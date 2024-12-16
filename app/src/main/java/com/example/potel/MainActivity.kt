@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import com.example.potel.ui.booking.bookingScreenRoute
 import com.example.potel.ui.myorders.myOrdersScreenRoute
 import com.example.potel.ui.theme.PotelTheme
 import idv.fan.tibame.tip102.ui.feature.home.HOME_NAVIGATION_ROUTE
