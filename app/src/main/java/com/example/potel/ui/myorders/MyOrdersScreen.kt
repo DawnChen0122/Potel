@@ -1,7 +1,6 @@
 package com.example.potel.ui.myorders
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 
@@ -15,7 +14,7 @@ import androidx.navigation.NavHostController
 
 @Composable
 fun MyOrdersRoute(
-    homeViewModel: HomeViewModel = viewModel(),
+    myOrdersViewModel: MyOrdersViewModel = viewModel(),
     navController: NavHostController
 ) {
 //    val items by homeViewModel.items.collectAsState()
