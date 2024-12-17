@@ -14,10 +14,11 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.example.potel.ui.booking.bookingScreenRoute
+import com.example.potel.ui.discussZone.discussZoneScreenRoute
 import com.example.potel.ui.myorders.myOrdersScreenRoute
 import com.example.potel.ui.theme.PotelTheme
-import idv.fan.tibame.tip102.ui.feature.home.HOME_NAVIGATION_ROUTE
-import idv.fan.tibame.tip102.ui.feature.home.homeScreenRoute
+import com.example.potel.ui.home.HOME_NAVIGATION_ROUTE
+import com.example.potel.ui.home.homeScreenRoute
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,7 +76,7 @@ fun TipNavHost(
         myOrdersScreenRoute(navController) // 27 正能
 //        shoppingScreenRoute(navController) // 07 柏森
 //        careRecordsScreenRoute(navController) // 25 泰陽
-//        discussZoneScreenRoute(navController) // 16 品伃
+         discussZoneScreenRoute(navController) // 16 品伃
 //        petsScreenRoute(navController) // 18 勇慶
     }
 
