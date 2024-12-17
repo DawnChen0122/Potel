@@ -1,4 +1,4 @@
-package com.example.potel.ui.logout
+package com.example.potel.ui.login
 
 import androidx.lifecycle.ViewModel
 
@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModel
  * (1) 為什麼要 ViewModel
  * (2) ViewModel 要做什麼事情，有哪些資料應該放到 ViewModel
  * */
-class HomeViewModel : ViewModel() {
+class LoginModel : ViewModel() {
 
 //    private val _items = MutableStateFlow<List<TipHomeItemUiState>>(listOf())
 //    val items = _items.asStateFlow()

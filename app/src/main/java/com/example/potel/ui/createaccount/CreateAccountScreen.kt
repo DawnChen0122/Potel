@@ -15,7 +15,7 @@ import androidx.navigation.NavHostController
 
 @Composable
 fun HomeRoute(
-    homeViewModel: HomeViewModel = viewModel(),
+    createAccountViewModel: CreateAccountViewModel = viewModel(),
     navController: NavHostController
 ) {
 //    val items by homeViewModel.items.collectAsState()
