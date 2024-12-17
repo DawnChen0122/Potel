@@ -1,4 +1,4 @@
-package idv.fan.tibame.tip102.ui.feature.home
+package com.example.potel.ui.home
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController

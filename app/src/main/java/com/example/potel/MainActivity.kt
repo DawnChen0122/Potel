@@ -17,8 +17,8 @@ import com.example.potel.ui.booking.bookingScreenRoute
 import com.example.potel.ui.discussZone.discussZoneScreenRoute
 import com.example.potel.ui.myorders.myOrdersScreenRoute
 import com.example.potel.ui.theme.PotelTheme
-import idv.fan.tibame.tip102.ui.feature.home.HOME_NAVIGATION_ROUTE
-import idv.fan.tibame.tip102.ui.feature.home.homeScreenRoute
+import com.example.potel.ui.home.HOME_NAVIGATION_ROUTE
+import com.example.potel.ui.home.homeScreenRoute
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
