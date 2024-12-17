@@ -3,7 +3,8 @@ package com.example.potel.ui.myorders
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
-import idv.fan.tibame.tip102.ui.feature.home.HOME_NAVIGATION_ROUTE
+//import java.text.SimpleDateFormat
+//import java.util.Date
 
 /**
  * todo 2-1 將首頁的路由獨立出來
@@ -17,6 +18,8 @@ fun NavGraphBuilder.myOrdersScreenRoute(navController: NavHostController) {
     composable(
         route = MYORDERS_NAVIGATION_ROUTE,
     ) {
+//        val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+//        sdf.format(Date())
         MyOrdersRoute(navController = navController)
     }
 }
