@@ -19,6 +19,7 @@ import com.example.potel.ui.myorders.myOrdersScreenRoute
 import com.example.potel.ui.theme.PotelTheme
 import com.example.potel.ui.home.HOME_NAVIGATION_ROUTE
 import com.example.potel.ui.home.homeScreenRoute
+import com.example.potel.ui.myorders.Screens
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,10 +52,7 @@ fun PotelApp(
                     .weight(1f),
                 navController = navController
             )
-
         }
-
-
     }
 }
 
@@ -68,7 +66,7 @@ fun TipNavHost(
     NavHost(
         modifier = modifier,
         navController = navController,
-        startDestination = HOME_NAVIGATION_ROUTE
+        startDestination = Screens.MOS0501.name
     ) {
         // todo 2-2 置入所有的畫面路徑
         homeScreenRoute(navController) // 02 明駿
