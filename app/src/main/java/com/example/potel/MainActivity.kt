@@ -43,12 +43,10 @@ import com.example.potel.ui.myorders.myOrdersScreenRoute
 import com.example.potel.ui.theme.PotelTheme
 import com.example.potel.ui.home.HOME_NAVIGATION_ROUTE
 import com.example.potel.ui.home.homeScreenRoute
-<<<<<<< HEAD
 import com.example.potel.ui.shopping.shopScreenRoute
-=======
 import com.example.potel.ui.myorders.Screens
 import kotlinx.coroutines.launch
->>>>>>> d052117c83c33d367f95120ac8f512e14c1a4bc4
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
