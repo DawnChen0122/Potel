@@ -4,15 +4,15 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 
-enum class LogIn (title: String){
+enum class Screens (title: String){
     LogIn(title = "登入畫面")
 }
 
 fun NavGraphBuilder.homeScreen1Route(navController: NavHostController) {
     composable(
-        route = Screens.MOS01.name,
+        route = Screens.LogIn.name,
     ) {
-        ScreenMOS01(
+        LogIn(
             navController = navController
         )
     }
