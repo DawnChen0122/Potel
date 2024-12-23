@@ -1,4 +1,4 @@
-package com.example.potel.ui.home
+package com.example.potel.ui.login
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*

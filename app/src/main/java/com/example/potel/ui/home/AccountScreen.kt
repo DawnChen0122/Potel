@@ -7,3 +7,4 @@ package com.example.potel.ui.home
  * (2) HomeScreen 實際畫面，將參數抽出來，方便 Preview
  * (3) PreviewHomeScreen 預覽畫面（不透過 ViewModel 預覽畫面）
  * */
+//刻 畫面
