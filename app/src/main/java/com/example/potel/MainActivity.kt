@@ -19,6 +19,7 @@ import com.example.potel.ui.myorders.myOrdersScreenRoute
 import com.example.potel.ui.theme.PotelTheme
 import com.example.potel.ui.home.HOME_NAVIGATION_ROUTE
 import com.example.potel.ui.home.homeScreenRoute
+import com.example.potel.ui.shopping.shopScreenRoute
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -74,7 +75,7 @@ fun TipNavHost(
         homeScreenRoute(navController) // 02 明駿
         bookingScreenRoute(navController) // 04 芊伃
         myOrdersScreenRoute(navController) // 27 正能
-//        shoppingScreenRoute(navController) // 07 柏森
+        shopScreenRoute(navController) // 07 柏森
 //        careRecordsScreenRoute(navController) // 25 泰陽
          discussZoneScreenRoute(navController) // 16 品伃
 //        petsScreenRoute(navController) // 18 勇慶
