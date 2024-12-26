@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.potel.R
 import com.example.potel.ui.theme.PotelTheme
 
@@ -72,7 +73,7 @@ fun ScreenMOS01(
             Button(
                 shape = RoundedCornerShape(20),
                 onClick = {
-
+                    navController.navigate(route = Screens.MOS02.name)
                 },
                 border = BorderStroke(1.dp, Color.Black),
                 colors = ButtonDefaults.outlinedButtonColors(),
@@ -199,5 +200,13 @@ fun ScreenMOS01(
                 )
             }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun MainPreview() {
+    PotelTheme {
+        ScreenMOS01(navController = rememberNavController())
     }
 }

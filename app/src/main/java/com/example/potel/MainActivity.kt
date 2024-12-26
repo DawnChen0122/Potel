@@ -108,7 +108,7 @@ fun TipNavHost(
     NavHost(
         modifier = modifier,
         navController = navController,
-        startDestination = Screens.MOS0501.name
+        startDestination = Screens.MOS02.name
     ) {
         // todo 2-2 置入所有的畫面路徑
         homeScreenRoute(navController) // 02 明駿
