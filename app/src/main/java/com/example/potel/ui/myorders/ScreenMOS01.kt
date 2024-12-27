@@ -100,7 +100,7 @@ fun ScreenMOS01(
             Button(
                 shape = RoundedCornerShape(20),
                 onClick = {
-
+                    navController.navigate(route = Screens.MOS03.name)
                 },
                 border = BorderStroke(1.dp, Color.Black),
                 colors = ButtonDefaults.outlinedButtonColors(),
@@ -150,7 +150,7 @@ fun ScreenMOS01(
             Button(
                 shape = RoundedCornerShape(20),
                 onClick = {
-
+                    navController.navigate(route = Screens.MOS04.name)
                 },
                 border = BorderStroke(1.dp, Color.Black),
                 colors = ButtonDefaults.outlinedButtonColors(),
@@ -176,7 +176,7 @@ fun ScreenMOS01(
             Button(
                 shape = RoundedCornerShape(20),
                 onClick = {
-
+                    navController.navigate(route = Screens.MOS05.name)
                 },
                 border = BorderStroke(1.dp, Color.Black),
                 colors = ButtonDefaults.outlinedButtonColors(),
@@ -203,10 +203,10 @@ fun ScreenMOS01(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun MainPreview() {
-    PotelTheme {
-        ScreenMOS01(navController = rememberNavController())
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun MainPreview() {
+//    PotelTheme {
+//        ScreenMOS01(navController = rememberNavController())
+//    }
+//}
