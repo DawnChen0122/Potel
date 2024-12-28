@@ -21,9 +21,25 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Signup(navController: NavHostController) {
     val uid = remember { mutableStateOf("") }
+
+    val birthday = remember { mutableStateOf("") }
+
+    val options = listOf("Large", "Medium", "Small")
+    // 使用者輸入的文字
+    var inputText by remember { mutableStateOf("") }
+
+    var selectedText by remember { mutableStateOf("") }
+    val filteredOptions = options.filter { it.startsWith(inputText, true) }
+    var expanded by remember { mutableStateOf(false) }
+    expanded = expanded && filteredOptions.isNotEmpty()
+    val month = listOf(1..12)
+
+    val gender = remember { mutableStateOf("") }
+
     val email = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
     val checkpassword = remember { mutableStateOf("") }
@@ -58,6 +74,29 @@ fun Signup(navController: NavHostController) {
                 .padding(top = 16.dp)
         )
 
+        OutlinedTextField(
+            value = birthday.value,
+            onValueChange = { birthday.value = it },
+            label = { Text(text = "請選擇生日") },
+            singleLine = true,
+            shape = RoundedCornerShape(8.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp),)
+        ExposedDropdownMenuBox(
+            expanded = expanded,
+            onExpandedChange = { expanded = it }
+        )
+        OutlinedTextField(
+            value = gender.value,
+            onValueChange = { gender.value = it },
+            label = { Text(text = "請選擇性別") },
+            singleLine = true,
+            shape = RoundedCornerShape(8.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp)
+        )
 
         OutlinedTextField(
             value = email.value,
@@ -187,4 +226,3 @@ fun Signup(navController: NavHostController) {
 fun DefaultPreview2() {
     Signup(navController = rememberNavController())
 }
-    
