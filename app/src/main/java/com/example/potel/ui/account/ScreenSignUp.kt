@@ -26,6 +26,7 @@ fun Signup(navController: NavHostController) {
     val uid = remember { mutableStateOf("") }
     val email = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
+    val checkpassword = remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
     val username = remember { mutableStateOf("") }
     val phonenumber = remember { mutableStateOf("") }
@@ -99,6 +100,37 @@ fun Signup(navController: NavHostController) {
                 .fillMaxWidth()
                 .padding(top = 16.dp)
         )
+        OutlinedTextField(
+            value = checkpassword.value,
+            onValueChange = { checkpassword.value = it },
+            label = { Text(text = "再次確認密碼") },
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Default.Lock,
+                    contentDescription = "再次確認密碼"
+                )
+            },
+            trailingIcon = {
+                Text(
+                    text = if (passwordVisible) "隱藏" else "顯示",
+                    modifier = Modifier.clickable {
+                        passwordVisible = !passwordVisible
+                    }
+                )
+            },
+            shape = RoundedCornerShape(8.dp),
+            visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+            singleLine = true,
+            colors = TextFieldDefaults.colors(
+                focusedIndicatorColor = Color.Blue,
+                unfocusedIndicatorColor = Color.Gray,
+            ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp)
+        )
+
 
         OutlinedTextField(
             value = username.value,
