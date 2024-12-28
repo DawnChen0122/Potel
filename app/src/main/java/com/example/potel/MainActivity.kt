@@ -30,7 +30,6 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.BlendMode.Companion.Screen
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
@@ -41,11 +40,10 @@ import com.example.potel.ui.booking.bookingScreenRoute
 import com.example.potel.ui.discussZone.discussZoneScreenRoute
 import com.example.potel.ui.myorders.myOrdersScreenRoute
 import com.example.potel.ui.theme.PotelTheme
-import com.example.potel.ui.home.HOME_NAVIGATION_ROUTE
 import com.example.potel.ui.home.homeScreenRoute
 import com.example.potel.ui.shopping.shopScreenRoute
 import com.example.potel.ui.myorders.Screens
-import kotlinx.coroutines.launch
+import com.example.potel.ui.account.accountRoute
 
 
 class MainActivity : ComponentActivity() {
@@ -113,6 +111,7 @@ fun TipNavHost(
         startDestination = Screens.MOS0501.name
     ) {
         // todo 2-2 置入所有的畫面路徑
+        accountRoute(navController) //帳號畫面
         homeScreenRoute(navController) // 02 明駿
         bookingScreenRoute(navController) // 04 芊伃
         myOrdersScreenRoute(navController) // 27 正能

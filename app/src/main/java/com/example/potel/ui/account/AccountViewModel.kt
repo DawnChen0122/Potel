@@ -1,4 +1,4 @@
-package com.example.potel.ui.home
+package com.example.potel.ui.account
 
 import androidx.lifecycle.ViewModel
 

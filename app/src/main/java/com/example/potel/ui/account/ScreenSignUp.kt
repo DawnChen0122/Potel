@@ -22,7 +22,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 
 @Composable
-fun Signup0(navController: NavHostController) {
+fun Signup(navController: NavHostController) {
     val uid = remember { mutableStateOf("") }
     val email = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
@@ -153,6 +153,6 @@ fun Signup0(navController: NavHostController) {
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview2() {
-    Signup0(navController = rememberNavController())
+    Signup(navController = rememberNavController())
 }
     

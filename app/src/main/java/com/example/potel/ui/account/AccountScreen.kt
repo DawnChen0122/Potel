@@ -1,4 +1,4 @@
-package com.example.potel.ui.home
+package com.example.potel.ui.account
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -22,7 +22,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 
 @Composable
-fun Signup(navController: NavHostController) {
+fun Register(navController: NavHostController) {
     val uid = remember { mutableStateOf("") }
     val email = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
@@ -152,7 +152,6 @@ fun Signup(navController: NavHostController) {
 
 @Preview(showBackground = true)
 @Composable
-fun DefaultPreview2() {
-    Signup(navController = rememberNavController())
+fun DefaultPreview1() {
+    Register(navController = rememberNavController())
 }
-    
