@@ -3,18 +3,26 @@ package com.example.potel.ui.account
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
-//import java.text.SimpleDateFormat
-//import java.util.Date
+import com.example.potel.ui.account.Screens
+
 
 enum class Screens(title: String){
-    Signup(title = "註冊畫面")
+    Signup(title = "註冊畫面"),
+    Login( title= "登入畫面")
 }
 
 fun NavGraphBuilder.accountRoute(navController: NavHostController) {
     composable(
         route = Screens.Signup.name
     ) {
-        SignUp(
+        Signup(
+            navController = navController
+        )
+    }
+    composable(
+        route = Screens.Login.name
+    ) {
+        LogIn(
             navController = navController
         )
     }
