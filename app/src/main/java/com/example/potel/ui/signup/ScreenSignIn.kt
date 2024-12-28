@@ -1,4 +1,4 @@
-package com.example.potel.ui.siginin
+package com.example.potel.ui.home
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -22,10 +22,15 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 
 @Composable
-fun LogIn(navController: NavHostController) {
+fun Register2(navController: NavHostController) {
     val uid = remember { mutableStateOf("") }
+    val email = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
+    val username = remember { mutableStateOf("") }
+    val phonenumber = remember { mutableStateOf("") }
+    val address = remember { mutableStateOf("") }
+
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -34,7 +39,7 @@ fun LogIn(navController: NavHostController) {
             .padding(16.dp)
     ) {
         Text(
-            text = "登入",
+            text = "會員註冊",
             fontSize = 30.sp,
             fontWeight = FontWeight.Bold,
             color = Color.Blue
@@ -44,7 +49,19 @@ fun LogIn(navController: NavHostController) {
         OutlinedTextField(
             value = uid.value,
             onValueChange = { uid.value = it },
-            label = { Text(text = "用戶 ID") },
+            label = { Text(text = "請輸入用戶名稱") },
+            singleLine = true,
+            shape = RoundedCornerShape(8.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp)
+        )
+
+
+        OutlinedTextField(
+            value = email.value,
+            onValueChange = { email.value = it },
+            label = { Text(text = "請輸入信箱") },
             singleLine = true,
             shape = RoundedCornerShape(8.dp),
             modifier = Modifier
@@ -83,7 +100,42 @@ fun LogIn(navController: NavHostController) {
                 .padding(top = 16.dp)
         )
 
-        // 登入按鈕
+        OutlinedTextField(
+            value = username.value,
+            onValueChange = { username.value = it },
+            label = { Text(text = "請輸入姓名") },
+            singleLine = true,
+            shape = RoundedCornerShape(8.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp)
+        )
+
+
+        OutlinedTextField(
+            value = phonenumber.value,
+            onValueChange = { phonenumber.value = it },
+            label = { Text(text = "請輸入手機號碼") },
+            singleLine = true,
+            shape = RoundedCornerShape(8.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp)
+        )
+
+        OutlinedTextField(
+            value = address.value,
+            onValueChange = { address.value = it },
+            label = { Text(text = "請輸入地址") },
+            singleLine = true,
+            shape = RoundedCornerShape(8.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp)
+        )
+
+
+        // 註冊按鈕
         Button(
             onClick = {
                 //
@@ -93,13 +145,14 @@ fun LogIn(navController: NavHostController) {
                 .padding(top = 16.dp),
             shape = RoundedCornerShape(8.dp)
         ) {
-            Text(text = "登入", fontSize = 16.sp)
+            Text(text = "註冊", fontSize = 16.sp)
         }
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun DefaultPreview() {
-    LogIn(navController = rememberNavController())
+fun DefaultPreview2() {
+    Register2(navController = rememberNavController())
 }
+    
