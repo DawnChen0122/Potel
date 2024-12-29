@@ -25,6 +25,7 @@ import androidx.navigation.compose.rememberNavController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
+
 fun Signup(navController: NavHostController) {
 
     val uid = remember { mutableStateOf("") }
@@ -147,7 +148,7 @@ fun Signup(navController: NavHostController) {
                     value = inputMonth,
                     onValueChange = {
                         inputMonth = it
-                        expandedMonth = true
+                        expandedMonth= true
                     },
                     singleLine = true,
                     label = { Text("月") },
@@ -180,7 +181,7 @@ fun Signup(navController: NavHostController) {
                     modifier = Modifier.menuAnchor(MenuAnchorType.PrimaryEditable, true),
                     value = inputDay,
                     onValueChange = {
-                        inputDay = it
+                        inputDay= it
                         expandedDay = true
                     },
                     singleLine = true,
@@ -227,7 +228,8 @@ fun Signup(navController: NavHostController) {
         {
             TextField(
                 readOnly = true,
-                modifier = Modifier.menuAnchor(MenuAnchorType.PrimaryEditable, true),
+                modifier = Modifier.menuAnchor(MenuAnchorType.PrimaryEditable, true)
+                    .fillMaxWidth(),
                 value = inputGender,
                 onValueChange = {
                     inputGender = it
@@ -365,10 +367,15 @@ fun Signup(navController: NavHostController) {
                 .padding(top = 10.dp)
         )
 
-
         Button(
             onClick = {
-            //
+                if (uid.value.isEmpty() || email.value.isEmpty() || password.value.isEmpty() || checkpassword.value.isEmpty()) {
+                    // 顯示錯誤提示
+                } else if (password.value != checkpassword.value) {
+                    // 顯示密碼不一致的錯誤提示
+                } else {
+                     "執行註冊邏輯"
+                }
             },
             modifier = Modifier
                 .fillMaxWidth()
