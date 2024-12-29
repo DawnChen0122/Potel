@@ -1,5 +1,6 @@
 package com.example.potel.ui.account
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -78,12 +79,22 @@ fun Signup(navController: NavHostController) {
                 .padding(top = 16.dp)
         )
 
-        // Date of Birth Row
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp)
+                .background(Color.White, RoundedCornerShape(8.dp))
+        ) {
+            Text(
+                text = "請選擇生日",
+                modifier = Modifier.padding(16.dp)
+            )
+        }
+
         Row(
-            horizontalArrangement = Arrangement.spacedBy(8.dp), // 水平間距
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Year Dropdown
             ExposedDropdownMenuBox(
                 expanded = expandedYear,
                 onExpandedChange = { expandedYear = it },
@@ -118,7 +129,7 @@ fun Signup(navController: NavHostController) {
                 }
             }
 
-            // Month Dropdown
+
             ExposedDropdownMenuBox(
                 expanded = expandedMonth,
                 onExpandedChange = { expandedMonth = it },
@@ -153,7 +164,6 @@ fun Signup(navController: NavHostController) {
                 }
             }
 
-            // Day Dropdown
             ExposedDropdownMenuBox(
                 expanded = expandedDay,
                 onExpandedChange = { expandedDay = it },
@@ -189,7 +199,7 @@ fun Signup(navController: NavHostController) {
             }
         }
 
-        // Gender Field
+
         OutlinedTextField(
             value = gender.value,
             onValueChange = { gender.value = it },
@@ -201,7 +211,7 @@ fun Signup(navController: NavHostController) {
                 .padding(top = 16.dp)
         )
 
-        // Email Field
+
         OutlinedTextField(
             value = email.value,
             onValueChange = { email.value = it },
@@ -213,7 +223,7 @@ fun Signup(navController: NavHostController) {
                 .padding(top = 16.dp)
         )
 
-        // Password Field
+
         OutlinedTextField(
             value = password.value,
             onValueChange = { password.value = it },
@@ -245,7 +255,7 @@ fun Signup(navController: NavHostController) {
                 .padding(top = 16.dp)
         )
 
-        // Confirm Password Field
+
         OutlinedTextField(
             value = checkpassword.value,
             onValueChange = { checkpassword.value = it },
@@ -277,7 +287,7 @@ fun Signup(navController: NavHostController) {
                 .padding(top = 16.dp)
         )
 
-        // Name Field
+
         OutlinedTextField(
             value = username.value,
             onValueChange = { username.value = it },
@@ -289,7 +299,7 @@ fun Signup(navController: NavHostController) {
                 .padding(top = 16.dp)
         )
 
-        // Phone Number Field
+
         OutlinedTextField(
             value = phonenumber.value,
             onValueChange = { phonenumber.value = it },
@@ -301,7 +311,7 @@ fun Signup(navController: NavHostController) {
                 .padding(top = 16.dp)
         )
 
-        // Address Field
+
         OutlinedTextField(
             value = address.value,
             onValueChange = { address.value = it },
@@ -313,10 +323,10 @@ fun Signup(navController: NavHostController) {
                 .padding(top = 16.dp)
         )
 
-        // Register Button
+
         Button(
             onClick = {
-                // 處理註冊邏輯
+            //
             },
             modifier = Modifier
                 .fillMaxWidth()
