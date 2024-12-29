@@ -29,41 +29,55 @@ import androidx.navigation.compose.rememberNavController
 fun Signup(navController: NavHostController) {
 
     val uid = remember { mutableStateOf("") }
+    var uidError by remember { mutableStateOf(false) }
+
     var inputYear by remember { mutableStateOf("") }
     var inputMonth by remember { mutableStateOf("") }
     var inputDay by remember { mutableStateOf("") }
-    var inputGender by remember { mutableStateOf("") }
 
-    val yearRange = (1960..2024).map { it.toString() }
+    val yearRange = (1924..2025).map { it.toString() }
     val monthRange = (1..12).map { it.toString() }
     val dayRange = (1..31).map { it.toString() }
-    val genderRange = listOf("男", "女","不願透漏").map{ it.toString() }
 
     var selectedYear by remember { mutableStateOf("") }
     var selectedMonth by remember { mutableStateOf("") }
     var selectedDay by remember { mutableStateOf("") }
-    var selectedGender by remember { mutableStateOf("") }
 
     var expandedYear by remember { mutableStateOf(false) }
     var expandedMonth by remember { mutableStateOf(false) }
     var expandedDay by remember { mutableStateOf(false) }
-    var expandedGender by remember { mutableStateOf(false) }
 
     val filteredYears = yearRange.filter { it.startsWith(inputYear, true) }
     val filteredMonths = monthRange.filter { it.startsWith(inputMonth, true) }
     val filteredDays = dayRange.filter { it.startsWith(inputDay, true) }
+
+
+    var inputGender by remember { mutableStateOf("") }
+    val genderRange = listOf("男", "女","不願透漏").map{ it.toString() }
+    var selectedGender by remember { mutableStateOf("") }
+    var expandedGender by remember { mutableStateOf(false) }
     val filteredGenders = genderRange.filter { it.startsWith(inputGender, true) }
 
-
     val email = remember { mutableStateOf("") }
+    var emailError by remember { mutableStateOf(false) }
+    val emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$".toRegex()
+
     val password = remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
+    var passwordError by remember { mutableStateOf(false) }
+
+
     var checkpassword = remember { mutableStateOf("") }
     var checkpasswordVisible  by remember { mutableStateOf(false) }
+    var checkpasswordError by remember { mutableStateOf(false) }
 
     val username = remember { mutableStateOf("") }
+
     val phonenumber = remember { mutableStateOf("") }
+    var phonenumberError by remember { mutableStateOf(false) }
+
     val address = remember { mutableStateOf("") }
+
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -80,14 +94,26 @@ fun Signup(navController: NavHostController) {
 
         OutlinedTextField(
             value = uid.value,
-            onValueChange = { uid.value = it },
+            onValueChange = {
+                uid.value = it
+                uidError = it.isEmpty()
+                            },
             label = { Text(text = "請輸入用戶名稱") },
             singleLine = true,
             shape = RoundedCornerShape(8.dp),
+            isError = uidError,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 10.dp)
         )
+        if(uidError) {
+            Text(
+                text = "用戶名稱為必填欄位",
+                color = Color.Red,
+                fontSize = 12.sp,
+                modifier = Modifier.padding(start = 16.dp)
+            )
+        }
 
         Box(
             modifier = Modifier
@@ -260,19 +286,31 @@ fun Signup(navController: NavHostController) {
 
         OutlinedTextField(
             value = email.value,
-            onValueChange = { email.value = it },
+            onValueChange = {
+                email.value = it
+                emailError = !it.matches(emailRegex) },
             label = { Text(text = "請輸入信箱") },
             singleLine = true,
             shape = RoundedCornerShape(8.dp),
+            isError = emailError,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 10.dp)
         )
-
+        if (emailError) {
+            Text(
+                text = "請輸入有效的信箱",
+                color = Color.Red,
+                fontSize = 12.sp,
+                modifier = Modifier.padding(start = 16.dp)
+            )
+        }
 
         OutlinedTextField(
             value = password.value,
-            onValueChange = { password.value = it },
+            onValueChange = { password.value = it
+                password.value = it
+                passwordError = it.isEmpty() || it.length < 6 || it.length > 20 },
             label = { Text(text = "密碼") },
             leadingIcon = {
                 Icon(
@@ -292,6 +330,7 @@ fun Signup(navController: NavHostController) {
             visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             singleLine = true,
+            isError = passwordError,
             colors = TextFieldDefaults.colors(
                 focusedIndicatorColor = Color.Blue,
                 unfocusedIndicatorColor = Color.Gray,
@@ -300,11 +339,19 @@ fun Signup(navController: NavHostController) {
                 .fillMaxWidth()
                 .padding(top = 10.dp)
         )
-
+        if (passwordError) {
+            Text(
+                text = "密碼需在6 至 20 字符內",
+                color = Color.Red,
+                fontSize = 12.sp,
+                modifier = Modifier.padding(start = 16.dp)
+            )
+        }
 
         OutlinedTextField(
             value = checkpassword.value,
-            onValueChange = { checkpassword.value = it },
+            onValueChange = { checkpassword.value = it
+                checkpasswordError = it != password.value},
             label = { Text(text = "再次確認密碼") },
             leadingIcon = {
                 Icon(
@@ -320,6 +367,7 @@ fun Signup(navController: NavHostController) {
                     }
                 )
             },
+            isError = checkpasswordError,
             shape = RoundedCornerShape(8.dp),
             visualTransformation = if (checkpasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
@@ -332,6 +380,15 @@ fun Signup(navController: NavHostController) {
                 .fillMaxWidth()
                 .padding(top = 10.dp)
         )
+
+        if (checkpasswordError) {
+            Text(
+                text = "密碼需輸入相同",
+                color = Color.Red,
+                fontSize = 12.sp,
+                modifier = Modifier.padding(start = 16.dp)
+            )
+        }
 
 
         OutlinedTextField(
@@ -348,14 +405,25 @@ fun Signup(navController: NavHostController) {
 
         OutlinedTextField(
             value = phonenumber.value,
-            onValueChange = { phonenumber.value = it },
+            onValueChange = { phonenumber.value = it
+                phonenumberError = it.isEmpty() || it.length != 10 },
             label = { Text(text = "請輸入手機號碼") },
             singleLine = true,
             shape = RoundedCornerShape(8.dp),
+            isError = phonenumberError,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 10.dp)
         )
+
+        if (phonenumberError) {
+            Text(
+                text = "手機號碼為十位數字",
+                color = Color.Red,
+                fontSize = 12.sp,
+                modifier = Modifier.padding(start = 16.dp)
+            )
+        }
 
 
         OutlinedTextField(
@@ -371,7 +439,8 @@ fun Signup(navController: NavHostController) {
 
         Button(
             onClick = {
-                if (uid.value.isEmpty() || email.value.isEmpty() || password.value.isEmpty() || checkpassword.value.isEmpty()) {
+                if (uid.value.isEmpty() || email.value.isEmpty() || password.value.isEmpty() || checkpassword.value.isEmpty()
+                    || username.value.isEmpty() || phonenumber.value.isEmpty() || address.value.isEmpty() ) {
                     // 顯示錯誤提示
                 } else if (password.value != checkpassword.value) {
                     // 顯示密碼不一致的錯誤提示
