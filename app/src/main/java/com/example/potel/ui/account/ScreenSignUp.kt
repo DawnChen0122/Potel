@@ -59,11 +59,11 @@ fun Signup(navController: NavHostController) {
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .padding(10.dp)
     ) {
         Text(
             text = "會員註冊",
-            fontSize = 30.sp,
+            fontSize = 15.sp,
             fontWeight = FontWeight.Bold,
             color = Color.Blue
         )
@@ -76,18 +76,18 @@ fun Signup(navController: NavHostController) {
             shape = RoundedCornerShape(8.dp),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 16.dp)
+                .padding(top = 10.dp)
         )
 
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 16.dp)
+                .padding(top = 10.dp)
                 .background(Color.White, RoundedCornerShape(8.dp))
         ) {
             Text(
                 text = "請選擇生日",
-                modifier = Modifier.padding(16.dp)
+                modifier = Modifier.padding(10.dp)
             )
         }
 
@@ -208,7 +208,7 @@ fun Signup(navController: NavHostController) {
             shape = RoundedCornerShape(8.dp),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 16.dp)
+                .padding(top = 10.dp)
         )
 
 
@@ -220,7 +220,7 @@ fun Signup(navController: NavHostController) {
             shape = RoundedCornerShape(8.dp),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 16.dp)
+                .padding(top = 10.dp)
         )
 
 
@@ -252,7 +252,7 @@ fun Signup(navController: NavHostController) {
             ),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 16.dp)
+                .padding(top = 10.dp)
         )
 
 
@@ -284,7 +284,7 @@ fun Signup(navController: NavHostController) {
             ),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 16.dp)
+                .padding(top = 10.dp)
         )
 
 
@@ -296,7 +296,7 @@ fun Signup(navController: NavHostController) {
             shape = RoundedCornerShape(8.dp),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 16.dp)
+                .padding(top = 10.dp)
         )
 
 
@@ -308,7 +308,7 @@ fun Signup(navController: NavHostController) {
             shape = RoundedCornerShape(8.dp),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 16.dp)
+                .padding(top = 10.dp)
         )
 
 
@@ -320,7 +320,7 @@ fun Signup(navController: NavHostController) {
             shape = RoundedCornerShape(8.dp),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 16.dp)
+                .padding(top = 10.dp)
         )
 
 
@@ -330,10 +330,10 @@ fun Signup(navController: NavHostController) {
             },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 16.dp),
+                .padding(top = 10.dp),
             shape = RoundedCornerShape(8.dp)
         ) {
-            Text(text = "註冊", fontSize = 16.sp)
+            Text(text = "註冊", fontSize = 20.sp)
         }
     }
 }
