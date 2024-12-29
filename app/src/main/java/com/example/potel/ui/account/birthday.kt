@@ -16,7 +16,6 @@ import androidx.navigation.compose.rememberNavController
 fun Birthday(navController: NavHostController) {
 
 
-    val birthday = remember { mutableStateOf("") }
     var inputYear by remember { mutableStateOf("") }
     var inputMonth by remember { mutableStateOf("") }
     var inputDay by remember { mutableStateOf("") }
@@ -54,8 +53,9 @@ fun Birthday(navController: NavHostController) {
         ) {
             ExposedDropdownMenuBox(
                 expanded = expandedYear,
-                onExpandedChange = { expandedYear = it })
-            {
+                onExpandedChange = { expandedYear = it },
+            modifier = Modifier.weight(1f)
+            ){
                 TextField(
                     readOnly = false,
                     modifier = Modifier.menuAnchor(MenuAnchorType.PrimaryEditable, true),
@@ -84,15 +84,12 @@ fun Birthday(navController: NavHostController) {
                     }
                 }
             }
-        }
 
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(8.dp), // 水平間距
-            verticalAlignment = Alignment.CenterVertically
-        ) {
+
             ExposedDropdownMenuBox(
                 expanded = expandedMonth,
-                onExpandedChange = { expandedMonth = it })
+                onExpandedChange = { expandedMonth = it },
+                        modifier = Modifier.weight(1f) )
             {
                 TextField(
                     readOnly = false,
@@ -122,15 +119,12 @@ fun Birthday(navController: NavHostController) {
                     }
                 }
             }
-        }
 
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(8.dp), // 水平間距
-            verticalAlignment = Alignment.CenterVertically
-        ) {
+
             ExposedDropdownMenuBox(
                 expanded = expandedDay,
-                onExpandedChange = { expandedDay = it })
+                onExpandedChange = { expandedDay = it },
+                modifier = Modifier.weight(1f) )
             {
                 TextField(
                     readOnly = false,

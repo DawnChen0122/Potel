@@ -26,30 +26,26 @@ import androidx.navigation.compose.rememberNavController
 @Composable
 fun Signup(navController: NavHostController) {
     val uid = remember { mutableStateOf("") }
-
-    val birthday = remember { mutableStateOf("") }
-
-    var inputText by remember { mutableStateOf("") }
-
+    var inputYear by remember { mutableStateOf("") }
+    var inputMonth by remember { mutableStateOf("") }
+    var inputDay by remember { mutableStateOf("") }
     val yearRange = (1960..2024).map { it.toString() }
-    var selectedYear by remember { mutableStateOf("") }
-    val filteredYears = yearRange.filter { it.startsWith(inputText, true) }
-
     val monthRange = (1..12).map { it.toString() }
-    var selectedMonth by remember { mutableStateOf("") }
-    val filteredMonths = monthRange.filter { it.startsWith(inputText, true) }
-
     val dayRange = (1..31).map { it.toString() }
+
+    var selectedYear by remember { mutableStateOf("") }
+    var selectedMonth by remember { mutableStateOf("") }
     var selectedDay by remember { mutableStateOf("") }
-    val filteredDays = dayRange.filter { it.startsWith(inputText, true) }
 
+    var expandedYear by remember { mutableStateOf(false) }
+    var expandedMonth by remember { mutableStateOf(false) }
+    var expandedDay by remember { mutableStateOf(false) }
 
-    var selectedText by remember { mutableStateOf("") }
-    var expanded by remember { mutableStateOf(false) }
-//    expanded = expanded && filteredbirthday.isNotEmpty()
+    val filteredYears = yearRange.filter { it.startsWith(inputYear, true) }
+    val filteredMonths = monthRange.filter { it.startsWith(inputMonth, true) }
+    val filteredDays = dayRange.filter { it.startsWith(inputDay, true) }
 
     val gender = remember { mutableStateOf("") }
-
     val email = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
     val checkpassword = remember { mutableStateOf("") }
@@ -57,7 +53,6 @@ fun Signup(navController: NavHostController) {
     val username = remember { mutableStateOf("") }
     val phonenumber = remember { mutableStateOf("") }
     val address = remember { mutableStateOf("") }
-
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -72,7 +67,6 @@ fun Signup(navController: NavHostController) {
             color = Color.Blue
         )
 
-
         OutlinedTextField(
             value = uid.value,
             onValueChange = { uid.value = it },
@@ -84,196 +78,258 @@ fun Signup(navController: NavHostController) {
                 .padding(top = 16.dp)
         )
 
-        TextField(
-            value = birthday.value,
-            onValueChange = { birthday.value = it },
-            label = { Text(text = "請選擇生日") },
+        // Date of Birth Row
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(8.dp), // 水平間距
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            // Year Dropdown
+            ExposedDropdownMenuBox(
+                expanded = expandedYear,
+                onExpandedChange = { expandedYear = it },
+                modifier = Modifier.weight(1f)
+            ) {
+                TextField(
+                    readOnly = false,
+                    modifier = Modifier.menuAnchor(MenuAnchorType.PrimaryEditable, true),
+                    value = inputYear,
+                    onValueChange = {
+                        inputYear = it
+                        expandedYear = true
+                    },
+                    singleLine = true,
+                    label = { Text("年") },
+                    trailingIcon = { TrailingIcon(expanded = expandedYear) }
+                )
+                ExposedDropdownMenu(
+                    expanded = expandedYear,
+                    onDismissRequest = { expandedYear = false }
+                ) {
+                    filteredYears.forEach { yearRange ->
+                        DropdownMenuItem(
+                            text = { Text(yearRange) },
+                            onClick = {
+                                selectedYear = yearRange
+                                inputYear = yearRange
+                                expandedYear = false
+                            }
+                        )
+                    }
+                }
+            }
+
+            // Month Dropdown
+            ExposedDropdownMenuBox(
+                expanded = expandedMonth,
+                onExpandedChange = { expandedMonth = it },
+                modifier = Modifier.weight(1f)
+            ) {
+                TextField(
+                    readOnly = false,
+                    modifier = Modifier.menuAnchor(MenuAnchorType.PrimaryEditable, true),
+                    value = inputMonth,
+                    onValueChange = {
+                        inputMonth = it
+                        expandedMonth = true
+                    },
+                    singleLine = true,
+                    label = { Text("月") },
+                    trailingIcon = { TrailingIcon(expanded = expandedMonth) }
+                )
+                ExposedDropdownMenu(
+                    expanded = expandedMonth,
+                    onDismissRequest = { expandedMonth = false }
+                ) {
+                    filteredMonths.forEach { monthRange ->
+                        DropdownMenuItem(
+                            text = { Text(monthRange) },
+                            onClick = {
+                                selectedMonth = monthRange
+                                inputMonth = monthRange
+                                expandedMonth = false
+                            }
+                        )
+                    }
+                }
+            }
+
+            // Day Dropdown
+            ExposedDropdownMenuBox(
+                expanded = expandedDay,
+                onExpandedChange = { expandedDay = it },
+                modifier = Modifier.weight(1f)
+            ) {
+                TextField(
+                    readOnly = false,
+                    modifier = Modifier.menuAnchor(MenuAnchorType.PrimaryEditable, true),
+                    value = inputDay,
+                    onValueChange = {
+                        inputDay = it
+                        expandedDay = true
+                    },
+                    singleLine = true,
+                    label = { Text("日") },
+                    trailingIcon = { TrailingIcon(expanded = expandedDay) }
+                )
+                ExposedDropdownMenu(
+                    expanded = expandedDay,
+                    onDismissRequest = { expandedDay = false }
+                ) {
+                    filteredDays.forEach { dayRange ->
+                        DropdownMenuItem(
+                            text = { Text(dayRange) },
+                            onClick = {
+                                selectedDay = dayRange
+                                inputDay = dayRange
+                                expandedDay = false
+                            }
+                        )
+                    }
+                }
+            }
+        }
+
+        // Gender Field
+        OutlinedTextField(
+            value = gender.value,
+            onValueChange = { gender.value = it },
+            label = { Text(text = "請選擇性別") },
             singleLine = true,
             shape = RoundedCornerShape(8.dp),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 16.dp),
+                .padding(top = 16.dp)
         )
-        ExposedDropdownMenuBox(
-            expanded = expanded,
-            onExpandedChange = { expanded = it })
-        {
-            TextField(
-                // 設為true則無法輸入
-                readOnly = false,
-                // 正確設定TextField與ExposedDropdownMenu對應位置。enabled為true方可展開下拉選單
-                modifier = Modifier.menuAnchor(MenuAnchorType.PrimaryEditable, true),
-                value = inputText,
-                // 當使用者修改文字值時呼叫
-                onValueChange = {
-                    inputText = it
-                    // 值改變時會彈出選項
-                    expanded = true
-                },
-                singleLine = true,
-                label = { Text("T-shirt Size") },
-                // 末端顯示下箭頭圖示
-                trailingIcon = { TrailingIcon(expanded = expanded) }
-            )
-            ExposedDropdownMenu(
-                // 設定是否彈出下拉選單
-                expanded = expanded,
-                // 點擊下拉選單外部時
-                onDismissRequest = { expanded = false }
-            ) {
-                // 下拉選單內容由DropdownMenuItem項目組成
-                filteredYears.forEach { yearRange ->
-                    DropdownMenuItem(
-                        text = { Text(yearRange) },
-                        // 點選項目後呼叫
-                        onClick = {
-                            // 點選項目的文字成爲被選取項目與輸入方塊的文字
-                            selectedText = yearRange
-                            inputText = yearRange
-                            // 將狀態設定為收回下拉選單
-                            expanded = false
-                        }
-                    )
-                }
-            }
 
+        // Email Field
+        OutlinedTextField(
+            value = email.value,
+            onValueChange = { email.value = it },
+            label = { Text(text = "請輸入信箱") },
+            singleLine = true,
+            shape = RoundedCornerShape(8.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp)
+        )
 
-            OutlinedTextField(
-                value = gender.value,
-                onValueChange = { gender.value = it },
-                label = { Text(text = "請選擇性別") },
-                singleLine = true,
-                shape = RoundedCornerShape(8.dp),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 16.dp)
-            )
+        // Password Field
+        OutlinedTextField(
+            value = password.value,
+            onValueChange = { password.value = it },
+            label = { Text(text = "密碼") },
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Default.Lock,
+                    contentDescription = "密碼"
+                )
+            },
+            trailingIcon = {
+                Text(
+                    text = if (passwordVisible) "隱藏" else "顯示",
+                    modifier = Modifier.clickable {
+                        passwordVisible = !passwordVisible
+                    }
+                )
+            },
+            shape = RoundedCornerShape(8.dp),
+            visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+            singleLine = true,
+            colors = TextFieldDefaults.colors(
+                focusedIndicatorColor = Color.Blue,
+                unfocusedIndicatorColor = Color.Gray,
+            ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp)
+        )
 
-            OutlinedTextField(
-                value = email.value,
-                onValueChange = { email.value = it },
-                label = { Text(text = "請輸入信箱") },
-                singleLine = true,
-                shape = RoundedCornerShape(8.dp),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 16.dp)
-            )
+        // Confirm Password Field
+        OutlinedTextField(
+            value = checkpassword.value,
+            onValueChange = { checkpassword.value = it },
+            label = { Text(text = "再次確認密碼") },
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Default.Lock,
+                    contentDescription = "再次確認密碼"
+                )
+            },
+            trailingIcon = {
+                Text(
+                    text = if (passwordVisible) "隱藏" else "顯示",
+                    modifier = Modifier.clickable {
+                        passwordVisible = !passwordVisible
+                    }
+                )
+            },
+            shape = RoundedCornerShape(8.dp),
+            visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+            singleLine = true,
+            colors = TextFieldDefaults.colors(
+                focusedIndicatorColor = Color.Blue,
+                unfocusedIndicatorColor = Color.Gray,
+            ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp)
+        )
 
-            OutlinedTextField(
-                value = password.value,
-                onValueChange = { password.value = it },
-                label = { Text(text = "密碼") },
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Default.Lock,
-                        contentDescription = "密碼"
-                    )
-                },
-                trailingIcon = {
-                    Text(
-                        text = if (passwordVisible) "隱藏" else "顯示",
-                        modifier = Modifier.clickable {
-                            passwordVisible = !passwordVisible
-                        }
-                    )
-                },
-                shape = RoundedCornerShape(8.dp),
-                visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                singleLine = true,
-                colors = TextFieldDefaults.colors(
-                    focusedIndicatorColor = Color.Blue,
-                    unfocusedIndicatorColor = Color.Gray,
-                ),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 16.dp)
-            )
-            OutlinedTextField(
-                value = checkpassword.value,
-                onValueChange = { checkpassword.value = it },
-                label = { Text(text = "再次確認密碼") },
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Default.Lock,
-                        contentDescription = "再次確認密碼"
-                    )
-                },
-                trailingIcon = {
-                    Text(
-                        text = if (passwordVisible) "隱藏" else "顯示",
-                        modifier = Modifier.clickable {
-                            passwordVisible = !passwordVisible
-                        }
-                    )
-                },
-                shape = RoundedCornerShape(8.dp),
-                visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                singleLine = true,
-                colors = TextFieldDefaults.colors(
-                    focusedIndicatorColor = Color.Blue,
-                    unfocusedIndicatorColor = Color.Gray,
-                ),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 16.dp)
-            )
+        // Name Field
+        OutlinedTextField(
+            value = username.value,
+            onValueChange = { username.value = it },
+            label = { Text(text = "請輸入姓名") },
+            singleLine = true,
+            shape = RoundedCornerShape(8.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp)
+        )
 
+        // Phone Number Field
+        OutlinedTextField(
+            value = phonenumber.value,
+            onValueChange = { phonenumber.value = it },
+            label = { Text(text = "請輸入手機號碼") },
+            singleLine = true,
+            shape = RoundedCornerShape(8.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp)
+        )
 
-            OutlinedTextField(
-                value = username.value,
-                onValueChange = { username.value = it },
-                label = { Text(text = "請輸入姓名") },
-                singleLine = true,
-                shape = RoundedCornerShape(8.dp),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 16.dp)
-            )
+        // Address Field
+        OutlinedTextField(
+            value = address.value,
+            onValueChange = { address.value = it },
+            label = { Text(text = "請輸入地址") },
+            singleLine = true,
+            shape = RoundedCornerShape(8.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp)
+        )
 
-
-            OutlinedTextField(
-                value = phonenumber.value,
-                onValueChange = { phonenumber.value = it },
-                label = { Text(text = "請輸入手機號碼") },
-                singleLine = true,
-                shape = RoundedCornerShape(8.dp),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 16.dp)
-            )
-
-            OutlinedTextField(
-                value = address.value,
-                onValueChange = { address.value = it },
-                label = { Text(text = "請輸入地址") },
-                singleLine = true,
-                shape = RoundedCornerShape(8.dp),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 16.dp)
-            )
-
-
-            // 註冊按鈕
-            Button(
-                onClick = {
-                    //
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 16.dp),
-                shape = RoundedCornerShape(8.dp)
-            ) {
-                Text(text = "註冊", fontSize = 16.sp)
-            }
+        // Register Button
+        Button(
+            onClick = {
+                // 處理註冊邏輯
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp),
+            shape = RoundedCornerShape(8.dp)
+        ) {
+            Text(text = "註冊", fontSize = 16.sp)
         }
     }
 }
+
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview2() {
-        Signup(navController = rememberNavController())
-    }
+    Signup(navController = rememberNavController())
+}
