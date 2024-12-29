@@ -36,16 +36,20 @@ fun NavGraphBuilder.myOrdersScreenRoute(
         )
     }
     composable(
-        route = MyOrdersScreens.MOS02.name,
-    ) {
+        route = "${MyOrdersScreens.MOS02.name}/{memberid}"
+    ) { backStackEntry ->
         ScreenMOS02(
-            navController = navController
+            navController = navController,
+            memberid = backStackEntry.arguments?.getString("memberid") ?: ""
         )
     }
     composable(
-        route = MyOrdersScreens.MOS0201.name,
-    ) {
-        ScreenMOS0201(navController = navController)
+        route = "${MyOrdersScreens.MOS0201.name}/{orderid}",
+    ) {backStackEntry ->
+        ScreenMOS0201(
+            navController = navController
+            , orderid = backStackEntry.arguments?.getString("orderid") ?: ""
+        )
     }
     composable(
         route = MyOrdersScreens.MOS0202.name,

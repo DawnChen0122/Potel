@@ -3,7 +3,6 @@ package com.example.potel.ui.myorders
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -17,11 +16,15 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -29,14 +32,28 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import coil.compose.rememberAsyncImagePainter
 import com.example.potel.R
+import kotlinx.coroutines.launch
 
 @Composable
 fun ScreenMOS0201(
-//    myOrdersViewModel: MyOrdersViewModel = viewModel(),
     navController: NavHostController
+    ,myOrdersViewModel: MyOrdersViewModel = viewModel()
+    ,orderid: String
 ) {
+    val coroutineScope = rememberCoroutineScope()
+    var order by remember { mutableStateOf<Order?>(null) }
+
+    LaunchedEffect(Unit) {
+        coroutineScope.launch {
+            order = myOrdersViewModel.getOrder(orderid.toInt())
+        }
+    }
+
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -93,7 +110,7 @@ fun ScreenMOS0201(
                 horizontalArrangement = Arrangement.SpaceBetween // 讓內容分佈在兩端
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.room),
+                    painter = rememberAsyncImagePainter(composeImageUrl(order?.roomtype?.imageid?.toInt()?:0)),
                     contentDescription = "房間照片"
                 )
 
@@ -117,7 +134,7 @@ fun ScreenMOS0201(
                 }
             }
             Text(
-                text = "貓咪海景房",
+                text = order?.roomtype?.descpt?:"No data",
                 style = TextStyle(
                     fontSize = 22.sp,
                     lineHeight = 32.sp,
@@ -130,7 +147,7 @@ fun ScreenMOS0201(
                     .padding(8.dp)
             )
             Text(
-                text = "訂房時間: 2024/12/13 15:43",
+                text = "訂房時間: ${order?.createdate}",
                 style = TextStyle(
                     fontSize = 18.sp,
                     lineHeight = 32.sp,
@@ -143,7 +160,7 @@ fun ScreenMOS0201(
                     .padding(8.dp)
             )
             Text(
-                text = "預約入住時間: 2025/01/22 ~ 2025/01/23",
+                text = "預約入住時間:",
                 style = TextStyle(
                     fontSize = 18.sp,
                     lineHeight = 32.sp,
@@ -156,7 +173,20 @@ fun ScreenMOS0201(
                     .padding(8.dp)
             )
             Text(
-                text = "訂單金額: NTD\$ 3000",
+                text = "   ${order?.expdates} ~ ${order?.expdatee}",
+                style = TextStyle(
+                    fontSize = 16.sp,
+                    lineHeight = 32.sp,
+                    fontFamily = FontFamily(Font(R.font.dm_sans)),
+//                    fontWeight = FontWeight(700),
+                    color = Color(0xFF000000),
+                    textAlign = TextAlign.Start
+                ),
+                modifier = Modifier
+                    .padding(8.dp)
+            )
+            Text(
+                text = "訂單金額: NTD\$ ${order?.amount}",
                 style = TextStyle(
                     fontSize = 18.sp,
                     lineHeight = 32.sp,
@@ -169,7 +199,7 @@ fun ScreenMOS0201(
                     .padding(8.dp)
             )
             Text(
-                text = "訂單編號: abcd1234567890",
+                text = "訂單編號: ${order?.orderid}",
                 style = TextStyle(
                     fontSize = 18.sp,
                     lineHeight = 32.sp,
@@ -182,7 +212,7 @@ fun ScreenMOS0201(
                     .padding(8.dp)
             )
             Text(
-                text = "寵物暱稱: 毛毛",
+                text = "寵物暱稱: ${order?.pet?.nickname}",
                 style = TextStyle(
                     fontSize = 18.sp,
                     lineHeight = 32.sp,

@@ -4,6 +4,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -32,28 +33,26 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.potel.R
-import com.example.potel.ui.theme.PotelTheme
 import kotlinx.coroutines.launch
 
 @Composable
 fun ScreenMOS02(
-    navController: NavHostController,
-    myOrdersViewModel: MyOrdersViewModel = viewModel(),
+    navController: NavHostController
+    ,myOrdersViewModel: MyOrdersViewModel = viewModel()
+    ,memberid: String
 ) {
     val coroutineScope = rememberCoroutineScope()
     var orderlist by remember { mutableStateOf<List<Order>>(emptyList()) }
 
     LaunchedEffect(Unit) {
         coroutineScope.launch {
-            orderlist = myOrdersViewModel.getOrders(1, OrderState.Created.state)
+            orderlist = myOrdersViewModel.getOrders(memberid.toInt(), OrderState.Created.state)
         }
     }
 
@@ -113,6 +112,8 @@ fun ScreenMOS02(
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 items(orderlist.size) { index ->
+                    val order = orderlist[index]
+
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -120,11 +121,12 @@ fun ScreenMOS02(
                                 border = BorderStroke(width = 1.dp, Color.Black),
                                 shape = RoundedCornerShape(10)
                             )
-                            .padding(5.dp),
+                            .padding(5.dp)
+                            .clickable{
+                                navController.navigate(route = "${MyOrdersScreens.MOS0201.name}/${order.orderid}")
+                            },
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        val order = orderlist[index]
-
                         Column(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -264,13 +266,5 @@ fun ScreenMOS02(
 
 
 
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun ScreenMOS02Preview() {
-    PotelTheme {
-        ScreenMOS02(navController = rememberNavController())
     }
 }

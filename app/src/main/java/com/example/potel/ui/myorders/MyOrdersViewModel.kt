@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.asStateFlow
 
 
 class MyOrdersViewModel : ViewModel() {
-    private val tag = "MyOrdersViewModel"
+    private var tag = "MyOrdersViewModel"
     // 定義一個可更改的變數, 但是是私有的(private), 只有VM自己可以改, 外部只能透過提供的method做修改
     private val _orderEditState = MutableStateFlow(Order())
     private val _prdorderEditState = MutableStateFlow(PrdOrder())
@@ -22,14 +22,27 @@ class MyOrdersViewModel : ViewModel() {
 
 
     suspend fun getOrders(memberid: Int = 1, orderstate: Char): List<Order> {
+        Log.d(tag, "memberid=$memberid, orderstate=$orderstate")
         try {
             val response = RetrofitInstance.api.getOrders(memberid, orderstate)
+
+            Log.d(tag, "response[0].orderid=${response[0].orderid}")
+
             return response // 回傳List<Order>
         } catch (e: Exception) {
             Log.e(tag, "error: ${e.message}")
             return emptyList()
         }
     }
-
+    suspend fun getOrder(orderid: Int = 0): Order? {
+        Log.d(tag, "orderid=$orderid")
+        try {
+            val response = RetrofitInstance.api.getOrder(orderid)
+            return response // 回傳List<Order>
+        } catch (e: Exception) {
+            Log.e(tag, "error: ${e.message}")
+            return null
+        }
+    }
 
 }

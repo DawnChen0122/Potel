@@ -65,7 +65,7 @@ fun ScreenMOS01(
             Button(
                 shape = RoundedCornerShape(20),
                 onClick = {
-                    navController.navigate(route = MyOrdersScreens.MOS02.name)
+                    navController.navigate(route = "${MyOrdersScreens.MOS02.name}/1")
                 },
                 border = BorderStroke(1.dp, Color.Black),
                 colors = ButtonDefaults.outlinedButtonColors(),
