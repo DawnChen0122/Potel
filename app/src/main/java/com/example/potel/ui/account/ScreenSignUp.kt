@@ -7,6 +7,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.*
+import androidx.compose.material3.ExposedDropdownMenuDefaults.TrailingIcon
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,15 +29,25 @@ fun Signup(navController: NavHostController) {
 
     val birthday = remember { mutableStateOf("") }
 
-    val options = listOf("Large", "Medium", "Small")
-    // 使用者輸入的文字
     var inputText by remember { mutableStateOf("") }
 
+    val yearRange = (1960..2024).map { it.toString() }
+    var selectedYear by remember { mutableStateOf("") }
+    val filteredYears = yearRange.filter { it.startsWith(inputText, true) }
+
+    val monthRange = (1..12).map { it.toString() }
+    var selectedMonth by remember { mutableStateOf("") }
+    val filteredMonths = monthRange.filter { it.startsWith(inputText, true) }
+
+    val dayRange = (1..31).map { it.toString() }
+    var selectedDay by remember { mutableStateOf("") }
+    val filteredDays = dayRange.filter { it.startsWith(inputText, true) }
+
+
+
     var selectedText by remember { mutableStateOf("") }
-    val filteredOptions = options.filter { it.startsWith(inputText, true) }
     var expanded by remember { mutableStateOf(false) }
-    expanded = expanded && filteredOptions.isNotEmpty()
-    val month = listOf(1..12)
+//    expanded = expanded && filteredbirthday.isNotEmpty()
 
     val gender = remember { mutableStateOf("") }
 
@@ -74,7 +85,7 @@ fun Signup(navController: NavHostController) {
                 .padding(top = 16.dp)
         )
 
-        OutlinedTextField(
+        TextField(
             value = birthday.value,
             onValueChange = { birthday.value = it },
             label = { Text(text = "請選擇生日") },
@@ -85,8 +96,47 @@ fun Signup(navController: NavHostController) {
                 .padding(top = 16.dp),)
         ExposedDropdownMenuBox(
             expanded = expanded,
-            onExpandedChange = { expanded = it }
-        )
+            onExpandedChange = { expanded = it } )
+        {   TextField(
+                // 設為true則無法輸入
+                readOnly = false,
+                // 正確設定TextField與ExposedDropdownMenu對應位置。enabled為true方可展開下拉選單
+                modifier = Modifier.menuAnchor(MenuAnchorType.PrimaryEditable, true),
+                value = inputText,
+                // 當使用者修改文字值時呼叫
+                onValueChange = {
+                    inputText = it
+                    // 值改變時會彈出選項
+                    expanded = true
+                },
+                singleLine = true,
+                label = { Text("T-shirt Size") },
+                // 末端顯示下箭頭圖示
+                trailingIcon = { TrailingIcon(expanded = expanded) }
+            )
+        ExposedDropdownMenu(
+            // 設定是否彈出下拉選單
+            expanded = expanded,
+            // 點擊下拉選單外部時
+            onDismissRequest = { expanded = false }
+        ){
+            // 下拉選單內容由DropdownMenuItem項目組成
+            filteredOptions.forEach { yearRange ->
+                DropdownMenuItem(
+                    text = { Text(yearRange) },
+                    // 點選項目後呼叫
+                    onClick = {
+                        // 點選項目的文字成爲被選取項目與輸入方塊的文字
+                        selectedText = yearRange
+                        inputText = yearRange
+                        // 將狀態設定為收回下拉選單
+                        expanded = false
+                    }
+                )
+            }
+        }
+
+
         OutlinedTextField(
             value = gender.value,
             onValueChange = { gender.value = it },
