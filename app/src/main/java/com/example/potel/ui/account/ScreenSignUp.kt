@@ -57,8 +57,10 @@ fun Signup(navController: NavHostController) {
 
     val email = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
-    val checkpassword = remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
+    var checkpassword = remember { mutableStateOf("") }
+    var checkpasswordVisible  by remember { mutableStateOf(false) }
+
     val username = remember { mutableStateOf("") }
     val phonenumber = remember { mutableStateOf("") }
     val address = remember { mutableStateOf("") }
@@ -312,14 +314,14 @@ fun Signup(navController: NavHostController) {
             },
             trailingIcon = {
                 Text(
-                    text = if (passwordVisible) "隱藏" else "顯示",
+                    text = if (checkpasswordVisible) "隱藏" else "顯示",
                     modifier = Modifier.clickable {
-                        passwordVisible = !passwordVisible
+                        checkpasswordVisible = !checkpasswordVisible
                     }
                 )
             },
             shape = RoundedCornerShape(8.dp),
-            visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+            visualTransformation = if (checkpasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             singleLine = true,
             colors = TextFieldDefaults.colors(
