@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.potel.ui.home.HOME_NAVIGATION_ROUTE
 
 @Composable
 fun LogIn(navController: NavHostController) {
@@ -33,6 +34,15 @@ fun LogIn(navController: NavHostController) {
             .fillMaxSize()
             .padding(16.dp)
     ) {
+        Text(
+            modifier = Modifier.clickable{
+                navController.navigate(HOME_NAVIGATION_ROUTE)
+            },
+            text = "首頁",
+            fontSize = 30.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color.Blue
+        )
         Text(
             text = "登入",
             fontSize = 30.sp,
