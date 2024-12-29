@@ -1,45 +1,62 @@
 package com.example.potel.ui.myorders
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyGridItemScope
-import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import coil.compose.rememberAsyncImagePainter
 import com.example.potel.R
 import com.example.potel.ui.theme.PotelTheme
+import kotlinx.coroutines.launch
 
 @Composable
 fun ScreenMOS02(
-//    myOrdersViewModel: MyOrdersViewModel = viewModel(),
-    navController: NavHostController
+    navController: NavHostController,
+    myOrdersViewModel: MyOrdersViewModel = viewModel(),
 ) {
+    val coroutineScope = rememberCoroutineScope()
+    var orderlist by remember { mutableStateOf<List<Order>>(emptyList()) }
+
+    LaunchedEffect(Unit) {
+        coroutineScope.launch {
+            orderlist = myOrdersViewModel.getOrders(1, OrderState.Created.state)
+        }
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -50,7 +67,7 @@ fun ScreenMOS02(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(20.dp)
+                .padding(5.dp)
                 .background(color = Color(0xFFD9D9D9), shape = RoundedCornerShape(size = 8.dp)),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
@@ -88,13 +105,14 @@ fun ScreenMOS02(
                 )
             }
 
+
             LazyVerticalGrid(
                 columns = GridCells.Fixed(1), // 每列 1 行
                 contentPadding = PaddingValues(10.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                items(20) { index ->
+                items(orderlist.size) { index ->
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -105,6 +123,8 @@ fun ScreenMOS02(
                             .padding(5.dp),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
+                        val order = orderlist[index]
+
                         Column(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -119,22 +139,33 @@ fun ScreenMOS02(
                                 horizontalArrangement = Arrangement.SpaceBetween
 
                             ){
-                                Text(text = "海景房",
+                                Text(text = order.roomtype.descpt,
                                     fontFamily = FontFamily.SansSerif,
                                     style = TextStyle(fontWeight = FontWeight(700),
                                         fontSize = 16.sp),
                                     modifier = Modifier.weight(1f)
                                 )
                                 Text(
-                                    text = "金額: 5000",
+                                    text = "金額: ${order.amount}",
                                     modifier = Modifier.weight(1f),
                                     textAlign = TextAlign.End
                                 )
                             }
-                            Row { Text(text = "訂房時間") }
+                            Text(text = "訂房時間: ${order.createdate}")
+                            Text(text = "暱稱: ${order.pet.nickname}")
                         }
-                        Column (modifier = Modifier.width(70.dp)){
-                            Text(text = "毛毛")
+                        Column (
+                            modifier = Modifier
+                                .width(70.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ){
+                            Image(
+//                                painter = painterResource(R.drawable.hoski),
+                                painter = rememberAsyncImagePainter(composeImageUrl(order.pet.imageid)),
+                                contentDescription = "寵物照片",
+                                alignment = Alignment.TopCenter,
+                                modifier = Modifier.fillMaxHeight()
+                            )
                         }
                     }
                 }

@@ -30,7 +30,6 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.BlendMode.Companion.Screen
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
@@ -39,12 +38,10 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.potel.ui.booking.bookingScreenRoute
 import com.example.potel.ui.discussZone.discussZoneScreenRoute
+import com.example.potel.ui.home.homeScreenRoute
+import com.example.potel.ui.myorders.MyOrdersScreens
 import com.example.potel.ui.myorders.myOrdersScreenRoute
 import com.example.potel.ui.theme.PotelTheme
-import com.example.potel.ui.home.HOME_NAVIGATION_ROUTE
-import com.example.potel.ui.home.homeScreenRoute
-import com.example.potel.ui.myorders.Screens
-import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,13 +64,16 @@ fun PotelApp(
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentScreen = backStackEntry?.destination?.route?.split("/")?.first() ?: "home"
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
+    val currentScreenTitle = findEnumTitleByName(currentScreen,
+        MyOrdersScreens::class.java)
+
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
             .fillMaxSize(),
         topBar = {
             MainTopAppBar(
-                currentScreen = currentScreen,
+                currentScreen = currentScreenTitle,
                 canNavigateBack = navController.previousBackStackEntry != null,
                 navigateUp = { navController.navigateUp() },
                 scrollBehavior = scrollBehavior
@@ -108,7 +108,7 @@ fun TipNavHost(
     NavHost(
         modifier = modifier,
         navController = navController,
-        startDestination = Screens.MOS02.name
+        startDestination = MyOrdersScreens.MOS01.name
     ) {
         // todo 2-2 置入所有的畫面路徑
         homeScreenRoute(navController) // 02 明駿
@@ -223,4 +223,22 @@ fun MainBottomAppBar(){
             }
         }
     )
+}
+
+fun findEnumTitleByName(name: String, vararg enums: Class<out Enum<*>>): String {
+    // 遍历传入的每个枚举类
+    for (enumClass in enums) {
+        // 获取当前枚举类的所有枚举实例
+        val enumConstants = enumClass.enumConstants ?: continue
+        for (enumValue in enumConstants) {
+            // 检查枚举实例的名称是否匹配
+            if (enumValue.name == name) {
+                // 使用反射获取 title 属性值
+                val titleField = enumClass.getMethod("getTitle") // 调用 getTitle 方法
+                return titleField.invoke(enumValue) as String
+            }
+        }
+    }
+    // 如果未找到，返回 null
+    return ""
 }

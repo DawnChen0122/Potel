@@ -2,12 +2,9 @@ package com.example.potel.ui.myorders
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -20,27 +17,22 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontVariation.width
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.example.potel.R
-import com.example.potel.ui.theme.PotelTheme
 
 @Composable
 fun ScreenMOS01(
-//    myOrdersViewModel: MyOrdersViewModel = viewModel(),
-    navController: NavHostController
+    navController: NavHostController,
+    myOrdersViewModel: MyOrdersViewModel = viewModel(),
 ) {
     Column(
         modifier = Modifier
@@ -73,7 +65,7 @@ fun ScreenMOS01(
             Button(
                 shape = RoundedCornerShape(20),
                 onClick = {
-                    navController.navigate(route = Screens.MOS02.name)
+                    navController.navigate(route = MyOrdersScreens.MOS02.name)
                 },
                 border = BorderStroke(1.dp, Color.Black),
                 colors = ButtonDefaults.outlinedButtonColors(),
@@ -100,7 +92,7 @@ fun ScreenMOS01(
             Button(
                 shape = RoundedCornerShape(20),
                 onClick = {
-                    navController.navigate(route = Screens.MOS03.name)
+                    navController.navigate(route = MyOrdersScreens.MOS03.name)
                 },
                 border = BorderStroke(1.dp, Color.Black),
                 colors = ButtonDefaults.outlinedButtonColors(),
@@ -150,7 +142,7 @@ fun ScreenMOS01(
             Button(
                 shape = RoundedCornerShape(20),
                 onClick = {
-                    navController.navigate(route = Screens.MOS04.name)
+                    navController.navigate(route = MyOrdersScreens.MOS04.name)
                 },
                 border = BorderStroke(1.dp, Color.Black),
                 colors = ButtonDefaults.outlinedButtonColors(),
@@ -176,7 +168,7 @@ fun ScreenMOS01(
             Button(
                 shape = RoundedCornerShape(20),
                 onClick = {
-                    navController.navigate(route = Screens.MOS05.name)
+                    navController.navigate(route = MyOrdersScreens.MOS05.name)
                 },
                 border = BorderStroke(1.dp, Color.Black),
                 colors = ButtonDefaults.outlinedButtonColors(),
