@@ -291,6 +291,7 @@ fun Signup(navController: NavHostController) {
                 emailError = !it.matches(emailRegex) },
             label = { Text(text = "請輸入信箱") },
             singleLine = true,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
             shape = RoundedCornerShape(8.dp),
             isError = emailError,
             modifier = Modifier
