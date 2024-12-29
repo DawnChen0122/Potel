@@ -308,7 +308,7 @@ fun Signup(navController: NavHostController) {
 
         OutlinedTextField(
             value = password.value,
-            onValueChange = { password.value = it
+            onValueChange = {
                 password.value = it
                 passwordError = it.isEmpty() || it.length < 6 || it.length > 20 },
             label = { Text(text = "密碼") },
@@ -326,11 +326,11 @@ fun Signup(navController: NavHostController) {
                     }
                 )
             },
+            isError = passwordError,
             shape = RoundedCornerShape(8.dp),
             visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             singleLine = true,
-            isError = passwordError,
             colors = TextFieldDefaults.colors(
                 focusedIndicatorColor = Color.Blue,
                 unfocusedIndicatorColor = Color.Gray,
@@ -339,6 +339,7 @@ fun Signup(navController: NavHostController) {
                 .fillMaxWidth()
                 .padding(top = 10.dp)
         )
+
         if (passwordError) {
             Text(
                 text = "密碼需在6 至 20 字符內",
