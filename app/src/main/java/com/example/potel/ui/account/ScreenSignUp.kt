@@ -36,7 +36,7 @@ fun Signup(navController: NavHostController) {
     val yearRange = (1960..2024).map { it.toString() }
     val monthRange = (1..12).map { it.toString() }
     val dayRange = (1..31).map { it.toString() }
-    val genderRange = (1..31).map { it.toString() }
+    val genderRange = listOf("男", "女","不願透漏").map{ it.toString() }
 
     var selectedYear by remember { mutableStateOf("") }
     var selectedMonth by remember { mutableStateOf("") }
@@ -70,7 +70,7 @@ fun Signup(navController: NavHostController) {
     ) {
         Text(
             text = "會員註冊",
-            fontSize = 15.sp,
+            fontSize = 20.sp,
             fontWeight = FontWeight.Bold,
             color = Color.Blue
         )
@@ -93,14 +93,14 @@ fun Signup(navController: NavHostController) {
                 .background(Color.White, RoundedCornerShape(8.dp))
         ) {
             Text(
-                text = "請選擇生日",
+                text = "請選擇出生年月日",
                 modifier = Modifier.padding(10.dp)
             )
         }
 
         Row(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.Top
         ) {
             ExposedDropdownMenuBox(
                 expanded = expandedYear,
@@ -108,7 +108,7 @@ fun Signup(navController: NavHostController) {
                 modifier = Modifier.weight(1f)
             ) {
                 TextField(
-                    readOnly = false,
+                    readOnly = true,
                     modifier = Modifier.menuAnchor(MenuAnchorType.PrimaryEditable, true),
                     value = inputYear,
                     onValueChange = {
@@ -136,14 +136,13 @@ fun Signup(navController: NavHostController) {
                 }
             }
 
-
             ExposedDropdownMenuBox(
                 expanded = expandedMonth,
                 onExpandedChange = { expandedMonth = it },
                 modifier = Modifier.weight(1f)
             ) {
                 TextField(
-                    readOnly = false,
+                    readOnly = true,
                     modifier = Modifier.menuAnchor(MenuAnchorType.PrimaryEditable, true),
                     value = inputMonth,
                     onValueChange = {
@@ -177,7 +176,7 @@ fun Signup(navController: NavHostController) {
                 modifier = Modifier.weight(1f)
             ) {
                 TextField(
-                    readOnly = false,
+                    readOnly = true,
                     modifier = Modifier.menuAnchor(MenuAnchorType.PrimaryEditable, true),
                     value = inputDay,
                     onValueChange = {
@@ -205,24 +204,29 @@ fun Signup(navController: NavHostController) {
                 }
             }
         }
+
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 10.dp)
                 .background(Color.White, RoundedCornerShape(8.dp))
-        ) {
+        )
+
+        {
             Text(
                 text = "請選擇性別",
                 modifier = Modifier.padding(10.dp)
             )
         }
+
         ExposedDropdownMenuBox(
             expanded = expandedGender,
             onExpandedChange = { expandedGender = it },
-            modifier = Modifier.weight(1f)
-        ) {
+            modifier = Modifier.fillMaxWidth()
+        )
+        {
             TextField(
-                readOnly = false,
+                readOnly = true,
                 modifier = Modifier.menuAnchor(MenuAnchorType.PrimaryEditable, true),
                 value = inputGender,
                 onValueChange = {
@@ -249,17 +253,6 @@ fun Signup(navController: NavHostController) {
                 }
             }
         }
-//        OutlinedTextField(
-//            value = gender.value,
-//            onValueChange = { gender.value = it },
-//            label = { Text(text = "請選擇性別") },
-//            singleLine = true,
-//            shape = RoundedCornerShape(8.dp),
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .padding(top = 10.dp)
-//        )
-
 
         OutlinedTextField(
             value = email.value,
