@@ -26,27 +26,34 @@ import androidx.navigation.compose.rememberNavController
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Signup(navController: NavHostController) {
+
     val uid = remember { mutableStateOf("") }
     var inputYear by remember { mutableStateOf("") }
     var inputMonth by remember { mutableStateOf("") }
     var inputDay by remember { mutableStateOf("") }
+    var inputGender by remember { mutableStateOf("") }
+
     val yearRange = (1960..2024).map { it.toString() }
     val monthRange = (1..12).map { it.toString() }
     val dayRange = (1..31).map { it.toString() }
+    val genderRange = (1..31).map { it.toString() }
 
     var selectedYear by remember { mutableStateOf("") }
     var selectedMonth by remember { mutableStateOf("") }
     var selectedDay by remember { mutableStateOf("") }
+    var selectedGender by remember { mutableStateOf("") }
 
     var expandedYear by remember { mutableStateOf(false) }
     var expandedMonth by remember { mutableStateOf(false) }
     var expandedDay by remember { mutableStateOf(false) }
+    var expandedGender by remember { mutableStateOf(false) }
 
     val filteredYears = yearRange.filter { it.startsWith(inputYear, true) }
     val filteredMonths = monthRange.filter { it.startsWith(inputMonth, true) }
     val filteredDays = dayRange.filter { it.startsWith(inputDay, true) }
+    val filteredGenders = genderRange.filter { it.startsWith(inputGender, true) }
 
-    val gender = remember { mutableStateOf("") }
+
     val email = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
     val checkpassword = remember { mutableStateOf("") }
@@ -198,18 +205,60 @@ fun Signup(navController: NavHostController) {
                 }
             }
         }
-
-
-        OutlinedTextField(
-            value = gender.value,
-            onValueChange = { gender.value = it },
-            label = { Text(text = "請選擇性別") },
-            singleLine = true,
-            shape = RoundedCornerShape(8.dp),
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 10.dp)
-        )
+                .background(Color.White, RoundedCornerShape(8.dp))
+        ) {
+            Text(
+                text = "請選擇性別",
+                modifier = Modifier.padding(10.dp)
+            )
+        }
+        ExposedDropdownMenuBox(
+            expanded = expandedGender,
+            onExpandedChange = { expandedGender = it },
+            modifier = Modifier.weight(1f)
+        ) {
+            TextField(
+                readOnly = false,
+                modifier = Modifier.menuAnchor(MenuAnchorType.PrimaryEditable, true),
+                value = inputGender,
+                onValueChange = {
+                    inputGender = it
+                    expandedGender = true
+                },
+                singleLine = true,
+                label = { Text("性別") },
+                trailingIcon = { TrailingIcon(expanded = expandedGender) }
+            )
+            ExposedDropdownMenu(
+                expanded = expandedGender,
+                onDismissRequest = { expandedGender = false }
+            ) {
+                filteredGenders.forEach { genderRange ->
+                    DropdownMenuItem(
+                        text = { Text(genderRange) },
+                        onClick = {
+                            selectedGender = genderRange
+                            inputGender = genderRange
+                            expandedGender = false
+                        }
+                    )
+                }
+            }
+        }
+//        OutlinedTextField(
+//            value = gender.value,
+//            onValueChange = { gender.value = it },
+//            label = { Text(text = "請選擇性別") },
+//            singleLine = true,
+//            shape = RoundedCornerShape(8.dp),
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .padding(top = 10.dp)
+//        )
 
 
         OutlinedTextField(
