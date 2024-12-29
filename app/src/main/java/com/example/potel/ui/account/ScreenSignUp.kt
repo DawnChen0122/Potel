@@ -414,9 +414,9 @@ fun Signup(navController: NavHostController) {
             isError = phonenumberError,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 10.dp)
+                .padding(top = 10.dp),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
         )
-
         if (phonenumberError) {
             Text(
                 text = "手機號碼為十位數字",
