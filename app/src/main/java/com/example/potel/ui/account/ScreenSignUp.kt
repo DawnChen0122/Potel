@@ -267,6 +267,7 @@ fun Signup(navController: NavHostController) {
                 label = { Text("性別") },
                 trailingIcon = { TrailingIcon(expanded = expandedGender) }
             )
+
             ExposedDropdownMenu(
                 expanded = expandedGender,
                 onDismissRequest = { expandedGender = false }
@@ -392,7 +393,6 @@ fun Signup(navController: NavHostController) {
             )
         }
 
-
         OutlinedTextField(
             value = username.value,
             onValueChange = { username.value = it },
@@ -403,7 +403,6 @@ fun Signup(navController: NavHostController) {
                 .fillMaxWidth()
                 .padding(top = 10.dp)
         )
-
 
         OutlinedTextField(
             value = phonenumber.value,
@@ -426,7 +425,6 @@ fun Signup(navController: NavHostController) {
                 modifier = Modifier.padding(start = 16.dp)
             )
         }
-
 
         OutlinedTextField(
             value = address.value,

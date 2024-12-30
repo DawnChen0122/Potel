@@ -24,7 +24,7 @@ import androidx.navigation.compose.rememberNavController
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 
-fun Resetpassword(navController: NavHostController) {
+fun Resetpassword (navController: NavHostController) {
 
     val email = remember { mutableStateOf("") }
     var emailError by remember { mutableStateOf(false) }
@@ -211,5 +211,5 @@ fun Resetpassword(navController: NavHostController) {
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview3() {
-    Resetpassword(navController = rememberNavController())
+     Resetpassword (navController = rememberNavController())
     }

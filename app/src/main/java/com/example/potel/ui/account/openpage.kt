@@ -23,7 +23,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.potel.ui.home.HOME_NAVIGATION_ROUTE
 
 @Composable
-fun Openpage(navController: NavHostController) {
+fun Login(navController: NavHostController) {
 
     val input = remember { mutableStateOf("") }
     var inputError by remember { mutableStateOf(false) }
@@ -149,5 +149,5 @@ fun Openpage(navController: NavHostController) {
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview6() {
-    Openpage(navController = rememberNavController())
+    Login(navController = rememberNavController())
 }
