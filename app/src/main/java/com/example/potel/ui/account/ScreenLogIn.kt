@@ -38,12 +38,6 @@ fun LogIn(navController: NavHostController) {
             modifier = Modifier.clickable{
                 navController.navigate(HOME_NAVIGATION_ROUTE)
             },
-            text = "首頁",
-            fontSize = 30.sp,
-            fontWeight = FontWeight.Bold,
-            color = Color.Blue
-        )
-        Text(
             text = "登入",
             fontSize = 30.sp,
             fontWeight = FontWeight.Bold,
