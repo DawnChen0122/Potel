@@ -26,7 +26,7 @@ import androidx.navigation.compose.rememberNavController
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 
-fun Signup(navController: NavHostController) {
+fun Signup (navController: NavHostController) {
 
     val uid = remember { mutableStateOf("") }
     var uidError by remember { mutableStateOf(false) }
