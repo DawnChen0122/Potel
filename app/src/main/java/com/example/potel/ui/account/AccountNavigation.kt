@@ -7,7 +7,7 @@ import androidx.navigation.compose.composable
 
 enum class Screens(val title: String){
     Signup(title = "註冊畫面"),
-    Login(title = "登入畫面"),
+    Openpage(title = "登入畫面"),
     Resetpassword(title = "重設密碼")
 }
 
@@ -22,9 +22,9 @@ fun NavGraphBuilder.accountRoute(navController: NavHostController) {
     }
 
     composable(
-        route = Screens.Login.name
+        route = Screens.Openpage.name
     ) {
-        LogIn(
+        Openpage(
             navController = navController
         )
     }
