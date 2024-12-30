@@ -207,8 +207,9 @@ fun Resetpassword(navController: NavHostController) {
                 }
             }
 
-    @Preview(showBackground = true)
-    @Composable
-    fun DefaultPreview3() {
-        Resetpassword(navController = rememberNavController())
+
+@Preview(showBackground = true)
+@Composable
+fun DefaultPreview3() {
+    Resetpassword(navController = rememberNavController())
     }

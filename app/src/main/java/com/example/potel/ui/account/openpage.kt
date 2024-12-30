@@ -11,7 +11,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -22,60 +21,78 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 
 @Composable
-fun Register(navController: NavHostController) {
-    val uid = remember { mutableStateOf("") }
+fun Openpage(navController: NavHostController) {
 
     val email = remember { mutableStateOf("") }
+    var emailError by remember { mutableStateOf(false) }
+    val emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$".toRegex()
+
+    val phonenumber = remember { mutableStateOf("") }
+    var phonenumberError by remember { mutableStateOf(false) }
 
     val password = remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
-    val username = remember { mutableStateOf("") }
-
-    val phonenumber = remember { mutableStateOf("") }
-
-    val address = remember { mutableStateOf("") }
+    var passwordError by remember { mutableStateOf(false) }
 
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .padding(10.dp)
     ) {
-        Text(
-            text = "會員註冊",
-            fontSize = 30.sp,
-            fontWeight = FontWeight.Bold,
-            color = Color.Blue
-        )
-
-
-        OutlinedTextField(
-            value = uid.value,
-            onValueChange = { uid.value = it },
-            label = { Text(text = "請輸入用戶名稱") },
-            singleLine = true,
-            shape = RoundedCornerShape(8.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 16.dp)
-        )
-
 
         OutlinedTextField(
             value = email.value,
-            onValueChange = { email.value = it },
+            onValueChange = {
+                email.value = it
+                emailError = !it.matches(emailRegex)
+            },
             label = { Text(text = "請輸入信箱") },
             singleLine = true,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
             shape = RoundedCornerShape(8.dp),
+            isError = emailError,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 16.dp)
+                .padding(top = 10.dp)
         )
+        if (emailError) {
+            Text(
+                text = "請輸入有效的信箱",
+                color = Color.Red,
+                fontSize = 12.sp,
+                modifier = Modifier.padding(start = 16.dp)
+            )
+        }
+
+        OutlinedTextField(
+            value = phonenumber.value,
+            onValueChange = { phonenumber.value = it
+                phonenumberError = it.isEmpty() || it.length != 10 },
+            label = { Text(text = "請輸入手機號碼") },
+            singleLine = true,
+            shape = RoundedCornerShape(8.dp),
+            isError = phonenumberError,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 10.dp),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+        )
+        if (phonenumberError) {
+            Text(
+                text = "手機號碼為十位數字",
+                color = Color.Red,
+                fontSize = 12.sp,
+                modifier = Modifier.padding(start = 16.dp)
+            )
+        }
 
         OutlinedTextField(
             value = password.value,
-            onValueChange = { password.value = it },
+            onValueChange = {
+                password.value = it
+                passwordError = it.isEmpty() || it.length < 6 || it.length > 20 },
             label = { Text(text = "密碼") },
             leadingIcon = {
                 Icon(
@@ -91,6 +108,7 @@ fun Register(navController: NavHostController) {
                     }
                 )
             },
+            isError = passwordError,
             shape = RoundedCornerShape(8.dp),
             visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
@@ -101,61 +119,43 @@ fun Register(navController: NavHostController) {
             ),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 16.dp)
+                .padding(top = 10.dp)
         )
 
-        OutlinedTextField(
-            value = username.value,
-            onValueChange = { username.value = it },
-            label = { Text(text = "請輸入姓名") },
-            singleLine = true,
-            shape = RoundedCornerShape(8.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 16.dp)
-        )
+        if (passwordError) {
+            Text(
+                text = "密碼需在6 至 20 字符內",
+                color = Color.Red,
+                fontSize = 12.sp,
+                modifier = Modifier.padding(start = 16.dp)
+            )
+        }
 
 
-        OutlinedTextField(
-            value = phonenumber.value,
-            onValueChange = { phonenumber.value = it },
-            label = { Text(text = "請輸入手機號碼") },
-            singleLine = true,
-            shape = RoundedCornerShape(8.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 16.dp)
-        )
-
-        OutlinedTextField(
-            value = address.value,
-            onValueChange = { address.value = it },
-            label = { Text(text = "請輸入地址") },
-            singleLine = true,
-            shape = RoundedCornerShape(8.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 16.dp)
-        )
-
-
-        // 註冊按鈕
         Button(
             onClick = {
-                //
+                if ( email.value.isEmpty() || password.value.isEmpty()) {
+                    // 顯示錯誤提示
+                } else if (password.value != password.value) {
+                    // 顯示密碼不一致的錯誤提示
+                } else {
+                    "執行註冊邏輯"
+                }
             },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 16.dp),
+                .padding(top = 10.dp),
             shape = RoundedCornerShape(8.dp)
         ) {
-            Text(text = "註冊", fontSize = 16.sp)
+            Text(text = "登入", fontSize = 20.sp)
         }
+
     }
 }
 
+
 @Preview(showBackground = true)
 @Composable
-fun DefaultPreview1() {
-    Register(navController = rememberNavController())
+fun DefaultPreview6() {
+    Openpage(navController = rememberNavController())
 }
