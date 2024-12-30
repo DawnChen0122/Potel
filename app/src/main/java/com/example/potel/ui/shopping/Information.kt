@@ -2,6 +2,7 @@ package com.example.potel.ui.shopping
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -108,6 +109,7 @@ fun InformationScreen() {
 
         Row(
             modifier = Modifier.padding(top = 40.dp)
+                .border(width = 2.dp, color = Color.DarkGray, shape = RoundedCornerShape(30))
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceAround,
         ){
@@ -116,7 +118,7 @@ fun InformationScreen() {
                 text = "總價:",
                 fontSize = 24.sp, // 字型大小: 24
                 fontWeight = FontWeight.Bold, // 字體樣式: 粗體
-                color = Color.Red, // 字的顏色: 紅色
+                color = Color.DarkGray, // 字的顏色: 深灰色
                 modifier = Modifier.padding(bottom = 0.dp) // 下方間距
             )
             Text(
