@@ -18,6 +18,8 @@ fun ShopRoute(
     homeViewModel: ShopViewModel = viewModel(),
     navController: NavHostController
 ) {
+
+}
 //    val items by homeViewModel.items.collectAsState()
 
 //    HomeScreen(
@@ -25,35 +27,3 @@ fun ShopRoute(
 //        onDetailClick = { title -> navController.navigate(genDetailNavigationRoute(title)) },
 //        onGetApiClick = homeViewModel::getApiData,
 //    )
-}
-
-@Preview
-@Composable
-fun PreviewHomeScreen() {
-    HomeScreen()
-}
-
-@Composable
-fun HomeScreen(
-//    items: List<TipHomeItemUiState> = listOf(),
-//    onGetApiClick: () -> Unit = {},
-//    onDetailClick: (String) -> Unit = {}
-) {
-//    Column {
-//        Text(
-//            modifier = Modifier
-//                .background(TipColor.Pink80)
-//                .padding(12.dp)
-//                .clickable(onClick = onGetApiClick),
-//            text = "取得資料"
-//        )
-//
-//        items.forEach { item ->
-//            TipHomeItem(
-//                modifier = Modifier.clickable(onClick = { onDetailClick.invoke(item.title) }),
-//                uiState = item
-//            )
-//        }
-//
-//    }
-}

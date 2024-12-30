@@ -13,7 +13,7 @@ fun NavGraphBuilder.homeScreen1Route(navController: NavHostController) {
     composable(
         route = Screens.LogIn.name,
     ) {
-        Login(
+        LogIn(
             navController = navController
         )
     }
