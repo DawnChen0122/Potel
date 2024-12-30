@@ -27,19 +27,19 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun PetInfoForm() {
     var ownerName by remember { mutableStateOf(TextFieldValue()) }
-    var birthDate by remember { mutableStateOf(TextFieldValue()) }
     var petName by remember { mutableStateOf(TextFieldValue()) }
-    var contactInfo by remember { mutableStateOf(TextFieldValue()) }
     var petGender by remember { mutableStateOf(TextFieldValue()) }
-
+    var contactInfo by remember { mutableStateOf(TextFieldValue()) }
+    var petDiscribe by remember { mutableStateOf(TextFieldValue()) }
+    var petImage by remember { mutableStateOf(TextFieldValue()) }
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(70.dp)
+        verticalArrangement = Arrangement.spacedBy(50.dp)
     ) {
-        Spacer(modifier = Modifier.height(10.dp))
+        Spacer(modifier = Modifier.height(5.dp))
         Text(
             text = "Pet Information",
             style = TextStyle(fontSize = 30.sp, fontWeight = androidx.compose.ui.text.font.FontWeight.Bold),
@@ -53,21 +53,9 @@ fun PetInfoForm() {
         )
 
         PetInfoTextField(
-            label = "請輸入飼主生日",
-            textState = birthDate,
-            onValueChange = { birthDate = it }
-        )
-
-        PetInfoTextField(
             label = "請輸入寵物名稱",
             textState = petName,
             onValueChange = { petName = it }
-        )
-
-        PetInfoTextField(
-            label = "請輸入聯絡訊息",
-            textState = contactInfo,
-            onValueChange = { contactInfo = it }
         )
 
         PetInfoTextField(
@@ -75,6 +63,25 @@ fun PetInfoForm() {
             textState = petGender,
             onValueChange = { petGender = it }
         )
+
+        PetInfoTextField(
+            label = "請輸飼主聯絡方式",
+            textState = contactInfo,
+            onValueChange = { contactInfo = it }
+        )
+
+        PetInfoTextField(
+            label = "請輸入寵物描述",
+            textState = petDiscribe,
+            onValueChange = { petDiscribe = it }
+        )
+
+        PetInfoTextField(
+            label = "請上傳寵物影像",
+            textState = petImage,
+            onValueChange = { petImage = it }
+        )
+
     }
 }
 
@@ -89,10 +96,10 @@ fun PetInfoTextField(label: String, textState: TextFieldValue, onValueChange: (T
     )
 }
 
-//@Preview(showBackground = true)
-//@Composable
-//fun DefaultPreview() {
-//
-//        PetInfoForm()
-//
-//}
+@Preview(showBackground = true)
+@Composable
+fun DefaultPreview() {
+
+        PetInfoForm()
+
+}

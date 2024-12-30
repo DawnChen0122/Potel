@@ -85,9 +85,9 @@ fun MainScreen() {
     }
 }
 
-//@Preview(showBackground = true)
-//@Composable
-//fun DefaultPreview() {
-//        MainScreen()
-//    }
+@Preview(showBackground = true)
+@Composable
+fun DefaultPreview() {
+        MainScreen()
+    }
 
