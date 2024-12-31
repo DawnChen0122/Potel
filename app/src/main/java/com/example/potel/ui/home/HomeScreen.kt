@@ -1,9 +1,24 @@
 package com.example.potel.ui.home
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 
 /**
  * todo 2-2 將首頁的畫面獨立出來
@@ -15,9 +30,80 @@ import androidx.navigation.NavHostController
 
 @Composable
 fun HomeRoute(
-    homeViewModel: HomeViewModel = viewModel(),
+//    homeViewModel: HomeViewModel = viewModel(),
     navController: NavHostController
 ) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(5.dp)
+    ) {
+        Text(
+            text = "首頁",
+            fontSize = 30.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color.Blue
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Text(
+            text = "入住須知",
+            fontSize = 30.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color.Blue
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Text(
+            text = "顯示房客評價",
+            fontSize = 30.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color.Blue
+        )
+
+        Spacer(modifier = Modifier.height(32.dp))
+
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(30.dp)
+        ) {
+            Text(
+                text = "聊天室",
+                fontSize = 30.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.Blue
+            )
+
+            Spacer(modifier = Modifier.width(16.dp))
+
+            Text(
+                text = "毛小孩追蹤",
+                fontSize = 30.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.Blue
+            )
+
+
+            Spacer(modifier = Modifier.height(32.dp))
+
+            Row(
+                horizontalArrangement = Arrangement.Center,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(30.dp)
+            ) {
+
+            }
+        }
+    }
+}
+
+
 //    val items by homeViewModel.items.collectAsState()
 
 //    HomeScreen(
@@ -25,20 +111,19 @@ fun HomeRoute(
 //        onDetailClick = { title -> navController.navigate(genDetailNavigationRoute(title)) },
 //        onGetApiClick = homeViewModel::getApiData,
 //    )
-}
 
-@Preview
-@Composable
-fun PreviewHomeScreen() {
-    HomeScreen()
-}
+//@Preview
+//@Composable
+//fun PreviewHomeScreen() {
+//    HomeScreen()
+//}
 
-@Composable
-fun HomeScreen(
+//    @Composable
+//    fun HomeScreen(
 //    items: List<TipHomeItemUiState> = listOf(),
 //    onGetApiClick: () -> Unit = {},
 //    onDetailClick: (String) -> Unit = {}
-) {
+//    ) {
 //    Column {
 //        Text(
 //            modifier = Modifier
@@ -56,4 +141,12 @@ fun HomeScreen(
 //        }
 //
 //    }
+//    }
+//}
+
+
+@Preview(showBackground = true)
+@Composable
+fun DefaultPreview10() {
+    HomeRoute(navController = rememberNavController())
 }
