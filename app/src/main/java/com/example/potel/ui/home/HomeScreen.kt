@@ -37,7 +37,7 @@ fun HomeRoute(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxSize()
-            .padding(5.dp)
+            .padding(30.dp)
     ) {
         Text(
             text = "首頁",
@@ -46,7 +46,7 @@ fun HomeRoute(
             color = Color.Blue
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(30.dp))
 
         Text(
             text = "入住須知",
@@ -55,7 +55,7 @@ fun HomeRoute(
             color = Color.Blue
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(30.dp))
 
         Text(
             text = "顯示房客評價",
@@ -64,12 +64,27 @@ fun HomeRoute(
             color = Color.Blue
         )
 
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(30.dp))
+
+            Row(
+                horizontalArrangement = Arrangement.Center,
+                modifier = Modifier
+                    .padding(30.dp)
+            ) {
+
+                Text(
+                    text = "房型介紹",
+                    fontSize = 30.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Blue
+                )
+            }
+
+        Spacer(modifier = Modifier.height(30.dp))
 
         Row(
             horizontalArrangement = Arrangement.Center,
             modifier = Modifier
-                .fillMaxSize()
                 .padding(30.dp)
         ) {
             Text(
@@ -79,7 +94,7 @@ fun HomeRoute(
                 color = Color.Blue
             )
 
-            Spacer(modifier = Modifier.width(16.dp))
+            Spacer(modifier = Modifier.width(30.dp))
 
             Text(
                 text = "毛小孩追蹤",
@@ -88,17 +103,6 @@ fun HomeRoute(
                 color = Color.Blue
             )
 
-
-            Spacer(modifier = Modifier.height(32.dp))
-
-            Row(
-                horizontalArrangement = Arrangement.Center,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(30.dp)
-            ) {
-
-            }
         }
     }
 }
