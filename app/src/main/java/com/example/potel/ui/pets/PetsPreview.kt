@@ -113,11 +113,11 @@ fun PetItem(petName: String, petGender: String, petDescription: String) {
         }
     }
 }
-@Preview(showBackground = true)
-@Composable
-fun PetInfoScreenPreview() {
-
-        PetInfoScreen()
-
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun PetInfoScreenPreview() {
+//
+//        PetInfoScreen()
+//
+//}
 

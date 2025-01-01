@@ -96,10 +96,10 @@ fun PetInfoTextField(label: String, textState: TextFieldValue, onValueChange: (T
     )
 }
 
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-
-        PetInfoForm()
-
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun DefaultPreview() {
+//
+//        PetInfoForm()
+//
+//}

@@ -16,6 +16,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.potel.R
 
 //class MainActivity : ComponentActivity() {
 //    override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,7 +47,29 @@ fun MainScreen() {
         )
 
         // 空白200個字元
-        Spacer(modifier = Modifier.height(300.dp))
+        Spacer(modifier = Modifier.height(200.dp))
+
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.user), // 替換為 dog 圖片資源ID
+                contentDescription = "User",
+                modifier = Modifier.size(100.dp)
+            )
+        }
+        Spacer(modifier = Modifier.height(20.dp))
+
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Button(onClick = { /* 按下Add Dog的動作 */ }) {
+                Text(text = "Add user")
+            }
+        }
+            Spacer(modifier = Modifier.height(100.dp))
 
         // 顯示圖片A (dog)
         Row(
@@ -54,14 +77,14 @@ fun MainScreen() {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
-                painter = painterResource(id = android.R.drawable.ic_menu_camera), // 替換為 dog 圖片資源ID
+                painter = painterResource(id = R.drawable.dog), // 替換為 dog 圖片資源ID
                 contentDescription = "Dog",
                 modifier = Modifier.size(100.dp)
             )
             Spacer(modifier = Modifier.width(30.dp)) // 圖片間隙
             // 顯示圖片B (cat)
             Image(
-                painter = painterResource(id = android.R.drawable.ic_menu_gallery), // 替換為 cat 圖片資源ID
+                painter = painterResource(id = R.drawable.cat), // 替換為 cat 圖片資源ID
                 contentDescription = "Cat",
                 modifier = Modifier.size(100.dp)
             )
