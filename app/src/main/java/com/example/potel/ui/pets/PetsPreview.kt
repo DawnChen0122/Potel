@@ -37,7 +37,8 @@ fun PetInfoScreen() {
 
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
+            .padding(16.dp)
+            .background(Color(0xFFF0E68C)),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         // TextField for user input
