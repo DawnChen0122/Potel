@@ -7,17 +7,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.BottomAppBar
-import androidx.compose.material3.BottomAppBarDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -31,7 +25,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -158,6 +154,7 @@ fun MainTopAppBar(
 @Composable
 fun MainBottomAppBar(){
     BottomAppBar(
+        modifier = Modifier.fillMaxWidth(),
         // 動作按鈕
         actions = {
             IconButton(
@@ -170,7 +167,12 @@ fun MainBottomAppBar(){
 //                    }
                 }
             ) {
-                Icon(Icons.Filled.Check, contentDescription = "check")
+//                Icon(Icons.Filled.Check, contentDescription = "check")
+                Icon(
+                    painter = painterResource(R.drawable.home),
+                    contentDescription = "Home",
+                    modifier = Modifier.size(150.dp)
+                )
             }
 
             IconButton(
@@ -181,11 +183,16 @@ fun MainBottomAppBar(){
 //                        withDismissAction = true
 //                    )
 //                }
-                }
+                },
             ) {
+//                Icon(
+//                    Icons.Filled.Edit,
+//                    contentDescription = "edit",
+//                )
                 Icon(
-                    Icons.Filled.Edit,
-                    contentDescription = "edit",
+                    painter = painterResource(R.drawable.booking),
+                    contentDescription = "Booking",
+                    modifier = Modifier.size(150.dp)
                 )
             }
 
@@ -197,31 +204,78 @@ fun MainBottomAppBar(){
 //                            withDismissAction = true
 //                        )
 //                    }
-                }
+                },
             ) {
+//                Icon(
+//                    Icons.Filled.Delete,
+//                    contentDescription = "delete",
+//                )
                 Icon(
-                    Icons.Filled.Delete,
-                    contentDescription = "delete",
+                    painter = painterResource(R.drawable.shopping),
+                    contentDescription = "Shopping",
+                    modifier = Modifier.size(150.dp)
                 )
             }
-        },
-        // BottomAppBar也可放FloatingActionButton
-        floatingActionButton = {
-            FloatingActionButton(
+            IconButton(
                 onClick = {
 //                    scope.launch {
 //                        snackbarHostState.showSnackbar(
-//                            "BottomAppBar - Add",
+//                            "BottomAppBar - Delete",
 //                            withDismissAction = true
 //                        )
 //                    }
-                },
-                containerColor = BottomAppBarDefaults.bottomAppBarFabColor,
-                elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation()
+                }
             ) {
-                Icon(Icons.Filled.Add, "Localized description")
+//                Icon(
+//                    Icons.Filled.Delete,
+//                    contentDescription = "delete",
+//                )
+                Icon(
+                    painter = painterResource(R.drawable.myorders),
+                    contentDescription = "MyOrders",
+                    modifier = Modifier.size(150.dp)
+                )
             }
-        }
+            IconButton(
+                onClick = {
+//                    scope.launch {
+//                        snackbarHostState.showSnackbar(
+//                            "BottomAppBar - Delete",
+//                            withDismissAction = true
+//                        )
+//                    }
+                }
+            ) {
+//                Icon(
+//                    Icons.Filled.Delete,
+//                    contentDescription = "delete",
+//                )
+                Icon(
+                    painter = painterResource(R.drawable.myinfo),
+                    contentDescription = "MyInfo",
+                    modifier = Modifier.size(150.dp)
+                )
+            }
+        },
+
+
+        // BottomAppBar也可放FloatingActionButton
+//        floatingActionButton = {
+//            FloatingActionButton(
+//                onClick = {
+////                    scope.launch {
+////                        snackbarHostState.showSnackbar(
+////                            "BottomAppBar - Add",
+////                            withDismissAction = true
+////                        )
+////                    }
+//                },
+//                containerColor = BottomAppBarDefaults.bottomAppBarFabColor,
+//                elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation()
+//            ) {
+//                Icon(Icons.Filled.Add, "Localized description")
+//            }
+//        }
     )
 }
 

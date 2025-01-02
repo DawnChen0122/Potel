@@ -26,10 +26,10 @@ interface ApiService {
 
     /** 修改order, 評分 */
     @PUT("api/order")
-    suspend fun updateUser(
-        @Query("orderid") orderid: Int,
+    suspend fun updateOrder(
+        @Query("op") op: String,
         @Body updateOrderRequest: Order
-    ): Order?
+    ): ResponseObject
 
 
 //    /** 修改user */

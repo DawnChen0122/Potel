@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.asStateFlow
 class MyOrdersViewModel : ViewModel() {
     private var tag = "MyOrdersViewModel"
     // 定義一個可更改的變數, 但是是私有的(private), 只有VM自己可以改, 外部只能透過提供的method做修改
-    private val _orderEditState = MutableStateFlow(Order())
+    private val _orderEditState = MutableStateFlow<Order?>(Order())
     private val _prdorderEditState = MutableStateFlow(PrdOrder())
     private val _petEditState = MutableStateFlow(Pet())
     private val _memberEditState = MutableStateFlow(Member())
@@ -20,6 +20,9 @@ class MyOrdersViewModel : ViewModel() {
     val petEditState = _petEditState.asStateFlow()
     val memberEditState = _memberEditState.asStateFlow()
 
+    fun setOrder(order: Order?){
+        _orderEditState.value = order
+    }
 
     suspend fun getOrders(memberid: Int = 1, orderstate: Char): List<Order> {
         Log.d(tag, "memberid=$memberid, orderstate=$orderstate")
@@ -45,4 +48,15 @@ class MyOrdersViewModel : ViewModel() {
         }
     }
 
+    suspend fun updateOrder(op:String, order: Order): ResponseObject? {
+        Log.d(tag, "orderid=${order.orderid}")
+        try {
+            val response = RetrofitInstance.api.updateOrder(op, order)
+            Log.d(tag, "orderid=${order.orderid}, respcode=${response.respcode}, respmsg=${response.respmsg}")
+            return response // 回傳ResponseObject
+        } catch (e: Exception) {
+            Log.e(tag, "error: ${e.message}")
+            return ResponseObject(-1, "更新資料失敗")
+        }
+    }
 }

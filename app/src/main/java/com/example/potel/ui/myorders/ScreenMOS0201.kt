@@ -41,30 +41,32 @@ import kotlinx.coroutines.launch
 @Composable
 fun ScreenMOS0201(
     navController: NavHostController
-    ,myOrdersViewModel: MyOrdersViewModel = viewModel()
     ,orderid: String
 ) {
+    val backStackEntry = navController.getBackStackEntry(MyOrdersScreens.MOS01.name)
+    val myOrdersViewModel: MyOrdersViewModel = viewModel(backStackEntry, key = "myOrdersVM")
+
     val coroutineScope = rememberCoroutineScope()
     var order by remember { mutableStateOf<Order?>(null) }
 
     LaunchedEffect(Unit) {
         coroutineScope.launch {
             order = myOrdersViewModel.getOrder(orderid.toInt())
+            myOrdersViewModel.setOrder(order)
         }
     }
-
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(10.dp),
+            .padding(2.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(20.dp)
+                .padding(10.dp)
                 .background(color = Color(0xFFD9D9D9), shape = RoundedCornerShape(size = 8.dp)),
             horizontalAlignment = Alignment.Start,
             verticalArrangement = Arrangement.Top
@@ -113,10 +115,29 @@ fun ScreenMOS0201(
                     painter = rememberAsyncImagePainter(composeImageUrl(order?.roomtype?.imageid?.toInt()?:0)),
                     contentDescription = "房間照片"
                 )
+            }
 
+            Row(
+                modifier = Modifier.fillMaxWidth()
+                    .padding(5.dp),
+                horizontalArrangement = Arrangement.SpaceBetween // 讓內容分佈在兩端
+            ) {
+                Text(
+                    text = order?.roomtype?.descpt?:"No data",
+                    style = TextStyle(
+                        fontSize = 22.sp,
+                        lineHeight = 32.sp,
+                        fontFamily = FontFamily(Font(R.font.dm_sans)),
+                        fontWeight = FontWeight(700),
+                        color = Color(0xFF000000),
+                        textAlign = TextAlign.Start
+                    ),
+                    modifier = Modifier
+                        .padding(8.dp)
+                )
                 OutlinedButton(
                     onClick = {
-
+                        navController.navigate(route = MyOrdersScreens.MOS0202.name)
                     },
                     shape = RoundedCornerShape(20),
                     border = BorderStroke(width = 1.dp, color = Color.Black),
@@ -132,20 +153,9 @@ fun ScreenMOS0201(
                         ),
                     )
                 }
+
             }
-            Text(
-                text = order?.roomtype?.descpt?:"No data",
-                style = TextStyle(
-                    fontSize = 22.sp,
-                    lineHeight = 32.sp,
-                    fontFamily = FontFamily(Font(R.font.dm_sans)),
-                    fontWeight = FontWeight(700),
-                    color = Color(0xFF000000),
-                    textAlign = TextAlign.Start
-                ),
-                modifier = Modifier
-                    .padding(8.dp)
-            )
+
             Text(
                 text = "訂房時間: ${order?.createdate}",
                 style = TextStyle(

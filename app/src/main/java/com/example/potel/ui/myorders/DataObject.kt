@@ -97,3 +97,8 @@ data class PrdOrdItem(
     var modifydate: String = "",
     var product: Product
 )
+
+data class ResponseObject(
+    var respcode: Int = -1,
+    var respmsg: String = ""
+)

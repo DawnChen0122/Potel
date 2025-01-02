@@ -1,7 +1,7 @@
 package com.example.potel.ui.myorders
 
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -28,6 +27,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -37,16 +38,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import coil.compose.rememberAsyncImagePainter
+import coil.compose.AsyncImage
 import com.example.potel.R
 import kotlinx.coroutines.launch
 
 @Composable
 fun ScreenMOS02(
     navController: NavHostController
-    ,myOrdersViewModel: MyOrdersViewModel = viewModel()
     ,memberid: String
 ) {
+    val backStackEntry = navController.getBackStackEntry(MyOrdersScreens.MOS01.name)
+    val myOrdersViewModel: MyOrdersViewModel = viewModel(backStackEntry, key = "myOrdersVM")
+
     val coroutineScope = rememberCoroutineScope()
     var orderlist by remember { mutableStateOf<List<Order>>(emptyList()) }
 
@@ -161,13 +164,21 @@ fun ScreenMOS02(
                                 .width(70.dp),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ){
-                            Image(
-//                                painter = painterResource(R.drawable.hoski),
-                                painter = rememberAsyncImagePainter(composeImageUrl(order.pet.imageid)),
+                            Log.d("ScreenMOS02", "imageid=${order.pet.imageid}, composeImageUrl(order.pet.imageid)=${composeImageUrl(order.pet.imageid)}")
+                            AsyncImage(
+                                model = composeImageUrl(order.pet.imageid),
                                 contentDescription = "寵物照片",
                                 alignment = Alignment.TopCenter,
-                                modifier = Modifier.fillMaxHeight()
+                                contentScale = ContentScale.FillWidth,
+                                placeholder = painterResource(R.drawable.placeholder)
                             )
+//                            Image(
+////                                painter = painterResource(R.drawable.hoski),
+////                                painter = rememberAsyncImagePainter(composeImageUrl(order.pet.imageid)),
+//                                contentDescription = "寵物照片",
+//                                alignment = Alignment.TopCenter,
+//                                modifier = Modifier.fillMaxHeight()
+//                            )
                         }
                     }
                 }

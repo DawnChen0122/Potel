@@ -45,7 +45,7 @@ fun NavGraphBuilder.myOrdersScreenRoute(
     }
     composable(
         route = "${MyOrdersScreens.MOS0201.name}/{orderid}",
-    ) {backStackEntry ->
+    ) { backStackEntry ->
         ScreenMOS0201(
             navController = navController
             , orderid = backStackEntry.arguments?.getString("orderid") ?: ""
@@ -54,22 +54,33 @@ fun NavGraphBuilder.myOrdersScreenRoute(
     composable(
         route = MyOrdersScreens.MOS0202.name,
     ) {
-        ScreenMOS0202(navController = navController)
+        ScreenMOS0202(
+            navController = navController
+        )
     }
     composable(
-        route = MyOrdersScreens.MOS03.name,
-    ) {
-        ScreenMOS03(navController = navController)
+        route = "${MyOrdersScreens.MOS03.name}/{memberid}"
+    ) { backStackEntry ->
+        ScreenMOS03(
+            navController = navController,
+            memberid = backStackEntry.arguments?.getString("memberid") ?: ""
+        )
     }
     composable(
-        route = MyOrdersScreens.MOS0301.name,
-    ) {
-        ScreenMOS0301(navController = navController)
+        route = "${MyOrdersScreens.MOS0301.name}/{orderid}",
+    ) { backStackEntry ->
+        ScreenMOS0301(
+            navController = navController,
+            orderid = backStackEntry.arguments?.getString("orderid") ?: "0"
+        )
     }
     composable(
-        route = MyOrdersScreens.MOS0302.name,
-    ) {
-        ScreenMOS0302(navController = navController)
+        route = "${MyOrdersScreens.MOS0302.name}/{orderid}",
+    ) { backStackEntry ->
+        ScreenMOS0302(
+            navController = navController,
+            orderid = backStackEntry.arguments?.getString("orderid") ?: "0"
+        )
     }
     composable(
         route = MyOrdersScreens.MOS0303.name,

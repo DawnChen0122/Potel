@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -31,9 +30,10 @@ import com.example.potel.R
 
 @Composable
 fun ScreenMOS01(
-    navController: NavHostController,
-    myOrdersViewModel: MyOrdersViewModel = viewModel(),
+    navController: NavHostController
 ) {
+    val myOrdersVM: MyOrdersViewModel = viewModel(key = "myOrdersVM")
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -82,17 +82,14 @@ fun ScreenMOS01(
                         fontWeight = FontWeight(700),
                         color = Color(0xFF000000),
                         textAlign = TextAlign.Center,
-                    ),
-                    modifier = Modifier
-                        .width(64.dp)
-                        .height(32.dp)
+                    )
                 )
             }
 
             Button(
                 shape = RoundedCornerShape(20),
                 onClick = {
-                    navController.navigate(route = MyOrdersScreens.MOS03.name)
+                    navController.navigate(route = "${MyOrdersScreens.MOS03.name}/1")
                 },
                 border = BorderStroke(1.dp, Color.Black),
                 colors = ButtonDefaults.outlinedButtonColors(),
@@ -109,10 +106,7 @@ fun ScreenMOS01(
                         fontWeight = FontWeight(700),
                         color = Color(0xFF000000),
                         textAlign = TextAlign.Center,
-                    ),
-                    modifier = Modifier
-                        .width(64.dp)
-                        .height(32.dp)
+                    )
                 )
             }
         }
@@ -159,10 +153,7 @@ fun ScreenMOS01(
                         fontWeight = FontWeight(700),
                         color = Color(0xFF000000),
                         textAlign = TextAlign.Center,
-                    ),
-                    modifier = Modifier
-                        .width(64.dp)
-                        .height(32.dp)
+                    )
                 )
             }
             Button(
@@ -185,10 +176,7 @@ fun ScreenMOS01(
                         fontWeight = FontWeight(700),
                         color = Color(0xFF000000),
                         textAlign = TextAlign.Center,
-                    ),
-                    modifier = Modifier
-                        .width(64.dp)
-                        .height(32.dp)
+                    )
                 )
             }
         }
