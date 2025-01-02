@@ -1,4 +1,4 @@
-package com.example.potel.ui.account
+package com.example.potel.ui.home
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -24,15 +24,11 @@ import androidx.navigation.compose.rememberNavController
 @Composable
 fun Register(navController: NavHostController) {
     val uid = remember { mutableStateOf("") }
-
     val email = remember { mutableStateOf("") }
-
     val password = remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
     val username = remember { mutableStateOf("") }
-
     val phonenumber = remember { mutableStateOf("") }
-
     val address = remember { mutableStateOf("") }
 
 
@@ -53,7 +49,6 @@ fun Register(navController: NavHostController) {
         OutlinedTextField(
             value = uid.value,
             onValueChange = { uid.value = it },
-<<<<<<< HEAD:app/src/main/java/com/example/potel/ui/account/AccountScreen.kt
             label = { Text(text = "請輸入用戶名稱") },
             singleLine = true,
             shape = RoundedCornerShape(8.dp),
@@ -67,9 +62,6 @@ fun Register(navController: NavHostController) {
             value = email.value,
             onValueChange = { email.value = it },
             label = { Text(text = "請輸入信箱") },
-=======
-            label = { Text(text = "請輸入手機號碼/信箱") },
->>>>>>> master:app/src/main/java/com/example/potel/ui/home/ScreenLogIn.kt
             singleLine = true,
             shape = RoundedCornerShape(8.dp),
             modifier = Modifier
