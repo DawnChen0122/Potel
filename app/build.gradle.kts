@@ -53,16 +53,13 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.security.crypto.ktx)
     implementation(libs.gson)
-<<<<<<< HEAD
     implementation(libs.coil.compose)
     implementation(libs.accompanist.permissions)
     implementation(libs.firebase.bom)
     implementation(libs.firebase.messaging.ktx)
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
-=======
     implementation(libs.play.services.analytics.impl)
->>>>>>> sen
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

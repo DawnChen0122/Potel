@@ -5,17 +5,15 @@ import androidx.compose.runtime.remember
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
-<<<<<<< HEAD
 import com.example.potel.ui.pets.PETS_NAVIGATION_ROUTE
-import com.example.potel.ui.pets.PetsScreenRoute
-=======
+//import com.example.potel.ui.pets.PetsScreenRoute
 import com.example.potel.ui.booking.BookingScreens.Booking
 import com.example.potel.ui.booking.BookingScreens.DateSelection
 import com.example.potel.ui.booking.BookingScreens.RoomSelection
 import com.example.potel.ui.booking.BookingScreens.Payment
 
 
->>>>>>> DawnChen
+
 
 /**
  * todo 2-1 將首頁的路由獨立出來
@@ -27,27 +25,18 @@ enum class BookingScreens(title: String){
     Payment(title = "Payment11"),
     BookingSuccess(title = "BookingSuccess11"),
 
-<<<<<<< HEAD
-const val HOME_NAVIGATION_ROUTE = "booking"
 
-fun getPetsNavigationRoute() = PETS_NAVIGATION_ROUTE
-=======
 }
->>>>>>> DawnChen
 
 fun NavGraphBuilder.PetsScreenRoute(navController: NavHostController) {
     composable(
-<<<<<<< HEAD
-        route = PETS_NAVIGATION_ROUTE,
-    ) {
-        PetsScreenRoute(navController = navController)
-=======
+
         route = DateSelection.name,
     ) {
         DateSelectionScreen(
             navController = navController
         )
->>>>>>> DawnChen
+
     }
     composable(
         route = Booking.name,

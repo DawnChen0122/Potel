@@ -18,23 +18,23 @@ enum class Screens(title: String){
 }
 const val PETS_NAVIGATION_ROUTE = "home"
 
-
-fun NavGraphBuilder.PetsScreenRoute(navController: NavHostController) {
-    composable(
-        route = com.example.potel.ui.myorders.Screens.MOS01.name,
-    ) {
-        ScreenMOS01(
-            navController = navController
-        )
-    }
-    composable(
-        route = com.example.potel.ui.myorders.Screens.MOS02.name,
-    ) {
-        ScreenMOS02(navController = navController)
-    }
-    composable(
-        route = com.example.potel.ui.myorders.Screens.MOS0201.name,
-    ) {
-        ScreenMOS0201(navController = navController)
-    }
-}
+//
+//fun NavGraphBuilder.PetsScreenRoute(navController: NavHostController) {
+//    composable(
+//        route = com.example.potel.ui.myorders.Screens.MOS01.name,
+//    ) {
+//        ScreenMOS01(
+//            navController = navController
+//        )
+//    }
+//    composable(
+//        route = com.example.potel.ui.myorders.Screens.MOS02.name,
+//    ) {
+//        ScreenMOS02(navController = navController)
+//    }
+//    composable(
+//        route = com.example.potel.ui.myorders.Screens.MOS0201.name,
+//    ) {
+//        ScreenMOS0201(navController = navController)
+//    }
+//}
