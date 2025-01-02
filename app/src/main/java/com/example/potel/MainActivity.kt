@@ -27,7 +27,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+<<<<<<< HEAD
 import androidx.compose.ui.unit.dp
+=======
+import androidx.compose.ui.tooling.preview.Preview
+>>>>>>> sen
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -38,9 +42,19 @@ import com.example.potel.ui.home.homeScreenRoute
 import com.example.potel.ui.myorders.MyOrdersScreens
 import com.example.potel.ui.myorders.myOrdersScreenRoute
 import com.example.potel.ui.theme.PotelTheme
+<<<<<<< HEAD
 import com.example.potel.ui.shopping.shopScreenRoute
 import com.example.potel.ui.account.accountRoute
 
+=======
+import com.example.potel.ui.home.HOME_NAVIGATION_ROUTE
+import com.example.potel.ui.home.homeScreenRoute
+
+import com.example.potel.ui.shopping.shopScreenRoute
+
+import com.example.potel.ui.myorders.Screens
+import kotlinx.coroutines.launch
+>>>>>>> sen
 
 
 class MainActivity : ComponentActivity() {
@@ -54,7 +68,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-
+@Preview(showBackground = true)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PotelApp(
@@ -116,6 +130,7 @@ fun TipNavHost(
         bookingScreenRoute(navController) // 04 芊伃
         myOrdersScreenRoute(navController) // 27 正能
         shopScreenRoute(navController) // 07 柏森
+        // productListRoute
 //        careRecordsScreenRoute(navController) // 25 泰陽
         discussZoneScreenRoute(navController) // 16 品伃
 //        petsScreenRoute(navController) // 18 勇慶
