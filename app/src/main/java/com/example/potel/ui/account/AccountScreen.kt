@@ -53,7 +53,6 @@ fun Register(navController: NavHostController) {
         OutlinedTextField(
             value = uid.value,
             onValueChange = { uid.value = it },
-<<<<<<< HEAD:app/src/main/java/com/example/potel/ui/account/AccountScreen.kt
             label = { Text(text = "請輸入用戶名稱") },
             singleLine = true,
             shape = RoundedCornerShape(8.dp),
@@ -66,10 +65,7 @@ fun Register(navController: NavHostController) {
         OutlinedTextField(
             value = email.value,
             onValueChange = { email.value = it },
-            label = { Text(text = "請輸入信箱") },
-=======
-            label = { Text(text = "請輸入手機號碼/信箱") },
->>>>>>> master:app/src/main/java/com/example/potel/ui/home/ScreenLogIn.kt
+            label = { Text (text = "請輸入手機號碼/信箱") },
             singleLine = true,
             shape = RoundedCornerShape(8.dp),
             modifier = Modifier
