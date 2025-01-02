@@ -9,6 +9,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -61,7 +62,8 @@ fun HomeRoute(
                 fontSize = 27.sp,
                 lineHeight = 49.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color(0xFF000000)
+                color = Color(0xFF000000),
+                textAlign = TextAlign.Center,
             ),
             modifier = Modifier
                 .width(246.dp)
@@ -76,6 +78,7 @@ fun HomeRoute(
                 lineHeight = 49.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color(0xFF000000),
+                textAlign = TextAlign.Center,
                 ),
             modifier = Modifier
                 .width(246.dp)
@@ -88,7 +91,7 @@ fun HomeRoute(
             verticalArrangement = Arrangement.spacedBy(21.dp, Alignment.Top),
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier =Modifier
-                .width(156.dp)
+                .fillMaxWidth()
                 .height(122.dp)
         ) {
             Text(
@@ -113,6 +116,7 @@ fun HomeRoute(
                     lineHeight = 49.sp,
                     fontWeight = FontWeight(700),
                     color = Color(0xFF000000),
+                    textAlign = TextAlign.Center,
                 ),
                 modifier = Modifier
                     .width(246.dp)
@@ -140,7 +144,7 @@ fun HomeRoute(
                 ),
                 modifier = Modifier
                     .width(135.dp)
-                    .height(32.dp)
+                    .height(45.dp)
             )
 
             Text(
@@ -154,7 +158,7 @@ fun HomeRoute(
                     ),
                 modifier = Modifier
                     .width(135.dp)
-                    .height(32.dp)
+                    .height(45.dp)
             )
         }
 
@@ -163,7 +167,7 @@ fun HomeRoute(
             horizontalArrangement = Arrangement.spacedBy(0.dp, Alignment.Start),
             verticalAlignment = Alignment.CenterVertically,
             modifier =Modifier
-                .width(412.dp)
+                .fillMaxWidth()
                 .height(80.dp)
         ) {
             Text(
