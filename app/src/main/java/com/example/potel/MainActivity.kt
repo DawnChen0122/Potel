@@ -38,14 +38,10 @@ import com.example.potel.ui.home.homeScreenRoute
 import com.example.potel.ui.myorders.MyOrdersScreens
 import com.example.potel.ui.myorders.myOrdersScreenRoute
 import com.example.potel.ui.theme.PotelTheme
-<<<<<<< HEAD
-import com.example.potel.ui.home.homeScreenRoute
 import com.example.potel.ui.shopping.shopScreenRoute
-import com.example.potel.ui.myorders.Screens
 import com.example.potel.ui.account.accountRoute
 
-=======
->>>>>>> JohnnyWu
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
