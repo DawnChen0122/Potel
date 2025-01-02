@@ -1,59 +1,69 @@
 package com.example.potel.ui.booking
 
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 
-/**
- * todo 2-2 將首頁的畫面獨立出來
- * 將每個頁面拆分成三個區塊
- * (1) HomeRoute 使用 ViewModel 的資料，此為 NavigationController 導向的起始點
- * (2) HomeScreen 實際畫面，將參數抽出來，方便 Preview
- * (3) PreviewHomeScreen 預覽畫面（不透過 ViewModel 預覽畫面）
- * */
-
 @Composable
-fun BookingRoute(
-    homeViewModel: HomeViewModel = viewModel(),
-    navController: NavHostController
-) {
-//    val items by homeViewModel.items.collectAsState()
+fun BookingScreen(navController: NavHostController) {
+    var selectedDogWeight by remember { mutableStateOf<String?>(null) }
+    var selectedCatRoom by remember { mutableStateOf<String?>(null) }
 
-//    HomeScreen(
-//        items = items,
-//        onDetailClick = { title -> navController.navigate(genDetailNavigationRoute(title)) },
-//        onGetApiClick = homeViewModel::getApiData,
-//    )
-}
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(text = "選擇狗的重量或貓的房型", style = MaterialTheme.typography.titleMedium)
+        Spacer(modifier = Modifier.height(16.dp))
 
-//@Preview
-//@Composable
-//fun PreviewHomeScreen() {
-//    HomeScreen()
-//}
+        // 狗重量選擇
+        Text("狗的重量")
+        val dogWeights = listOf("9公斤以下", "9-23公斤", "23-40公斤", "40公斤以上")
+        dogWeights.forEach { weight ->
+            Row {
+                RadioButton(
+                    selected = selectedDogWeight == weight,
+                    onClick = {
+                        selectedDogWeight = weight
+                        selectedCatRoom = null
+                    }
+                )
+                Text(text = weight)
+            }
+        }
+        Spacer(modifier = Modifier.height(16.dp))
 
-@Composable
-fun BookingScreen(
-//    items: List<TipHomeItemUiState> = listOf(),
-//    onGetApiClick: () -> Unit = {},
-//    onDetailClick: (String) -> Unit = {}
-) {
-//    Column {
-//        Text(
-//            modifier = Modifier
-//                .background(TipColor.Pink80)
-//                .padding(12.dp)
-//                .clickable(onClick = onGetApiClick),
-//            text = "取得資料"
-//        )
-//
-//        items.forEach { item ->
-//            TipHomeItem(
-//                modifier = Modifier.clickable(onClick = { onDetailClick.invoke(item.title) }),
-//                uiState = item
-//            )
-//        }
-//
-//    }
+        // 貓房型選擇
+        Text("貓的房型")
+        val catRooms = listOf("標準房", "海景房", "鄉村房", "都市房")
+        catRooms.forEach { room ->
+            Row {
+                RadioButton(
+                    selected = selectedCatRoom == room,
+                    onClick = {
+                        selectedCatRoom = room
+                        selectedDogWeight = null
+                    }
+                )
+                Text(text = room)
+            }
+        }
+        Spacer(modifier = Modifier.height(24.dp))
+
+        Button(
+            onClick = {
+                val type = if (selectedDogWeight != null) "dog" else "cat"
+                navController.navigate("roomSelect/$type")
+            },
+            enabled = selectedDogWeight != null || selectedCatRoom != null
+        ) {
+            Text("下一步")
+        }
+    }
 }

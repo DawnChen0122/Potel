@@ -121,7 +121,11 @@ fun TipNavHost(
     NavHost(
         modifier = modifier,
         navController = navController,
+<<<<<<< HEAD
         startDestination = MyOrdersScreens.MOS01.name
+=======
+        startDestination = "BookingSuccess"
+>>>>>>> DawnChen
     ) {
         // todo 2-2 置入所有的畫面路徑
         accountRoute(navController) //帳號畫面
