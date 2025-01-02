@@ -1,8 +1,5 @@
-package com.example.potel.ui.pets
+package com.example.potel.ui.petsfile
 
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -17,7 +14,10 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.potel.R
+import com.example.potel.ui.theme.PotelTheme
 
 //class MainActivity : ComponentActivity() {
 //    override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,7 +29,7 @@ import com.example.potel.R
 //    }
 
 @Composable
-fun MainScreen() {
+fun ScreenPetsFileFirst( navController: NavHostController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -112,7 +112,9 @@ fun MainScreen() {
 
 @Preview(showBackground = true)
 @Composable
-fun DefaultPreview() {
-        MainScreen()
+fun ScreenPetsFileFirstPreview() {
+    PotelTheme  {
+        ScreenPetsFileFirst(rememberNavController())
     }
+}
 

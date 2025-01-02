@@ -30,7 +30,6 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.BlendMode.Companion.Screen
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
@@ -40,11 +39,10 @@ import androidx.navigation.compose.rememberNavController
 import com.example.potel.ui.discussZone.discussZoneScreenRoute
 import com.example.potel.ui.myorders.myOrdersScreenRoute
 import com.example.potel.ui.theme.PotelTheme
-import com.example.potel.ui.home.HOME_NAVIGATION_ROUTE
 import com.example.potel.ui.home.homeScreenRoute
 import com.example.potel.ui.shopping.shopScreenRoute
 import com.example.potel.ui.myorders.Screens
-import kotlinx.coroutines.launch
+import com.example.potel.ui.petsfile.petsfileScreenRoute
 
 
 class MainActivity : ComponentActivity() {
@@ -118,7 +116,7 @@ fun TipNavHost(
         shopScreenRoute(navController) // 07 柏森
 //        careRecordsScreenRoute(navController) // 25 泰陽
         discussZoneScreenRoute(navController) // 16 品伃
-//        petsScreenRoute(navController) // 18 勇慶
+        petsfileScreenRoute(navController) // 18 勇慶
     }
 
 }

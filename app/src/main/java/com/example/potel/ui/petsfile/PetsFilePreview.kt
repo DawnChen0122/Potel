@@ -1,4 +1,4 @@
-package com.example.potel.ui.pets
+package com.example.potel.ui.petsfile
 
 
 import androidx.compose.foundation.Image
@@ -17,7 +17,10 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.potel.R
+import com.example.potel.ui.theme.PotelTheme
 
 //class MainActivity : ComponentActivity() {
 //    override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,7 +33,7 @@ import com.example.potel.R
 //}
 
 @Composable
-fun PetInfoScreen() {
+fun ScreenPetsFilePreview(navController: NavHostController) {
     var textState by remember { mutableStateOf(TextFieldValue("Pet names")) }
 
     Column(
@@ -114,11 +117,10 @@ fun PetItem(petName: String, petGender: String, petDescription: String) {
         }
     }
 }
-//@Preview(showBackground = true)
-//@Composable
-//fun PetInfoScreenPreview() {
-//
-//        PetInfoScreen()
-//
-//}
-
+@Preview(showBackground = true)
+@Composable
+fun ScreenPetsFilePreviewPreview() {
+    PotelTheme  {
+        ScreenPetsFilePreview(rememberNavController())
+    }
+}

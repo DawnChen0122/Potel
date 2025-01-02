@@ -1,8 +1,5 @@
-package com.example.potel.ui.pets
+package com.example.potel.ui.petsfile
 
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -15,6 +12,9 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import com.example.potel.ui.theme.PotelTheme
 
 //class MainActivity : ComponentActivity() {
 //    override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.sp
 //}
 
 @Composable
-fun PetInfoForm() {
+fun ScreenPetsFileAdd(navController: NavHostController) {
     var ownerName by remember { mutableStateOf(TextFieldValue()) }
     var petName by remember { mutableStateOf(TextFieldValue()) }
     var petGender by remember { mutableStateOf(TextFieldValue()) }
@@ -98,10 +98,10 @@ fun PetInfoTextField(label: String, textState: TextFieldValue, onValueChange: (T
     )
 }
 
-//@Preview(showBackground = true)
-//@Composable
-//fun DefaultPreview() {
-//
-//        PetInfoForm()
-//
-//}
+@Preview(showBackground = true)
+@Composable
+fun ScreenPetsFileAddPreview() {
+    PotelTheme  {
+        ScreenPetsFileAdd(rememberNavController())
+    }
+}
