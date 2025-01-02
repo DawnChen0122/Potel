@@ -55,10 +55,17 @@ dependencies {
     implementation(libs.gson)
     implementation(libs.coil.compose)
     implementation(libs.accompanist.permissions)
+<<<<<<< HEAD
     implementation(libs.firebase.bom)
     implementation(libs.firebase.messaging.ktx)
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
+=======
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    implementation(libs.firebase.bom)
+    implementation(libs.firebase.messaging.ktx)
+>>>>>>> JohnnyWu
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

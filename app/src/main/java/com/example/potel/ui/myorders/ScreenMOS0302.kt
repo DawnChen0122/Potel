@@ -1,9 +1,8 @@
 package com.example.potel.ui.myorders
 
-import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -14,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
@@ -24,13 +24,17 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -38,15 +42,34 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.potel.R
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ScreenMOS0302(
-//    myOrdersViewModel: MyOrdersViewModel = viewModel(),
-    navController: NavHostController
+    navController: NavHostController,
+    orderid: String
 ) {
+    val tag = "ScreenMOS0302"
+    val backStackEntry = navController.getBackStackEntry(MyOrdersScreens.MOS01.name)
+    val myOrdersViewModel: MyOrdersViewModel = viewModel(backStackEntry, key = "myOrdersVM")
+
+    val coroutineScope = rememberCoroutineScope()
+    var order by remember { mutableStateOf<Order?>(null) }
+    var score by remember { mutableIntStateOf(0) }
+    var comment by remember { mutableStateOf("") }
+
+    LaunchedEffect(Unit) {
+        coroutineScope.launch {
+            order = myOrdersViewModel.getOrder(orderid.toInt())
+            myOrdersViewModel.setOrder(order)
+        }
+    }
+
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -106,43 +129,46 @@ fun ScreenMOS0302(
                 Icon(
                     imageVector = Icons.Filled.ThumbUp,
                     contentDescription = "糟",
-                    modifier = Modifier.graphicsLayer(
-                        rotationX = 180f // 將圖標上下顛倒
-                    )
+                    modifier = Modifier
+                        .graphicsLayer(
+                            rotationX = 180f // 將圖標上下顛倒
+                        )
                         .weight(0.5f)
+                        .clickable {
+                            score--
+                        }
                 )
 
                 Row {
                     Icon(
-                        imageVector = Icons.Filled.Favorite,
+                        imageVector = if(score>=1) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
                         contentDescription = "實心"
                     )
                     Icon(
-                        imageVector = Icons.Filled.Favorite,
+                        imageVector = if(score>=2) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
                         contentDescription = "實心"
                     )
                     Icon(
-                        imageVector = Icons.Filled.Favorite,
+                        imageVector = if(score>=3) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
                         contentDescription = "實心"
                     )
                     Icon(
-                        imageVector = Icons.Filled.Favorite,
+                        imageVector = if(score>=4) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
                         contentDescription = "實心"
                     )
                     Icon(
-                        imageVector = Icons.Filled.Favorite,
+                        imageVector = if(score>=5) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
                         contentDescription = "實心"
-                    )
-                    Icon(
-//                    painter = painterResource(id = R.drawable.room),
-                        imageVector = Icons.Filled.FavoriteBorder,
-                        contentDescription = "空心"
                     )
                 }
                 Icon(
                     imageVector = Icons.Filled.ThumbUp,
                     contentDescription = "讚",
-                    modifier = Modifier.weight(0.5f)
+                    modifier = Modifier
+                        .weight(0.5f)
+                        .clickable {
+                            score++
+                        }
                 )
 
             }
@@ -162,16 +188,22 @@ fun ScreenMOS0302(
             )
 
             OutlinedTextField(
-                value = "",
-                onValueChange = {},
+                value = comment,
+                onValueChange = { comment = it},
                 placeholder = { Text(text = "請把您的想法寫在這, 最多可寫300個字") },
                 maxLines = 10,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                keyboardOptions = KeyboardOptions(
+                    showKeyboardOnFocus = true
+                )
             )
 
             OutlinedButton(
                 onClick = {
-
+                    order?.score = score
+                    order?.comment = comment
+                    myOrdersViewModel.setOrder(order)
+                    navController.navigate(MyOrdersScreens.MOS0303.name)
                 },
                 shape = RoundedCornerShape(20),
                 border = BorderStroke(width = 1.dp, color = Color.Black),
