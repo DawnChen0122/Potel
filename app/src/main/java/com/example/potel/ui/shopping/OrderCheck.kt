@@ -15,6 +15,8 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,11 +29,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.navigation.NavHostController
 import com.example.potel.R
 import com.example.potel.ui.theme.PotelTheme
 
 @Composable
-fun OrderCheckScreen(onDismissRequest: () -> Unit) {
+fun OrderCheckScreen(navController: NavHostController, onDismissRequest: () -> Unit) {
 
     Dialog(onDismissRequest = onDismissRequest) {
         // 使用 Card 來呈現對話框內容
@@ -51,10 +54,10 @@ fun OrderCheckScreen(onDismissRequest: () -> Unit) {
                 verticalArrangement = Arrangement.SpaceAround,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-//                // 顯示圖片，這裡使用了 painterResource 來加載圖片資源
+                // 顯示圖片，這裡使用了 painterResource 來加載圖片資源
 //                Image(
 //                    painter = painterResource(id = R.drawable.room), // 用您自己的圖片資源替換
-//                    contentDescription = "Image description",
+//                    contentDescription = "Order Completed",
 //                    contentScale = ContentScale.Fit,
 //                    modifier = Modifier.aspectRatio(2.5f) // 調整圖片的長寬比例
 //                )
@@ -73,9 +76,11 @@ fun OrderCheckScreen(onDismissRequest: () -> Unit) {
                     fontWeight = FontWeight.Bold // 字體樣式: 粗體
                 )
 
-                // 清除按鈕
+                // 回到首頁按鈕，設置 onClick 邏輯
                 Button(
-                    onClick = { /* 按鈕點擊事件 */ },
+                    onClick = {
+                        navController.navigate(ShopScreens.twoclass.name)
+                    },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color.Black, // 按鈕顏色
                         contentColor = Color.Yellow // 按鈕中文字顏色
@@ -91,12 +96,11 @@ fun OrderCheckScreen(onDismissRequest: () -> Unit) {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun OrderCheckPreview() {
-    PotelTheme {
-        OrderCheckScreen() {
 
-        }
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun OrderCheckPreview() {
+//    PotelTheme {
+//        OrderCheckScreen()
+//    }
+//}

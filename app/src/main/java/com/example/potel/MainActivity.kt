@@ -48,6 +48,7 @@ import com.example.potel.ui.home.homeScreenRoute
 import com.example.potel.ui.shopping.shopScreenRoute
 
 import com.example.potel.ui.myorders.Screens
+import com.example.potel.ui.shopping.ShopScreens
 import kotlinx.coroutines.launch
 
 
@@ -113,14 +114,13 @@ fun TipNavHost(
     NavHost(
         modifier = modifier,
         navController = navController,
-        startDestination = Screens.MOS0501.name
+        startDestination = ShopScreens.twoclass.name
     ) {
         // todo 2-2 置入所有的畫面路徑
         homeScreenRoute(navController) // 02 明駿
         bookingScreenRoute(navController) // 04 芊伃
         myOrdersScreenRoute(navController) // 27 正能
         shopScreenRoute(navController) // 07 柏森
-        // productListRoute
 //        careRecordsScreenRoute(navController) // 25 泰陽
         discussZoneScreenRoute(navController) // 16 品伃
 //        petsScreenRoute(navController) // 18 勇慶

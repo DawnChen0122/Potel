@@ -30,11 +30,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.example.potel.R
 import com.example.potel.ui.theme.PotelTheme
 
 @Composable
-fun InformationScreen() {
+fun InformationScreen(navController: NavHostController) {
 
     var count by remember { mutableStateOf(1) }
     var amount by remember { mutableStateOf(1) }
@@ -141,7 +142,7 @@ fun InformationScreen() {
             verticalAlignment = Alignment.CenterVertically // 子元素垂直置中
         ) {
             Button(
-                onClick = { /* 處理按鈕點擊事件 */ },
+                onClick = { navController.navigate(ShopScreens.creditcard.name)},
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color.Black, // 按鈕背景色
                     contentColor = Color.Yellow // 按鈕文字顏色
@@ -156,10 +157,10 @@ fun InformationScreen() {
     }
 }
 
-@Preview(showBackground = true)
-    @Composable
-    fun InformationPreview() {
-        PotelTheme {
-            InformationScreen()
-        }
-    }
+//@Preview(showBackground = true)
+//    @Composable
+//    fun InformationPreview() {
+//        PotelTheme {
+//            InformationScreen()
+//        }
+//    }

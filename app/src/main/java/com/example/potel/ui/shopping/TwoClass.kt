@@ -21,11 +21,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.example.potel.ui.theme.PotelTheme
 
 
 @Composable
-fun TwoClassScreen() {
+fun TwoClassScreen(navController: NavHostController) {
 
     Column (
         modifier = Modifier
@@ -46,7 +47,9 @@ fun TwoClassScreen() {
                 .background(Color.White)
                 .height(185.dp),
 
-            onClick = { var text = "狗勾專區" },
+            onClick = {
+                navController.navigate(ShopScreens.productlist.name)
+                      },
             colors = ButtonDefaults.buttonColors(
                 // 設定按鈕容器顏色
                 containerColor = Color.Transparent,
@@ -71,7 +74,9 @@ fun TwoClassScreen() {
                 .shadow(elevation = 3.dp, shape = RoundedCornerShape(20) )
                 .background(Color.White)
                 .height(185.dp),
-            onClick = { var text = "貓貓專區" },
+            onClick = {
+                navController.navigate(ShopScreens.productlist.name)
+            },
             colors = ButtonDefaults.buttonColors(
                 // 設定按鈕容器顏色
                 containerColor = Color.Transparent,
@@ -89,10 +94,10 @@ fun TwoClassScreen() {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun TwoClassPreview() {
-    PotelTheme{
-        TwoClassScreen()
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun TwoClassPreview() {
+//    PotelTheme{
+//        TwoClassScreen()
+//    }
+//}
