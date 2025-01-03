@@ -1,5 +1,7 @@
 package com.example.potel.ui.account
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -11,6 +13,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -21,9 +24,64 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.potel.ui.home.HOME_NAVIGATION_ROUTE
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+
+
+
+fun showtoast(message: String, context: Context) {
+    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+}
+
+
+// 用來處理登入請求（email）
+fun sendLoginRequestWithEmail(email: String, password: String, context: Context, navController: NavHostController) {
+
+    CoroutineScope(Dispatchers.IO).launch {
+        try {
+            val response = RetrofitInstance.api.login(LoginRequest(email, password))
+            withContext(Dispatchers.Main) {
+                if (response.token.isNotEmpty()) {
+                    showtoast("登入成功，token: ${response.token}", context)
+                    navController.navigate(HOME_NAVIGATION_ROUTE)
+                } else {
+                    showtoast("登入失敗: ${response.message}", context)
+                }
+            }
+        } catch (e: Exception) {
+            withContext(Dispatchers.Main) {
+                showtoast("登入錯誤: ${e.message}", context)
+            }
+        }
+    }
+}
+
+fun sendLoginRequestWithPhone(phone: String, password: String, context: Context, navController: NavHostController) {
+
+    CoroutineScope(Dispatchers.IO).launch {
+        try {
+            val response = RetrofitInstance2.api.login(LoginRequest2(phone, password))
+            withContext(Dispatchers.Main) {
+                if (response.token.isNotEmpty()) {
+                    showtoast("登入成功，token: ${response.token}", context)
+                    navController.navigate(HOME_NAVIGATION_ROUTE)
+                } else {
+                    showtoast("登入失敗: ${response.message}", context)
+                }
+            }
+        } catch (e: Exception) {
+            withContext(Dispatchers.Main) {
+                showtoast("登入錯誤: ${e.message}", context)
+            }
+        }
+    }
+}
 
 @Composable
 fun Login(navController: NavHostController) {
+    val context = LocalContext.current
 
     val input = remember { mutableStateOf("") }
     var inputError by remember { mutableStateOf(false) }
@@ -44,7 +102,7 @@ fun Login(navController: NavHostController) {
     ) {
 
         Text(
-            modifier = Modifier.clickable{
+            modifier = Modifier.clickable {
                 navController.navigate(HOME_NAVIGATION_ROUTE)
             },
             text = "Potel",
@@ -124,15 +182,13 @@ fun Login(navController: NavHostController) {
         Button(
             onClick = {
                 if (input.value.isEmpty() || password.value.isEmpty()) {
-                    // 顯示錯誤提示
-                } else if (password.value != password.value) {
-                    // 顯示密碼不一致的錯誤提示
+                    showtoast("請填寫所有欄位", context)
                 } else {
                     // 執行登入邏輯
                     if (input.value.matches(emailRegex)) {
-                        // 處理Email登入邏輯
+                        sendLoginRequestWithEmail(input.value, password.value, context, navController) // 修改：傳遞 context 和 navController
                     } else if (input.value.matches(phoneRegex)) {
-                        // 處理手機號碼登入邏輯
+                        sendLoginRequestWithPhone(input.value, password.value, context, navController) // 修改：傳遞 context 和 navController
                     }
                 }
             },
