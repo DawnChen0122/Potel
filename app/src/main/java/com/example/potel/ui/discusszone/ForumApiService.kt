@@ -1,19 +1,24 @@
 package com.example.potel.ui.discusszone
 
-import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 
 interface ForumApiService {
 
+    @GET("Forum")
+    suspend fun fetchForums(): List<Post>
+
+    @GET("likes")
+    suspend fun fetchAllLikes(): List<Likes>
 
 }
+
 object RetrofitInstance {
     val api: ForumApiService by lazy {
         Retrofit.Builder()
-            .baseUrl("http://localhost:8080/PotelServer") // Base URL
-            .addConverterFactory(GsonConverterFactory.create()) // GSON for JSON conversion
+            .baseUrl("http://10.0.2.2:8080/PotelServer/")
+            .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(ForumApiService::class.java)
     }

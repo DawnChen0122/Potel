@@ -9,10 +9,6 @@ import com.example.potel.ui.discusszone.PostAddScreen
 import com.example.potel.ui.discusszone.PostEditScreen
 import com.example.potel.ui.discusszone.PostScreen
 
-val DISCUSSZONE_NAVIGATION_ROUTE = "discussZone"
-
-fun genDiscussZoneNavigationRoute() = DISCUSSZONE_NAVIGATION_ROUTE
-
 enum class ForumScreens(title: String){
     ForumScreen(title = "討論區"),
     PostScreen(title="文章"),
@@ -21,7 +17,8 @@ enum class ForumScreens(title: String){
     CommentEditScreen(title="編輯留言")
 }
 
-fun NavGraphBuilder.discussZoneScreenRoute(navController: NavHostController) {
+fun NavGraphBuilder.ForumScreenRoute(navController: NavHostController) {
+
     composable(
         route = ForumScreens.ForumScreen.name
     ) {
