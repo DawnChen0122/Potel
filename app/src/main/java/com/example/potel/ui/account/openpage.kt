@@ -4,6 +4,7 @@ import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -28,7 +29,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-
+import java.time.format.TextStyle
 
 
 fun showtoast(message: String, context: Context) {
@@ -96,8 +97,9 @@ fun Login(navController: NavHostController) {
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.SpaceEvenly,
         modifier = Modifier
-            .fillMaxSize()
+//            .fillMaxSize()
             .padding(10.dp)
     ) {
 
@@ -124,7 +126,7 @@ fun Login(navController: NavHostController) {
             isError = inputError,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 10.dp)
+                .padding(top = 0.dp)
         )
         if (inputError) {
             Text(
@@ -167,7 +169,7 @@ fun Login(navController: NavHostController) {
             ),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 10.dp)
+                .padding(top = 0.dp)
         )
 
         if (passwordError) {
@@ -186,22 +188,65 @@ fun Login(navController: NavHostController) {
                 } else {
                     // 執行登入邏輯
                     if (input.value.matches(emailRegex)) {
-                        sendLoginRequestWithEmail(input.value, password.value, context, navController) // 修改：傳遞 context 和 navController
+                        sendLoginRequestWithEmail(
+                            input.value,
+                            password.value,
+                            context,
+                            navController
+                        ) // 修改：傳遞 context 和 navController
                     } else if (input.value.matches(phoneRegex)) {
-                        sendLoginRequestWithPhone(input.value, password.value, context, navController) // 修改：傳遞 context 和 navController
+                        sendLoginRequestWithPhone(
+                            input.value,
+                            password.value,
+                            context,
+                            navController
+                        ) // 修改：傳遞 context 和 navController
                     }
                 }
             },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 10.dp),
+                .padding(top = 0.dp),
             shape = RoundedCornerShape(8.dp)
         ) {
             Text(text = "登入", fontSize = 20.sp)
         }
     }
-}
 
+    Row (
+        horizontalArrangement  = Arrangement.SpaceAround,
+        verticalAlignment = Alignment.Bottom,
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(0.dp)
+    ) {
+        Text(
+            text = "忘記密碼",
+            fontSize = 32.sp,
+            lineHeight = 46.sp,
+            fontWeight = FontWeight(700),
+            color = Color(0xFF000000),  // 顏色設置為黑色
+            modifier = Modifier
+                .width(128.dp)  // 設置寬度
+                .height(46.dp)  // 設置高度
+        )
+
+
+
+        Text(
+            text = "會員註冊",
+            fontSize = 32.sp,
+            lineHeight = 46.sp,
+            fontWeight = FontWeight(700),
+            color = Color(0xFF000000),  // 顏色設置為黑色
+            modifier = Modifier
+                .width(128.dp)  // 設置寬度
+                .height(46.dp)  // 設置高度
+        )
+
+
+    }
+}
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview6() {

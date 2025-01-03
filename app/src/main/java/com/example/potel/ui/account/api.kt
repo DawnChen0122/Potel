@@ -8,8 +8,8 @@ import retrofit2.http.POST
 
 fun getRetrofitInstance(): Retrofit {
     return Retrofit.Builder()
-        .baseUrl("http://10.0.2.2:8080/BookshopRestDBDemo_Server/") // 基礎 URL
-        .addConverterFactory(GsonConverterFactory.create()) // GSON 轉換器
+        .baseUrl("http://10.0.2.2:8080/BookshopRestDBDemo_Server/")
+        .addConverterFactory(GsonConverterFactory.create())
         .build()
 }
 
