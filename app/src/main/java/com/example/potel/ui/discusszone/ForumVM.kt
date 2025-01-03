@@ -50,6 +50,23 @@ class ForumVM : ViewModel(){
     fun getLikesCountForPost(postId: Int): Int {
         return _likesCountState.value.count { it.postId == postId }
     }
+    // 新增一個新的論壇貼文
+    fun addPost(post: Post) {
+        viewModelScope.launch {
+            try {
+                val response = RetrofitInstance.api.addPost(post)
+                if (response.isSuccessful) {
+                    Log.d(TAG, "Post added successfully: ${response.body()}")
+                    // 可以在這裡處理成功後的邏輯，比如刷新論壇列表
+                    fetchForumData()
+                } else {
+                    Log.e(TAG, "Error adding post: ${response.errorBody()}")
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Error adding post: ${e.message}")
+            }
+        }
+    }
 }
 
 
