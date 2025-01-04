@@ -25,3 +25,8 @@ data class Comment(
     val createDate: String = "",
     val modifyDate: String? = null
 )
+
+data class Image(
+    val imageId: Int = 0,
+    val imageData: ByteArray
+)
