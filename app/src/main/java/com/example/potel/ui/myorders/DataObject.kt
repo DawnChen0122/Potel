@@ -20,7 +20,7 @@ data class Order (
     var paydatetime: String = "",
     var refunddatetime: String = "",
     var createdate: String = "",
-    var modifydate: String = "",
+    var modifydate: String? = null,
     var roomtype: RoomType = RoomType(),
     var member: Member = Member(),
     var pet: Pet = Pet()
@@ -35,8 +35,8 @@ data class Pet(
     var breed: String = "",
     var imageid: Int = 0,
     var status: Char = '1',
-    var createdate: String = "",
-    var modifydate: String = ""
+    var createdate: String? = null,
+    var modifydate: String? = null
 )
 
 data class Member(
@@ -45,12 +45,12 @@ data class Member(
     var cellphone: String = "",
     var address: String = "",
     var gender: Char = 'M',
-    var birthday: String = "",
+    var birthday: String? = null,
     var email: String = "",
     var imageid: Int = 0,
     var status: Char = '1',
-    var createdate: String = "",
-    var modifydate: String = ""
+    var createdate: String? = null,
+    var modifydate: String? = null
 )
 
 data class RoomType(
@@ -62,8 +62,8 @@ data class RoomType(
     var weightl: Int = 0,
     var weighth: Int = 0,
     var status: Char = '1',
-    var createdate: String = "",
-    var modifydate: String = ""
+    var createdate: String? = null,
+    var modifydate: String? = null
 )
 
 data class Product(
@@ -73,17 +73,17 @@ data class Product(
     var imageid: Int = -1,
     var prddesc: String = "",
     var status: Char = '0',
-    var createdate: String = "",
-    var modifydate: String = ""
+    var createdate: String?,
+    var modifydate: String?
 )
 
 data class PrdOrder(
     var prdorderid: Int = 0,
 //    var memberid: Int = 0,
     var amount: Int = -1,
-    var status: Char = '0',
+    var status: String = "0",
     var createdate: String = "",
-    var modifydate: String = "",
+    var modifydate: String? = null,
     var member: Member = Member(),
     var prdorditems: List<PrdOrdItem> = emptyList()
 )
@@ -93,12 +93,13 @@ data class PrdOrdItem(
     var prdorderid: Int = 0,
 //    var prdid: Int = 0,
     var prdcount: Int = -1,
-    var createdate: String = "",
-    var modifydate: String = "",
+    var createdate: String?,
+    var modifydate: String?,
     var product: Product
 )
 
-data class ResponseObject(
+data class ResponseObject<T>(
     var respcode: Int = -1,
-    var respmsg: String = ""
+    var respmsg: String = "",
+    var resobj: T? = null
 )

@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -153,9 +154,8 @@ fun ScreenMOS0201(
                         ),
                     )
                 }
-
             }
-
+            HorizontalDivider()
             Text(
                 text = "訂房時間: ${order?.createdate}",
                 style = TextStyle(

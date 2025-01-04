@@ -40,7 +40,7 @@ fun ScreenMOS0202(
     val myOrdersViewModel: MyOrdersViewModel = viewModel(backStackEntry, key = "myOrdersVM")
     val order = myOrdersViewModel.orderEditState.collectAsState();
     order.value?.orderstate = OrderState.Canceled.state
-    var responseObject by remember { mutableStateOf<ResponseObject?>(null) }
+    var responseObject by remember { mutableStateOf<ResponseObject<Any>?>(null) }
 
     val coroutineScope = rememberCoroutineScope()
     LaunchedEffect(Unit) {
