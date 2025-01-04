@@ -32,12 +32,12 @@ import kotlinx.coroutines.withContext
 
 
 
+
 fun showtoast(message: String, context: Context) {
     Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
 }
 
 
-// 用來處理登入請求（email）
 fun sendLoginRequestWithEmail(email: String, password: String, context: Context, navController: NavHostController) {
 
     CoroutineScope(Dispatchers.IO).launch {
@@ -99,14 +99,13 @@ fun Login(navController: NavHostController) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceAround,
         modifier = Modifier
-//            .fillMaxSize()
             .padding(10.dp)
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
             modifier = Modifier
-//            .fillMaxSize()
+
                 .padding(10.dp)
         ) {
 
@@ -195,21 +194,20 @@ fun Login(navController: NavHostController) {
                     if (input.value.isEmpty() || password.value.isEmpty()) {
                         showtoast("請填寫所有欄位", context)
                     } else {
-                        // 執行登入邏輯
                         if (input.value.matches(emailRegex)) {
                             sendLoginRequestWithEmail(
                                 input.value,
                                 password.value,
                                 context,
                                 navController
-                            ) // 修改：傳遞 context 和 navController
+                            )
                         } else if (input.value.matches(phoneRegex)) {
                             sendLoginRequestWithPhone(
                                 input.value,
                                 password.value,
                                 context,
                                 navController
-                            ) // 修改：傳遞 context 和 navController
+                            )
                         }
                     }
                 },
@@ -230,36 +228,36 @@ fun Login(navController: NavHostController) {
                 .padding(10.dp)
         ) {
             Button(
-                onClick = { navController.navigate("reset_password_route")  },  // 點擊按鈕時調用 Resetpassword 函數
+                onClick = { navController.navigate("reset_password_route")  },
                 modifier = Modifier
-                    .width(120.dp)  // 設置寬度
-                    .height(46.dp),  // 設置高度
-                contentPadding = PaddingValues(0.dp)  // 移除內部邊距
+                    .width(120.dp)
+                    .height(46.dp),
+                contentPadding = PaddingValues(0.dp)
             ) {
                 Text(
-                    text = "忘記密碼",  // 顯示的文字
-                    fontSize = 20.sp,  // 字體大小
-                    lineHeight = 46.sp,  // 行高
-                    fontWeight = FontWeight(700),  // 字體加粗
-                    color = Color(0xFF000000),  // 顏色設置為黑色
+                    text = "忘記密碼",
+                    fontSize = 20.sp,
+                    lineHeight = 46.sp,
+                    fontWeight = FontWeight(700),
+                    color = Color(0xFF000000),
                 )
             }
             Button(
-                onClick = { navController.navigate("Signup")  },  // 點擊按鈕時調用 Resetpassword 函數
+                onClick = { navController.navigate("Signup")  },
                 modifier = Modifier
-                    .width(120.dp)  // 設置寬度
-                    .height(46.dp),  // 設置高度
-                contentPadding = PaddingValues(0.dp)  // 移除內部邊距
+                    .width(120.dp)
+                    .height(46.dp),
+                contentPadding = PaddingValues(0.dp)
             ) {
                 Text(
                     text = "會員註冊",
                     fontSize = 20.sp,
                     lineHeight = 46.sp,
                     fontWeight = FontWeight(700),
-                    color = Color(0xFF000000),  // 顏色設置為黑色
+                    color = Color(0xFF000000),
                     modifier = Modifier
-                        .width(120.dp)  // 設置寬度
-                        .height(46.dp)  // 設置高度
+                        .width(120.dp)
+                        .height(46.dp)
                 )
             }
 
