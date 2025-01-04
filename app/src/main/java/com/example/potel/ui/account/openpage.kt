@@ -1,6 +1,7 @@
 package com.example.potel.ui.account
 
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -25,6 +26,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.potel.ui.home.HOME_NAVIGATION_ROUTE
+import com.example.potel.ui.home.Screens
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -228,7 +230,9 @@ fun Login(navController: NavHostController) {
                 .padding(10.dp)
         ) {
             Button(
-                onClick = { navController.navigate("reset_password_route")  },
+
+                onClick = { Log.e("LoginScreen", "Reset password button clicked")
+                    navController.navigate(Screens.Resetpassword.name)  },
                 modifier = Modifier
                     .width(120.dp)
                     .height(46.dp),
@@ -243,7 +247,7 @@ fun Login(navController: NavHostController) {
                 )
             }
             Button(
-                onClick = { navController.navigate("Signup")  },
+                onClick = { navController.navigate(Screens.Signup.name)  },
                 modifier = Modifier
                     .width(120.dp)
                     .height(46.dp),
