@@ -1,4 +1,4 @@
-package com.example.potel.ui.discusszone
+package com.example.potel.ui.forumZone
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -21,7 +21,6 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Divider
@@ -50,7 +49,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.potel.R
-import com.example.potel.ui.discussZone.ForumScreens
 
 
 @Composable
@@ -96,7 +94,7 @@ fun ForumTabContent(
         }
         FloatingActionButton(
             onClick = {
-                //fix me postaddscreen
+                navController.navigate(ForumScreens.PostAddScreen.name)
             },
             modifier = Modifier
                 .align(Alignment.BottomEnd)

@@ -1,4 +1,4 @@
-package com.example.potel.ui.discusszone
+package com.example.potel.ui.forumZone
 
 import retrofit2.Response
 import retrofit2.Retrofit
@@ -13,13 +13,14 @@ interface ForumApiService {
     suspend fun fetchForums(): List<Post>
 
     @GET("Forum/Likes")
-    suspend fun fetchAllLikes(): List<Likes>
+    suspend fun fetchAllLikes(): List<Like>
 
     @GET("Forum/Comments")
-    suspend fun fetchComments(): List<Comments>
+    suspend fun fetchComments(): List<Comment>
 
-    @POST("Forum/addPost")
+    @POST("Forum/AddPost")
     suspend fun addPost(@Body post: Post): Response<Post>
+
 }
 
 object RetrofitInstance {

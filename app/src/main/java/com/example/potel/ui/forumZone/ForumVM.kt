@@ -1,4 +1,4 @@
-package com.example.potel.ui.discusszone
+package com.example.potel.ui.forumZone
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -21,8 +21,11 @@ class ForumVM : ViewModel(){
     private var _forumsState = MutableStateFlow(emptyList<Post>())
     val forumsState: StateFlow<List<Post>> = _forumsState.asStateFlow()
 
-    private val _likesCountState = MutableStateFlow(emptyList<Likes>())
-    val likesCountState: StateFlow<List<Likes>> = _likesCountState.asStateFlow()
+    private val _likeCountState = MutableStateFlow(emptyList<Like>())
+    val likeCountState: StateFlow<List<Like>> = _likeCountState.asStateFlow()
+
+    private val _commentsState = MutableStateFlow(emptyList<Comment>())
+    val commentsState: StateFlow<List<Comment>> = _commentsState.asStateFlow()
 
     init {
         // 在 viewModelScope 中啟動協程以呼叫 suspend 函式
@@ -38,7 +41,7 @@ class ForumVM : ViewModel(){
             _forumsState.value = forums
 
             val likes = RetrofitInstance.api.fetchAllLikes()
-            _likesCountState.value = likes
+            _likeCountState.value = likes
 
             Log.d(TAG, "Forums: $forums")
             Log.d(TAG, "Likes: $likes")
@@ -48,7 +51,7 @@ class ForumVM : ViewModel(){
     }
     /* 計算每個帖子對應的點讚數量 */
     fun getLikesCountForPost(postId: Int): Int {
-        return _likesCountState.value.count { it.postId == postId }
+        return _likeCountState.value.count { it.postId == postId }
     }
     // 新增一個新的論壇貼文
     fun addPost(post: Post) {
@@ -57,10 +60,9 @@ class ForumVM : ViewModel(){
                 val response = RetrofitInstance.api.addPost(post)
                 if (response.isSuccessful) {
                     Log.d(TAG, "Post added successfully: ${response.body()}")
-                    // 可以在這裡處理成功後的邏輯，比如刷新論壇列表
                     fetchForumData()
                 } else {
-                    Log.e(TAG, "Error adding post: ${response.errorBody()}")
+                    Log.e(TAG, "Error adding post: Code ${response.code()}, Body: ${response.errorBody()?.string()}")
                 }
             } catch (e: Exception) {
                 Log.e(TAG, "Error adding post: ${e.message}")

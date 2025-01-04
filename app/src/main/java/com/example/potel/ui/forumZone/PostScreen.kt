@@ -1,6 +1,5 @@
-package com.example.potel.ui.discusszone
+package com.example.potel.ui.forumZone
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -11,7 +10,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import com.example.potel.ui.discussZone.ForumScreens
 
 @Composable
 fun PostScreen(
