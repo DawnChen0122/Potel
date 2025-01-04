@@ -1,5 +1,6 @@
 package com.example.potel.ui.account
 
+import android.R.attr.text
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -18,14 +19,16 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 
 @Composable
-fun Register(navController: NavHostController) {
+fun Register(viewModel:AccountViewModel = viewModel(), navController: NavHostController) {
+    val items = viewModel.items.collectAsState()
+    val email = viewModel.email.collectAsState()
     val uid = remember { mutableStateOf("") }
 
-    val email = remember { mutableStateOf("") }
 
     val password = remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
@@ -64,8 +67,8 @@ fun Register(navController: NavHostController) {
 
         OutlinedTextField(
             value = email.value,
-            onValueChange = { email.value = it },
-            label = { Text (text = "請輸入手機號碼/信箱") },
+            onValueChange = viewModel::onEmailChanged,
+            label = { Text("請輸入信箱") },
             singleLine = true,
             shape = RoundedCornerShape(8.dp),
             modifier = Modifier

@@ -8,7 +8,7 @@ import retrofit2.http.POST
 
 fun getRetrofitInstance(): Retrofit {
     return Retrofit.Builder()
-        .baseUrl("http://10.0.2.2:8080/BookshopRestDBDemo_Server/")
+        .baseUrl("http://10.0.2.2:8080/PotelServer/")
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 }
@@ -20,6 +20,8 @@ data class LoginResponse(val token: String, val message: String)
 interface ApiService {
     @POST("login")
     suspend fun login(@Body request: LoginRequest): LoginResponse
+
+    companion object
 }
 
 
