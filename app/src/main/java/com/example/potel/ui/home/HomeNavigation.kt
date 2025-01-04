@@ -6,7 +6,6 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
-import com.example.potel.ui.account.Screens
 
 /**
  * todo 2-1 將首頁的路由獨立出來

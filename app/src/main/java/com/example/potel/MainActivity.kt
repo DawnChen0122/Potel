@@ -33,13 +33,13 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.potel.ui.discussZone.discussZoneScreenRoute
+//import com.example.potel.ui.discussZone.discussZoneScreenRoute
 import com.example.potel.ui.home.homeScreenRoute
 import com.example.potel.ui.myorders.MyOrdersScreens
 import com.example.potel.ui.myorders.myOrdersScreenRoute
 import com.example.potel.ui.theme.PotelTheme
 import com.example.potel.ui.shopping.shopScreenRoute
-import com.example.potel.ui.account.accountRoute
+import com.example.potel.ui.home.accountRoute
 
 
 
@@ -120,7 +120,7 @@ fun TipNavHost(
         shopScreenRoute(navController) // 07 柏森
         // productListRoute
 //        careRecordsScreenRoute(navController) // 25 泰陽
-        discussZoneScreenRoute(navController) // 16 品伃
+//        discussZoneScreenRoute(navController) // 16 品伃
 //        petsScreenRoute(navController) // 18 勇慶
     }
 
