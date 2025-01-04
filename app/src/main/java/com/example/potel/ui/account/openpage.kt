@@ -97,156 +97,165 @@ fun Login(navController: NavHostController) {
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.SpaceEvenly,
+        verticalArrangement = Arrangement.SpaceAround,
         modifier = Modifier
 //            .fillMaxSize()
             .padding(10.dp)
     ) {
-
-        Text(
-            modifier = Modifier.clickable {
-                navController.navigate(HOME_NAVIGATION_ROUTE)
-            },
-            text = "Potel",
-            fontSize = 30.sp,
-            fontWeight = FontWeight.Bold,
-            color = Color.Blue
-        )
-
-        OutlinedTextField(
-            value = input.value,
-            onValueChange = {
-                input.value = it
-                inputError = !(it.matches(emailRegex) || it.matches(phoneRegex))
-            },
-            label = { Text(text = "請輸入信箱或手機號碼") },
-            singleLine = true,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-            shape = RoundedCornerShape(8.dp),
-            isError = inputError,
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 0.dp)
-        )
-        if (inputError) {
-            Text(
-                text = "請輸入有效的信箱或手機號碼",
-                color = Color.Red,
-                fontSize = 12.sp,
-                modifier = Modifier.padding(start = 16.dp)
-            )
-        }
-
-        OutlinedTextField(
-            value = password.value,
-            onValueChange = {
-                password.value = it
-                passwordError = it.isEmpty() || it.length < 6 || it.length > 20
-            },
-            label = { Text(text = "密碼") },
-            leadingIcon = {
-                Icon(
-                    imageVector = Icons.Default.Lock,
-                    contentDescription = "密碼"
-                )
-            },
-            trailingIcon = {
-                Text(
-                    text = if (passwordVisible) "隱藏" else "顯示",
-                    modifier = Modifier.clickable {
-                        passwordVisible = !passwordVisible
-                    }
-                )
-            },
-            isError = passwordError,
-            shape = RoundedCornerShape(8.dp),
-            visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-            singleLine = true,
-            colors = TextFieldDefaults.colors(
-                focusedIndicatorColor = Color.Blue,
-                unfocusedIndicatorColor = Color.Gray,
-            ),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 0.dp)
-        )
-
-        if (passwordError) {
-            Text(
-                text = "密碼需在6 至 20 字符內",
-                color = Color.Red,
-                fontSize = 12.sp,
-                modifier = Modifier.padding(start = 16.dp)
-            )
-        }
-
-        Button(
-            onClick = {
-                if (input.value.isEmpty() || password.value.isEmpty()) {
-                    showtoast("請填寫所有欄位", context)
-                } else {
-                    // 執行登入邏輯
-                    if (input.value.matches(emailRegex)) {
-                        sendLoginRequestWithEmail(
-                            input.value,
-                            password.value,
-                            context,
-                            navController
-                        ) // 修改：傳遞 context 和 navController
-                    } else if (input.value.matches(phoneRegex)) {
-                        sendLoginRequestWithPhone(
-                            input.value,
-                            password.value,
-                            context,
-                            navController
-                        ) // 修改：傳遞 context 和 navController
-                    }
-                }
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 0.dp),
-            shape = RoundedCornerShape(8.dp)
+//            .fillMaxSize()
+                .padding(10.dp)
         ) {
-            Text(text = "登入", fontSize = 20.sp)
+
+            Text(
+                modifier = Modifier.clickable {
+                    navController.navigate(HOME_NAVIGATION_ROUTE)
+                },
+                text = "Potel",
+                fontSize = 40.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.Blue
+            )
+
+        
+
+            OutlinedTextField(
+                value = input.value,
+                onValueChange = {
+                    input.value = it
+                    inputError = !(it.matches(emailRegex) || it.matches(phoneRegex))
+                },
+                label = { Text(text = "請輸入信箱或手機號碼") },
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                shape = RoundedCornerShape(8.dp),
+                isError = inputError,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 0.dp)
+            )
+            if (inputError) {
+                Text(
+                    text = "請輸入有效的信箱或手機號碼",
+                    color = Color.Red,
+                    fontSize = 12.sp,
+                    modifier = Modifier.padding(start = 16.dp)
+                )
+            }
+
+            OutlinedTextField(
+                value = password.value,
+                onValueChange = {
+                    password.value = it
+                    passwordError = it.isEmpty() || it.length < 6 || it.length > 20
+                },
+                label = { Text(text = "密碼") },
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Default.Lock,
+                        contentDescription = "密碼"
+                    )
+                },
+                trailingIcon = {
+                    Text(
+                        text = if (passwordVisible) "隱藏" else "顯示",
+                        modifier = Modifier.clickable {
+                            passwordVisible = !passwordVisible
+                        }
+                    )
+                },
+                isError = passwordError,
+                shape = RoundedCornerShape(8.dp),
+                visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                singleLine = true,
+                colors = TextFieldDefaults.colors(
+                    focusedIndicatorColor = Color.Blue,
+                    unfocusedIndicatorColor = Color.Gray,
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 0.dp)
+            )
+
+            if (passwordError) {
+                Text(
+                    text = "密碼需在6 至 20 字符內",
+                    color = Color.Red,
+                    fontSize = 12.sp,
+                    modifier = Modifier.padding(start = 16.dp)
+                )
+            }
+
+            Button(
+                onClick = {
+                    if (input.value.isEmpty() || password.value.isEmpty()) {
+                        showtoast("請填寫所有欄位", context)
+                    } else {
+                        // 執行登入邏輯
+                        if (input.value.matches(emailRegex)) {
+                            sendLoginRequestWithEmail(
+                                input.value,
+                                password.value,
+                                context,
+                                navController
+                            ) // 修改：傳遞 context 和 navController
+                        } else if (input.value.matches(phoneRegex)) {
+                            sendLoginRequestWithPhone(
+                                input.value,
+                                password.value,
+                                context,
+                                navController
+                            ) // 修改：傳遞 context 和 navController
+                        }
+                    }
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 0.dp),
+                shape = RoundedCornerShape(8.dp)
+            ) {
+                Text(text = "登入", fontSize = 20.sp)
+            }
         }
-    }
 
-    Row (
-        horizontalArrangement  = Arrangement.SpaceAround,
-        verticalAlignment = Alignment.Bottom,
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(0.dp)
-    ) {
-        Text(
-            text = "忘記密碼",
-            fontSize = 32.sp,
-            lineHeight = 46.sp,
-            fontWeight = FontWeight(700),
-            color = Color(0xFF000000),  // 顏色設置為黑色
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.Top,
             modifier = Modifier
-                .width(128.dp)  // 設置寬度
-                .height(46.dp)  // 設置高度
-        )
+                .fillMaxSize()
+                .padding(10.dp)
+        ) {
+            Text(
+                text = "忘記密碼",
+                fontSize = 20.sp,
+                lineHeight = 46.sp,
+                fontWeight = FontWeight(700),
+                color = Color(0xFF000000),  // 顏色設置為黑色
+                modifier = Modifier
+                    .width(80.dp)  // 設置寬度
+                    .height(46.dp)  // 設置高度
+            )
+
+            Text(
+                text = "會員註冊",
+                fontSize = 20.sp,
+                lineHeight = 46.sp,
+                fontWeight = FontWeight(700),
+                color = Color(0xFF000000),  // 顏色設置為黑色
+                modifier = Modifier
+                    .width(80.dp)  // 設置寬度
+                    .height(46.dp)  // 設置高度
+            )
 
 
-
-        Text(
-            text = "會員註冊",
-            fontSize = 32.sp,
-            lineHeight = 46.sp,
-            fontWeight = FontWeight(700),
-            color = Color(0xFF000000),  // 顏色設置為黑色
-            modifier = Modifier
-                .width(128.dp)  // 設置寬度
-                .height(46.dp)  // 設置高度
-        )
-
-
+        }
     }
 }
+
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview6() {
