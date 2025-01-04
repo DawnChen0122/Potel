@@ -33,14 +33,17 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 
-
-
 fun showtoast(message: String, context: Context) {
     Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
 }
 
 
-fun sendLoginRequestWithEmail(email: String, password: String, context: Context, navController: NavHostController) {
+fun sendLoginRequestWithEmail(
+    email: String,
+    password: String,
+    context: Context,
+    navController: NavHostController
+) {
 
     CoroutineScope(Dispatchers.IO).launch {
         try {
@@ -61,7 +64,12 @@ fun sendLoginRequestWithEmail(email: String, password: String, context: Context,
     }
 }
 
-fun sendLoginRequestWithPhone(phone: String, password: String, context: Context, navController: NavHostController) {
+fun sendLoginRequestWithPhone(
+    phone: String,
+    password: String,
+    context: Context,
+    navController: NavHostController
+) {
 
     CoroutineScope(Dispatchers.IO).launch {
         try {
@@ -121,7 +129,7 @@ fun Login(navController: NavHostController) {
                 color = Color.Blue
             )
 
-        
+
 
             OutlinedTextField(
                 value = input.value,
@@ -231,8 +239,13 @@ fun Login(navController: NavHostController) {
         ) {
             Button(
 
-                onClick = { Log.e("LoginScreen", "Reset password button clicked")
-                    navController.navigate(Screens.Resetpassword.name)  },
+                onClick = {
+                    Log.e("Resetpassword", "Reset password button clicked")
+                    navController.graph.forEach{
+                        Log.e("tag",it.route ?:"")
+                    }
+                    navController.navigate(Screens.Resetpassword.name)
+                },
                 modifier = Modifier
                     .width(120.dp)
                     .height(46.dp),
@@ -247,7 +260,7 @@ fun Login(navController: NavHostController) {
                 )
             }
             Button(
-                onClick = { navController.navigate(Screens.Signup.name)  },
+                onClick = { navController.navigate(Screens.Signup.name) },
                 modifier = Modifier
                     .width(120.dp)
                     .height(46.dp),
