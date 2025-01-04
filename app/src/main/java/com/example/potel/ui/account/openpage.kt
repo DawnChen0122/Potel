@@ -31,6 +31,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import androidx.compose.material3.Text
+
 
 
 fun showtoast(message: String, context: Context) {
@@ -109,21 +111,21 @@ fun Login(navController: NavHostController) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceAround,
         modifier = Modifier
+            .fillMaxSize()
             .padding(10.dp)
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
+verticalArrangement = Arrangement.Top,
             modifier = Modifier
 
                 .padding(10.dp)
         ) {
-
             Text(
                 modifier = Modifier.clickable {
                     navController.navigate(HOME_NAVIGATION_ROUTE)
                 },
-                text = "Potel",
+                text = "Potel" ,
                 fontSize = 40.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.Blue
@@ -231,10 +233,10 @@ fun Login(navController: NavHostController) {
         }
 
         Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.Top,
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-                .fillMaxSize()
+
                 .padding(10.dp)
         ) {
             Button(
@@ -247,13 +249,13 @@ fun Login(navController: NavHostController) {
                     navController.navigate(Screens.Resetpassword.name)
                 },
                 modifier = Modifier
-                    .width(120.dp)
+                    .width(100.dp)
                     .height(46.dp),
                 contentPadding = PaddingValues(0.dp)
             ) {
                 Text(
                     text = "忘記密碼",
-                    fontSize = 20.sp,
+                    fontSize = 22.sp,
                     lineHeight = 46.sp,
                     fontWeight = FontWeight(700),
                     color = Color(0xFF000000),
@@ -262,18 +264,18 @@ fun Login(navController: NavHostController) {
             Button(
                 onClick = { navController.navigate(Screens.Signup.name) },
                 modifier = Modifier
-                    .width(120.dp)
+                    .width(100.dp)
                     .height(46.dp),
                 contentPadding = PaddingValues(0.dp)
             ) {
                 Text(
                     text = "會員註冊",
-                    fontSize = 20.sp,
+                    fontSize = 22.sp,
                     lineHeight = 46.sp,
                     fontWeight = FontWeight(700),
                     color = Color(0xFF000000),
                     modifier = Modifier
-                        .width(120.dp)
+                        .width(100.dp)
                         .height(46.dp)
                 )
             }
