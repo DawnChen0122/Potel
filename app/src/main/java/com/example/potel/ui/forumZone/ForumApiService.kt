@@ -1,11 +1,14 @@
 package com.example.potel.ui.forumZone
 
+import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface ForumApiService {
 
@@ -20,6 +23,10 @@ interface ForumApiService {
 
     @POST("Forum/AddPost")
     suspend fun addPost(@Body post: Post): Response<Post>
+
+    @GET("Forum/Image")
+    suspend fun fetchImage(@Query("imageid") imageId: Int): Response<String>
+
 
 }
 

@@ -27,6 +27,7 @@ class ForumVM : ViewModel(){
     private val _commentsState = MutableStateFlow(emptyList<Comment>())
     val commentsState: StateFlow<List<Comment>> = _commentsState.asStateFlow()
 
+
     init {
         // 在 viewModelScope 中啟動協程以呼叫 suspend 函式
         viewModelScope.launch {
@@ -34,7 +35,6 @@ class ForumVM : ViewModel(){
         }
     }
 
-    /* 取得所有論壇資訊 */
     private suspend fun fetchForumData() {
         try {
             val forums = RetrofitInstance.api.fetchForums()
@@ -49,6 +49,7 @@ class ForumVM : ViewModel(){
             Log.e(TAG, "Error fetching forum data: ${e.message}")
         }
     }
+
     /* 計算每個帖子對應的點讚數量 */
     fun getLikesCountForPost(postId: Int): Int {
         return _likeCountState.value.count { it.postId == postId }
@@ -57,10 +58,12 @@ class ForumVM : ViewModel(){
     fun addPost(post: Post) {
         viewModelScope.launch {
             try {
+                // 使用 Retrofit 發送新增貼文的 API 請求
                 val response = RetrofitInstance.api.addPost(post)
                 if (response.isSuccessful) {
                     Log.d(TAG, "Post added successfully: ${response.body()}")
-                    fetchForumData()
+                    // 在新增成功後更新 _forumsState，將新貼文加入現有的列表
+                    _forumsState.value += response.body()!!
                 } else {
                     Log.e(TAG, "Error adding post: Code ${response.code()}, Body: ${response.errorBody()?.string()}")
                 }

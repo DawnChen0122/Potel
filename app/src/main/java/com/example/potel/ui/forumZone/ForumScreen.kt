@@ -1,5 +1,8 @@
 package com.example.potel.ui.forumZone
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -31,15 +34,19 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -48,7 +55,9 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import coil.compose.AsyncImage
 import com.example.potel.R
+import retrofit2.Response
 
 
 @Composable
@@ -226,7 +235,7 @@ fun PostHeader(post: Post) {
                 .padding(start = 25.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            MemberImage(post.postImageId)
+//            MemberImage(post.postImage)
             // 用戶頭貼
             Column(
                 Modifier
@@ -273,18 +282,65 @@ fun PostFooter(post: Post, likesCount: Int) {
         Spacer(Modifier.size(10.dp))
     }
 }
-
 @Composable
-fun PostImage(postImageId: Int?, modifier: Modifier = Modifier) {
-    val imageResource = R.drawable.ic_launcher_background
-    Image(
-        painter = painterResource(id = imageResource),
-        contentDescription = "貼文照片",
-        modifier = modifier
-            .size(100.dp)
-            .clip(RoundedCornerShape(5.dp))
-            .border(1.dp, Color.LightGray, RoundedCornerShape(8.dp))
-    )
+fun PostImage(postImageId: Int?) {
+    // 使用 remember 來保持圖片的狀態
+    val imageBitmap = remember { mutableStateOf<Bitmap?>(null) }
+
+    // 當 postImageId 不為 null 時，發送請求來獲取圖片
+    LaunchedEffect(postImageId) {
+        if (postImageId != null) {
+            // 呼叫 fetchImage 並處理圖片加載
+            loadImage(postImageId, imageBitmap)
+        }
+    }
+
+    // 根據圖片狀態顯示圖片或顯示 "No Image"
+    if (imageBitmap.value != null) {
+        // 將 Bitmap 轉換為 ImageBitmap 顯示
+        androidx.compose.foundation.Image(
+            bitmap = imageBitmap.value!!.asImageBitmap(),
+            contentDescription = "貼文照片",
+            modifier = Modifier
+                .size(100.dp)
+                .clip(RoundedCornerShape(5.dp))
+                .border(1.dp, Color.LightGray, RoundedCornerShape(8.dp))
+        )
+    } else {
+        Box(
+            modifier = Modifier
+                .size(100.dp)
+                .clip(RoundedCornerShape(5.dp))
+                .background(Color.Gray),
+            contentAlignment = Alignment.Center
+        ) {
+            Text("No Image", color = Color.White, fontSize = 14.sp)
+        }
+    }
+}
+
+// 加載圖片的函式
+suspend fun loadImage(postImageId: Int, imageBitmap: MutableState<Bitmap?>) {
+    try {
+        // 呼叫 API 來獲取圖片
+        val response: Response<String> = RetrofitInstance.api.fetchImage(postImageId)
+        if (response.isSuccessful) {
+            val imageData = response.body()
+            Log.e("TAG",imageData.toString())
+            if (imageData != null) {
+                // 將二進制數據轉換為 Bitmap
+//                imageBitmap.value = BitmapFactory.decodeByteArray(imageData, 0, imageData.size)
+            } else {
+                imageBitmap.value = null
+            }
+        } else {
+            imageBitmap.value = null
+            Log.e("PostImage", "Error fetching image: ${response.code()}")
+        }
+    } catch (e: Exception) {
+        imageBitmap.value = null
+        Log.e("PostImage", "Error fetching image: ${e.message}")
+    }
 }
 
 @Composable

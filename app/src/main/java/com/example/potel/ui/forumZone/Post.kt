@@ -27,6 +27,6 @@ data class Comment(
 )
 
 data class Image(
-    val imageId: Int = 0,
-    val imageData: ByteArray
+    val imageId: Int = 0, // 圖片ID，默認為 0
+    val imageData: ByteArray? = null // 圖片的二進制數據
 )

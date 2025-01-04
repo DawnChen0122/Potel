@@ -89,7 +89,7 @@ fun PostAddScreen(
                         } else {
                             errorMessage = ""  // 清除錯誤訊息
                             val newPost = Post(
-                                memberId = memberId, // 固定使用者ID（可根據需求修改）
+                                memberId = memberId, // 固定使用者ID
                                 title = title,
                                 content = content
                             )
