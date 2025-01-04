@@ -29,7 +29,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.time.format.TextStyle
+
 
 
 fun showtoast(message: String, context: Context) {
@@ -229,28 +229,39 @@ fun Login(navController: NavHostController) {
                 .fillMaxSize()
                 .padding(10.dp)
         ) {
-            Text(
-                text = "忘記密碼",
-                fontSize = 20.sp,
-                lineHeight = 46.sp,
-                fontWeight = FontWeight(700),
-                color = Color(0xFF000000),  // 顏色設置為黑色
+            Button(
+                onClick = { navController.navigate("reset_password_route")  },  // 點擊按鈕時調用 Resetpassword 函數
                 modifier = Modifier
-                    .width(80.dp)  // 設置寬度
-                    .height(46.dp)  // 設置高度
-            )
-
-            Text(
-                text = "會員註冊",
-                fontSize = 20.sp,
-                lineHeight = 46.sp,
-                fontWeight = FontWeight(700),
-                color = Color(0xFF000000),  // 顏色設置為黑色
+                    .width(120.dp)  // 設置寬度
+                    .height(46.dp),  // 設置高度
+                contentPadding = PaddingValues(0.dp)  // 移除內部邊距
+            ) {
+                Text(
+                    text = "忘記密碼",  // 顯示的文字
+                    fontSize = 20.sp,  // 字體大小
+                    lineHeight = 46.sp,  // 行高
+                    fontWeight = FontWeight(700),  // 字體加粗
+                    color = Color(0xFF000000),  // 顏色設置為黑色
+                )
+            }
+            Button(
+                onClick = { navController.navigate("Signup")  },  // 點擊按鈕時調用 Resetpassword 函數
                 modifier = Modifier
-                    .width(80.dp)  // 設置寬度
-                    .height(46.dp)  // 設置高度
-            )
-
+                    .width(120.dp)  // 設置寬度
+                    .height(46.dp),  // 設置高度
+                contentPadding = PaddingValues(0.dp)  // 移除內部邊距
+            ) {
+                Text(
+                    text = "會員註冊",
+                    fontSize = 20.sp,
+                    lineHeight = 46.sp,
+                    fontWeight = FontWeight(700),
+                    color = Color(0xFF000000),  // 顏色設置為黑色
+                    modifier = Modifier
+                        .width(120.dp)  // 設置寬度
+                        .height(46.dp)  // 設置高度
+                )
+            }
 
         }
     }
