@@ -41,7 +41,6 @@ import com.example.potel.ui.forumZone.ForumScreens
 import com.example.potel.ui.forumZone.forumScreenRoute
 import com.example.potel.ui.home.homeScreenRoute
 import com.example.potel.ui.myorders.myOrdersScreenRoute
-import com.example.potel.ui.shopping.shopScreenRoute
 import com.example.potel.ui.theme.PotelTheme
 
 
@@ -113,7 +112,7 @@ fun TipNavHost(
         homeScreenRoute(navController) // 02 明駿
         bookingScreenRoute(navController) // 04 芊伃
         myOrdersScreenRoute(navController) // 27 正能
-        shopScreenRoute(navController) // 07 柏森
+
 //        careRecordsScreenRoute(navController) // 25 泰陽
          forumScreenRoute(navController) // 16 品伃
 //        petsScreenRoute(navController) // 18 勇慶

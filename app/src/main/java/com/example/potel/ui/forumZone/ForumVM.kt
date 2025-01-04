@@ -50,27 +50,26 @@ class ForumVM : ViewModel(){
         }
     }
 
-    /* 計算每個帖子對應的點讚數量 */
-    fun getLikesCountForPost(postId: Int): Int {
-        return _likeCountState.value.count { it.postId == postId }
-    }
     // 新增一個新的論壇貼文
     fun addPost(post: Post) {
         viewModelScope.launch {
             try {
-                // 使用 Retrofit 發送新增貼文的 API 請求
                 val response = RetrofitInstance.api.addPost(post)
-                if (response.isSuccessful) {
+                if (response.isSuccessful && response.body() != null) {
                     Log.d(TAG, "Post added successfully: ${response.body()}")
-                    // 在新增成功後更新 _forumsState，將新貼文加入現有的列表
-                    _forumsState.value += response.body()!!
+                    Log.d(TAG, "Updated forumsState: ${_forumsState.value}")
                 } else {
                     Log.e(TAG, "Error adding post: Code ${response.code()}, Body: ${response.errorBody()?.string()}")
                 }
             } catch (e: Exception) {
                 Log.e(TAG, "Error adding post: ${e.message}")
             }
+            fetchForumData()
         }
+    }
+
+    fun getLikesCountForPost(postId: Int): Int {
+        return _likeCountState.value.count { it.postId == postId }
     }
 }
 

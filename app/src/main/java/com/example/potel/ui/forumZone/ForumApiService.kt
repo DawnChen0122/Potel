@@ -22,11 +22,7 @@ interface ForumApiService {
     suspend fun fetchComments(): List<Comment>
 
     @POST("Forum/AddPost")
-    suspend fun addPost(@Body post: Post): Response<Post>
-
-    @GET("Forum/Image")
-    suspend fun fetchImage(@Query("imageid") imageId: Int): Response<String>
-
+    suspend fun addPost(@Body post: Post): Response<ResponseBody>
 
 }
 

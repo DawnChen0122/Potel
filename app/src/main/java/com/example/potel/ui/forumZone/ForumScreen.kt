@@ -265,7 +265,7 @@ fun PostContent(post: Post) {
             Text(truncatedContent, Modifier.width(235.dp), fontSize = 15.sp, maxLines = 2, color = Color.White)
         }
         Spacer(Modifier.size(20.dp))
-        PostImage(post.postImageId)
+//        PostImage(post.postImage)
         //fix me 貼文照片
     }
 }
@@ -282,66 +282,42 @@ fun PostFooter(post: Post, likesCount: Int) {
         Spacer(Modifier.size(10.dp))
     }
 }
-@Composable
-fun PostImage(postImageId: Int?) {
-    // 使用 remember 來保持圖片的狀態
-    val imageBitmap = remember { mutableStateOf<Bitmap?>(null) }
-
-    // 當 postImageId 不為 null 時，發送請求來獲取圖片
-    LaunchedEffect(postImageId) {
-        if (postImageId != null) {
-            // 呼叫 fetchImage 並處理圖片加載
-            loadImage(postImageId, imageBitmap)
-        }
-    }
-
-    // 根據圖片狀態顯示圖片或顯示 "No Image"
-    if (imageBitmap.value != null) {
-        // 將 Bitmap 轉換為 ImageBitmap 顯示
-        androidx.compose.foundation.Image(
-            bitmap = imageBitmap.value!!.asImageBitmap(),
-            contentDescription = "貼文照片",
-            modifier = Modifier
-                .size(100.dp)
-                .clip(RoundedCornerShape(5.dp))
-                .border(1.dp, Color.LightGray, RoundedCornerShape(8.dp))
-        )
-    } else {
-        Box(
-            modifier = Modifier
-                .size(100.dp)
-                .clip(RoundedCornerShape(5.dp))
-                .background(Color.Gray),
-            contentAlignment = Alignment.Center
-        ) {
-            Text("No Image", color = Color.White, fontSize = 14.sp)
-        }
-    }
-}
-
-// 加載圖片的函式
-suspend fun loadImage(postImageId: Int, imageBitmap: MutableState<Bitmap?>) {
-    try {
-        // 呼叫 API 來獲取圖片
-        val response: Response<String> = RetrofitInstance.api.fetchImage(postImageId)
-        if (response.isSuccessful) {
-            val imageData = response.body()
-            Log.e("TAG",imageData.toString())
-            if (imageData != null) {
-                // 將二進制數據轉換為 Bitmap
-//                imageBitmap.value = BitmapFactory.decodeByteArray(imageData, 0, imageData.size)
-            } else {
-                imageBitmap.value = null
-            }
-        } else {
-            imageBitmap.value = null
-            Log.e("PostImage", "Error fetching image: ${response.code()}")
-        }
-    } catch (e: Exception) {
-        imageBitmap.value = null
-        Log.e("PostImage", "Error fetching image: ${e.message}")
-    }
-}
+//@Composable
+//fun PostImage(postImageId: Int?) {
+//    // 使用 remember 來保持圖片的狀態
+//    val imageBitmap = remember { mutableStateOf<Bitmap?>(null) }
+//
+//    // 當 postImageId 不為 null 時，發送請求來獲取圖片
+//    LaunchedEffect(postImageId) {
+//        if (postImageId != null) {
+//            // 呼叫 fetchImage 並處理圖片加載
+//            loadImage(postImageId, imageBitmap)
+//        }
+//    }
+//
+//    // 根據圖片狀態顯示圖片或顯示 "No Image"
+//    if (imageBitmap.value != null) {
+//        // 將 Bitmap 轉換為 ImageBitmap 顯示
+//        androidx.compose.foundation.Image(
+//            bitmap = imageBitmap.value!!.asImageBitmap(),
+//            contentDescription = "貼文照片",
+//            modifier = Modifier
+//                .size(100.dp)
+//                .clip(RoundedCornerShape(5.dp))
+//                .border(1.dp, Color.LightGray, RoundedCornerShape(8.dp))
+//        )
+//    } else {
+//        Box(
+//            modifier = Modifier
+//                .size(100.dp)
+//                .clip(RoundedCornerShape(5.dp))
+//                .background(Color.Gray),
+//            contentAlignment = Alignment.Center
+//        ) {
+//            Text("No Image", color = Color.White, fontSize = 14.sp)
+//        }
+//    }
+//}
 
 @Composable
 fun MemberImage(userImg: Int?) {
