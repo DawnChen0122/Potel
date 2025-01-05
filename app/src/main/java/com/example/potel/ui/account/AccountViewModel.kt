@@ -8,7 +8,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-
 class AccountViewModel : ViewModel() {
 
     private val _uid = MutableStateFlow<List<TipHomeItemUiState>>(listOf())
@@ -17,14 +16,11 @@ class AccountViewModel : ViewModel() {
         _uid.value = listOf(TipHomeItemUiState(title = uid, imageVector = Icons.Filled.Email))
     }
 
-
     private val _username = MutableStateFlow<List<TipHomeItemUiState>>(listOf())
     val username = _username.asStateFlow()
     fun onUsernameChanged(username: String) {
         _username.value = listOf(TipHomeItemUiState(title = username, imageVector = Icons.Filled.Email))
     }
-
-
 
     private val _password = MutableStateFlow<List<TipHomeItemUiState>>(listOf())
     val password = _password.asStateFlow()
@@ -32,15 +28,11 @@ class AccountViewModel : ViewModel() {
         _password.value = listOf(TipHomeItemUiState(title = password, imageVector = Icons.Filled.Email))
     }
 
-
     private val _checkpassword = MutableStateFlow<List<TipHomeItemUiState>>(listOf())
     val checkpassword = _checkpassword.asStateFlow()
     fun onCheckPasswordChanged(checkpassword: String){
         _checkpassword.value = listOf(TipHomeItemUiState(title = checkpassword, imageVector = Icons.Filled.Email))
     }
-
-
-
 
     private val _phonenumber = MutableStateFlow<List<TipHomeItemUiState>>(listOf())
     val phonenumber = _phonenumber.asStateFlow()
@@ -48,8 +40,6 @@ class AccountViewModel : ViewModel() {
         _phonenumber.value =
             listOf(TipHomeItemUiState(title = phonenumber, imageVector = Icons.Filled.Email))
     }
-
-
 
     private val _address = MutableStateFlow<List<TipHomeItemUiState>>(listOf())
     val address = _address.asStateFlow()
@@ -67,9 +57,7 @@ class AccountViewModel : ViewModel() {
     }
 }
 
-
 data class TipHomeItemUiState(val title: String, val imageVector: ImageVector)
-
 
 // 假設的 ApiService，負責處理登入請求
 //object ApiService3 {
@@ -82,8 +70,6 @@ data class TipHomeItemUiState(val title: String, val imageVector: ImageVector)
 
 // 假設的 Result 類別，用來表示 API 回應
 class Result
-
-
 
 //    fun getApiData() {
 //        // todo 2-5 取得 API 資料，目前先用假資料
@@ -104,7 +90,6 @@ class Result
 //            )
 //        }
 //    }
-
 
 //private fun ApiService.Companion.Login(string: String) {}
 //API 翻轉頁面 資料交互

@@ -68,7 +68,7 @@ fun Signup(viewModel:AccountViewModel = viewModel(), navController: NavHostContr
 
 
 
-    val  password = viewModel.password.collectAsState()
+    val password = viewModel.password.collectAsState()
     var passwordVisible by remember { mutableStateOf(false) }
     var passwordError by remember { mutableStateOf(false) }
 
@@ -80,15 +80,10 @@ fun Signup(viewModel:AccountViewModel = viewModel(), navController: NavHostContr
     val  username = viewModel.username.collectAsState()
 
 
-    val  phonenumber = viewModel.phonenumber.collectAsState()
+    val phonenumber = viewModel.phonenumber.collectAsState()
     var phonenumberError by remember { mutableStateOf(false) }
 
-
     val  address = viewModel.address.collectAsState()
-
-
-
-
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -150,7 +145,6 @@ fun Signup(viewModel:AccountViewModel = viewModel(), navController: NavHostContr
         }
 
 
-
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -162,6 +156,7 @@ fun Signup(viewModel:AccountViewModel = viewModel(), navController: NavHostContr
                 modifier = Modifier.padding(10.dp)
             )
         }
+
 
         Row(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -235,6 +230,7 @@ fun Signup(viewModel:AccountViewModel = viewModel(), navController: NavHostContr
                 }
             }
 
+
             ExposedDropdownMenuBox(
                 expanded = expandedDay,
                 onExpandedChange = { expandedDay = it },
@@ -270,6 +266,7 @@ fun Signup(viewModel:AccountViewModel = viewModel(), navController: NavHostContr
             }
         }
 
+
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -277,12 +274,14 @@ fun Signup(viewModel:AccountViewModel = viewModel(), navController: NavHostContr
                 .background(Color.White, RoundedCornerShape(8.dp))
         )
 
+
         {
             Text(
                 text = "請選擇性別",
                 modifier = Modifier.padding(10.dp)
             )
         }
+
 
         ExposedDropdownMenuBox(
             expanded = expandedGender,
@@ -366,8 +365,6 @@ fun Signup(viewModel:AccountViewModel = viewModel(), navController: NavHostContr
         }
 
 
-
-
         OutlinedTextField(
             value = checkpassword.value.firstOrNull()?.title ?: "",
             onValueChange = viewModel::onCheckPasswordChanged,
@@ -401,7 +398,6 @@ fun Signup(viewModel:AccountViewModel = viewModel(), navController: NavHostContr
                 .fillMaxWidth()
                 .padding(top = 10.dp)
         )
-
         if (checkpasswordError) {
             Text(
                 text = "密碼需輸入相同",
@@ -410,6 +406,7 @@ fun Signup(viewModel:AccountViewModel = viewModel(), navController: NavHostContr
                 modifier = Modifier.padding(start = 16.dp)
             )
         }
+
 
         OutlinedTextField(
             value = username.value.firstOrNull()?.title ?: "",
@@ -421,7 +418,6 @@ fun Signup(viewModel:AccountViewModel = viewModel(), navController: NavHostContr
                 .fillMaxWidth()
                 .padding(top = 10.dp)
         )
-
 
 
         OutlinedTextField(
