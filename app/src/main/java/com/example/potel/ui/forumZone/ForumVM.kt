@@ -43,8 +43,12 @@ class ForumVM : ViewModel(){
             val likes = RetrofitInstance.api.fetchAllLikes()
             _likeCountState.value = likes
 
+            val comments = RetrofitInstance.api.fetchComments()
+            _commentsState.value = comments
             Log.d(TAG, "Forums: $forums")
             Log.d(TAG, "Likes: $likes")
+            Log.d(TAG, "comments: $comments")
+
         } catch (e: Exception) {
             Log.e(TAG, "Error fetching forum data: ${e.message}")
         }

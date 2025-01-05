@@ -211,7 +211,9 @@ fun EditDialog(showEditButton: Boolean) {
         Spacer(Modifier.height(5.dp))
         if (showEditButton) {
             IconButton(
-                onClick ={ }
+                onClick ={
+                    //PostOptionsDialog
+                }
             ) {
                 Icon(
                     imageVector = Icons.Filled.MoreVert,
@@ -235,7 +237,7 @@ fun PostHeader(post: Post) {
                 .padding(start = 25.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-//            MemberImage(post.postImage)
+            MemberImage(null)
             // 用戶頭貼
             Column(
                 Modifier
