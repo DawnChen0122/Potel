@@ -1,6 +1,5 @@
 package com.example.potel.ui.account
 
-import android.R.attr.text
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -25,18 +24,24 @@ import androidx.navigation.compose.rememberNavController
 
 @Composable
 fun Register(viewModel:AccountViewModel = viewModel(), navController: NavHostController) {
-    val items = viewModel.items.collectAsState()
+//    val items = viewModel.items.collectAsState()
+    val  uid = viewModel.uid.collectAsState()
+
     val email = viewModel.email.collectAsState()
-    val uid = remember { mutableStateOf("") }
+
+    val  password = viewModel.password.collectAsState()
 
 
-    val password = remember { mutableStateOf("") }
+    val  username = viewModel.username.collectAsState()
+
+    val  phonenumber = viewModel.phonenumber.collectAsState()
+
+    val  address = viewModel.address.collectAsState()
+
+
     var passwordVisible by remember { mutableStateOf(false) }
-    val username = remember { mutableStateOf("") }
 
-    val phonenumber = remember { mutableStateOf("") }
 
-    val address = remember { mutableStateOf("") }
 
 
     Column(
@@ -54,8 +59,8 @@ fun Register(viewModel:AccountViewModel = viewModel(), navController: NavHostCon
 
 
         OutlinedTextField(
-            value = uid.value,
-            onValueChange = { uid.value = it },
+            value = uid.value.firstOrNull()?.title ?: "",
+            onValueChange = viewModel::onUidChanged,
             label = { Text(text = "請輸入用戶名稱") },
             singleLine = true,
             shape = RoundedCornerShape(8.dp),
@@ -66,7 +71,7 @@ fun Register(viewModel:AccountViewModel = viewModel(), navController: NavHostCon
 
 
         OutlinedTextField(
-            value = email.value,
+            value = email.value.firstOrNull()?.title ?: "",
             onValueChange = viewModel::onEmailChanged,
             label = { Text("請輸入信箱") },
             singleLine = true,
@@ -77,8 +82,8 @@ fun Register(viewModel:AccountViewModel = viewModel(), navController: NavHostCon
         )
 
         OutlinedTextField(
-            value = password.value,
-            onValueChange = { password.value = it },
+            value = password.value.firstOrNull()?.title ?: "",
+            onValueChange = viewModel::onPasswordChanged,
             label = { Text(text = "密碼") },
             leadingIcon = {
                 Icon(
@@ -108,8 +113,8 @@ fun Register(viewModel:AccountViewModel = viewModel(), navController: NavHostCon
         )
 
         OutlinedTextField(
-            value = username.value,
-            onValueChange = { username.value = it },
+            value = username.value.firstOrNull()?.title ?: "",
+            onValueChange = viewModel::onUsernameChanged,
             label = { Text(text = "請輸入姓名") },
             singleLine = true,
             shape = RoundedCornerShape(8.dp),
@@ -120,8 +125,8 @@ fun Register(viewModel:AccountViewModel = viewModel(), navController: NavHostCon
 
 
         OutlinedTextField(
-            value = phonenumber.value,
-            onValueChange = { phonenumber.value = it },
+            value = phonenumber.value.firstOrNull()?.title ?: "",
+            onValueChange = viewModel::onPhonenumberChanged,
             label = { Text(text = "請輸入手機號碼") },
             singleLine = true,
             shape = RoundedCornerShape(8.dp),
@@ -131,8 +136,8 @@ fun Register(viewModel:AccountViewModel = viewModel(), navController: NavHostCon
         )
 
         OutlinedTextField(
-            value = address.value,
-            onValueChange = { address.value = it },
+            value = address.value.firstOrNull()?.title ?: "",
+            onValueChange = viewModel::onAddressumberChanged,
             label = { Text(text = "請輸入地址") },
             singleLine = true,
             shape = RoundedCornerShape(8.dp),
