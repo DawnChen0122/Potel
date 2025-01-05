@@ -1,8 +1,7 @@
 package com.example.potel.ui.petsfile
 
+import android.annotation.SuppressLint
 import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -61,31 +60,38 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.core.app.ComponentActivity
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.potel.ui.theme.PotelTheme
 import kotlinx.coroutines.launch
 
-class MainActivity : ComponentActivity() {
+@SuppressLint("RestrictedApi")
+class PetsFileCatsActivity : ComponentActivity() {
+    @SuppressLint("RestrictedApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             PotelTheme  {
-                ScreensPetsFileDogs(navController = rememberNavController())
+                ScreensPetsFileCats(navController = rememberNavController())
             }
         }
+    }
+
+    private fun setContent(function: @Composable () -> Unit) {
+
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ScreensPetsFileDogs(petsFileViewModel: PetsFileDogsViewModel = viewModel(),
-         navController: NavHostController
+fun ScreensPetsFileCats(petsFileViewModel: PetsFileCatsViewModel = viewModel(),
+                            navController: NavHostController
 ) {
     var inputText by remember { mutableStateOf("") }
     // 從StateFlow取得並呈現最新的值
-    val dogs by petsFileViewModel.dogsState.collectAsState()
+    val cats by petsFileViewModel.catsState.collectAsState()
     // 設定內容向上捲動時，TopAppBar自動收起來；呼叫pinnedScrollBehavior()則不會收起來
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
     val snackbarHostState = remember { SnackbarHostState() }
@@ -94,7 +100,7 @@ fun ScreensPetsFileDogs(petsFileViewModel: PetsFileDogsViewModel = viewModel(),
     var showAddDialog by remember { mutableStateOf(false) }
     var showEditDialog by remember { mutableStateOf(false) }
     // 暫存被點選編輯的書籍
-    var editDogs by remember { mutableStateOf(PetsDog()) }
+    var editCats by remember { mutableStateOf(PetsCat()) }
 
     Scaffold(
         // 設定則可追蹤捲動狀態，藉此調整畫面(例如內容向上捲動時，TopAppBar自動收起來)
@@ -107,7 +113,7 @@ fun ScreensPetsFileDogs(petsFileViewModel: PetsFileDogsViewModel = viewModel(),
                         value = inputText,
                         onValueChange = { inputText = it },
                         // 在此placeholder較label(會將提示文字上移)適合
-                        placeholder = { Text(text = "dogs name") },
+                        placeholder = { Text(text = "cats name") },
                         leadingIcon = {
                             Icon(
                                 imageVector = Icons.Default.Search, contentDescription = "search"
@@ -153,7 +159,7 @@ fun ScreensPetsFileDogs(petsFileViewModel: PetsFileDogsViewModel = viewModel(),
 
     ) { innerPadding ->
         // 一定要套用innerPadding，否則內容無法跟TopAppBar對齊
-        DogsLists(dogs.filter { it.name.contains(inputText, true) },
+        CatsLists(cats.filter { it.name.contains(inputText, true) },
             innerPadding,
             // 項目被點擊時執行
             onItemClick = {
@@ -167,7 +173,7 @@ fun ScreensPetsFileDogs(petsFileViewModel: PetsFileDogsViewModel = viewModel(),
             showMore,
             // 編輯按鈕被點擊時執行
             onEditClick = {
-                editDogs = it
+                editCats = it
                 showEditDialog = true
             },
             // 刪除按鈕被點擊時執行
@@ -183,7 +189,7 @@ fun ScreensPetsFileDogs(petsFileViewModel: PetsFileDogsViewModel = viewModel(),
             })
         if (showAddDialog) {
             // 顯示新增對話視窗
-            AddDialog(
+            AddDialogCats (
                 // 取消時欲執行內容
                 onDismiss = {
                     showAddDialog = false
@@ -207,7 +213,7 @@ fun ScreensPetsFileDogs(petsFileViewModel: PetsFileDogsViewModel = viewModel(),
         if (showEditDialog) {
             // 顯示編輯對話視窗
             EditDialog(
-                editDogs,
+                editCats,
                 // 取消時欲執行內容
                 onDismiss = {
                     showEditDialog = false
@@ -235,13 +241,13 @@ fun ScreensPetsFileDogs(petsFileViewModel: PetsFileDogsViewModel = viewModel(),
  * @param onEditClick 點擊列表項目時所需呼叫的函式
  */
 @Composable
-fun DogsLists(
-    pets: List<PetsDog>,
+fun CatsLists(
+    pets: List<PetsCat>,
     innerPadding: PaddingValues,
-    onItemClick: (PetsDog) -> Unit,
+    onItemClick: (PetsCat) -> Unit,
     showMore: Boolean,
-    onEditClick: (PetsDog) -> Unit,
-    onDeleteClick: (PetsDog) -> Unit
+    onEditClick: (PetsCat) -> Unit,
+    onDeleteClick: (PetsCat) -> Unit
 ) {
     LazyColumn(
         modifier = Modifier
@@ -249,18 +255,18 @@ fun DogsLists(
             .padding(innerPadding)
     ) {
 
-        items(pets) { dogs ->
+        items(pets) { cats ->
             // 用來建立Lists內容物
             ListItem(
                 // 讓項目可被點擊，並設定點擊時欲執行內容
                 modifier = Modifier.clickable {
-                    onItemClick(dogs)
+                    onItemClick(cats)
                 },
-                headlineContent = { Text(dogs.name) },
-                supportingContent = { Text(dogs.breed) },
+                headlineContent = { Text(cats.name) },
+                supportingContent = { Text(cats.breed) },
                 leadingContent = {
                     Image(
-                        painter = painterResource(id = dogs.image), contentDescription = "dogs"
+                        painter = painterResource(id = cats.image), contentDescription = "cats"
                     )
                 },
                 trailingContent = {
@@ -268,13 +274,13 @@ fun DogsLists(
                         Row {
                             // 編輯按鈕
                             IconButton(onClick = {
-                                onEditClick(dogs)
+                                onEditClick(cats)
                             }) {
                                 Icon(Icons.Filled.Edit, contentDescription = "edit")
                             }
                             // 刪除按鈕
                             IconButton(onClick = {
-                                onDeleteClick(dogs)
+                                onDeleteClick(cats)
                             }) {
                                 Icon(Icons.Filled.Delete, contentDescription = "delete")
                             }
@@ -288,9 +294,9 @@ fun DogsLists(
 }
 
 @Composable
-fun AddDialog(
+fun AddDialogCats(
     onDismiss: () -> Unit,
-    onAdd: (PetsDog) -> Unit
+    onAdd: (PetsCat) -> Unit
 ) {
     var name by remember { mutableStateOf("") }
     var breed by remember { mutableStateOf("") }
@@ -310,7 +316,7 @@ fun AddDialog(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "Add Dogs",
+                    text = "Add Cats",
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.Blue
@@ -318,12 +324,12 @@ fun AddDialog(
                 TextField(
                     value = name,
                     onValueChange = { name = it },
-                    label = { Text(text = "Dogs name") }
+                    label = { Text(text = "Cats name") }
                 )
                 TextField(
                     value = breed,
                     onValueChange = { breed = it },
-                    label = { Text(text = "Dogs breed") }
+                    label = { Text(text = "Cats breed") }
                 )
                 TextField(
                     value = gender,
@@ -339,12 +345,12 @@ fun AddDialog(
                     horizontalArrangement = Arrangement.Center
                 ) {
                     Button(onClick = {
-                        val newDogs = PetsDog(
+                        val newCats = PetsCat(
                             name, breed, gender,
                             // 隨意給個封面圖
                             android.R.drawable.ic_dialog_map
                         )
-                        onAdd(newDogs)
+                        onAdd(newCats)
                     }) {
                         Text("Add")
                     }
@@ -360,13 +366,13 @@ fun AddDialog(
 
 @Composable
 fun EditDialog(
-    dogs: PetsDog,
+    cats: PetsCat,
     onDismiss: () -> Unit,
-    onEdit: (PetsDog) -> Unit
+    onEdit: (PetsCat) -> Unit
 ) {
-    var name by remember { mutableStateOf(dogs.name) }
-    var breed by remember { mutableStateOf(dogs.breed) }
-    var gender by remember { mutableStateOf(dogs.gender) }
+    var name by remember { mutableStateOf(cats.name) }
+    var breed by remember { mutableStateOf(cats.breed) }
+    var gender by remember { mutableStateOf(cats.gender) }
     Dialog(onDismissRequest = { onDismiss() }) {
         Card(
             modifier = Modifier
@@ -382,26 +388,26 @@ fun EditDialog(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "Edit Dogs",
+                    text = "Edit Cats",
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.Blue
                 )
-                Text(text = "Dogs: ${dogs.name}, ${dogs.breed}, ${dogs.gender}")
+                Text(text = "Cats: ${cats.name}, ${cats.breed}, ${cats.gender}")
                 TextField(
                     value = name,
                     onValueChange = { name = it },
-                    label = { Text(text = "Dogs name") }
+                    label = { Text(text = "Cats name") }
                 )
                 TextField(
                     value = breed,
                     onValueChange = { breed = it },
-                    label = { Text(text = "Dogs breed") }
+                    label = { Text(text = "Cats breed") }
                 )
                 TextField(
                     value = gender,
                     onValueChange = { gender = it },
-                    label = { Text(text = "Dogs gender") },
+                    label = { Text(text = "Cats gender") },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                 )
 
@@ -413,10 +419,10 @@ fun EditDialog(
                 ) {
                     Button(onClick = {
                         // 就將原本書內容替換成使用者輸入的新內容，原始books內容也會更新
-                        dogs.name = name
-                        dogs.breed = breed
-                        dogs.gender = gender
-                        onEdit(dogs)
+                        cats.name = name
+                        cats.breed = breed
+                        cats.gender = gender
+                        onEdit(cats)
                     }) {
                         Text("Update")
                     }
@@ -431,8 +437,8 @@ fun EditDialog(
 }
 @Preview(showBackground = true)
 @Composable
-fun ScreensPetsFileDogsPreview() {
+fun ScreensPetsFileCatsPreview() {
     PotelTheme  {
-        ScreensPetsFileDogs(navController = rememberNavController())
+        ScreensPetsFileCats(navController = rememberNavController())
     }
 }
