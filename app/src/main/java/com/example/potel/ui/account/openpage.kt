@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -19,6 +21,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.potel.ui.home.HOME_NAVIGATION_ROUTE
 import androidx.compose.material3.Text
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.lifecycle.viewmodel.compose.viewModel
 
 
@@ -31,6 +35,11 @@ fun Login(viewModel:OpenpageViewModel = viewModel()
     val inputError by viewModel.inputError.collectAsState()
     val phonenumber = viewModel.phonenumber.collectAsState()
     val email = viewModel.email.collectAsState()
+
+
+    val password = viewModel.password.collectAsState()
+    var passwordVisible by remember { mutableStateOf(false) }
+
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -73,6 +82,48 @@ fun Login(viewModel:OpenpageViewModel = viewModel()
             if (inputError) {
                 Text(
                     text = "請輸入有效的信箱或手機號碼",
+                    color = Color.Red,
+                    fontSize = 12.sp,
+                    modifier = Modifier.padding(start = 16.dp)
+                )
+            }
+
+
+
+            OutlinedTextField(
+                value = password.value,
+                onValueChange = viewModel::onPasswordChanged,
+                label = { Text(text = "密碼") },
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Default.Lock,
+                        contentDescription = "密碼"
+                    )
+                },
+                trailingIcon = {
+                    Text(
+                        text = if (passwordVisible) "隱藏" else "顯示",
+                        modifier = Modifier.clickable {
+                            passwordVisible = !passwordVisible
+                        }
+                    )
+                },
+                isError = viewModel.passwordError,
+                shape = RoundedCornerShape(8.dp),
+                visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                singleLine = true,
+                colors = TextFieldDefaults.colors(
+                    focusedIndicatorColor = Color.Blue,
+                    unfocusedIndicatorColor = Color.Gray,
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 16.dp)
+            )
+            if (viewModel.passwordError) {
+                Text(
+                    text = "密碼需在6至20字符內，且包含字母和數字",
                     color = Color.Red,
                     fontSize = 12.sp,
                     modifier = Modifier.padding(start = 16.dp)
