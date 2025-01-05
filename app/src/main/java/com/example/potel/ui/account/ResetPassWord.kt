@@ -22,11 +22,12 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 
 fun Resetpassword (viewModel:ResetPassWordViewModel = viewModel()
-    ,navController: NavHostController) {
+    ,navController: NavHostController ) {
 
     val email = viewModel.email.collectAsState()
 
@@ -108,7 +109,7 @@ fun Resetpassword (viewModel:ResetPassWordViewModel = viewModel()
 
                     if (viewModel.passwordError) {
                         Text(
-                            text = "密碼需在6 至 20 字符內",
+                            text = "密碼需在6 至 20 字內數字英文至少各一",
                             color = Color.Red,
                             fontSize = 12.sp,
                             modifier = Modifier.padding(start = 16.dp)
