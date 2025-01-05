@@ -18,28 +18,28 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 
-fun Resetpassword (navController: NavHostController) {
+fun Resetpassword (viewModel:ResetPassWordViewModel = viewModel()
+    ,navController: NavHostController) {
 
-    val email = remember { mutableStateOf("") }
-    var emailError by remember { mutableStateOf(false) }
-    val emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$".toRegex()
+    val email = viewModel.email.collectAsState()
 
-    val password = remember { mutableStateOf("") }
+    val password = viewModel.password.collectAsState()
+
     var passwordVisible by remember { mutableStateOf(false) }
-    var passwordError by remember { mutableStateOf(false) }
 
-    var checkpassword = remember { mutableStateOf("") }
+    val checkpassword = viewModel.checkpassword.collectAsState()
     var checkpasswordVisible  by remember { mutableStateOf(false) }
-    var checkpasswordError by remember { mutableStateOf(false) }
 
-    val phonenumber = remember { mutableStateOf("") }
-    var phonenumberError by remember { mutableStateOf(false) }
+
+    val phonenumber = viewModel.phonenumber.collectAsState()
+
 
        Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -54,21 +54,18 @@ fun Resetpassword (navController: NavHostController) {
                         color = Color.Blue
                     )
 
-                    OutlinedTextField(
-                        value = email.value,
-                        onValueChange = {
-                            email.value = it
-                            emailError = !it.matches(emailRegex) },
-                        label = { Text(text = "請輸入信箱") },
-                        singleLine = true,
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-                        shape = RoundedCornerShape(8.dp),
-                        isError = emailError,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 10.dp)
+           OutlinedTextField(
+               value = email.value,
+               onValueChange = viewModel::onEmailChanged,
+               label = { Text("請輸入信箱") },
+               singleLine = true,
+               shape = RoundedCornerShape(8.dp),
+               isError = viewModel.emailError,
+               modifier = Modifier
+                   .fillMaxWidth()
+                   .padding(top = 16.dp)
                     )
-                    if (emailError) {
+                    if (viewModel.emailError) {
                         Text(
                             text = "請輸入有效的信箱",
                             color = Color.Red,
@@ -79,9 +76,7 @@ fun Resetpassword (navController: NavHostController) {
 
                     OutlinedTextField(
                         value = password.value,
-                        onValueChange = {
-                            password.value = it
-                            passwordError = it.isEmpty() || it.length < 6 || it.length > 20 },
+                        onValueChange = viewModel::onPasswordChanged,
                         label = { Text(text = "密碼") },
                         leadingIcon = {
                             Icon(
@@ -97,7 +92,7 @@ fun Resetpassword (navController: NavHostController) {
                                 }
                             )
                         },
-                        isError = passwordError,
+                        isError = viewModel.passwordError,
                         shape = RoundedCornerShape(8.dp),
                         visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
@@ -111,7 +106,7 @@ fun Resetpassword (navController: NavHostController) {
                             .padding(top = 10.dp)
                     )
 
-                    if (passwordError) {
+                    if (viewModel.passwordError) {
                         Text(
                             text = "密碼需在6 至 20 字符內",
                             color = Color.Red,
@@ -122,8 +117,7 @@ fun Resetpassword (navController: NavHostController) {
 
                     OutlinedTextField(
                         value = checkpassword.value,
-                        onValueChange = { checkpassword.value = it
-                            checkpasswordError = it != password.value},
+                        onValueChange = viewModel::onCheckPasswordChanged,
                         label = { Text(text = "再次確認密碼") },
                         leadingIcon = {
                             Icon(
@@ -139,7 +133,7 @@ fun Resetpassword (navController: NavHostController) {
                                 }
                             )
                         },
-                        isError = checkpasswordError,
+                        isError = viewModel.checkpasswordError,
                         shape = RoundedCornerShape(8.dp),
                         visualTransformation = if (checkpasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
@@ -153,7 +147,7 @@ fun Resetpassword (navController: NavHostController) {
                             .padding(top = 10.dp)
                     )
 
-                    if (checkpasswordError) {
+                    if (viewModel.checkpasswordError) {
                         Text(
                             text = "密碼需輸入相同",
                             color = Color.Red,
@@ -164,18 +158,17 @@ fun Resetpassword (navController: NavHostController) {
 
                     OutlinedTextField(
                         value = phonenumber.value,
-                        onValueChange = { phonenumber.value = it
-                            phonenumberError = it.isEmpty() || it.length != 10 },
+                        onValueChange = viewModel::onPhonenumberChanged,
                         label = { Text(text = "請輸入手機號碼") },
                         singleLine = true,
                         shape = RoundedCornerShape(8.dp),
-                        isError = phonenumberError,
+                        isError = viewModel.phonenumberError,
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(top = 10.dp),
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     )
-                    if (phonenumberError) {
+                    if (viewModel.phonenumberError) {
                         Text(
                             text = "手機號碼為十位數字",
                             color = Color.Red,
