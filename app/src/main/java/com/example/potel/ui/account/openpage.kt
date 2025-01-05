@@ -37,57 +37,57 @@ fun showtoast(message: String, context: Context) {
 }
 
 
-fun sendLoginRequestWithEmail(
-    email: String,
-    password: String,
-    context: Context,
-    navController: NavHostController
-) {
+//fun sendLoginRequestWithEmail(
+//    email: String,
+//    password: String,
+//    context: Context,
+//    navController: NavHostController
+//) {
+//
+//    CoroutineScope(Dispatchers.IO).launch {
+//        try {
+//            val response = RetrofitInstance.api.login(LoginRequest(email, password))
+//            withContext(Dispatchers.Main) {
+//                if (response.token.isNotEmpty()) {
+//                    showtoast("登入成功，token: ${response.token}", context)
+//                    navController.navigate(HOME_NAVIGATION_ROUTE)
+//                } else {
+//                    showtoast("登入失敗: ${response.message}", context)
+//                }
+//            }
+//        } catch (e: Exception) {
+//            withContext(Dispatchers.Main) {
+//                showtoast("登入錯誤: ${e.message}", context)
+//            }
+//        }
+//    }
+//}
 
-    CoroutineScope(Dispatchers.IO).launch {
-        try {
-            val response = RetrofitInstance.api.login(LoginRequest(email, password))
-            withContext(Dispatchers.Main) {
-                if (response.token.isNotEmpty()) {
-                    showtoast("登入成功，token: ${response.token}", context)
-                    navController.navigate(HOME_NAVIGATION_ROUTE)
-                } else {
-                    showtoast("登入失敗: ${response.message}", context)
-                }
-            }
-        } catch (e: Exception) {
-            withContext(Dispatchers.Main) {
-                showtoast("登入錯誤: ${e.message}", context)
-            }
-        }
-    }
-}
-
-fun sendLoginRequestWithPhone(
-    phone: String,
-    password: String,
-    context: Context,
-    navController: NavHostController
-) {
-
-    CoroutineScope(Dispatchers.IO).launch {
-        try {
-            val response = RetrofitInstance2.api.login(LoginRequest2(phone, password))
-            withContext(Dispatchers.Main) {
-                if (response.token.isNotEmpty()) {
-                    showtoast("登入成功，token: ${response.token}", context)
-                    navController.navigate(HOME_NAVIGATION_ROUTE)
-                } else {
-                    showtoast("登入失敗: ${response.message}", context)
-                }
-            }
-        } catch (e: Exception) {
-            withContext(Dispatchers.Main) {
-                showtoast("登入錯誤: ${e.message}", context)
-            }
-        }
-    }
-}
+//fun sendLoginRequestWithPhone(
+//    phone: String,
+//    password: String,
+//    context: Context,
+//    navController: NavHostController
+//) {
+//
+//    CoroutineScope(Dispatchers.IO).launch {
+//        try {
+//            val response = RetrofitInstance2.api.login(LoginRequest2(phone, password))
+//            withContext(Dispatchers.Main) {
+//                if (response.token.isNotEmpty()) {
+//                    showtoast("登入成功，token: ${response.token}", context)
+//                    navController.navigate(HOME_NAVIGATION_ROUTE)
+//                } else {
+//                    showtoast("登入失敗: ${response.message}", context)
+//                }
+//            }
+//        } catch (e: Exception) {
+//            withContext(Dispatchers.Main) {
+//                showtoast("登入錯誤: ${e.message}", context)
+//            }
+//        }
+//    }
+//}
 
 @Composable
 fun Login(navController: NavHostController) {
@@ -198,35 +198,35 @@ verticalArrangement = Arrangement.Top,
                 )
             }
 
-            Button(
-                onClick = {
-                    if (input.value.isEmpty() || password.value.isEmpty()) {
-                        showtoast("請填寫所有欄位", context)
-                    } else {
-                        if (input.value.matches(emailRegex)) {
-                            sendLoginRequestWithEmail(
-                                input.value,
-                                password.value,
-                                context,
-                                navController
-                            )
-                        } else if (input.value.matches(phoneRegex)) {
-                            sendLoginRequestWithPhone(
-                                input.value,
-                                password.value,
-                                context,
-                                navController
-                            )
-                        }
-                    }
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 0.dp),
-                shape = RoundedCornerShape(8.dp)
-            ) {
-                Text(text = "登入", fontSize = 20.sp)
-            }
+//            Button(
+//                onClick = {
+//                    if (input.value.isEmpty() || password.value.isEmpty()) {
+//                        showtoast("請填寫所有欄位", context)
+//                    } else {
+//                        if (input.value.matches(emailRegex)) {
+//                            sendLoginRequestWithEmail(
+//                                input.value,
+//                                password.value,
+//                                context,
+//                                navController
+//                            )
+//                        } else if (input.value.matches(phoneRegex)) {
+//                            sendLoginRequestWithPhone(
+//                                input.value,
+//                                password.value,
+//                                context,
+//                                navController
+//                            )
+//                        }
+//                    }
+//                },
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .padding(top = 0.dp),
+//                shape = RoundedCornerShape(8.dp)
+//            ) {
+//                Text(text = "登入", fontSize = 20.sp)
+//            }
         }
 
         Row(

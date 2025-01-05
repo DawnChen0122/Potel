@@ -42,27 +42,16 @@ fun Signup(viewModel:AccountViewModel = viewModel(), navController: NavHostContr
     val monthRange = (1..12).map { it.toString() }
     val dayRange = (1..31).map { it.toString() }
 
-    var selectedYear by remember { mutableStateOf("") }
-    var selectedMonth by remember { mutableStateOf("") }
-    var selectedDay by remember { mutableStateOf("") }
-
     var expandedYear by remember { mutableStateOf(false) }
     var expandedMonth by remember { mutableStateOf(false) }
     var expandedDay by remember { mutableStateOf(false) }
 
-    val filteredYears = yearRange.filter { it.startsWith(inputYear, true) }
-    val filteredMonths = monthRange.filter { it.startsWith(inputMonth, true) }
-    val filteredDays = dayRange.filter { it.startsWith(inputDay, true) }
+
 
     var inputGender by remember { mutableStateOf("") }
     val genderRange = listOf("男", "女","不願透漏").map{ it.toString() }
 
-    var selectedGender by remember { mutableStateOf("") }
     var expandedGender by remember { mutableStateOf(false) }
-
-    val filteredGenders = genderRange.filter { it.startsWith(inputGender, true) }
-
-
 
     val password = viewModel.password.collectAsState()
     var passwordVisible by remember { mutableStateOf(false) }
@@ -95,7 +84,7 @@ fun Signup(viewModel:AccountViewModel = viewModel(), navController: NavHostContr
 
 
         OutlinedTextField(
-            value = uid.value.firstOrNull()?.title ?: "",
+            value = uid.value,
             onValueChange = viewModel::onUidChanged,
             label = { Text(text = "請輸入用戶名稱") },
             singleLine = true,
@@ -116,7 +105,7 @@ fun Signup(viewModel:AccountViewModel = viewModel(), navController: NavHostContr
 
 
         OutlinedTextField(
-            value = email.value.firstOrNull()?.title ?: "",
+            value = email.value,
             onValueChange = viewModel::onEmailChanged,
             label = { Text("請輸入信箱") },
             singleLine = true,
@@ -174,11 +163,10 @@ fun Signup(viewModel:AccountViewModel = viewModel(), navController: NavHostContr
                     expanded = expandedYear,
                     onDismissRequest = { expandedYear = false }
                 ) {
-                    filteredYears.forEach { yearRange ->
+                    yearRange.forEach { yearRange ->
                         DropdownMenuItem(
                             text = { Text(yearRange) },
                             onClick = {
-                                selectedYear = yearRange
                                 inputYear = yearRange
                                 expandedYear = false
                             }
@@ -208,11 +196,10 @@ fun Signup(viewModel:AccountViewModel = viewModel(), navController: NavHostContr
                     expanded = expandedMonth,
                     onDismissRequest = { expandedMonth = false }
                 ) {
-                    filteredMonths.forEach { monthRange ->
+                    monthRange.forEach { monthRange ->
                         DropdownMenuItem(
                             text = { Text(monthRange) },
                             onClick = {
-                                selectedMonth = monthRange
                                 inputMonth = monthRange
                                 expandedMonth = false
                             }
@@ -243,11 +230,10 @@ fun Signup(viewModel:AccountViewModel = viewModel(), navController: NavHostContr
                     expanded = expandedDay,
                     onDismissRequest = { expandedDay = false }
                 ) {
-                    filteredDays.forEach { dayRange ->
+                    dayRange.forEach { dayRange ->
                         DropdownMenuItem(
                             text = { Text(dayRange) },
                             onClick = {
-                                selectedDay = dayRange
                                 inputDay = dayRange
                                 expandedDay = false
                             }
@@ -298,11 +284,10 @@ fun Signup(viewModel:AccountViewModel = viewModel(), navController: NavHostContr
                 expanded = expandedGender,
                 onDismissRequest = { expandedGender = false }
             ) {
-                filteredGenders.forEach { genderRange ->
+                genderRange.forEach { genderRange ->
                     DropdownMenuItem(
                         text = { Text(genderRange) },
                         onClick = {
-                            selectedGender = genderRange
                             inputGender = genderRange
                             expandedGender = false
                         }
@@ -313,7 +298,7 @@ fun Signup(viewModel:AccountViewModel = viewModel(), navController: NavHostContr
 
 
         OutlinedTextField(
-            value = password.value.firstOrNull()?.title ?: "",
+            value = password.value,
             onValueChange = viewModel::onPasswordChanged,
             label = { Text(text = "密碼") },
             leadingIcon = {
@@ -354,7 +339,7 @@ fun Signup(viewModel:AccountViewModel = viewModel(), navController: NavHostContr
 
 
         OutlinedTextField(
-            value = checkpassword.value.firstOrNull()?.title ?: "",
+            value = checkpassword.value,
             onValueChange = viewModel::onCheckPasswordChanged,
             label = { Text(text = "再次確認密碼") },
             leadingIcon = {
@@ -395,7 +380,7 @@ fun Signup(viewModel:AccountViewModel = viewModel(), navController: NavHostContr
 
 
         OutlinedTextField(
-            value = username.value.firstOrNull()?.title ?: "",
+            value = username.value,
             onValueChange = viewModel::onUsernameChanged,
             label = { Text(text = "請輸入姓名") },
             singleLine = true,
@@ -409,7 +394,7 @@ fun Signup(viewModel:AccountViewModel = viewModel(), navController: NavHostContr
 
 
         OutlinedTextField(
-            value = phonenumber.value.firstOrNull()?.title ?: "",
+            value = phonenumber.value,
             onValueChange = viewModel::onPhonenumberChanged,
             label = { Text(text = "請輸入手機號碼") },
             singleLine = true,
@@ -430,7 +415,7 @@ fun Signup(viewModel:AccountViewModel = viewModel(), navController: NavHostContr
 
 
         OutlinedTextField(
-            value = address.value.firstOrNull()?.title ?: "",
+            value = address.value,
             onValueChange = viewModel::onAddressChanged,
             label = { Text(text = "請輸入地址") },
             singleLine = true,

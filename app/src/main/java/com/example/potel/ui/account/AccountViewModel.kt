@@ -1,88 +1,88 @@
 package com.example.potel.ui.account
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Email
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 class AccountViewModel : ViewModel() {
 
-
-    private val _uid = MutableStateFlow<List<TipHomeItemUiState>>(listOf())
-    val uid: StateFlow<List<TipHomeItemUiState>> = _uid.asStateFlow()
+    private val _uid =MutableStateFlow("")
+    val uid= _uid.asStateFlow()
     var uidError by mutableStateOf(false)
-    fun onUidChanged(uid: String){
-        val uidRegex = Regex("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{3,20}$")
+
+    fun onUidChanged(uid: String) {
+        val uidRegex = Regex("^[a-zA-Z0-9]{3,20}$")
         uidError = !uid.matches(uidRegex)
-        _uid.value = listOf(TipHomeItemUiState(title = uid, imageVector = Icons.Filled.Email))
+        _uid.value = uid
     }
 
 
-    private val _username = MutableStateFlow<List<TipHomeItemUiState>>(listOf())
+    private val _username = MutableStateFlow("")
     val username = _username.asStateFlow()
     fun onUsernameChanged(username: String) {
-        _username.value = listOf(TipHomeItemUiState(title = username, imageVector = Icons.Filled.Email))
+        _username.value = username
     }
 
-
-
-private val _password = MutableStateFlow<List<TipHomeItemUiState>>(listOf())
-    val password: StateFlow<List<TipHomeItemUiState>> = _password.asStateFlow()
+    private val _password = MutableStateFlow("")
+    val password = _password.asStateFlow()
     var passwordError by mutableStateOf(false)
-    fun onPasswordChanged(password: String){
+    fun onPasswordChanged(password: String) {
         val passwordRegex = Regex("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{6,20}$")
         passwordError = !password.matches(passwordRegex)
-        _password.value = listOf(TipHomeItemUiState(title = password, imageVector = Icons.Filled.Email))
+        _password.value = password
     }
 
 
 
-    private val _checkpassword = MutableStateFlow<List<TipHomeItemUiState>>(listOf())
-    val checkpassword: StateFlow<List<TipHomeItemUiState>> = _checkpassword.asStateFlow()
+    private val _checkpassword = MutableStateFlow("")
+    val checkpassword = _checkpassword.asStateFlow()
     var checkpasswordError by mutableStateOf(false)
-    fun onCheckPasswordChanged(checkpassword: String){
-        checkpasswordError = checkpassword != _password.value.firstOrNull()?.title
-        _checkpassword.value = listOf(TipHomeItemUiState(title = checkpassword, imageVector = Icons.Filled.Email))
+    fun onCheckPasswordChanged(checkpassword: String) {
+        val checkpasswordRegex = Regex("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")
+        checkpasswordError = !checkpassword.matches(checkpasswordRegex)
+        _checkpassword.value = checkpassword
     }
 
 
-    private val _phonenumber = MutableStateFlow<List<TipHomeItemUiState>>(listOf())
-    val phonenumber: StateFlow<List<TipHomeItemUiState>> = _phonenumber.asStateFlow()
+    private val _phonenumber = MutableStateFlow("")
+    val phonenumber = _phonenumber.asStateFlow()
     var phonenumberError by mutableStateOf(false)
-    fun onPhonenumberChanged(phonenumber:String) {
+    fun onPhonenumberChanged(phonenumber: String) {
         val phonenumberRegex = Regex("^[0-9]{10}$")
         phonenumberError = !phonenumber.matches(phonenumberRegex)
-        _phonenumber.value = listOf(TipHomeItemUiState(title = phonenumber, imageVector = Icons.Filled.Email))
-    }
+        _phonenumber.value = phonenumber}
 
 
-
-    private val _address = MutableStateFlow<List<TipHomeItemUiState>>(listOf())
+    private val _address = MutableStateFlow("")
     val address = _address.asStateFlow()
-    fun onAddressChanged(address: String){
-        _address.value = listOf(TipHomeItemUiState(title = address, imageVector = Icons.Filled.Email))
+    fun onAddressChanged(address: String) {
+        _address.value = address
     }
 
-//    private val _items = MutableStateFlow<List<TipHomeItemUiState>>(listOf())
-//    val items = _items.asStateFlow()
-
-    private val _email = MutableStateFlow<List<TipHomeItemUiState>>(listOf())
-    val email: StateFlow<List<TipHomeItemUiState>> = _email.asStateFlow()
+    private val _email = MutableStateFlow("")
+    val email = _email.asStateFlow()
     var emailError by mutableStateOf(false)
-    fun onEmailChanged(email: String){
+    fun onEmailChanged(email: String) {
         val emailRegex = Regex("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")
         emailError = !email.matches(emailRegex)
-        _email.value = listOf(TipHomeItemUiState(title = email, imageVector = Icons.Filled.Email))
+        _email.value = email
     }
-}
 
-data class TipHomeItemUiState(val title: String, val imageVector: ImageVector)
+    fun login(){
+        val account = _email.value
+        val password = _password.value
+        viewModelScope.launch{
+           val user =  RetrofitInstance.api.login(loginid = account, password = password)
+            // 跳轉業面跟儲存
+        }
+    }
+
+}
 
 // 假設的 ApiService，負責處理登入請求
 //object ApiService3 {

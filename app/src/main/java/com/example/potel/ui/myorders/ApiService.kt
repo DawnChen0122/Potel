@@ -10,7 +10,10 @@ import retrofit2.http.Query
 interface ApiService {
     /** 取得所有該會員的訂房訂單orders */
     @GET("api/orders")
-    suspend fun getOrders(@Query("memberid") memberid: Int, @Query("orderstate") orderstate:Char): List<Order>
+    suspend fun getOrders(
+        @Query("memberid") memberid: Int,
+        @Query("orderstate") orderstate: Char
+    ): List<Order>
 
     /** 取得指定id的order */
     @GET("api/order")
@@ -31,6 +34,12 @@ interface ApiService {
         @Body updateOrderRequest: Order
     ): ResponseObject
 
+    @GET
+    suspend fun login(
+        @Query("loginId") account: String,
+        @Query("password") password: String
+    ): User
+
 
 //    /** 修改user */
 //    @PUT("/api/users/{id}")
@@ -40,7 +49,12 @@ interface ApiService {
 //    ): UpdateUserResponse?
 }
 
+data class User(
+    val email: String
+)
+
 const val baseurl = "http://10.0.2.2:8080/PotelServer/"
+
 // singleton-pattern, 建立一個符合APIService介面的物件
 object RetrofitInstance {
     val api: ApiService by lazy {
@@ -52,6 +66,6 @@ object RetrofitInstance {
     }
 }
 
-fun composeImageUrl(imageid: Int): String{
+fun composeImageUrl(imageid: Int): String {
     return "${baseurl}api/image?imageid=$imageid"
 }
