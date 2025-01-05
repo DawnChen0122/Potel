@@ -1,14 +1,10 @@
 package com.example.potel.ui.account
 
-import android.content.Context
-import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -16,21 +12,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.potel.ui.home.HOME_NAVIGATION_ROUTE
-import com.example.potel.ui.home.Screens
 import androidx.compose.material3.Text
 import androidx.lifecycle.viewmodel.compose.viewModel
-
-fun showtoast(message: String, context: Context) {
-    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
-}
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -39,25 +28,9 @@ fun showtoast(message: String, context: Context) {
 fun Login(viewModel:OpenpageViewModel = viewModel()
           , navController: NavHostController) {
 
-    val email = viewModel.email.collectAsState()
-
-    val password = viewModel.password.collectAsState()
-    var passwordVisible by remember { mutableStateOf(false) }
-
-
+    val inputError by viewModel.inputError.collectAsState()
     val phonenumber = viewModel.phonenumber.collectAsState()
-    var phonenumberError by remember { mutableStateOf(false) }
-
-
-
-    val input = remember { mutableStateOf("") }
-    var inputError by remember { mutableStateOf(false) }
-
-    val emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$".toRegex()
-
-    val phoneRegex = "^[0-9]{10}$".toRegex()
-
-    var passwordError by remember { mutableStateOf(false) }
+    val email = viewModel.email.collectAsState()
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -68,7 +41,7 @@ fun Login(viewModel:OpenpageViewModel = viewModel()
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-verticalArrangement = Arrangement.Top,
+            verticalArrangement = Arrangement.Top,
             modifier = Modifier
 
                 .padding(10.dp)
@@ -83,13 +56,10 @@ verticalArrangement = Arrangement.Top,
                 color = Color.Blue
             )
 
-
-
             OutlinedTextField(
-                value = input.value,
-                onValueChange = {
-                    input.value = it
-                    inputError = !(it.matches(emailRegex) || it.matches(phoneRegex))
+                value = if (email.value.isNotEmpty()) email.value else phonenumber.value,
+                onValueChange = { newValue ->
+                    viewModel.onInputChanged(newValue)
                 },
                 label = { Text(text = "請輸入信箱或手機號碼") },
                 singleLine = true,
@@ -108,47 +78,6 @@ verticalArrangement = Arrangement.Top,
                     modifier = Modifier.padding(start = 16.dp)
                 )
             }
-
-            OutlinedTextField(
-                value = password.value,
-                onValueChange = viewModel::onPasswordChanged,
-                label = { Text(text = "密碼") },
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Default.Lock,
-                        contentDescription = "密碼"
-                    )
-                },
-                trailingIcon = {
-                    Text(
-                        text = if (passwordVisible) "隱藏" else "顯示",
-                        modifier = Modifier.clickable {
-                            passwordVisible = !passwordVisible
-                        }
-                    )
-                },
-                isError = passwordError,
-                shape = RoundedCornerShape(8.dp),
-                visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                singleLine = true,
-                colors = TextFieldDefaults.colors(
-                    focusedIndicatorColor = Color.Blue,
-                    unfocusedIndicatorColor = Color.Gray,
-                ),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 0.dp)
-            )
-
-            if (passwordError) {
-                Text(
-                    text = "密碼需在6 至 20 字符內",
-                    color = Color.Red,
-                    fontSize = 12.sp,
-                    modifier = Modifier.padding(start = 16.dp)
-                )
-            }
         }
 
         Row(
@@ -158,42 +87,36 @@ verticalArrangement = Arrangement.Top,
 
                 .padding(10.dp)
         ) {
+            var errorMessage by remember { mutableStateOf<String?>(null) }
+            // 註冊按鈕
             Button(
-
-                onClick = { navController.navigate(Screens.Resetpassword.name)
+                onClick = {
+                    if (email.value.isEmpty() && phonenumber.value.isEmpty()) {
+                        errorMessage = "信箱或手機號碼欄位不得空白"
+                    } else if (!email.value.matches(viewModel.emailRegex) && !phonenumber.value.matches(viewModel.phonenumberRegex)) {
+                        errorMessage = "請輸入有效的信箱或手機號碼"
+                    } else {
+                        errorMessage = null // 清除錯誤訊息
+                        // 執行註冊邏輯
+                        "執行註冊邏輯"
+                    }
                 },
                 modifier = Modifier
-                    .width(100.dp)
-                    .height(46.dp),
-                contentPadding = PaddingValues(0.dp)
+                    .fillMaxWidth()
+                    .padding(top = 16.dp),
+                shape = RoundedCornerShape(8.dp)
             ) {
-                Text(
-                    text = "忘記密碼",
-                    fontSize = 22.sp,
-                    lineHeight = 46.sp,
-                    fontWeight = FontWeight(700),
-                    color = Color(0xFF000000),
-                )
+                Text(text = "註冊", fontSize = 16.sp)
             }
-            Button(
-                onClick = { navController.navigate(Screens.Signup.name) },
-                modifier = Modifier
-                    .width(100.dp)
-                    .height(46.dp),
-                contentPadding = PaddingValues(0.dp)
-            ) {
+            errorMessage?.let {
                 Text(
-                    text = "會員註冊",
-                    fontSize = 22.sp,
-                    lineHeight = 46.sp,
-                    fontWeight = FontWeight(700),
-                    color = Color(0xFF000000),
-                    modifier = Modifier
-                        .width(100.dp)
-                        .height(46.dp)
+                    text = it,
+                    color = Color.Red,
+                    fontSize = 14.sp,
+                    modifier = Modifier.padding(top = 8.dp)
                 )
-            }
 
+            }
         }
     }
 }

@@ -1,34 +1,76 @@
-//package com.example.potel.ui.account
-//
-//import androidx.compose.runtime.getValue
-//import androidx.compose.runtime.mutableStateOf
-//import androidx.compose.runtime.setValue
-//import androidx.lifecycle.ViewModel
-//import androidx.lifecycle.viewModelScope
-//import kotlinx.coroutines.flow.MutableStateFlow
-//import kotlinx.coroutines.flow.asStateFlow
-//import kotlinx.coroutines.launch
-//
-//class AccountViewModel : ViewModel() {
-//
-//
-//    private val _phonenumber = MutableStateFlow("")
-//    val phonenumber = _phonenumber.asStateFlow()
-//    var phonenumberError by mutableStateOf(false)
-//    fun onPhonenumberChanged(phonenumber: String) {
-//        val phonenumberRegex = Regex("^[0-9]{10}$")
-//        phonenumberError = !phonenumber.matches(phonenumberRegex)
-//        _phonenumber.value = phonenumber}
-//
-//
-//    private val _email = MutableStateFlow("")
-//    val email = _email.asStateFlow()
-//    var emailError by mutableStateOf(false)
-//    fun onEmailChanged(email: String) {
-//        val emailRegex = Regex("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")
-//        emailError = !email.matches(emailRegex)
-//        _email.value = email
-//    }
-//
-//
-//
+package com.example.potel.ui.account
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material3.*
+import androidx.compose.material3.ExposedDropdownMenuDefaults.TrailingIcon
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+
+fun Signup0(viewModel:AccountViewModel = viewModel(),
+           navController: NavHostController) {
+
+
+    val phonenumber = viewModel.phonenumber.collectAsState()
+    var phonenumberError by remember { mutableStateOf(false) }
+
+
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+        Text(
+            text = "會員註冊",
+            fontSize = 30.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color.Blue
+        )
+
+
+        OutlinedTextField(
+            value = phonenumber.value,
+            onValueChange = viewModel::onPhonenumberChanged,
+            label = { Text(text = "請輸入手機號碼") },
+            singleLine = true,
+            shape = RoundedCornerShape(8.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+        )
+        if (phonenumberError) {
+            Text(
+                text = "手機號碼為十位數字",
+                color = Color.Red,
+                fontSize = 12.sp,
+                modifier = Modifier.padding(start = 16.dp)
+            )
+        }
+
+
+
+    }
+}
