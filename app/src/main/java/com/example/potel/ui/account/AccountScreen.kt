@@ -27,7 +27,9 @@ import androidx.navigation.compose.rememberNavController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Signup(viewModel:AccountViewModel = viewModel(), navController: NavHostController) {
+
+fun Signup(viewModel:AccountViewModel = viewModel(),
+           navController: NavHostController) {
 //    val items = viewModel.items.collectAsState()
 
     val  uid = viewModel.uid.collectAsState()

@@ -14,7 +14,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -26,72 +25,30 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.potel.ui.home.HOME_NAVIGATION_ROUTE
 import com.example.potel.ui.home.Screens
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import androidx.compose.material3.Text
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 fun showtoast(message: String, context: Context) {
     Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
 }
 
 
-//fun sendLoginRequestWithEmail(
-//    email: String,
-//    password: String,
-//    context: Context,
-//    navController: NavHostController
-//) {
-//
-//    CoroutineScope(Dispatchers.IO).launch {
-//        try {
-//            val response = RetrofitInstance.api.login(LoginRequest(email, password))
-//            withContext(Dispatchers.Main) {
-//                if (response.token.isNotEmpty()) {
-//                    showtoast("登入成功，token: ${response.token}", context)
-//                    navController.navigate(HOME_NAVIGATION_ROUTE)
-//                } else {
-//                    showtoast("登入失敗: ${response.message}", context)
-//                }
-//            }
-//        } catch (e: Exception) {
-//            withContext(Dispatchers.Main) {
-//                showtoast("登入錯誤: ${e.message}", context)
-//            }
-//        }
-//    }
-//}
-
-//fun sendLoginRequestWithPhone(
-//    phone: String,
-//    password: String,
-//    context: Context,
-//    navController: NavHostController
-//) {
-//
-//    CoroutineScope(Dispatchers.IO).launch {
-//        try {
-//            val response = RetrofitInstance2.api.login(LoginRequest2(phone, password))
-//            withContext(Dispatchers.Main) {
-//                if (response.token.isNotEmpty()) {
-//                    showtoast("登入成功，token: ${response.token}", context)
-//                    navController.navigate(HOME_NAVIGATION_ROUTE)
-//                } else {
-//                    showtoast("登入失敗: ${response.message}", context)
-//                }
-//            }
-//        } catch (e: Exception) {
-//            withContext(Dispatchers.Main) {
-//                showtoast("登入錯誤: ${e.message}", context)
-//            }
-//        }
-//    }
-//}
-
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Login(navController: NavHostController) {
-    val context = LocalContext.current
+
+fun Login(viewModel:OpenpageViewModel = viewModel()
+          , navController: NavHostController) {
+
+    val email = viewModel.email.collectAsState()
+
+    val password = viewModel.password.collectAsState()
+    var passwordVisible by remember { mutableStateOf(false) }
+
+
+    val phonenumber = viewModel.phonenumber.collectAsState()
+    var phonenumberError by remember { mutableStateOf(false) }
+
+
 
     val input = remember { mutableStateOf("") }
     var inputError by remember { mutableStateOf(false) }
@@ -100,8 +57,6 @@ fun Login(navController: NavHostController) {
 
     val phoneRegex = "^[0-9]{10}$".toRegex()
 
-    val password = remember { mutableStateOf("") }
-    var passwordVisible by remember { mutableStateOf(false) }
     var passwordError by remember { mutableStateOf(false) }
 
     Column(
@@ -156,10 +111,7 @@ verticalArrangement = Arrangement.Top,
 
             OutlinedTextField(
                 value = password.value,
-                onValueChange = {
-                    password.value = it
-                    passwordError = it.isEmpty() || it.length < 6 || it.length > 20
-                },
+                onValueChange = viewModel::onPasswordChanged,
                 label = { Text(text = "密碼") },
                 leadingIcon = {
                     Icon(
@@ -197,36 +149,6 @@ verticalArrangement = Arrangement.Top,
                     modifier = Modifier.padding(start = 16.dp)
                 )
             }
-
-//            Button(
-//                onClick = {
-//                    if (input.value.isEmpty() || password.value.isEmpty()) {
-//                        showtoast("請填寫所有欄位", context)
-//                    } else {
-//                        if (input.value.matches(emailRegex)) {
-//                            sendLoginRequestWithEmail(
-//                                input.value,
-//                                password.value,
-//                                context,
-//                                navController
-//                            )
-//                        } else if (input.value.matches(phoneRegex)) {
-//                            sendLoginRequestWithPhone(
-//                                input.value,
-//                                password.value,
-//                                context,
-//                                navController
-//                            )
-//                        }
-//                    }
-//                },
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .padding(top = 0.dp),
-//                shape = RoundedCornerShape(8.dp)
-//            ) {
-//                Text(text = "登入", fontSize = 20.sp)
-//            }
         }
 
         Row(

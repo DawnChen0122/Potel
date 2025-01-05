@@ -1,72 +1,34 @@
-//import android.content.Context
-//import android.os.Bundle
-//import androidx.activity.ComponentActivity
-//import androidx.activity.compose.setContent
-//import androidx.compose.runtime.Composable
+//package com.example.potel.ui.account
+//
 //import androidx.compose.runtime.getValue
 //import androidx.compose.runtime.mutableStateOf
-//import androidx.compose.runtime.remember
 //import androidx.compose.runtime.setValue
-//import androidx.compose.ui.platform.LocalContext
-//import androidx.compose.ui.tooling.preview.Preview
-
-//class MainActivity : ComponentActivity() {
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//        setContent {
-//            BookshopDemo_AndroidTheme {
-//                Main()
-//            }
-//        }
-//    }
-//}
+//import androidx.lifecycle.ViewModel
+//import androidx.lifecycle.viewModelScope
+//import kotlinx.coroutines.flow.MutableStateFlow
+//import kotlinx.coroutines.flow.asStateFlow
+//import kotlinx.coroutines.launch
 //
-//@Composable
-//fun Main() {
-//    val context = LocalContext.current
-//    val preferences = context.getSharedPreferences("settings", Context.MODE_PRIVATE)
-//    // 取出當初儲存資料，如果沒有儲存則回傳空字串
-//    var uid by remember { mutableStateOf(preferences.getString("uid", "")!!) }
-//    var showRegister by remember { mutableStateOf(false) }
+//class AccountViewModel : ViewModel() {
 //
-//    if (uid.isEmpty()) {
-//        if (!showRegister) {
-//            // 顯示登入頁面
-//            UserLoginScreen(
-//                // 登入成功，將uid存檔
-//                onLoginSuccess = {
-//                    uid = it
-//                    preferences.edit().putString("uid", uid).apply()
-//                },
-//                // 切換到註冊頁面
-//                onRegisterClick = { showRegister = true })
-//        } else {
-//            // 顯示註冊頁面
-//            UserRegisterMainScreen(
-//                // 註冊成功等於登入成功，一樣將uid存檔
-//                onRegisterSuccess = {
-//                    uid = it
-//                    preferences.edit().putString("uid", uid).apply()
-//                    // 註冊成功後如果登出，應該切換到登入畫面；
-//                    // 如果showRegister = true，會切換到註冊畫面
-//                    showRegister = false
-//                },
-//                // 返回登入頁面
-//                onBackToLogin = { showRegister = false },
-//            )
-//        }
-//    } else {
-//        // 登入成功後進入書的展示流程
-//        BookMainScreen(
-//            // 點擊Logout按鈕會登出
-//            onLogout = { uid = "" })
-//    }
-//}
 //
-//@Preview(showBackground = true)
-//@Composable
-//fun DefaultPreview() {
-//    BookshopDemo_AndroidTheme {
-//        Main()
+//    private val _phonenumber = MutableStateFlow("")
+//    val phonenumber = _phonenumber.asStateFlow()
+//    var phonenumberError by mutableStateOf(false)
+//    fun onPhonenumberChanged(phonenumber: String) {
+//        val phonenumberRegex = Regex("^[0-9]{10}$")
+//        phonenumberError = !phonenumber.matches(phonenumberRegex)
+//        _phonenumber.value = phonenumber}
+//
+//
+//    private val _email = MutableStateFlow("")
+//    val email = _email.asStateFlow()
+//    var emailError by mutableStateOf(false)
+//    fun onEmailChanged(email: String) {
+//        val emailRegex = Regex("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")
+//        emailError = !email.matches(emailRegex)
+//        _email.value = email
 //    }
-//}
+//
+//
+//
