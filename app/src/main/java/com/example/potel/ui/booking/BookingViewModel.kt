@@ -1,6 +1,8 @@
 package com.example.potel.ui.booking
 
 import androidx.lifecycle.ViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 
 
 /**
@@ -11,8 +13,27 @@ import androidx.lifecycle.ViewModel
  * */
 class BookingViewModel : ViewModel() {
 
+    var checkInDate: String? = null
+    var checkOutDate: String? = null
+    var petType: String? = null
+    var roomType: String? = null
+    var totalAmount: Double = 0.0
+
+    fun submitBooking() {
+        viewModelScope.launch {
+            // 在此處發送資料到後端 API
+            // 使用 Retrofit 發送 POST 請求
+        }
+    }
+
+    private val _paymentInfo :MutableStateFlow<String> = MutableStateFlow("")
+
 //    private val _items = MutableStateFlow<List<TipHomeItemUiState>>(listOf())
 //    val items = _items.asStateFlow()
+
+    fun addPaymentInfo(info:String){
+        _paymentInfo.update { info }
+    }
 
 
     fun getApiData() {

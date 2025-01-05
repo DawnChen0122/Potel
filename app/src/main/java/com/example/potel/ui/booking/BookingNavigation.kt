@@ -1,5 +1,6 @@
 package com.example.potel.ui.booking
 
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
@@ -15,7 +16,7 @@ import com.example.potel.ui.booking.BookingScreens.BookingSuccess
 /**
  * todo 2-1 將首頁的路由獨立出來
  * */
-enum class BookingScreens(val title: String){
+enum class BookingScreens(val title: String) {
     DateSelection(title = "DateSelection"),
     Booking(title = "BookingRoom"),
     RoomSelection(title = "RoomSelection/{type}"),
@@ -28,8 +29,10 @@ const val BOOKING_NAVIGATION_ROUTE = "Booking"
 const val ROOM_SELECTION_ROUTE = "RoomSelection/{type}" // 使用 {type} 來接收參數
 
 
-
-fun NavGraphBuilder.bookingScreenRoute(navController: NavHostController) {
+fun NavGraphBuilder.bookingScreenRoute(
+    bookingViewModel: BookingViewModel,
+    navController: NavHostController
+) {
     composable(
         route = DateSelection.name,
     ) {
@@ -44,15 +47,17 @@ fun NavGraphBuilder.bookingScreenRoute(navController: NavHostController) {
     }
     composable(
         route = "${RoomSelection.name}/{type}",//字串不能帶參數
-    ) {
-        backStackEntry ->
+    ) { backStackEntry ->
         val type = backStackEntry.arguments?.getString("type") ?: "cat" // 獲取類型參數，預設為 "cat"
         RoomSelectionScreen(navController = navController, type = type)
     }
     composable(
         route = Payment.name,
     ) {
-        PaymentScreen(navController = navController)
+        PaymentScreen(
+            bookingViewModel = bookingViewModel,
+            navController = navController
+        )
     }
     composable(
         route = BookingScreens.BookingSuccess.name,
@@ -60,9 +65,6 @@ fun NavGraphBuilder.bookingScreenRoute(navController: NavHostController) {
         BookingSuccessScreen(navController = navController)
     }
 }
-
-
-
 
 
 //    val HOME_NAVIGATION_ROUTE = "booking"

@@ -33,10 +33,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.BlendMode.Companion.Screen
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.potel.ui.booking.BookingViewModel
 import com.example.potel.ui.booking.bookingScreenRoute
 import com.example.potel.ui.discussZone.discussZoneScreenRoute
 import com.example.potel.ui.myorders.myOrdersScreenRoute
@@ -104,6 +106,8 @@ fun TipNavHost(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController()
 ) {
+    val bookingViewModel : BookingViewModel = viewModel()
+
     // todo 2-1 這裡是將所有的畫面路徑都列出來
     NavHost(
         modifier = modifier,

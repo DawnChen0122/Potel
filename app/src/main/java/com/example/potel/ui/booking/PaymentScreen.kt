@@ -13,15 +13,20 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.potel.R
 
 @Composable
-fun PaymentScreen(navController: NavHostController) {
+fun PaymentScreen(
+    bookingViewModel:BookingViewModel,
+    navController: NavHostController
+) {
     var cardNumber by remember { mutableStateOf("") }
     var expiryDate by remember { mutableStateOf("") }
     var cvv by remember { mutableStateOf("") }
     val amount = "100"
+
 
     val fieldModifier = Modifier
         .fillMaxWidth()
@@ -81,7 +86,9 @@ fun PaymentScreen(navController: NavHostController) {
 
         Spacer(modifier = Modifier.height(24.dp))
         Button(
-            onClick = { navController.navigate("BookingSuccess") },
+            onClick = {
+                bookingViewModel.addPaymentInfo("RRRRR")
+                navController.navigate("BookingSuccess") },
             modifier = Modifier.padding(horizontal = 16.dp)
         ) {
             Text("提交")
