@@ -11,10 +11,9 @@ import kotlinx.coroutines.launch
 
 class AccountViewModel : ViewModel() {
 
-    private val _uid =MutableStateFlow("")
-    val uid= _uid.asStateFlow()
+    private val _uid = MutableStateFlow("")
+    val uid = _uid.asStateFlow()
     var uidError by mutableStateOf(false)
-
     fun onUidChanged(uid: String) {
         val uidRegex = Regex("^[a-zA-Z0-9]{3,20}$")
         uidError = !uid.matches(uidRegex)
@@ -38,7 +37,6 @@ class AccountViewModel : ViewModel() {
     }
 
 
-
     private val _checkpassword = MutableStateFlow("")
     val checkpassword = _checkpassword.asStateFlow()
     var checkpasswordError by mutableStateOf(false)
@@ -55,7 +53,8 @@ class AccountViewModel : ViewModel() {
     fun onPhonenumberChanged(phonenumber: String) {
         val phonenumberRegex = Regex("^[0-9]{10}$")
         phonenumberError = !phonenumber.matches(phonenumberRegex)
-        _phonenumber.value = phonenumber}
+        _phonenumber.value = phonenumber
+    }
 
 
     private val _address = MutableStateFlow("")
@@ -72,6 +71,50 @@ class AccountViewModel : ViewModel() {
         emailError = !email.matches(emailRegex)
         _email.value = email
     }
+
+    val yearRange = (1924..2025).map { it.toString() }
+    private val _inputYear = MutableStateFlow("")
+    val inputYear = _inputYear.asStateFlow()
+    private val _expandedYear = MutableStateFlow(false)
+    val expandedYear = _expandedYear.asStateFlow()
+    fun onYearChanged(newYear: String) {
+        _inputYear.value = newYear
+        _expandedYear.value = false }
+    fun toggleYearDropdown() {
+        _expandedYear.value = !_expandedYear.value }
+
+
+    val monthRange = (1..12).map { it.toString() }
+    private val _inputMonth = MutableStateFlow("")
+    val inputMonth = _inputMonth.asStateFlow()
+    private val _expandedMonth = MutableStateFlow(false)
+    val expandedMonth = _expandedMonth.asStateFlow()
+    fun onMonthChanged(newMonth: String) {
+        _inputMonth.value = newMonth
+        _expandedMonth.value = false }
+    fun toggleMonthDropdown() {
+        _expandedMonth.value = !_expandedMonth.value }
+
+
+
+    val dayRange = (1..31).map { it.toString() }
+    private val _inputDay = MutableStateFlow("")
+    val inputDay = _inputDay.asStateFlow()
+    private val _expandedDay = MutableStateFlow(false)
+    val expandedDay = _expandedDay.asStateFlow()
+    fun onDayChanged(newDay: String) {
+        _inputDay.value = newDay
+        _expandedDay.value = false }
+    fun toggleDayDropdown() {
+        _expandedDay.value = !_expandedDay.value }
+
+
+
+
+
+
+
+
 
     fun login(){
         val account = _email.value

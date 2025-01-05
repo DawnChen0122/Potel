@@ -33,7 +33,9 @@ fun Login(viewModel:OpenpageViewModel = viewModel()
           , navController: NavHostController) {
 
     val inputError by viewModel.inputError.collectAsState()
+
     val phonenumber = viewModel.phonenumber.collectAsState()
+
     val email = viewModel.email.collectAsState()
 
 
