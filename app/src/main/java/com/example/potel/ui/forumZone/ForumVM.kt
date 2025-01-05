@@ -7,6 +7,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 
 class ForumVM : ViewModel(){
     private val TAG = "tag_ForumVM"
@@ -55,20 +58,30 @@ class ForumVM : ViewModel(){
     }
 
     // 新增一個新的論壇貼文
-    fun addPost(post: Post) {
+    fun addPost(post: NewPost, imagePart: MultipartBody.Part?) {
         viewModelScope.launch {
             try {
-                val response = RetrofitInstance.api.addPost(post)
-                if (response.isSuccessful && response.body() != null) {
+                // 構建 RequestBody
+                val memberIdPart = RequestBody.create("text/plain".toMediaTypeOrNull(), post.memberId.toString())
+                val titlePart = RequestBody.create("text/plain".toMediaTypeOrNull(), post.title)
+                val contentPart = RequestBody.create("text/plain".toMediaTypeOrNull(), post.content)
+
+                // 發送請求
+                val response = RetrofitInstance.api.addPost(
+                    memberId = memberIdPart,
+                    title = titlePart,
+                    content = contentPart,
+                    image = imagePart
+                )
+
+                if (response.isSuccessful) {
                     Log.d(TAG, "Post added successfully: ${response.body()}")
-                    Log.d(TAG, "Updated forumsState: ${_forumsState.value}")
                 } else {
                     Log.e(TAG, "Error adding post: Code ${response.code()}, Body: ${response.errorBody()?.string()}")
                 }
             } catch (e: Exception) {
                 Log.e(TAG, "Error adding post: ${e.message}")
             }
-            fetchForumData()
         }
     }
 

@@ -7,7 +7,12 @@ data class Post(
     val content: String = "",
     val createDate: String = "",
     val modifyDate: String? = null,
-    val postImage: String? = null
+    val ImageId: Int? = null
+)
+data class NewPost(
+    val memberId: Int = 0,
+    val title: String = "",
+    val content: String = "",
 )
 
 data class Like(
@@ -25,3 +30,4 @@ data class Comment(
     val createDate: String = "",
     val modifyDate: String? = null
 )
+

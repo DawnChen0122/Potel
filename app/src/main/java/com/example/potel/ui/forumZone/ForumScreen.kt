@@ -47,6 +47,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -160,7 +161,7 @@ fun PostListView(
     posts: List<Post>,
     forumVM: ForumVM,
     navController: NavHostController,
-    showEditButton: Boolean = false
+    showEditButton: Boolean
 ) {
     LazyColumn(modifier = Modifier.fillMaxSize()) {
         items(posts) { post ->
@@ -179,7 +180,6 @@ fun PostCard(
     showEditButton: Boolean
 ) {
     val likesCount = forumVM.getLikesCountForPost(post.postId)
-
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -193,36 +193,29 @@ fun PostCard(
     ) {
         Row{
             PostHeader(post)
-            EditDialog(showEditButton)
+            if(showEditButton){
+                Column (
+                    Modifier.height(65.dp)
+                ) {
+                    Spacer(Modifier.height(5.dp))
+                    IconButton(onClick = {
+
+                    }) { // 點擊後觸發 onMoreOptionsClick
+                        Icon(
+                            imageVector = Icons.Filled.MoreVert,
+                            contentDescription = "更多操作",
+                            Modifier.size(30.dp),
+                            tint = Color.Gray
+                        )
+                    }
+                }
+            }
         }
         Spacer(Modifier.size(10.dp))
         PostContent(post)
         Spacer(Modifier.size(10.dp))
         PostFooter(post, likesCount)
         Spacer(Modifier.size(10.dp))
-    }
-}
-
-@Composable
-fun EditDialog(showEditButton: Boolean) {
-    Column (
-        Modifier.height(65.dp)
-    ) {
-        Spacer(Modifier.height(5.dp))
-        if (showEditButton) {
-            IconButton(
-                onClick ={
-                    //PostOptionsDialog
-                }
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.MoreVert,
-                    contentDescription = "更多操作",
-                    Modifier.size(30.dp),
-                    tint = Color.Gray
-                )
-            }
-        }
     }
 }
 
@@ -267,8 +260,7 @@ fun PostContent(post: Post) {
             Text(truncatedContent, Modifier.width(235.dp), fontSize = 15.sp, maxLines = 2, color = Color.White)
         }
         Spacer(Modifier.size(20.dp))
-//        PostImage(post.postImage)
-        //fix me 貼文照片
+        if(post.ImageId!=null) PostImage(post.ImageId)
     }
 }
 
@@ -284,42 +276,20 @@ fun PostFooter(post: Post, likesCount: Int) {
         Spacer(Modifier.size(10.dp))
     }
 }
-//@Composable
-//fun PostImage(postImageId: Int?) {
-//    // 使用 remember 來保持圖片的狀態
-//    val imageBitmap = remember { mutableStateOf<Bitmap?>(null) }
-//
-//    // 當 postImageId 不為 null 時，發送請求來獲取圖片
-//    LaunchedEffect(postImageId) {
-//        if (postImageId != null) {
-//            // 呼叫 fetchImage 並處理圖片加載
-//            loadImage(postImageId, imageBitmap)
-//        }
-//    }
-//
-//    // 根據圖片狀態顯示圖片或顯示 "No Image"
-//    if (imageBitmap.value != null) {
-//        // 將 Bitmap 轉換為 ImageBitmap 顯示
-//        androidx.compose.foundation.Image(
-//            bitmap = imageBitmap.value!!.asImageBitmap(),
-//            contentDescription = "貼文照片",
-//            modifier = Modifier
-//                .size(100.dp)
-//                .clip(RoundedCornerShape(5.dp))
-//                .border(1.dp, Color.LightGray, RoundedCornerShape(8.dp))
-//        )
-//    } else {
-//        Box(
-//            modifier = Modifier
-//                .size(100.dp)
-//                .clip(RoundedCornerShape(5.dp))
-//                .background(Color.Gray),
-//            contentAlignment = Alignment.Center
-//        ) {
-//            Text("No Image", color = Color.White, fontSize = 14.sp)
-//        }
-//    }
-//}
+
+@Composable
+fun PostImage(imageid: Int) {
+    val imageUrl = com.example.potel.ui.forumZone.composeImageUrl(imageid)
+    Log.d("PostImage", "Image URL: $imageUrl") // 檢查URL
+    AsyncImage(
+        model = imageUrl,
+        contentDescription = "貼文照片",
+        modifier = Modifier.size(100.dp),
+        alignment = Alignment.TopCenter,
+        contentScale = ContentScale.Crop,
+        placeholder = painterResource(R.drawable.placeholder)
+    )
+}
 
 @Composable
 fun MemberImage(userImg: Int?) {
