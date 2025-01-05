@@ -156,6 +156,7 @@ fun PostAddScreen(
                                 )
                                 // 呼叫 ViewModel 的 addPost 方法來提交資料
                                 forumVM.addPost(newPost, imagePart)
+                                navController.popBackStack()
                             }
                         }
                     ) {
