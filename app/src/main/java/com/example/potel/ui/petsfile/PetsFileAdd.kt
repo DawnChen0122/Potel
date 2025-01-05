@@ -1,6 +1,7 @@
 package com.example.potel.ui.petsfile
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -12,6 +13,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.potel.ui.theme.PotelTheme
@@ -26,13 +28,17 @@ import com.example.potel.ui.theme.PotelTheme
 //}
 
 @Composable
-fun ScreenPetsFileAdd(navController: NavHostController) {
-    var ownerName by remember { mutableStateOf(TextFieldValue()) }
-    var petName by remember { mutableStateOf(TextFieldValue()) }
-    var petGender by remember { mutableStateOf(TextFieldValue()) }
-    var contactInfo by remember { mutableStateOf(TextFieldValue()) }
-    var petDiscribe by remember { mutableStateOf(TextFieldValue()) }
-    var petImage by remember { mutableStateOf(TextFieldValue()) }
+fun ScreenPetsFileAdd(
+    viewModel: PetFileAddViewModel = viewModel(),
+    navController: NavHostController
+) {
+    val ownerName by viewModel.ownerName.collectAsState()
+    val petName by viewModel.petName.collectAsState()
+    val petGender by viewModel.petGender.collectAsState()
+    val contactInfo by viewModel.contactInfo.collectAsState()
+    val petDiscribe by viewModel.petDiscribe.collectAsState()
+    val petImage by viewModel.petImage.collectAsState()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -48,60 +54,63 @@ fun ScreenPetsFileAdd(navController: NavHostController) {
             color = Color.Black
         )
 
+        // 使用 ViewModel 中的函式來更新狀態
         PetInfoTextField(
             label = "請輸入飼主名稱",
             textState = ownerName,
-            onValueChange = { ownerName = it }
+            onValueChange = { viewModel.updateOwnerName(it) }
         )
 
         PetInfoTextField(
             label = "請輸入寵物名稱",
             textState = petName,
-            onValueChange = { petName = it }
+            onValueChange = { viewModel.updatePetName(it) }
         )
 
         PetInfoTextField(
             label = "請輸入寵物性別",
             textState = petGender,
-            onValueChange = { petGender = it }
+            onValueChange = { viewModel.updatePetGender(it) }
         )
 
         PetInfoTextField(
             label = "請輸飼主聯絡方式",
             textState = contactInfo,
-            onValueChange = { contactInfo = it }
+            onValueChange = { viewModel.updateContactInfo(it) }
         )
 
         PetInfoTextField(
             label = "請輸入寵物描述",
             textState = petDiscribe,
-            onValueChange = { petDiscribe = it }
+            onValueChange = { viewModel.updatePetDiscribe(it) }
         )
 
         PetInfoTextField(
             label = "請上傳寵物影像",
             textState = petImage,
-            onValueChange = { petImage = it }
+            onValueChange = { viewModel.updatePetImage(it) }
         )
 
+        Text(text = "添加資料", modifier = Modifier.clickable(onClick = { viewModel.onAddClicked() }))
     }
 }
 
 @Composable
-fun PetInfoTextField(label: String, textState: TextFieldValue, onValueChange: (TextFieldValue) -> Unit) {
+fun PetInfoTextField(label: String, textState: String, onValueChange: (String) -> Unit) {
     TextField(
         value = textState,
-        onValueChange = onValueChange,
+        onValueChange = { onValueChange(it) },
         label = { Text(text = label) },
         modifier = Modifier.fillMaxWidth(),
         singleLine = true
     )
 }
 
+
 @Preview(showBackground = true)
 @Composable
 fun ScreenPetsFileAddPreview() {
     PotelTheme  {
-        ScreenPetsFileAdd(rememberNavController())
+        ScreenPetsFileAdd(navController = rememberNavController())
     }
 }
