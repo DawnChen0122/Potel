@@ -11,11 +11,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.potel.R
 
 @Composable
 fun BookingSuccessScreen(navController: NavHostController) {
+    val bookingVM: BookingViewModel = viewModel(key = "bookingVM")
     Column(
         modifier = Modifier
             .fillMaxSize()

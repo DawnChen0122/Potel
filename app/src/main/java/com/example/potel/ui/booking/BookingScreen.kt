@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.potel.R
 
@@ -76,6 +77,7 @@ import com.example.potel.R
 
 @Composable
 fun BookingScreen(navController: NavHostController) {
+    val bookingVM: BookingViewModel = viewModel(key = "bookingVM")
     var selectedDogWeight by remember { mutableStateOf<String?>(null) }
     var selectedCatRoom by remember { mutableStateOf<String?>(null) }
 

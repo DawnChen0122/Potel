@@ -7,7 +7,9 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.example.potel.ui.myorders.MyOrdersViewModel
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -17,6 +19,11 @@ import java.time.format.FormatStyle
 @SuppressLint("NewApi")
 @Composable
 fun DateSelectionScreen(navController: NavHostController) {
+    val bookingVM: BookingViewModel = viewModel(key = "bookingVM")
+
+    val order by bookingVM.addOrderState.collectAsState();
+    order.amount
+
     var showDateRangePickerDialog by remember { mutableStateOf(false) }
     var message by remember { mutableStateOf("請您選取入住日期和離開日期！") }
 

@@ -17,6 +17,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.potel.PotelApp
 import com.example.potel.R
@@ -64,6 +65,7 @@ import com.example.potel.ui.theme.PotelTheme
 
 @Composable
 fun RoomSelectionScreen(navController: NavHostController, type: String) {
+    val bookingVM: BookingViewModel = viewModel(key = "bookingVM")
     val rooms = if (type == "dog") {
         listOf("小型狗房 - $100", "中型狗房 - $150", "大型狗房 - $200", "特大狗房 - $250")
     } else {

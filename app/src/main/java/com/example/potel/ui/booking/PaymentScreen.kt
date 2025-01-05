@@ -22,7 +22,9 @@ fun PaymentScreen(
     bookingViewModel:BookingViewModel,
     navController: NavHostController
 ) {
-    var cardNumber by remember { mutableStateOf("") }
+    val bookingVM: BookingViewModel = viewModel(key = "bookingVM")
+    val cardNumber by bookingVM.creditCardNumber.collectAsState()
+
     var expiryDate by remember { mutableStateOf("") }
     var cvv by remember { mutableStateOf("") }
     val amount = "100"
@@ -52,7 +54,7 @@ fun PaymentScreen(
 
         OutlinedTextField(
             value = cardNumber,
-            onValueChange = { updatedValue -> cardNumber = updatedValue },
+            onValueChange = bookingVM::onCreditCardNumberChange,
             label = { Text("信用卡號碼") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             modifier = fieldModifier
