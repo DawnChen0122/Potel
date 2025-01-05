@@ -6,8 +6,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 
 class OpenpageViewModel : ViewModel() {
@@ -35,14 +38,27 @@ class OpenpageViewModel : ViewModel() {
     }
 
     fun onInputChanged(input: String) {
-        if (input.matches(phonenumberRegex)) {
-            _inputError.value = false
-            _phonenumber.value = input
-        } else if (input.matches(emailRegex)) {
-            _inputError.value = false
-            _email.value = input
-        } else {
-            _inputError.value = true
+        viewModelScope.launch {
+            delay(500)
+            if (input.isNotEmpty()) {
+                if (input.contains("@")) {
+                    if (input.matches(emailRegex)) {
+                        _inputError.value = false
+                        _email.value = input
+                    } else {
+                        _inputError.value = true
+                    }
+                } else {
+                    if (input.matches(phonenumberRegex)) {
+                        _inputError.value = false
+                        _phonenumber.value = input
+                    } else {
+                        _inputError.value = true
+                    }
+                }
+            } else {
+                _inputError.value = false
+            }
         }
     }
 }

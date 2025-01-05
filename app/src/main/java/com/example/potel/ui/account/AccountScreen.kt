@@ -44,7 +44,7 @@ fun Signup(viewModel:AccountViewModel = viewModel(),
     val expandedYear by viewModel.expandedYear.collectAsState()
 
 
-    val inputMonth by viewModel.inputDay.collectAsState()
+    val inputMonth by viewModel.inputMonth.collectAsState()
     val expandedMonth by viewModel.expandedMonth.collectAsState()
 
     val inputDay by viewModel.inputDay.collectAsState()

@@ -32,7 +32,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 fun Login(viewModel:OpenpageViewModel = viewModel()
           , navController: NavHostController) {
 
-    val inputError by viewModel.inputError.collectAsState()
+    val inputError = viewModel.inputError.collectAsState()
 
     val phonenumber = viewModel.phonenumber.collectAsState()
 
@@ -40,8 +40,10 @@ fun Login(viewModel:OpenpageViewModel = viewModel()
 
 
     val password = viewModel.password.collectAsState()
+
     var passwordVisible by remember { mutableStateOf(false) }
 
+    var currentInput by remember { mutableStateOf("") }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -68,20 +70,19 @@ fun Login(viewModel:OpenpageViewModel = viewModel()
             )
 
             OutlinedTextField(
-                value = if (email.value.isNotEmpty()) email.value else phonenumber.value,
-                onValueChange = { newValue ->
-                    viewModel.onInputChanged(newValue)
-                },
-                label = { Text(text = "請輸入信箱或手機號碼") },
-                singleLine = true,
+                value = currentInput,
+                onValueChange = { value ->
+                    currentInput = value
+                    viewModel.onInputChanged(value)},
+                    label = { Text(text = "請輸入信箱或手機號碼") },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                 shape = RoundedCornerShape(8.dp),
-                isError = inputError,
+                isError = inputError.value,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 0.dp)
             )
-            if (inputError) {
+            if (inputError.value) {
                 Text(
                     text = "請輸入有效的信箱或手機號碼",
                     color = Color.Red,
@@ -89,7 +90,6 @@ fun Login(viewModel:OpenpageViewModel = viewModel()
                     modifier = Modifier.padding(start = 16.dp)
                 )
             }
-
 
 
             OutlinedTextField(
@@ -151,7 +151,7 @@ fun Login(viewModel:OpenpageViewModel = viewModel()
                     } else {
                         errorMessage = null // 清除錯誤訊息
                         // 執行註冊邏輯
-                        "執行註冊邏輯"
+                        "執行登入"
                     }
                 },
                 modifier = Modifier
@@ -159,7 +159,7 @@ fun Login(viewModel:OpenpageViewModel = viewModel()
                     .padding(top = 16.dp),
                 shape = RoundedCornerShape(8.dp)
             ) {
-                Text(text = "註冊", fontSize = 16.sp)
+                Text(text = "登入", fontSize = 16.sp)
             }
             errorMessage?.let {
                 Text(
