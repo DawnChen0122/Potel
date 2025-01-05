@@ -31,12 +31,8 @@ fun Signup(viewModel:AccountViewModel = viewModel(), navController: NavHostContr
 //    val items = viewModel.items.collectAsState()
 
     val  uid = viewModel.uid.collectAsState()
-    var uidError by remember { mutableStateOf(false) }
 
     val email = viewModel.email.collectAsState()
-    var emailError by remember { mutableStateOf(false) }
-    val emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$".toRegex()
-
 
     var inputYear by remember { mutableStateOf("") }
     var inputMonth by remember { mutableStateOf("") }
@@ -70,11 +66,10 @@ fun Signup(viewModel:AccountViewModel = viewModel(), navController: NavHostContr
 
     val password = viewModel.password.collectAsState()
     var passwordVisible by remember { mutableStateOf(false) }
-    var passwordError by remember { mutableStateOf(false) }
+
 
     var checkpassword = viewModel.checkpassword.collectAsState()
     var checkpasswordVisible  by remember { mutableStateOf(false) }
-    var checkpasswordError by remember { mutableStateOf(false) }
 
 
     val  username = viewModel.username.collectAsState()
@@ -102,16 +97,15 @@ fun Signup(viewModel:AccountViewModel = viewModel(), navController: NavHostContr
         OutlinedTextField(
             value = uid.value.firstOrNull()?.title ?: "",
             onValueChange = viewModel::onUidChanged,
-//            uidError = uid.value.isEmpty(),
             label = { Text(text = "請輸入用戶名稱") },
             singleLine = true,
             shape = RoundedCornerShape(8.dp),
-            isError = uidError,
+            isError = viewModel.uidError,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 16.dp)
         )
-        if(uidError) {
+        if(viewModel.uidError) {
             Text(
                 text = "用戶名稱為必填欄位",
                 color = Color.Red,
@@ -124,18 +118,15 @@ fun Signup(viewModel:AccountViewModel = viewModel(), navController: NavHostContr
         OutlinedTextField(
             value = email.value.firstOrNull()?.title ?: "",
             onValueChange = viewModel::onEmailChanged,
-//            onValueChange = {
-//                email.value = it
-//                emailError = !it.matches(emailRegex) },
             label = { Text("請輸入信箱") },
             singleLine = true,
             shape = RoundedCornerShape(8.dp),
-            isError = emailError,
+            isError = viewModel.emailError,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 16.dp)
         )
-        if (emailError) {
+        if (viewModel.emailError) {
             Text(
                 text = "請輸入有效的信箱",
                 color = Color.Red,
@@ -324,9 +315,6 @@ fun Signup(viewModel:AccountViewModel = viewModel(), navController: NavHostContr
         OutlinedTextField(
             value = password.value.firstOrNull()?.title ?: "",
             onValueChange = viewModel::onPasswordChanged,
-//            onValueChange = {
-//                password.value = it
-//                passwordError = it.isEmpty() || it.length < 6 || it.length > 20 },
             label = { Text(text = "密碼") },
             leadingIcon = {
                 Icon(
@@ -342,7 +330,7 @@ fun Signup(viewModel:AccountViewModel = viewModel(), navController: NavHostContr
                     }
                 )
             },
-            isError = passwordError,
+            isError = viewModel.passwordError,
             shape = RoundedCornerShape(8.dp),
             visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
@@ -355,9 +343,9 @@ fun Signup(viewModel:AccountViewModel = viewModel(), navController: NavHostContr
                 .fillMaxWidth()
                 .padding(top = 16.dp)
         )
-        if (passwordError) {
+        if (viewModel.passwordError) {
             Text(
-                text = "密碼需在6 至 20 字符內",
+                text = "密碼需在6至20字符內，且包含字母和數字",
                 color = Color.Red,
                 fontSize = 12.sp,
                 modifier = Modifier.padding(start = 16.dp)
@@ -368,8 +356,6 @@ fun Signup(viewModel:AccountViewModel = viewModel(), navController: NavHostContr
         OutlinedTextField(
             value = checkpassword.value.firstOrNull()?.title ?: "",
             onValueChange = viewModel::onCheckPasswordChanged,
-//            onValueChange = { checkpassword.value = it
-//                checkpasswordError = it != password.value},
             label = { Text(text = "再次確認密碼") },
             leadingIcon = {
                 Icon(
@@ -385,7 +371,7 @@ fun Signup(viewModel:AccountViewModel = viewModel(), navController: NavHostContr
                     }
                 )
             },
-            isError = checkpasswordError,
+            isError = viewModel.checkpasswordError,
             shape = RoundedCornerShape(8.dp),
             visualTransformation = if (checkpasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
@@ -398,7 +384,7 @@ fun Signup(viewModel:AccountViewModel = viewModel(), navController: NavHostContr
                 .fillMaxWidth()
                 .padding(top = 10.dp)
         )
-        if (checkpasswordError) {
+        if (viewModel.checkpasswordError) {
             Text(
                 text = "密碼需輸入相同",
                 color = Color.Red,
@@ -420,11 +406,11 @@ fun Signup(viewModel:AccountViewModel = viewModel(), navController: NavHostContr
         )
 
 
+
+
         OutlinedTextField(
             value = phonenumber.value.firstOrNull()?.title ?: "",
             onValueChange = viewModel::onPhonenumberChanged,
-//            onValueChange = { phonenumber.value = it
-//                phonenumberError = it.isEmpty() || it.length != 10 },
             label = { Text(text = "請輸入手機號碼") },
             singleLine = true,
             shape = RoundedCornerShape(8.dp),
@@ -445,27 +431,24 @@ fun Signup(viewModel:AccountViewModel = viewModel(), navController: NavHostContr
 
         OutlinedTextField(
             value = address.value.firstOrNull()?.title ?: "",
-            onValueChange = viewModel::onAddressumberChanged,
-//            onValueChange = { phonenumber.value = it
-//                phonenumberError = it.isEmpty() || it.length != 10 },
+            onValueChange = viewModel::onAddressChanged,
             label = { Text(text = "請輸入地址") },
             singleLine = true,
             shape = RoundedCornerShape(8.dp),
-            isError = phonenumberError,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 16.dp)
         )
 
-
+        var errorMessage by remember { mutableStateOf<String?>(null) }
         // 註冊按鈕
         Button(
             onClick = {
                 if (uid.value.isEmpty() || email.value.isEmpty() || password.value.isEmpty() || checkpassword.value.isEmpty()
                     || username.value.isEmpty() || phonenumber.value.isEmpty() || address.value.isEmpty() ) {
-                    // 顯示錯誤提示
+                    errorMessage = "欄位不得空白"
                 } else if (password.value != checkpassword.value) {
-                    // 顯示密碼不一致的錯誤提示
+                    errorMessage = "密碼與確認密碼不同"
                 } else {
                     "執行註冊邏輯"
                 }
@@ -476,6 +459,14 @@ fun Signup(viewModel:AccountViewModel = viewModel(), navController: NavHostContr
             shape = RoundedCornerShape(8.dp)
         ) {
             Text(text = "註冊", fontSize = 16.sp)
+        }
+        errorMessage?.let {
+            Text(
+                text = it,
+                color = Color.Red,
+                fontSize = 14.sp,
+                modifier = Modifier.padding(top = 8.dp)
+            )
         }
     }
 }
