@@ -33,6 +33,14 @@ class AccountViewModel : ViewModel() {
     }
 
 
+    private val _checkpassword = MutableStateFlow<List<TipHomeItemUiState>>(listOf())
+    val checkpassword = _checkpassword.asStateFlow()
+    fun onCheckPasswordChanged(checkpassword: String){
+        _checkpassword.value = listOf(TipHomeItemUiState(title = checkpassword, imageVector = Icons.Filled.Email))
+    }
+
+
+
 
     private val _phonenumber = MutableStateFlow<List<TipHomeItemUiState>>(listOf())
     val phonenumber = _phonenumber.asStateFlow()
