@@ -10,6 +10,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -20,14 +26,29 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.potel.R
+import kotlinx.coroutines.launch
 
 @Composable
 fun ScreenMOS0303(
-//    myOrdersViewModel: MyOrdersViewModel = viewModel(),
     navController: NavHostController
 ) {
+    val tag = "ScreenMOS0302"
+    val backStackEntry = navController.getBackStackEntry(MyOrdersScreens.MOS01.name)
+    val myOrdersViewModel: MyOrdersViewModel = viewModel(backStackEntry, key = "myOrdersVM")
+
+    val coroutineScope = rememberCoroutineScope()
+    var order by remember { mutableStateOf<Order?>(myOrdersViewModel.orderEditState.value) }
+    var responseObject by remember { mutableStateOf<ResponseObject<Any>?>(null) }
+
+    LaunchedEffect(Unit) {
+        coroutineScope.launch {
+            responseObject = myOrdersViewModel.updateOrder("score", order!!)
+        }
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -99,7 +120,13 @@ fun ScreenMOS0303(
                         .padding(5.dp)
                 )
                 Text(
-                    text = "我們會更努力改善我們的服務!",
+                    text = if(responseObject?.respcode==-1){
+                        // 失敗
+                        responseObject?.respmsg ?: "動作失敗"
+                    }else{
+                        // 成功
+                        "我們會更努力改善我們的服務!"
+                    },
                     style = TextStyle(
                         fontSize = 20.sp,
                         lineHeight = 32.sp,

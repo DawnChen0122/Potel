@@ -19,7 +19,6 @@ import com.example.potel.R
 
 @Composable
 fun PaymentScreen(
-    bookingViewModel:BookingViewModel,
     navController: NavHostController
 ) {
     val bookingVM: BookingViewModel = viewModel(key = "bookingVM")
@@ -89,7 +88,7 @@ fun PaymentScreen(
         Spacer(modifier = Modifier.height(24.dp))
         Button(
             onClick = {
-                bookingViewModel.addPaymentInfo("RRRRR")
+                bookingVM.addPaymentInfo("RRRRR")
                 navController.navigate("BookingSuccess") },
             modifier = Modifier.padding(horizontal = 16.dp)
         ) {

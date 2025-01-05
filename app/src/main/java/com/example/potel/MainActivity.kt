@@ -3,21 +3,17 @@ package com.example.potel
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.BottomAppBar
-import androidx.compose.material3.BottomAppBarDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -29,11 +25,13 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.BlendMode.Companion.Screen
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -41,12 +39,10 @@ import androidx.navigation.compose.rememberNavController
 import com.example.potel.ui.booking.BookingViewModel
 import com.example.potel.ui.booking.bookingScreenRoute
 import com.example.potel.ui.discussZone.discussZoneScreenRoute
+import com.example.potel.ui.home.homeScreenRoute
+import com.example.potel.ui.myorders.MyOrdersScreens
 import com.example.potel.ui.myorders.myOrdersScreenRoute
 import com.example.potel.ui.theme.PotelTheme
-import com.example.potel.ui.home.HOME_NAVIGATION_ROUTE
-import com.example.potel.ui.home.homeScreenRoute
-import com.example.potel.ui.myorders.Screens
-import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,20 +65,24 @@ fun PotelApp(
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentScreen = backStackEntry?.destination?.route?.split("/")?.first() ?: "home"
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
+    val currentScreenTitle = findEnumTitleByName(currentScreen,
+        MyOrdersScreens::class.java)
+
 
     Scaffold(
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
+        modifier = Modifier
+            .nestedScroll(scrollBehavior.nestedScrollConnection)
             .fillMaxSize(),
         topBar = {
             MainTopAppBar(
-                currentScreen = currentScreen,
+                currentScreen = currentScreenTitle,
                 canNavigateBack = navController.previousBackStackEntry != null,
                 navigateUp = { navController.navigateUp() },
                 scrollBehavior = scrollBehavior
             )
         },
         bottomBar = {
-            MainBottomAppBar()
+            MainBottomAppBar(navController)
         }
     ) { innerPadding ->
         Column(
@@ -160,71 +160,124 @@ fun MainTopAppBar(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainBottomAppBar(){
+fun MainBottomAppBar(navController: NavHostController){
     BottomAppBar(
         // 動作按鈕
         actions = {
-            IconButton(
-                onClick = {
-//                    scope.launch {
-//                        snackbarHostState.showSnackbar(
-//                            "BottomAppBar - Check",
-//                            withDismissAction = true
-//                        )
-//                    }
-                }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp), // 增加水平間距
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center // 將內容置中
             ) {
-                Icon(Icons.Filled.Check, contentDescription = "check")
-            }
+                IconButton(
+                    modifier = Modifier
+                        .size(60.dp)
+                        .weight(0.2f),
+                    onClick = {
+                    }
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.home),
+                        contentDescription = "Home",
+                        modifier = Modifier.size(150.dp)
+                    )
+                }
 
-            IconButton(
-                onClick = {
-//                scope.launch {
-//                    snackbarHostState.showSnackbar(
-//                        "BottomAppBar - Edit",
-//                        withDismissAction = true
-//                    )
-//                }
+                IconButton(
+                    modifier = Modifier
+                        .size(60.dp)
+                        .weight(0.2f),
+                    onClick = {
+                    },
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.booking),
+                        contentDescription = "Booking",
+                        modifier = Modifier.size(150.dp)
+                    )
                 }
-            ) {
-                Icon(
-                    Icons.Filled.Edit,
-                    contentDescription = "edit",
-                )
-            }
 
-            IconButton(
-                onClick = {
-//                    scope.launch {
-//                        snackbarHostState.showSnackbar(
-//                            "BottomAppBar - Delete",
-//                            withDismissAction = true
-//                        )
-//                    }
+                IconButton(
+                    modifier = Modifier
+                        .size(60.dp)
+                        .weight(0.2f),
+                    onClick = {
+                    },
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.shopping),
+                        contentDescription = "Shopping",
+                        modifier = Modifier.size(150.dp)
+                    )
                 }
-            ) {
-                Icon(
-                    Icons.Filled.Delete,
-                    contentDescription = "delete",
-                )
+                IconButton(
+                    modifier = Modifier
+                        .size(60.dp)
+                        .weight(0.2f),
+                    onClick = {
+                        if(!navController.popBackStack(MyOrdersScreens.MOS01.name, false))
+                            navController.navigate("${MyOrdersScreens.MOS01.name}/1")
+                    }
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.myorders),
+                        contentDescription = "MyOrders",
+                        modifier = Modifier.size(150.dp)
+                    )
+                }
+                IconButton(
+                    modifier = Modifier
+                        .size(60.dp)
+                        .weight(0.2f),
+                    onClick = {
+                    }
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.myinfo),
+                        contentDescription = "MyInfo",
+                        modifier = Modifier.size(150.dp)
+                    )
+                }
             }
         },
+
+
         // BottomAppBar也可放FloatingActionButton
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = {
-//                    scope.launch {
-//                        snackbarHostState.showSnackbar(
-//                            "BottomAppBar - Add",
-//                            withDismissAction = true
-//                        )
-//                    }
-                },
-                containerColor = BottomAppBarDefaults.bottomAppBarFabColor,
-                elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation()
-            ) {
-                Icon(Icons.Filled.Add, "Localized description")
+//        floatingActionButton = {
+//            FloatingActionButton(
+//                onClick = {
+////                    scope.launch {
+////                        snackbarHostState.showSnackbar(
+////                            "BottomAppBar - Add",
+////                            withDismissAction = true
+////                        )
+////                    }
+//                },
+//                containerColor = BottomAppBarDefaults.bottomAppBarFabColor,
+//                elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation()
+//            ) {
+//                Icon(Icons.Filled.Add, "Localized description")
+//            }
+//        }
+    )
+}
+
+fun findEnumTitleByName(name: String, vararg enums: Class<out Enum<*>>): String {
+    // 遍历传入的每个枚举类
+    for (enumClass in enums) {
+        // 获取当前枚举类的所有枚举实例
+        val enumConstants = enumClass.enumConstants ?: continue
+        for (enumValue in enumConstants) {
+            // 检查枚举实例的名称是否匹配
+            if (enumValue.name == name) {
+                // 使用反射获取 title 属性值
+                val titleField = enumClass.getMethod("getTitle") // 调用 getTitle 方法
+                return titleField.invoke(enumValue) as String
             }
         }
-    )
+    }
+    // 如果未找到，返回 null
+    return ""
 }

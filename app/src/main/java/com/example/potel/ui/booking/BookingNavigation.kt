@@ -30,7 +30,6 @@ const val ROOM_SELECTION_ROUTE = "RoomSelection/{type}" // 使用 {type} 來接�
 
 
 fun NavGraphBuilder.bookingScreenRoute(
-    bookingViewModel: BookingViewModel,
     navController: NavHostController
 ) {
     composable(

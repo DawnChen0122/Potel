@@ -1,7 +1,6 @@
 package com.example.potel.ui.myorders
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,12 +12,20 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
@@ -27,14 +34,31 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import coil.compose.AsyncImage
 import com.example.potel.R
+import kotlinx.coroutines.launch
 
 @Composable
 fun ScreenMOS0301(
-//    myOrdersViewModel: MyOrdersViewModel = viewModel(),
-    navController: NavHostController
+    navController: NavHostController,
+    orderid: String
 ) {
+    val tag = "ScreenMOS0301"
+    val backStackEntry = navController.getBackStackEntry(MyOrdersScreens.MOS01.name)
+    val myOrdersViewModel: MyOrdersViewModel = viewModel(backStackEntry, key = "myOrdersVM")
+
+    val coroutineScope = rememberCoroutineScope()
+    var order by remember { mutableStateOf<Order?>(null) }
+
+    LaunchedEffect(Unit) {
+        coroutineScope.launch {
+            order = myOrdersViewModel.getOrder(orderid.toInt())
+            myOrdersViewModel.setOrder(order)
+        }
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -85,19 +109,34 @@ fun ScreenMOS0301(
 
             Spacer(modifier = Modifier.height(10.dp))
 
+            AsyncImage(
+                model = composeImageUrl(order?.roomtype?.imageid?:0),
+                contentDescription = "房間照片",
+                alignment = Alignment.TopCenter,
+                contentScale = ContentScale.FillWidth,
+                placeholder = painterResource(R.drawable.placeholder)
+            )
+
             Row(
-                modifier = Modifier.fillMaxWidth()
-                    .padding(5.dp),
+                modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween // 讓內容分佈在兩端
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.room),
-                    contentDescription = "房間照片"
+                Text(
+                    text = order?.roomtype?.descpt?:"",
+                    style = TextStyle(
+                        fontSize = 22.sp,
+                        lineHeight = 32.sp,
+                        fontFamily = FontFamily(Font(R.font.dm_sans)),
+                        fontWeight = FontWeight(700),
+                        color = Color(0xFF000000),
+                        textAlign = TextAlign.Start
+                    ),
+                    modifier = Modifier
+                        .padding(8.dp)
                 )
-
                 OutlinedButton(
                     onClick = {
-
+                        navController.navigate(route = "${MyOrdersScreens.MOS0302.name}/$orderid")
                     },
                     shape = RoundedCornerShape(20),
                     border = BorderStroke(width = 1.dp, color = Color.Black),
@@ -114,21 +153,9 @@ fun ScreenMOS0301(
                     )
                 }
             }
+            HorizontalDivider()
             Text(
-                text = "貓咪海景房",
-                style = TextStyle(
-                    fontSize = 22.sp,
-                    lineHeight = 32.sp,
-                    fontFamily = FontFamily(Font(R.font.dm_sans)),
-                    fontWeight = FontWeight(700),
-                    color = Color(0xFF000000),
-                    textAlign = TextAlign.Start
-                ),
-                modifier = Modifier
-                    .padding(8.dp)
-            )
-            Text(
-                text = "訂房時間: 2024/12/13 15:43",
+                text = "訂房時間: ${order?.createdate}",
                 style = TextStyle(
                     fontSize = 18.sp,
                     lineHeight = 32.sp,
@@ -141,7 +168,7 @@ fun ScreenMOS0301(
                     .padding(8.dp)
             )
             Text(
-                text = "入住時間: 2025/01/22 ~ 2025/01/23",
+                text = "入住時間: ${order?.dates} ~ ${order?.datee}",
                 style = TextStyle(
                     fontSize = 18.sp,
                     lineHeight = 32.sp,
@@ -154,7 +181,7 @@ fun ScreenMOS0301(
                     .padding(8.dp)
             )
             Text(
-                text = "訂單金額: NTD\$ 3000",
+                text = "訂單金額: NTD\$ ${order?.amount}",
                 style = TextStyle(
                     fontSize = 18.sp,
                     lineHeight = 32.sp,
@@ -167,7 +194,7 @@ fun ScreenMOS0301(
                     .padding(8.dp)
             )
             Text(
-                text = "訂單編號: abcd1234567890",
+                text = "訂單編號: $orderid",
                 style = TextStyle(
                     fontSize = 18.sp,
                     lineHeight = 32.sp,
@@ -180,7 +207,7 @@ fun ScreenMOS0301(
                     .padding(8.dp)
             )
             Text(
-                text = "寵物暱稱: 毛毛",
+                text = "寵物暱稱: ${order?.pet?.nickname}",
                 style = TextStyle(
                     fontSize = 18.sp,
                     lineHeight = 32.sp,
