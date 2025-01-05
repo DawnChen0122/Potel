@@ -1,10 +1,13 @@
 package com.example.potel.ui.account
 
+import android.content.Context
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -79,9 +82,12 @@ class AccountViewModel : ViewModel() {
     val expandedYear = _expandedYear.asStateFlow()
     fun onYearChanged(newYear: String) {
         _inputYear.value = newYear
-        _expandedYear.value = false }
+        _expandedYear.value = false
+    }
+
     fun toggleYearDropdown() {
-        _expandedYear.value = !_expandedYear.value }
+        _expandedYear.value = !_expandedYear.value
+    }
 
 
     val monthRange = (1..12).map { it.toString() }
@@ -91,10 +97,12 @@ class AccountViewModel : ViewModel() {
     val expandedMonth = _expandedMonth.asStateFlow()
     fun onMonthChanged(newMonth: String) {
         _inputMonth.value = newMonth
-        _expandedMonth.value = false }
-    fun toggleMonthDropdown() {
-        _expandedMonth.value = !_expandedMonth.value }
+        _expandedMonth.value = false
+    }
 
+    fun toggleMonthDropdown() {
+        _expandedMonth.value = !_expandedMonth.value
+    }
 
 
     val dayRange = (1..31).map { it.toString() }
@@ -104,28 +112,25 @@ class AccountViewModel : ViewModel() {
     val expandedDay = _expandedDay.asStateFlow()
     fun onDayChanged(newDay: String) {
         _inputDay.value = newDay
-        _expandedDay.value = false }
-    fun toggleDayDropdown() {
-        _expandedDay.value = !_expandedDay.value }
-
-
-
-
-
-
-
-
-
-    fun login(){
-        val account = _email.value
-        val password = _password.value
-        viewModelScope.launch{
-           val user =  RetrofitInstance.api.login(loginid = account, password = password)
-            // 跳轉業面跟儲存
-        }
+        _expandedDay.value = false
     }
 
+    fun toggleDayDropdown() {
+        _expandedDay.value = !_expandedDay.value
+    }
+
+
 }
+//    fun login(){
+//        val account = _email.value
+//        val password = _password.value
+//        viewModelScope.launch{
+//           val user =  RetrofitInstance.api.login(loginid = account, password = password)
+//            // 跳轉業面跟儲存
+//        }
+//    }
+//
+//}
 
 // 假設的 ApiService，負責處理登入請求
 //object ApiService3 {
@@ -135,9 +140,9 @@ class AccountViewModel : ViewModel() {
 //        callback(Result())
 //    }
 //}
-
-// 假設的 Result 類別，用來表示 API 回應
-class Result
+//
+//// 假設的 Result 類別，用來表示 API 回應
+//class Result
 
 //    fun getApiData() {
 //        // todo 2-5 取得 API 資料，目前先用假資料
@@ -172,3 +177,4 @@ class Result
 //        }
 //    }
 //}
+
