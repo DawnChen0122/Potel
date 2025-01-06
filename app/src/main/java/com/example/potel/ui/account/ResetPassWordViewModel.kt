@@ -3,10 +3,11 @@ package com.example.potel.ui.account
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-class ResetPassWordViewModel {
+class ResetPassWordViewModel: ViewModel() {
     private val _password = MutableStateFlow("")
     val password = _password.asStateFlow()
     var passwordError by mutableStateOf(false)

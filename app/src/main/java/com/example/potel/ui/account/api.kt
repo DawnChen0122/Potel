@@ -29,6 +29,11 @@ interface ApiService {
 
 }
 
+//
+//interface ApiService2 {
+//    @POST("login")
+//    suspend fun login(@Query("loginid") loginid: String, @Query("password") password: String): LoginResponse
+//}
 
 //object RetrofitInstance {
 //    val api: ApiService by lazy {
@@ -56,6 +61,3 @@ object RetrofitInstance {
     }
 }
 
-//fun composeImageUrl(imageid: Int): String{
-//    return "${baseurl}api/image?imageid=$imageid"
-//}
