@@ -1,4 +1,4 @@
-package com.example.potel.ui.discusszone
+package com.example.potel.ui.forumZone
 
 import androidx.navigation.NavHostController
 

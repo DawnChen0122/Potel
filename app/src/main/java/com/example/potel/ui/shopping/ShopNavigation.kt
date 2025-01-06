@@ -10,6 +10,7 @@ import androidx.navigation.compose.composable
  * */
 
 
+
 const val SHOP_NAVIGATION_ROUTE = "Shop"
 
 //fun genShopNavigationRoute() = HOME_NAVIGATION_ROUTE
@@ -51,3 +52,4 @@ fun NavGraphBuilder.shopScreenRoute(navController: NavHostController) {
         OrderCheckScreen(navController = navController, onDismissRequest = { /* 自定義行為 */ })
     }
 }
+
