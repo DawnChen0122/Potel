@@ -25,10 +25,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.example.potel.ui.theme.PotelTheme
 
 @Composable
-fun CreditCardScreen() {
+fun CreditCardScreen(navController: NavHostController) {
     // 使用 remember 和 mutableStateOf 來保存並更新顯示的文本
     var cardnumber by remember { mutableStateOf("") }
     var expiredate by remember { mutableStateOf("") }
@@ -74,7 +75,7 @@ fun CreditCardScreen() {
                 .padding(top = 8.dp),
             textStyle = TextStyle(
                 fontSize = 16.sp,
-                color = Color.White
+                color = Color.Black
             ),
             colors = OutlinedTextFieldDefaults.colors(
             )
@@ -93,7 +94,7 @@ fun CreditCardScreen() {
 
         // 顯示按鈕
         Button(
-            onClick = {}, // 按下時清空文本
+            onClick = {navController.navigate(ShopScreens.ordercheck.name)},
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color.Black, // 設定按鈕容器顏色
                 contentColor = Color.Yellow // 設定按鈕內容顏色
@@ -108,10 +109,10 @@ fun CreditCardScreen() {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun CreditCardPreview() {
-    PotelTheme{
-        CreditCardScreen()
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun CreditCardPreview() {
+//    PotelTheme{
+//        CreditCardScreen()
+//    }
+//}
