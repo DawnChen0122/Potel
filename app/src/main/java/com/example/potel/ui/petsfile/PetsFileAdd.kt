@@ -109,14 +109,9 @@ fun PetInfoTextField(label: String, textState: String, onValueChange: (String) -
 
 @Preview(showBackground = true)
 @Composable
-<<<<<<< HEAD:app/src/main/java/com/example/potel/ui/pets/PetsAdd.kt
-fun DefaultPreview999() {
-    PetInfoForm()
-}
-=======
+
 fun ScreenPetsFileAddPreview() {
     PotelTheme  {
         ScreenPetsFileAdd(navController = rememberNavController())
     }
 }
->>>>>>> Kent:app/src/main/java/com/example/potel/ui/petsfile/PetsFileAdd.kt
