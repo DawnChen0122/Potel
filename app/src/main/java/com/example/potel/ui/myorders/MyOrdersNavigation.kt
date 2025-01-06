@@ -32,7 +32,7 @@ fun NavGraphBuilder.myOrdersScreenRoute(
         route = MyOrdersScreens.MOS01.name,
     ) {
         ScreenMOS01(
-            navController = navController
+            navController = navController,
         )
     }
     composable(
@@ -88,28 +88,43 @@ fun NavGraphBuilder.myOrdersScreenRoute(
         ScreenMOS0303(navController = navController)
     }
     composable(
-        route = MyOrdersScreens.MOS04.name,
-    ) {
-        ScreenMOS04(navController = navController)
+        route = "${MyOrdersScreens.MOS04.name}/{memberid}",
+    ) { backStackEntry ->
+        ScreenMOS04(
+            navController = navController,
+            memberid = backStackEntry.arguments?.getString("memberid") ?: "0"
+        )
     }
     composable(
-        route = MyOrdersScreens.MOS0401.name,
-    ) {
-        ScreenMOS0401(navController = navController)
+        route = "${MyOrdersScreens.MOS0401.name}/{prdorderid}",
+    ) { backStackEntry ->
+        ScreenMOS0401(
+            navController = navController,
+            prdorderid = backStackEntry.arguments?.getString("prdorderid") ?: "0"
+        )
     }
     composable(
-        route = MyOrdersScreens.MOS0402.name,
-    ) {
-        ScreenMOS0402(navController = navController)
+        route = "${MyOrdersScreens.MOS0402.name}/{prdorderid}",
+    ) { backStackEntry ->
+        ScreenMOS0402(
+            navController = navController,
+            prdorderid = backStackEntry.arguments?.getString("prdorderid") ?: "0"
+            )
     }
     composable(
-        route = MyOrdersScreens.MOS05.name,
-    ) {
-        ScreenMOS05(navController = navController)
+        route = "${MyOrdersScreens.MOS05.name}/{memberid}",
+    ) { backStackEntry ->
+        ScreenMOS05(
+            navController = navController,
+            memberid = backStackEntry.arguments?.getString("memberid") ?: "0"
+        )
     }
     composable(
-        route = MyOrdersScreens.MOS0501.name,
-    ) {
-        ScreenMOS0501(navController = navController)
+        route = "${MyOrdersScreens.MOS0501.name}/{prdorderid}",
+    ) { backStackEntry ->
+        ScreenMOS0501(
+            navController = navController,
+            prdorderid = backStackEntry.arguments?.getString("prdorderid") ?: "0"
+        )
     }
 }

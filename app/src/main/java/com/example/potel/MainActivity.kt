@@ -3,7 +3,9 @@ package com.example.potel
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -23,6 +25,7 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
@@ -70,7 +73,8 @@ fun PotelApp(
 
 
     Scaffold(
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
+        modifier = Modifier
+            .nestedScroll(scrollBehavior.nestedScrollConnection)
             .fillMaxSize(),
         topBar = {
             MainTopAppBar(
@@ -81,7 +85,7 @@ fun PotelApp(
             )
         },
         bottomBar = {
-            MainBottomAppBar()
+            MainBottomAppBar(navController)
         }
     ) { innerPadding ->
         Column(
@@ -160,109 +164,86 @@ fun MainTopAppBar(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainBottomAppBar(){
+fun MainBottomAppBar(navController: NavHostController){
     BottomAppBar(
-        modifier = Modifier.fillMaxWidth(),
         // 動作按鈕
         actions = {
-            IconButton(
-                onClick = {
-//                    scope.launch {
-//                        snackbarHostState.showSnackbar(
-//                            "BottomAppBar - Check",
-//                            withDismissAction = true
-//                        )
-//                    }
-                }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp), // 增加水平間距
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center // 將內容置中
             ) {
-//                Icon(Icons.Filled.Check, contentDescription = "check")
-                Icon(
-                    painter = painterResource(R.drawable.home),
-                    contentDescription = "Home",
-                    modifier = Modifier.size(150.dp)
-                )
-            }
+                IconButton(
+                    modifier = Modifier
+                        .size(60.dp)
+                        .weight(0.2f),
+                    onClick = {
+                    }
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.home),
+                        contentDescription = "Home",
+                        modifier = Modifier.size(150.dp)
+                    )
+                }
 
-            IconButton(
-                onClick = {
-//                scope.launch {
-//                    snackbarHostState.showSnackbar(
-//                        "BottomAppBar - Edit",
-//                        withDismissAction = true
-//                    )
-//                }
-                },
-            ) {
-//                Icon(
-//                    Icons.Filled.Edit,
-//                    contentDescription = "edit",
-//                )
-                Icon(
-                    painter = painterResource(R.drawable.booking),
-                    contentDescription = "Booking",
-                    modifier = Modifier.size(150.dp)
-                )
-            }
+                IconButton(
+                    modifier = Modifier
+                        .size(60.dp)
+                        .weight(0.2f),
+                    onClick = {
+                    },
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.booking),
+                        contentDescription = "Booking",
+                        modifier = Modifier.size(150.dp)
+                    )
+                }
 
-            IconButton(
-                onClick = {
-//                    scope.launch {
-//                        snackbarHostState.showSnackbar(
-//                            "BottomAppBar - Delete",
-//                            withDismissAction = true
-//                        )
-//                    }
-                },
-            ) {
-//                Icon(
-//                    Icons.Filled.Delete,
-//                    contentDescription = "delete",
-//                )
-                Icon(
-                    painter = painterResource(R.drawable.shopping),
-                    contentDescription = "Shopping",
-                    modifier = Modifier.size(150.dp)
-                )
-            }
-            IconButton(
-                onClick = {
-//                    scope.launch {
-//                        snackbarHostState.showSnackbar(
-//                            "BottomAppBar - Delete",
-//                            withDismissAction = true
-//                        )
-//                    }
+                IconButton(
+                    modifier = Modifier
+                        .size(60.dp)
+                        .weight(0.2f),
+                    onClick = {
+                    },
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.shopping),
+                        contentDescription = "Shopping",
+                        modifier = Modifier.size(150.dp)
+                    )
                 }
-            ) {
-//                Icon(
-//                    Icons.Filled.Delete,
-//                    contentDescription = "delete",
-//                )
-                Icon(
-                    painter = painterResource(R.drawable.myorders),
-                    contentDescription = "MyOrders",
-                    modifier = Modifier.size(150.dp)
-                )
-            }
-            IconButton(
-                onClick = {
-//                    scope.launch {
-//                        snackbarHostState.showSnackbar(
-//                            "BottomAppBar - Delete",
-//                            withDismissAction = true
-//                        )
-//                    }
+                IconButton(
+                    modifier = Modifier
+                        .size(60.dp)
+                        .weight(0.2f),
+                    onClick = {
+                        if(!navController.popBackStack(MyOrdersScreens.MOS01.name, false))
+                            navController.navigate("${MyOrdersScreens.MOS01.name}/1")
+                    }
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.myorders),
+                        contentDescription = "MyOrders",
+                        modifier = Modifier.size(150.dp)
+                    )
                 }
-            ) {
-//                Icon(
-//                    Icons.Filled.Delete,
-//                    contentDescription = "delete",
-//                )
-                Icon(
-                    painter = painterResource(R.drawable.myinfo),
-                    contentDescription = "MyInfo",
-                    modifier = Modifier.size(150.dp)
-                )
+                IconButton(
+                    modifier = Modifier
+                        .size(60.dp)
+                        .weight(0.2f),
+                    onClick = {
+                    }
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.myinfo),
+                        contentDescription = "MyInfo",
+                        modifier = Modifier.size(150.dp)
+                    )
+                }
             }
         },
 

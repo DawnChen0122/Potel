@@ -41,7 +41,7 @@ fun ScreenMOS0303(
 
     val coroutineScope = rememberCoroutineScope()
     var order by remember { mutableStateOf<Order?>(myOrdersViewModel.orderEditState.value) }
-    var responseObject by remember { mutableStateOf<ResponseObject?>(null) }
+    var responseObject by remember { mutableStateOf<ResponseObject<Any>?>(null) }
 
     LaunchedEffect(Unit) {
         coroutineScope.launch {

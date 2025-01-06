@@ -10,7 +10,7 @@ class MyOrdersViewModel : ViewModel() {
     private var tag = "MyOrdersViewModel"
     // 定義一個可更改的變數, 但是是私有的(private), 只有VM自己可以改, 外部只能透過提供的method做修改
     private val _orderEditState = MutableStateFlow<Order?>(Order())
-    private val _prdorderEditState = MutableStateFlow(PrdOrder())
+    private val _prdorderEditState = MutableStateFlow<PrdOrder?>(PrdOrder())
     private val _petEditState = MutableStateFlow(Pet())
     private val _memberEditState = MutableStateFlow(Member())
 
@@ -22,6 +22,9 @@ class MyOrdersViewModel : ViewModel() {
 
     fun setOrder(order: Order?){
         _orderEditState.value = order
+    }
+    fun setPrdOrder(prdorder: PrdOrder?){
+        _prdorderEditState.value = prdorder
     }
 
     suspend fun getOrders(memberid: Int = 1, orderstate: Char): List<Order> {
@@ -48,11 +51,49 @@ class MyOrdersViewModel : ViewModel() {
         }
     }
 
-    suspend fun updateOrder(op:String, order: Order): ResponseObject? {
+    suspend fun updateOrder(op:String, order: Order): ResponseObject<Any> {
         Log.d(tag, "orderid=${order.orderid}")
         try {
             val response = RetrofitInstance.api.updateOrder(op, order)
             Log.d(tag, "orderid=${order.orderid}, respcode=${response.respcode}, respmsg=${response.respmsg}")
+            return response // 回傳ResponseObject
+        } catch (e: Exception) {
+            Log.e(tag, "error: ${e.message}")
+            return ResponseObject(-1, "更新資料失敗")
+        }
+    }
+
+
+    suspend fun getPrdOrders(memberid: Int = 1, orderstate: Char): ResponseObject<List<PrdOrder>> {
+        Log.d(tag, "memberid=$memberid, orderstate=$orderstate")
+        try {
+            val response = RetrofitInstance.api.getPrdOrders(memberid, orderstate)
+
+            Log.d(tag, "response.respcode=${response.respcode}")
+            return response // 回傳ResponseObject (resobj= List<PrdOrder>)
+        } catch (e: Exception) {
+            Log.e(tag, "error: ${e.message}")
+            return ResponseObject(respcode = -2, "無法取得購物訂單列表")
+        }
+    }
+
+    suspend fun getPrdOrder(prdorderid: Int = 0): ResponseObject<PrdOrder> {
+        Log.d(tag, "orderid=$prdorderid")
+        try {
+            val response = RetrofitInstance.api.getPrdOrder(prdorderid)
+            return response // 回傳List<PrdOrder>
+        } catch (e: Exception) {
+            Log.e(tag, "error: ${e.message}")
+            return ResponseObject(respcode = -1, respmsg = "無法查詢購物訂單")
+        }
+    }
+
+    suspend fun updatePrdOrder(op:String, prdorder: PrdOrder): ResponseObject<Any> {
+        tag = "updatePrdOrder"
+        Log.d(tag, "prdorderid=${prdorder.prdorderid}")
+        try {
+            val response = RetrofitInstance.api.updatePrdOrder(op, prdorder)
+            Log.d(tag, "prdorderid=${prdorder.prdorderid}, respcode=${response.respcode}, respmsg=${response.respmsg}")
             return response // 回傳ResponseObject
         } catch (e: Exception) {
             Log.e(tag, "error: ${e.message}")

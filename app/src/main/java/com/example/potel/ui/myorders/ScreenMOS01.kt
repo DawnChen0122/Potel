@@ -36,6 +36,7 @@ fun ScreenMOS01(
     navController: NavHostController
 ) {
     val myOrdersVM: MyOrdersViewModel = viewModel(key = "myOrdersVM")
+    val memberid = "1" // TODO: 這應該登入後從登入的資訊中獲取
 
     Column(
         modifier = Modifier
@@ -47,6 +48,7 @@ fun ScreenMOS01(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
+                .weight(0.45f)
                 .background(color = Color(0xFFD9D9D9), shape = RoundedCornerShape(size = 8.dp)),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
@@ -68,7 +70,7 @@ fun ScreenMOS01(
             Button(
                 shape = RoundedCornerShape(20),
                 onClick = {
-                    navController.navigate(route = "${MyOrdersScreens.MOS02.name}/1")
+                    navController.navigate(route = "${MyOrdersScreens.MOS02.name}/$memberid")
                 },
                 border = BorderStroke(1.dp, Color.Black),
                 colors = ButtonDefaults.outlinedButtonColors(),
@@ -79,7 +81,7 @@ fun ScreenMOS01(
                 Text(
                     text = "預約訂單",
                     style = TextStyle(
-                        fontSize = 16.sp,
+                        fontSize = 32.sp,
                         lineHeight = 32.sp,
                         fontFamily = FontFamily(Font(R.font.dm_sans)),
                         fontWeight = FontWeight(700),
@@ -92,7 +94,7 @@ fun ScreenMOS01(
             Button(
                 shape = RoundedCornerShape(20),
                 onClick = {
-                    navController.navigate(route = "${MyOrdersScreens.MOS03.name}/1")
+                    navController.navigate(route = "${MyOrdersScreens.MOS03.name}/$memberid")
                 },
                 border = BorderStroke(1.dp, Color.Black),
                 colors = ButtonDefaults.outlinedButtonColors(),
@@ -103,7 +105,7 @@ fun ScreenMOS01(
                 Text(
                     text = "歷史訂單",
                     style = TextStyle(
-                        fontSize = 16.sp,
+                        fontSize = 32.sp,
                         lineHeight = 32.sp,
                         fontFamily = FontFamily(Font(R.font.dm_sans)),
                         fontWeight = FontWeight(700),
@@ -117,6 +119,7 @@ fun ScreenMOS01(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
+                .weight(0.45f)
                 .background(color = Color(0xFFD9D9D9), shape = RoundedCornerShape(size = 8.dp)),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
@@ -135,11 +138,11 @@ fun ScreenMOS01(
                     .align(Alignment.Start)
                     .padding(5.dp)
             )
-            Spacer(modifier = Modifier.height(30.dp))
+
             Button(
                 shape = RoundedCornerShape(20),
                 onClick = {
-                    navController.navigate(route = MyOrdersScreens.MOS04.name)
+                    navController.navigate(route = "${MyOrdersScreens.MOS04.name}/$memberid")
                 },
                 border = BorderStroke(1.dp, Color.Black),
                 colors = ButtonDefaults.outlinedButtonColors(),
@@ -150,7 +153,7 @@ fun ScreenMOS01(
                 Text(
                     text = "待出貨訂單",
                     style = TextStyle(
-                        fontSize = 16.sp,
+                        fontSize = 32.sp,
                         lineHeight = 32.sp,
                         fontFamily = FontFamily(Font(R.font.dm_sans)),
                         fontWeight = FontWeight(700),
@@ -162,7 +165,7 @@ fun ScreenMOS01(
             Button(
                 shape = RoundedCornerShape(20),
                 onClick = {
-                    navController.navigate(route = MyOrdersScreens.MOS05.name)
+                    navController.navigate(route = "${MyOrdersScreens.MOS05.name}/$memberid")
                 },
                 border = BorderStroke(1.dp, Color.Black),
                 colors = ButtonDefaults.outlinedButtonColors(),
@@ -173,7 +176,7 @@ fun ScreenMOS01(
                 Text(
                     text = "歷史訂單",
                     style = TextStyle(
-                        fontSize = 16.sp,
+                        fontSize = 32.sp,
                         lineHeight = 32.sp,
                         fontFamily = FontFamily(Font(R.font.dm_sans)),
                         fontWeight = FontWeight(700),
