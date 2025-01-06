@@ -39,21 +39,20 @@ fun Signup(viewModel:AccountViewModel = viewModel(),
 
     val email = viewModel.email.collectAsState()
 
+    var inputYear by remember { mutableStateOf("") }
+    val yearRange = (1924..2025).map { it.toString() }
+    var expandedYear by remember { mutableStateOf(false) }
 
-    val inputYear by viewModel.inputYear.collectAsState()
-    val expandedYear by viewModel.expandedYear.collectAsState()
+    var inputMonth by remember { mutableStateOf("") }
+    val monthRange = (1..12).map { it.toString() }
+    var expandedMonth by remember { mutableStateOf(false) }
 
-
-    val inputMonth by viewModel.inputMonth.collectAsState()
-    val expandedMonth by viewModel.expandedMonth.collectAsState()
-
-    val inputDay by viewModel.inputDay.collectAsState()
-    val expandedDay by viewModel.expandedDay.collectAsState()
-
+    var inputDay by remember { mutableStateOf("") }
+    val dayRange = (1..31).map { it.toString() }
+    var expandedDay by remember { mutableStateOf(false) }
 
     var inputGender by remember { mutableStateOf("") }
     val genderRange = listOf("男", "女", "不願透漏").map { it.toString() }
-
     var expandedGender by remember { mutableStateOf(false) }
 
     val password = viewModel.password.collectAsState()
@@ -144,31 +143,35 @@ fun Signup(viewModel:AccountViewModel = viewModel(),
         Row(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.Top
-        ) {
+        )
+        {
             ExposedDropdownMenuBox(
                 expanded = expandedYear,
-                onExpandedChange = { viewModel.toggleYearDropdown() },
+                onExpandedChange = { expandedYear = it },
                 modifier = Modifier.weight(1f)
             ) {
                 TextField(
                     readOnly = true,
                     modifier = Modifier.menuAnchor(MenuAnchorType.PrimaryEditable, true),
                     value = inputYear,
-                    onValueChange = { viewModel.onYearChanged(it) },
+                    onValueChange = {
+                        inputYear = it
+                        expandedYear = true
+                    },
                     singleLine = true,
                     label = { Text("年") },
                     trailingIcon = { TrailingIcon(expanded = expandedYear) }
                 )
                 ExposedDropdownMenu(
                     expanded = expandedYear,
-                    onDismissRequest = { viewModel.toggleYearDropdown() }
+                    onDismissRequest = { expandedYear = false }
                 ) {
-                    viewModel.yearRange.forEach { year ->
+                    yearRange.forEach { yearRange ->
                         DropdownMenuItem(
-                            text = { Text(year) },
+                            text = { Text(yearRange) },
                             onClick = {
-                                viewModel.onYearChanged(year)
-                                viewModel.toggleYearDropdown()
+                                inputYear = yearRange
+                                expandedYear = false
                             }
                         )
                     }
@@ -177,28 +180,31 @@ fun Signup(viewModel:AccountViewModel = viewModel(),
 
             ExposedDropdownMenuBox(
                 expanded = expandedMonth,
-                onExpandedChange = { viewModel.toggleMonthDropdown() },
+                onExpandedChange = { expandedMonth = it },
                 modifier = Modifier.weight(1f)
             ) {
                 TextField(
                     readOnly = true,
                     modifier = Modifier.menuAnchor(MenuAnchorType.PrimaryEditable, true),
                     value = inputMonth,
-                    onValueChange = { viewModel.onMonthChanged(it) },
+                    onValueChange = {
+                        inputMonth = it
+                        expandedMonth = true
+                    },
                     singleLine = true,
                     label = { Text("月") },
                     trailingIcon = { TrailingIcon(expanded = expandedMonth) }
                 )
                 ExposedDropdownMenu(
                     expanded = expandedMonth,
-                    onDismissRequest = { viewModel.toggleMonthDropdown() }
+                    onDismissRequest = { expandedMonth = false }
                 ) {
-                    viewModel.monthRange.forEach { month ->
+                    monthRange.forEach { monthRange ->
                         DropdownMenuItem(
-                            text = { Text(month) },
+                            text = { Text(monthRange) },
                             onClick = {
-                                viewModel.onMonthChanged(month)
-                                viewModel.toggleMonthDropdown()
+                                inputMonth = monthRange
+                                expandedMonth = false
                             }
                         )
                     }
@@ -207,248 +213,253 @@ fun Signup(viewModel:AccountViewModel = viewModel(),
 
 
 
+
             ExposedDropdownMenuBox(
                 expanded = expandedDay,
-                onExpandedChange = { viewModel.toggleDayDropdown()},
+                onExpandedChange = { expandedDay = it },
                 modifier = Modifier.weight(1f)
             ) {
                 TextField(
                     readOnly = true,
                     modifier = Modifier.menuAnchor(MenuAnchorType.PrimaryEditable, true),
                     value = inputDay,
-                    onValueChange = { viewModel.onDayChanged(it) },
+                    onValueChange = {
+                        inputDay = it
+                        expandedDay = true
+                    },
                     singleLine = true,
                     label = { Text("日") },
                     trailingIcon = { TrailingIcon(expanded = expandedDay) }
                 )
                 ExposedDropdownMenu(
                     expanded = expandedDay,
-                    onDismissRequest = { viewModel.toggleDayDropdown() }
+                    onDismissRequest = { expandedDay = false }
                 ) {
-                    viewModel.dayRange.forEach { day ->
+                    dayRange.forEach { dayRange ->
                         DropdownMenuItem(
-                            text = { Text(day) },
+                            text = { Text(dayRange) },
                             onClick = {
-                                viewModel.onYearChanged(day)
-                                viewModel.toggleYearDropdown()
+                                inputDay = dayRange
+                                expandedDay = false
                             }
                         )
                     }
                 }
             }
+        }
 
 
 
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 10.dp)
-                    .background(Color.White, RoundedCornerShape(8.dp))
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 10.dp)
+                .background(Color.White, RoundedCornerShape(8.dp))
+        )
+
+
+        {
+            Text(
+                text = "請選擇性別",
+                modifier = Modifier.padding(10.dp)
+            )
+        }
+
+
+        ExposedDropdownMenuBox(
+            expanded = expandedGender,
+            onExpandedChange = { expandedGender = it },
+            modifier = Modifier.fillMaxWidth()
+        )
+        {
+            TextField(
+                readOnly = true,
+                modifier = Modifier.menuAnchor(MenuAnchorType.PrimaryEditable, true)
+                    .fillMaxWidth(),
+                value = inputGender,
+                onValueChange = {
+                    inputGender = it
+                    expandedGender = true
+                },
+                singleLine = true,
+                label = { Text("性別") },
+                trailingIcon = { TrailingIcon(expanded = expandedGender) }
             )
 
-
-            {
-                Text(
-                    text = "請選擇性別",
-                    modifier = Modifier.padding(10.dp)
-                )
-            }
-
-
-            ExposedDropdownMenuBox(
+            ExposedDropdownMenu(
                 expanded = expandedGender,
-                onExpandedChange = { expandedGender = it },
-                modifier = Modifier.fillMaxWidth()
-            )
-            {
-                TextField(
-                    readOnly = true,
-                    modifier = Modifier.menuAnchor(MenuAnchorType.PrimaryEditable, true)
-                        .fillMaxWidth(),
-                    value = inputGender,
-                    onValueChange = {
-                        inputGender = it
-                        expandedGender = true
-                    },
-                    singleLine = true,
-                    label = { Text("性別") },
-                    trailingIcon = { TrailingIcon(expanded = expandedGender) }
-                )
-
-                ExposedDropdownMenu(
-                    expanded = expandedGender,
-                    onDismissRequest = { expandedGender = false }
-                ) {
-                    genderRange.forEach { genderRange ->
-                        DropdownMenuItem(
-                            text = { Text(genderRange) },
-                            onClick = {
-                                inputGender = genderRange
-                                expandedGender = false
-                            }
-                        )
-                    }
+                onDismissRequest = { expandedGender = false }
+            ) {
+                genderRange.forEach { genderRange ->
+                    DropdownMenuItem(
+                        text = { Text(genderRange) },
+                        onClick = {
+                            inputGender = genderRange
+                            expandedGender = false
+                        }
+                    )
                 }
             }
+        }
 
 
-            OutlinedTextField(
-                value = password.value,
-                onValueChange = viewModel::onPasswordChanged,
-                label = { Text(text = "密碼") },
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Default.Lock,
-                        contentDescription = "密碼"
-                    )
-                },
-                trailingIcon = {
-                    Text(
-                        text = if (passwordVisible) "隱藏" else "顯示",
-                        modifier = Modifier.clickable {
-                            passwordVisible = !passwordVisible
-                        }
-                    )
-                },
-                isError = viewModel.passwordError,
-                shape = RoundedCornerShape(8.dp),
-                visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                singleLine = true,
-                colors = TextFieldDefaults.colors(
-                    focusedIndicatorColor = Color.Blue,
-                    unfocusedIndicatorColor = Color.Gray,
-                ),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 16.dp)
-            )
-            if (viewModel.passwordError) {
-                Text(
-                    text = "密碼需在6至20字符內，且包含字母和數字",
-                    color = Color.Red,
-                    fontSize = 12.sp,
-                    modifier = Modifier.padding(start = 16.dp)
+        OutlinedTextField(
+            value = password.value,
+            onValueChange = viewModel::onPasswordChanged,
+            label = { Text(text = "密碼") },
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Default.Lock,
+                    contentDescription = "密碼"
                 )
-            }
-
-
-            OutlinedTextField(
-                value = checkpassword.value,
-                onValueChange = viewModel::onCheckPasswordChanged,
-                label = { Text(text = "再次確認密碼") },
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Default.Lock,
-                        contentDescription = "再次確認密碼"
-                    )
-                },
-                trailingIcon = {
-                    Text(
-                        text = if (checkpasswordVisible) "隱藏" else "顯示",
-                        modifier = Modifier.clickable {
-                            checkpasswordVisible = !checkpasswordVisible
-                        }
-                    )
-                },
-                isError = viewModel.checkpasswordError,
-                shape = RoundedCornerShape(8.dp),
-                visualTransformation = if (checkpasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                singleLine = true,
-                colors = TextFieldDefaults.colors(
-                    focusedIndicatorColor = Color.Blue,
-                    unfocusedIndicatorColor = Color.Gray,
-                ),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 10.dp)
-            )
-            if (viewModel.checkpasswordError) {
+            },
+            trailingIcon = {
                 Text(
-                    text = "密碼需輸入相同",
-                    color = Color.Red,
-                    fontSize = 12.sp,
-                    modifier = Modifier.padding(start = 16.dp)
-                )
-            }
-
-
-            OutlinedTextField(
-                value = username.value,
-                onValueChange = viewModel::onUsernameChanged,
-                label = { Text(text = "請輸入姓名") },
-                singleLine = true,
-                shape = RoundedCornerShape(8.dp),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 10.dp)
-            )
-
-
-
-
-            OutlinedTextField(
-                value = phonenumber.value,
-                onValueChange = viewModel::onPhonenumberChanged,
-                label = { Text(text = "請輸入手機號碼") },
-                singleLine = true,
-                shape = RoundedCornerShape(8.dp),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 16.dp),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            )
-            if (phonenumberError) {
-                Text(
-                    text = "手機號碼為十位數字",
-                    color = Color.Red,
-                    fontSize = 12.sp,
-                    modifier = Modifier.padding(start = 16.dp)
-                )
-            }
-
-
-            OutlinedTextField(
-                value = address.value,
-                onValueChange = viewModel::onAddressChanged,
-                label = { Text(text = "請輸入地址") },
-                singleLine = true,
-                shape = RoundedCornerShape(8.dp),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 16.dp)
-            )
-
-            var errorMessage by remember { mutableStateOf<String?>(null) }
-            // 註冊按鈕
-            Button(
-                onClick = {
-                    if (uid.value.isEmpty() || email.value.isEmpty() || password.value.isEmpty() || checkpassword.value.isEmpty()
-                        || username.value.isEmpty() || phonenumber.value.isEmpty() || address.value.isEmpty()
-                    ) {
-                        errorMessage = "欄位不得空白"
-                    } else if (password.value != checkpassword.value) {
-                        errorMessage = "密碼與確認密碼不同"
-                    } else {
-                        "執行註冊邏輯"
+                    text = if (passwordVisible) "隱藏" else "顯示",
+                    modifier = Modifier.clickable {
+                        passwordVisible = !passwordVisible
                     }
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 16.dp),
-                shape = RoundedCornerShape(8.dp)
-            ) {
-                Text(text = "註冊", fontSize = 16.sp)
-            }
-            errorMessage?.let {
-                Text(
-                    text = it,
-                    color = Color.Red,
-                    fontSize = 14.sp,
-                    modifier = Modifier.padding(top = 8.dp)
                 )
-            }
+            },
+            isError = viewModel.passwordError,
+            shape = RoundedCornerShape(8.dp),
+            visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+            singleLine = true,
+            colors = TextFieldDefaults.colors(
+                focusedIndicatorColor = Color.Blue,
+                unfocusedIndicatorColor = Color.Gray,
+            ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp)
+        )
+        if (viewModel.passwordError) {
+            Text(
+                text = "密碼需在6至20字符內，且包含字母和數字",
+                color = Color.Red,
+                fontSize = 12.sp,
+                modifier = Modifier.padding(start = 16.dp)
+            )
+        }
+
+
+        OutlinedTextField(
+            value = checkpassword.value,
+            onValueChange = viewModel::onCheckPasswordChanged,
+            label = { Text(text = "再次確認密碼") },
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Default.Lock,
+                    contentDescription = "再次確認密碼"
+                )
+            },
+            trailingIcon = {
+                Text(
+                    text = if (checkpasswordVisible) "隱藏" else "顯示",
+                    modifier = Modifier.clickable {
+                        checkpasswordVisible = !checkpasswordVisible
+                    }
+                )
+            },
+            isError = viewModel.checkpasswordError,
+            shape = RoundedCornerShape(8.dp),
+            visualTransformation = if (checkpasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+            singleLine = true,
+            colors = TextFieldDefaults.colors(
+                focusedIndicatorColor = Color.Blue,
+                unfocusedIndicatorColor = Color.Gray,
+            ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 10.dp)
+        )
+        if (viewModel.checkpasswordError) {
+            Text(
+                text = "密碼需輸入相同",
+                color = Color.Red,
+                fontSize = 12.sp,
+                modifier = Modifier.padding(start = 16.dp)
+            )
+        }
+
+
+        OutlinedTextField(
+            value = username.value,
+            onValueChange = viewModel::onUsernameChanged,
+            label = { Text(text = "請輸入姓名") },
+            singleLine = true,
+            shape = RoundedCornerShape(8.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 10.dp)
+        )
+
+
+
+
+        OutlinedTextField(
+            value = phonenumber.value,
+            onValueChange = viewModel::onPhonenumberChanged,
+            label = { Text(text = "請輸入手機號碼") },
+            singleLine = true,
+            shape = RoundedCornerShape(8.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+        )
+        if (phonenumberError) {
+            Text(
+                text = "手機號碼為十位數字",
+                color = Color.Red,
+                fontSize = 12.sp,
+                modifier = Modifier.padding(start = 16.dp)
+            )
+        }
+
+
+        OutlinedTextField(
+            value = address.value,
+            onValueChange = viewModel::onAddressChanged,
+            label = { Text(text = "請輸入地址") },
+            singleLine = true,
+            shape = RoundedCornerShape(8.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp)
+        )
+
+        var errorMessage by remember { mutableStateOf<String?>(null) }
+        // 註冊按鈕
+        Button(
+            onClick = {
+                if (uid.value.isEmpty() || email.value.isEmpty() || password.value.isEmpty() || checkpassword.value.isEmpty()
+                    || username.value.isEmpty() || phonenumber.value.isEmpty() || address.value.isEmpty()
+                ) {
+                    errorMessage = "欄位不得空白"
+                } else if (password.value != checkpassword.value) {
+                    errorMessage = "密碼與確認密碼不同"
+                } else {
+                    "執行註冊邏輯"
+                }
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp),
+            shape = RoundedCornerShape(8.dp)
+        ) {
+            Text(text = "註冊", fontSize = 16.sp)
+        }
+        errorMessage?.let {
+            Text(
+                text = it,
+                color = Color.Red,
+                fontSize = 14.sp,
+                modifier = Modifier.padding(top = 8.dp)
+            )
         }
     }
 }
