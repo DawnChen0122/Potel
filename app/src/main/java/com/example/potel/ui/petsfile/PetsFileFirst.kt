@@ -1,9 +1,7 @@
-package com.example.potel.ui.pets
+package com.example.potel.ui.petsfile
 
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
@@ -16,6 +14,10 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import com.example.potel.R
+import com.example.potel.ui.theme.PotelTheme
 
 //class MainActivity : ComponentActivity() {
 //    override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,11 +29,12 @@ import androidx.compose.ui.unit.sp
 //    }
 
 @Composable
-fun MainScreen() {
+fun ScreenPetsFileFirst( navController: NavHostController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
+            .padding(16.dp)
+            .background(Color(0xFFF0E68C)),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
@@ -46,7 +49,29 @@ fun MainScreen() {
         )
 
         // 空白200個字元
-        Spacer(modifier = Modifier.height(300.dp))
+        Spacer(modifier = Modifier.height(200.dp))
+
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.user), // 替換為 dog 圖片資源ID
+                contentDescription = "User",
+                modifier = Modifier.size(100.dp)
+            )
+        }
+        Spacer(modifier = Modifier.height(20.dp))
+
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Button(onClick = { /* 按下Add Dog的動作 */ }) {
+                Text(text = "Add user")
+            }
+        }
+            Spacer(modifier = Modifier.height(100.dp))
 
         // 顯示圖片A (dog)
         Row(
@@ -54,14 +79,14 @@ fun MainScreen() {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
-                painter = painterResource(id = android.R.drawable.ic_menu_camera), // 替換為 dog 圖片資源ID
+                painter = painterResource(id = R.drawable.dog), // 替換為 dog 圖片資源ID
                 contentDescription = "Dog",
                 modifier = Modifier.size(100.dp)
             )
             Spacer(modifier = Modifier.width(30.dp)) // 圖片間隙
             // 顯示圖片B (cat)
             Image(
-                painter = painterResource(id = android.R.drawable.ic_menu_gallery), // 替換為 cat 圖片資源ID
+                painter = painterResource(id = R.drawable.cat), // 替換為 cat 圖片資源ID
                 contentDescription = "Cat",
                 modifier = Modifier.size(100.dp)
             )
@@ -87,7 +112,9 @@ fun MainScreen() {
 
 @Preview(showBackground = true)
 @Composable
-fun DefaultPreview() {
-        MainScreen()
+fun ScreenPetsFileFirstPreview() {
+    PotelTheme  {
+        ScreenPetsFileFirst(rememberNavController())
     }
+}
 
