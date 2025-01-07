@@ -37,6 +37,7 @@ import com.example.potel.ui.theme.PotelTheme
 @Composable
 fun InformationScreen(navController: NavHostController) {
 
+//    var title by viewModel.title.collectAsState()
     var count by remember { mutableStateOf(1) }
     var amount by remember { mutableStateOf(1) }
     LaunchedEffect(count) { amount = count * 230 }

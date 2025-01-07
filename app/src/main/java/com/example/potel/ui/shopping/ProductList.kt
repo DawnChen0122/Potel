@@ -18,6 +18,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.potel.R
 import com.example.potel.ui.theme.PotelTheme
@@ -34,6 +35,8 @@ data class Products(
 fun ProductListScreen(
     navController: NavHostController
 ) {
+
+
     ListGrid(
         products = fetchProducts(),
         onItemClick = { product ->
