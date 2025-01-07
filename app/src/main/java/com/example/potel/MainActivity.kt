@@ -3,7 +3,9 @@ package com.example.potel
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -25,6 +27,7 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
@@ -43,7 +46,6 @@ import com.example.potel.ui.home.Screens
 import com.example.potel.ui.myorders.myOrdersScreenRoute
 import com.example.potel.ui.theme.PotelTheme
 import com.example.potel.ui.home.accountRoute
-import com.example.potel.ui.myorders.MyOrdersScreens
 import com.example.potel.ui.petsfile.petsfileScreenRoute
 import com.example.potel.ui.shopping.shopScreenRoute
 
@@ -72,7 +74,7 @@ fun PotelApp(
     val currentScreen = backStackEntry?.destination?.route?.split("/")?.first() ?: "home"
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
 
-    val isForumScreen = currentScreen in ForumScreens.values().map { it.name }
+    val isForumScreen = currentScreen in ForumScreens.entries.map { it.name }
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
@@ -116,7 +118,6 @@ fun TipNavHost(
     NavHost(
         modifier = modifier,
         navController = navController,
-
         startDestination = Screens.HomeRoute.name
 
     ) {
@@ -166,65 +167,81 @@ fun MainTopAppBar(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 
-fun MainBottomAppBar(){
+fun MainBottomAppBar() {
     val navController = rememberNavController()
-                IconButton(
-                    modifier = Modifier
-                        .size(60.dp)
-                        .width(1.dp),
-                    onClick = {
-                    },
-                ) {
-                    Icon(
-                        painter = painterResource(R.drawable.booking),
-                        contentDescription = "Booking",
-                        modifier = Modifier.size(150.dp)
-                    )
-                }
-
-                IconButton(
-                    modifier = Modifier
-                        .size(60.dp)
-                        .width(0.2.dp),
-                    onClick = {
-                    },
-                ) {
-                    Icon(
-                        painter = painterResource(R.drawable.shopping),
-                        contentDescription = "Shopping",
-                        modifier = Modifier.size(150.dp)
-                    )
-                }
 
 
-                IconButton(
-                    modifier = Modifier
-                        .size(60.dp)
-                        .width(0.2.dp),
-                    onClick = {
-                        // 先用popbackstack以避免重複載入頁面造成資源損耗, 若沒進入過該頁才改呼叫navigate
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp), // 這裡給Row一點邊距
+        horizontalArrangement = Arrangement.SpaceBetween, // 按鈕平均分佈
+        verticalAlignment = Alignment.CenterVertically // 垂直居中
+    )
 
-                        if(!navController.popBackStack(Screens.HomeRoute.name, false))
-                            navController.navigate(Screens.HomeRoute.name)
-                    }
-                ) {
-                    Icon(
-                        painter = painterResource(R.drawable.myorders),
-                        contentDescription = "MyOrders",
-                        modifier = Modifier.size(150.dp)
-                    )
-                }
-                IconButton(
-                    modifier = Modifier
-                        .size(60.dp)
-                        .width(0.2.dp),
-                    onClick = {
-                    }
-                ) {
-                    Icon(
-                        painter = painterResource(R.drawable.myinfo),
-                        contentDescription = "MyInfo",
-                        modifier = Modifier.size(150.dp)
-                    )
-                }
+    {
+
+        IconButton(
+            modifier = Modifier
+                .size(60.dp)
+                .width(10.dp),
+            onClick = {
+            },
+        ) {
+            Icon(
+                painter = painterResource(R.drawable.booking),
+                contentDescription = "Booking",
+                modifier = Modifier.size(150.dp)
+            )
+        }
+
+
+        IconButton(
+            modifier = Modifier
+                .size(60.dp)
+                .width(10.dp),
+            onClick = {
+            },
+        ) {
+            Icon(
+                painter = painterResource(R.drawable.shopping),
+                contentDescription = "Shopping",
+                modifier = Modifier.size(150.dp)
+            )
+        }
+
+
+        IconButton(
+            modifier = Modifier
+                .size(60.dp)
+                .width(10.dp),
+            onClick = {
+                // 先用popbackstack以避免重複載入頁面造成資源損耗, 若沒進入過該頁才改呼叫navigate
+
+                if (!navController.popBackStack(Screens.HomeRoute.name, false))
+                    navController.navigate(Screens.HomeRoute.name)
             }
+        ) {
+            Icon(
+                painter = painterResource(R.drawable.myorders),
+                contentDescription = "MyOrders",
+                modifier = Modifier.size(150.dp)
+            )
+        }
+
+
+        IconButton(
+            modifier = Modifier
+                .size(60.dp)
+                .width(10.dp),
+            onClick = {
+            }
+        ) {
+            Icon(
+                painter = painterResource(R.drawable.myinfo),
+                contentDescription = "MyInfo",
+                modifier = Modifier.size(150.dp)
+            )
+        }
+    }
+}

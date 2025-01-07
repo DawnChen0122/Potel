@@ -147,11 +147,7 @@ fun HomeRoute(
                 }
             }
                 Row(
-                    horizontalArrangement = Arrangement.spacedBy(
-                        10.dp,
-                        Alignment.CenterHorizontally
-                    ),
-                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Start,
                 ) {
                     Button(
                         shape = RoundedCornerShape(20),
@@ -162,7 +158,6 @@ fun HomeRoute(
                         colors = ButtonDefaults.outlinedButtonColors(),
                         modifier = Modifier
 
-                            .padding(30.dp)
                     )
                     {
                         Text(
@@ -188,8 +183,7 @@ fun HomeRoute(
                         border = BorderStroke(1.dp, Color.Black),
                         colors = ButtonDefaults.outlinedButtonColors(),
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(30.dp)
+
                     )
                     {
                         Text(
