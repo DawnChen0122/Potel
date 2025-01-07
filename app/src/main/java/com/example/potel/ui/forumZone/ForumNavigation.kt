@@ -4,7 +4,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 
-enum class ForumScreens(title: String) {
+enum class ForumScreens(val title: String) {
     ForumScreen(title = "討論區"),
     PostScreen(title = "文章"),
     PostEditScreen(title = "編輯文章"),

@@ -13,12 +13,6 @@
 .externalNativeBuild
 .cxx
 local.properties
-<<<<<<< HEAD
-<<<<<<< HEAD
 .idea/deploymentTargetSelector.xml
-=======
 .idea/
->>>>>>> JohnnyWu
-=======
-.idea/
->>>>>>> master
+
