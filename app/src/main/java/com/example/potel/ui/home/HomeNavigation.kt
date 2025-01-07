@@ -16,8 +16,8 @@ enum class Screens(val title: String){
 
     Signup (title = "註冊畫面"),
     Login (title = "登入畫面"),
-    Resetpassword (title = "重設密碼"),
-    HomeRoute (title = "重設密碼")
+    Reset (title = "重設密碼"),
+    HomeRoute (title = "首頁")
 }
 
 
@@ -51,7 +51,7 @@ fun NavGraphBuilder.accountRoute(navController: NavHostController) {
     }
 
     composable(
-        route = Screens.Resetpassword.name
+        route = Screens.Reset.name
     ) {
         Resetpassword(
             navController = navController
