@@ -1,6 +1,8 @@
 package com.example.potel.ui.shopping
 
 import androidx.lifecycle.ViewModel
+import com.example.potel.ui.myorders.Product
+import com.example.potel.ui.myorders.RetrofitInstance
 
 
 class ShopViewModel : ViewModel() {
