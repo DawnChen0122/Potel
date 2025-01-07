@@ -1,5 +1,6 @@
 package com.example.potel.ui.myorders
 
+import android.content.Context
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -17,23 +18,31 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.potel.R
+import com.example.potel.ui.theme.PotelTheme
 
 @Composable
 fun ScreenMOS01(
     navController: NavHostController
 ) {
     val myOrdersVM: MyOrdersViewModel = viewModel(key = "myOrdersVM")
-    val memberid = "1" // TODO: 這應該登入後從登入的資訊中獲取
+
+    val context = LocalContext.current
+    // 開 "settings"這個檔案, 沒有的話就建一個
+    val preferences = context.getSharedPreferences("member", Context.MODE_PRIVATE)
+    val memberid = preferences.getString("uid", "1")!!
 
     Column(
         modifier = Modifier
@@ -186,10 +195,10 @@ fun ScreenMOS01(
     }
 }
 
-//@Preview(showBackground = true)
-//@Composable
-//fun MainPreview() {
-//    PotelTheme {
-//        ScreenMOS01(navController = rememberNavController())
-//    }
-//}
+@Preview(showBackground = true)
+@Composable
+fun ScreenMOS01() {
+    PotelTheme {
+        ScreenMOS01(navController = rememberNavController())
+    }
+}
