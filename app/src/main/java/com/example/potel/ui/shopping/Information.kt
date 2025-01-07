@@ -143,7 +143,7 @@ fun InformationScreen(navController: NavHostController) {
             verticalAlignment = Alignment.CenterVertically // 子元素垂直置中
         ) {
             Button(
-                onClick = { navController.navigate(ShopScreens.creditcard.name)},
+                onClick = { navController.navigate(ShopScreens.Creditcard.name)},
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color.Black, // 按鈕背景色
                     contentColor = Color.Yellow // 按鈕文字顏色

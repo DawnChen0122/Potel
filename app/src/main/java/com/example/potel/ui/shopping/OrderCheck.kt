@@ -79,7 +79,7 @@ fun OrderCheckScreen(navController: NavHostController, onDismissRequest: () -> U
                 // 回到首頁按鈕，設置 onClick 邏輯
                 Button(
                     onClick = {
-                        navController.navigate(ShopScreens.twoclass.name)
+                        navController.navigate(ShopScreens.Twoclass.name)
                     },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color.Black, // 按鈕顏色

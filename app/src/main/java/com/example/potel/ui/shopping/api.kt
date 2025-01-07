@@ -50,7 +50,7 @@ object RetrofitInstance {
 
 // 根據圖片 ID 生成圖片 URL
 fun composeImageUrl(imageId: Int): String {
-    return "${baseurl}api/image?imageid=$imageId" // 根據圖片 ID 組成圖片 URL
+    return "${baseurl}shopping/image?imageid=$imageId" // 根據圖片 ID 組成圖片 URL
 }
 
 // 定義商品類別資料模型
@@ -64,7 +64,7 @@ data class Product(
     val id: Int, // 商品 ID
     val name: String, // 商品名稱
     val price: Double, // 商品價格
-    val imageUrl: String // 商品圖片 URL
+    val imageid: Int // 商品圖片 ID
 )
 
 // 定義商品詳細資料模型
