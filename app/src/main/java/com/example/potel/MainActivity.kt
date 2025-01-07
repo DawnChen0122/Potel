@@ -61,21 +61,27 @@ class MainActivity : ComponentActivity() {
 fun PotelApp(
     navController: NavHostController = rememberNavController()
 ) {
-    // todo 1-2 先宣告一個完整頁面，包含 BottomBar / NavHost
+
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentScreen = backStackEntry?.destination?.route?.split("/")?.first() ?: "home"
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
+
+
+    val isForumScreen = currentScreen in ForumScreens.values().map { it.name }
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
             .fillMaxSize(),
         topBar = {
-            MainTopAppBar(
-                currentScreen = currentScreen,
-                canNavigateBack = navController.previousBackStackEntry != null,
-                navigateUp = { navController.navigateUp() },
-                scrollBehavior = scrollBehavior
-            )
+
+            if (!isForumScreen) {
+                MainTopAppBar(
+                    currentScreen = currentScreen,
+                    canNavigateBack = navController.previousBackStackEntry != null,
+                    navigateUp = { navController.navigateUp() },
+                    scrollBehavior = scrollBehavior
+                )
+            }
         },
         bottomBar = {
             MainBottomAppBar()
@@ -85,7 +91,6 @@ fun PotelApp(
             modifier = Modifier
                 .padding(innerPadding)
         ) {
-            // todo 1-3 將 NavHost 放在 Scaffold Content 裡
             TipNavHost(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -155,71 +160,6 @@ fun MainTopAppBar(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainBottomAppBar(){
-    BottomAppBar(
-        // 動作按鈕
-        actions = {
-            IconButton(
-                onClick = {
-//                    scope.launch {
-//                        snackbarHostState.showSnackbar(
-//                            "BottomAppBar - Check",
-//                            withDismissAction = true
-//                        )
-//                    }
-                }
-            ) {
-                Icon(Icons.Filled.Check, contentDescription = "check")
-            }
 
-            IconButton(
-                onClick = {
-//                scope.launch {
-//                    snackbarHostState.showSnackbar(
-//                        "BottomAppBar - Edit",
-//                        withDismissAction = true
-//                    )
-//                }
-                }
-            ) {
-                Icon(
-                    Icons.Filled.Edit,
-                    contentDescription = "edit",
-                )
-            }
-
-            IconButton(
-                onClick = {
-//                    scope.launch {
-//                        snackbarHostState.showSnackbar(
-//                            "BottomAppBar - Delete",
-//                            withDismissAction = true
-//                        )
-//                    }
-                }
-            ) {
-                Icon(
-                    Icons.Filled.Delete,
-                    contentDescription = "delete",
-                )
-            }
-        },
-        // BottomAppBar也可放FloatingActionButton
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = {
-//                    scope.launch {
-//                        snackbarHostState.showSnackbar(
-//                            "BottomAppBar - Add",
-//                            withDismissAction = true
-//                        )
-//                    }
-                },
-                containerColor = BottomAppBarDefaults.bottomAppBarFabColor,
-                elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation()
-            ) {
-                Icon(Icons.Filled.Add, "Localized description")
-            }
-        }
-    )
 }
 

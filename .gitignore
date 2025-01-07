@@ -13,8 +13,6 @@
 .externalNativeBuild
 .cxx
 local.properties
-<<<<<<< HEAD
 .idea/deploymentTargetSelector.xml
-=======
 .idea/
->>>>>>> JohnnyWu
+
