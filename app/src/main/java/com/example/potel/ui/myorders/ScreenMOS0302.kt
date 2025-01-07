@@ -39,6 +39,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -66,6 +67,8 @@ fun ScreenMOS0302(
         coroutineScope.launch {
             order = myOrdersViewModel.getOrder(orderid.toInt())
             myOrdersViewModel.setOrder(order)
+            score = order?.score?:0
+            comment = order?.comment?:""
         }
     }
 
@@ -142,23 +145,38 @@ fun ScreenMOS0302(
                 Row {
                     Icon(
                         imageVector = if(score>=1) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
-                        contentDescription = "實心"
+                        contentDescription = "實心",
+                        modifier = Modifier.clickable {
+                            score = 1
+                        }
                     )
                     Icon(
                         imageVector = if(score>=2) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
-                        contentDescription = "實心"
+                        contentDescription = "實心",
+                        modifier = Modifier.clickable {
+                            score = 2
+                        }
                     )
                     Icon(
                         imageVector = if(score>=3) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
-                        contentDescription = "實心"
+                        contentDescription = "實心",
+                        modifier = Modifier.clickable {
+                            score = 3
+                        }
                     )
                     Icon(
                         imageVector = if(score>=4) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
-                        contentDescription = "實心"
+                        contentDescription = "實心",
+                        modifier = Modifier.clickable {
+                            score = 4
+                        }
                     )
                     Icon(
                         imageVector = if(score>=5) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
-                        contentDescription = "實心"
+                        contentDescription = "實心",
+                        modifier = Modifier.clickable {
+                            score = 5
+                        }
                     )
                 }
                 Icon(
@@ -192,9 +210,12 @@ fun ScreenMOS0302(
                 onValueChange = { comment = it},
                 placeholder = { Text(text = "請把您的想法寫在這, 最多可寫300個字") },
                 maxLines = 10,
-                modifier = Modifier.weight(1f),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
                 keyboardOptions = KeyboardOptions(
-                    showKeyboardOnFocus = true
+                    showKeyboardOnFocus = true,
+                    keyboardType = KeyboardType.Unspecified
                 )
             )
 

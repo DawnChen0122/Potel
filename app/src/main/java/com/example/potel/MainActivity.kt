@@ -7,17 +7,13 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+
+
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material3.BottomAppBar
-import androidx.compose.material3.BottomAppBarDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -31,10 +27,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.potel.ui.booking.PetsScreenRoute
@@ -44,6 +43,7 @@ import com.example.potel.ui.home.Screens
 import com.example.potel.ui.myorders.myOrdersScreenRoute
 import com.example.potel.ui.theme.PotelTheme
 import com.example.potel.ui.home.accountRoute
+import com.example.potel.ui.myorders.MyOrdersScreens
 import com.example.potel.ui.petsfile.petsfileScreenRoute
 import com.example.potel.ui.shopping.shopScreenRoute
 
@@ -72,12 +72,12 @@ fun PotelApp(
     val currentScreen = backStackEntry?.destination?.route?.split("/")?.first() ?: "home"
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
 
-
     val isForumScreen = currentScreen in ForumScreens.values().map { it.name }
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
-            .fillMaxSize(),
+            .fillMaxSize()
+            .fillMaxWidth(),
         topBar = {
 
             if (!isForumScreen) {
@@ -99,8 +99,7 @@ fun PotelApp(
         ) {
             TipNavHost(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f),
+                    .fillMaxWidth(),
                 navController = navController
             )
         }
@@ -117,7 +116,6 @@ fun TipNavHost(
     NavHost(
         modifier = modifier,
         navController = navController,
-
 
         startDestination = Screens.HomeRoute.name
 
@@ -167,7 +165,66 @@ fun MainTopAppBar(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
+
 fun MainBottomAppBar(){
+    val navController = rememberNavController()
+                IconButton(
+                    modifier = Modifier
+                        .size(60.dp)
+                        .width(1.dp),
+                    onClick = {
+                    },
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.booking),
+                        contentDescription = "Booking",
+                        modifier = Modifier.size(150.dp)
+                    )
+                }
 
-}
+                IconButton(
+                    modifier = Modifier
+                        .size(60.dp)
+                        .width(0.2.dp),
+                    onClick = {
+                    },
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.shopping),
+                        contentDescription = "Shopping",
+                        modifier = Modifier.size(150.dp)
+                    )
+                }
 
+
+                IconButton(
+                    modifier = Modifier
+                        .size(60.dp)
+                        .width(0.2.dp),
+                    onClick = {
+                        // 先用popbackstack以避免重複載入頁面造成資源損耗, 若沒進入過該頁才改呼叫navigate
+
+                        if(!navController.popBackStack(Screens.HomeRoute.name, false))
+                            navController.navigate(Screens.HomeRoute.name)
+                    }
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.myorders),
+                        contentDescription = "MyOrders",
+                        modifier = Modifier.size(150.dp)
+                    )
+                }
+                IconButton(
+                    modifier = Modifier
+                        .size(60.dp)
+                        .width(0.2.dp),
+                    onClick = {
+                    }
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.myinfo),
+                        contentDescription = "MyInfo",
+                        modifier = Modifier.size(150.dp)
+                    )
+                }
+            }
