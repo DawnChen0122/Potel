@@ -57,6 +57,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
+import coil.compose.rememberAsyncImagePainter
 import com.example.potel.R
 import retrofit2.Response
 
@@ -278,11 +279,11 @@ fun PostFooter(post: Post, likesCount: Int) {
 }
 
 @Composable
-fun PostImage(imageid: Int) {
-    val imageUrl = com.example.potel.ui.forumZone.composeImageUrl(imageid)
+fun PostImage(imageId: Int) {
+    val imageUrl = remember(imageId) { com.example.potel.ui.forumZone.composeImageUrl(imageId) }
     Log.d("PostImage", "Image URL: $imageUrl") // 檢查URL
     AsyncImage(
-        model = imageUrl,
+        model = (imageUrl),
         contentDescription = "貼文照片",
         modifier = Modifier.size(100.dp),
         alignment = Alignment.TopCenter,

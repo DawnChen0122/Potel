@@ -31,3 +31,10 @@ data class Comment(
     val modifyDate: String? = null
 )
 
+data class NewComment(
+    val postId: Int = 0,
+    val memberId: Int = 0,
+    val content: String = ""
+)
+
+

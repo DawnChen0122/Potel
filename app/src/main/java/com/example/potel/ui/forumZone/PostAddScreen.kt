@@ -4,6 +4,7 @@ import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -67,7 +68,6 @@ fun PostAddScreen(
         contract = ActivityResultContracts.PickVisualMedia(), // 僅選擇圖片
         onResult = { uri: Uri? -> selectedImageUri = uri } // 設定選擇的圖片 URI
     )
-
     // 主要的界面容器
     Box(modifier = Modifier.fillMaxSize()) {
         LazyColumn(modifier = Modifier.fillMaxSize()) {
@@ -83,7 +83,8 @@ fun PostAddScreen(
                         value = title,
                         onValueChange = { if (it.length <= 200) title = it }, // 限制標題長度
                         label = { Text("標題") }, // 顯示標籤
-                        modifier = Modifier.width(350.dp) // 設置寬度
+                        modifier = Modifier
+                            .width(350.dp)
                     )
                     Spacer(modifier = Modifier.height(3.dp)) // 標題和內容之間的間隔
 
