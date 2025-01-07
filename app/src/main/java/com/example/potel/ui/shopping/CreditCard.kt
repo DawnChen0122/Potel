@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedTextField
@@ -22,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -57,6 +59,7 @@ fun CreditCardScreen(navController: NavHostController) {
             label = { Text(text = "卡號") },
             singleLine = true,
             shape = RoundedCornerShape(20.dp),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 8.dp),
@@ -69,6 +72,7 @@ fun CreditCardScreen(navController: NavHostController) {
             label = { Text(text = "MM/YY") },
             singleLine = true,
             shape = RoundedCornerShape(20.dp),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
             modifier = Modifier
                 .fillMaxWidth()
 //                .background(Color.DarkGray, shape = RoundedCornerShape(12.dp))
@@ -87,6 +91,7 @@ fun CreditCardScreen(navController: NavHostController) {
             label = { Text(text = "CVV") },
             singleLine = true,
             shape = RoundedCornerShape(20.dp),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 8.dp),
