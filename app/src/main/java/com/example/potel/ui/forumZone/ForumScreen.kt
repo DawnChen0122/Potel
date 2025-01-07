@@ -1,5 +1,6 @@
 package com.example.potel.ui.forumZone
 
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -20,16 +21,23 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Divider
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -43,6 +51,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -52,7 +62,7 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.example.potel.R
 
-
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ForumScreen(
     navController: NavHostController,
@@ -64,6 +74,33 @@ fun ForumScreen(
             .fillMaxSize()
             .background(colorResource(R.color.forum))
     ) {
+
+        TopAppBar(
+            title = { Text(
+                text = "                           討論區", // 使文字占滿寬度
+            ) },
+            navigationIcon = {
+                // 确保存在返回栈时才允许返回
+                val canNavigateBack = navController.previousBackStackEntry != null
+                if (canNavigateBack) {
+                    IconButton(onClick = { navController.navigateUp() }) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = stringResource(R.string.back_button)
+                        )
+                    }
+                }
+            },
+            colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = colorResource(R.color.forum), // 设置背景色
+                titleContentColor = Color.White// 设置标题文字颜色
+            )
+        )
+        HorizontalDivider(
+            Modifier.padding(start = 10.dp, end = 10.dp),
+            thickness = 1.dp,
+            color = Color.DarkGray
+        )
         Spacer(Modifier.height(20.dp))
         ForumTabContent(forumVM, navController, posts)
     }
@@ -158,7 +195,11 @@ fun PostListView(
     LazyColumn(modifier = Modifier.fillMaxSize()) {
         items(posts) { post ->
             PostCard(post, forumVM, navController, showEditButton)
-            Divider(Modifier.padding(start = 15.dp, end = 15.dp),thickness = 1.dp, color = Color.DarkGray)
+            HorizontalDivider(
+                Modifier.padding(start = 15.dp, end = 15.dp),
+                thickness = 1.dp,
+                color = Color.DarkGray
+            )
             Spacer(Modifier.height(3.dp))
         }
     }
@@ -238,7 +279,7 @@ fun PostHeader(post: Post) {
 
 @Composable
 fun PostContent(post: Post) {
-    val truncatedContent = post.content.truncateToLength(55)
+    val truncatedContent = post.content.truncateToLength(60)
 
     Row(
         Modifier
@@ -249,7 +290,7 @@ fun PostContent(post: Post) {
         Column {
             Text(post.title, fontSize = 20.sp, maxLines = 1, color = Color.White)
             Spacer(Modifier.size(5.dp))
-            Text(truncatedContent, Modifier.width(235.dp), fontSize = 15.sp, maxLines = 2, color = Color.White)
+            Text(truncatedContent, Modifier.width(250.dp), fontSize = 15.sp, maxLines = 2, color = Color.White)
         }
         Spacer(Modifier.size(20.dp))
         if(post.ImageId!=null) PostImage(post.ImageId)

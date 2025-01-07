@@ -10,6 +10,7 @@ import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 
 class ForumVM : ViewModel(){
     private val TAG = "tag_ForumVM"
@@ -87,9 +88,10 @@ class ForumVM : ViewModel(){
         viewModelScope.launch {
             try {
                 // 構建 RequestBody
-                val memberIdPart = RequestBody.create("text/plain".toMediaTypeOrNull(), post.memberId.toString())
-                val titlePart = RequestBody.create("text/plain".toMediaTypeOrNull(), post.title)
-                val contentPart = RequestBody.create("text/plain".toMediaTypeOrNull(), post.content)
+                val memberIdPart =
+                    post.memberId.toString().toRequestBody("text/plain".toMediaTypeOrNull())
+                val titlePart = post.title.toRequestBody("text/plain".toMediaTypeOrNull())
+                val contentPart = post.content.toRequestBody("text/plain".toMediaTypeOrNull())
 
                 // 發送請求
                 val response = RetrofitInstance.api.addPost(

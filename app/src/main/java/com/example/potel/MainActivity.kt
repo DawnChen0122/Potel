@@ -117,9 +117,7 @@ fun TipNavHost(
         homeScreenRoute(navController) // 02 明駿
         bookingScreenRoute(navController) // 04 芊伃
         myOrdersScreenRoute(navController) // 27 正能
-
-//        careRecordsScreenRoute(navController) // 25 泰陽
-         forumScreenRoute(navController) // 16 品伃
+        forumScreenRoute(navController) // 16 品伃
 //        petsScreenRoute(navController) // 18 勇慶
     }
 
