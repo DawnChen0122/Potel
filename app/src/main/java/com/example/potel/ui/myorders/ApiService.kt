@@ -37,7 +37,9 @@ interface ApiService {
     @GET("api/prdorders")
     suspend fun getPrdOrders(
         @Query("memberid") memberid: Int,
-        @Query("orderstate") orderstate:Char
+        @Query("orderstate") orderstate:Char,
+        @Query("datestart") dateStart: String? = null,
+        @Query("dateend") dateEnd: String? = null,
     ): ResponseObject<List<PrdOrder>>
 
     /** 取得指定id的prdorder */

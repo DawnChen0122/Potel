@@ -4,9 +4,11 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -23,6 +25,7 @@ import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDefaults
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -58,7 +61,7 @@ import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ScreenMOS03(
@@ -103,10 +106,14 @@ fun ScreenMOS03(
             Row(
                 modifier = Modifier
                     .fillMaxWidth(),
-                verticalAlignment = Alignment.Bottom
+                verticalAlignment = Alignment.Bottom,
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Row (
-                    verticalAlignment = Alignment.Bottom
+                    modifier = Modifier
+                        .weight(0.9f),
+                    verticalAlignment = Alignment.Bottom,
+                    horizontalArrangement = Arrangement.Start
                 ){
                     Text(
                         text = "訂房訂單",
@@ -135,70 +142,80 @@ fun ScreenMOS03(
                             .padding(5.dp)
                     )
                 }
-                Column(
+                Icon(
+                    imageVector = Icons.Default.Search,
+                    contentDescription = "查詢",
                     modifier = Modifier
-                        .weight(1f),
-                    horizontalAlignment = Alignment.End
-                ) {
-                    Row {
-                        Icon(
-                            imageVector = Icons.Default.Search,
-                            contentDescription = "查詢",
-                            modifier = Modifier
-                                .clickable {
-                                    showSearchText = !showSearchText
+                        .weight(0.1f)
+                        .combinedClickable(
+                            onClick = {
+                                coroutineScope.launch {
+                                    orderlist = myOrdersViewModel.getOrders(memberid.toInt(), OrderState.CheckedOut.state, dateStart, dateEnd)
                                 }
+                            },
+                            onLongClick = {
+                                showSearchText = !showSearchText
+                            },
                         )
-                    }
-                }
+
+                )
             }
 
             if(showSearchText){
-                TextField(
-                    value = dateStart,
-                    onValueChange = {
+                Row(
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    TextField(
+                        modifier = Modifier.weight(0.45f),
+                        value = dateStart,
+                        onValueChange = {
 
-                    },
-                    readOnly = true,
-                    label = {
-                        Text(text = "開始日期")
-                    },
-                    singleLine = true,
-                    trailingIcon = {
-                        Icon(
-                            imageVector = Icons.Default.DateRange,
-                            contentDescription = "選擇開始日期",
-                            modifier = Modifier
-                                .clickable {
-                                    showDateRangePickerDialog = true
-                                    isdatestart = true
-                                }
-                        )
-                    }
-                )
-                Text(text = " ～ ")
-                TextField(
-                    value = dateEnd,
-                    onValueChange = {
+                        },
+                        readOnly = true,
+                        label = {
+                            Text(text = "開始日期")
+                        },
+                        singleLine = true,
+                        trailingIcon = {
+                            Icon(
+                                imageVector = Icons.Default.DateRange,
+                                contentDescription = "選擇開始日期",
+                                modifier = Modifier
+                                    .clickable {
+                                        showDateRangePickerDialog = true
+                                        isdatestart = true
+                                    }
+                            )
+                        }
+                    )
+                    Text(
+                        modifier = Modifier.weight(0.1f),
+                        text = " ～ "
+                    )
+                    TextField(
+                        modifier = Modifier.weight(0.45f),
+                        value = dateEnd,
+                        onValueChange = {
 
-                    },
-                    readOnly = true,
-                    label = {
-                        Text(text = "結束日期")
-                    },
-                    singleLine = true,
-                    trailingIcon = {
-                        Icon(
-                            imageVector = Icons.Default.DateRange,
-                            contentDescription = "選擇結束日期",
-                            modifier = Modifier
-                                .clickable {
-                                    showDateRangePickerDialog = true
-                                    isdatestart = false
-                                }
-                        )
-                    }
-                )
+                        },
+                        readOnly = true,
+                        label = {
+                            Text(text = "結束日期")
+                        },
+                        singleLine = true,
+                        trailingIcon = {
+                            Icon(
+                                imageVector = Icons.Default.DateRange,
+                                contentDescription = "選擇結束日期",
+                                modifier = Modifier
+                                    .clickable {
+                                        showDateRangePickerDialog = true
+                                        isdatestart = false
+                                    }
+                            )
+                        }
+                    )
+                }
             }
 
             if(showDateRangePickerDialog){
@@ -317,6 +334,7 @@ fun formatMillisToDateString(millis: Long): String {
 }
 
 // 使用的DatePicker屬於androidx.compose.material3測試功能，需要加上"@OptIn"註記
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyDatePickerDialog(
@@ -363,8 +381,12 @@ fun MyDatePickerDialog(
         DatePicker(
             state = datePickerState,
             title = {
+
+            },
+            headline = {
                 Text(text = title)
-            }
+            },
+            dateFormatter = DatePickerDefaults.dateFormatter(yearSelectionSkeleton = "yyyy / MM")
         )
     }
 }
