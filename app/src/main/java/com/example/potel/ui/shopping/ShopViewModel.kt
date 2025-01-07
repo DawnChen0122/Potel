@@ -7,7 +7,7 @@ import com.example.potel.ui.myorders.RetrofitInstance
 
 class ShopViewModel : ViewModel() {
 
-    suspend fun getProductList(prdtype: String.Companion = String): List<Product> {
+    suspend fun getProductList(prdtype: String): List<Product> {
 //        Log.d(tag, "memberid=$memberid, orderstate=$orderstate")
         try {
             val response = RetrofitInstance.api.getProductList(prdtype)
