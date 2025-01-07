@@ -15,13 +15,22 @@ class ForumVM : ViewModel(){
     private val TAG = "tag_ForumVM"
     private val _postSelectedState = MutableStateFlow(Post())
     val postSelectedState: StateFlow<Post> = _postSelectedState.asStateFlow()
+    private  val _postSelectedCommentsList = MutableStateFlow(emptyList<Comment>())
+    val postSelectedCommentsList: StateFlow<List<Comment>> = _postSelectedCommentsList.asStateFlow()
 
     fun setSelectedPost(post: Post) {
+        // 更新選中的 post
         _postSelectedState.value = post
+
+        // 從 commentsState 篩選出與選中 post 相關的 comments
+        val selectedComments = _commentsState.value.filter { it.postId == post.postId }
+
+        // 更新 postSelectedCommentsList
+        _postSelectedCommentsList.value = selectedComments
     }
 
-    // 用來監控所有論壇資料，當資料變動時通知 UI 更新
-    private var _forumsState = MutableStateFlow(emptyList<Post>())
+        // 用來監控所有論壇資料，當資料變動時通知 UI 更新
+    private val _forumsState = MutableStateFlow(emptyList<Post>())
     val forumsState: StateFlow<List<Post>> = _forumsState.asStateFlow()
 
     private val _likeCountState = MutableStateFlow(emptyList<Like>())
@@ -34,7 +43,9 @@ class ForumVM : ViewModel(){
     init {
         // 在 viewModelScope 中啟動協程以呼叫 suspend 函式
         viewModelScope.launch {
+            fetchLikeData()
             fetchForumData()
+            fetchCommentData()
         }
     }
 
@@ -42,16 +53,30 @@ class ForumVM : ViewModel(){
         try {
             val forums = RetrofitInstance.api.fetchForums()
             _forumsState.value = forums
+            _forumsState.value.forEach {
+                post ->  getLikesCountForPost(post.postId)
+            }
+            Log.d(TAG, "Forums: $forums")
+        } catch (e: Exception) {
+            Log.e(TAG, "Error fetching forum data: ${e.message}")
+        }
+    }
+    private suspend fun fetchCommentData() {
+        try {
+            val comments = RetrofitInstance.api.fetchComments()
+            _commentsState.value = comments
 
+            Log.d(TAG, "comments: $comments")
+        } catch (e: Exception) {
+            Log.e(TAG, "Error fetching forum data: ${e.message}")
+        }
+    }
+    private suspend fun fetchLikeData() {
+        try {
             val likes = RetrofitInstance.api.fetchAllLikes()
             _likeCountState.value = likes
 
-            val comments = RetrofitInstance.api.fetchComments()
-            _commentsState.value = comments
-            Log.d(TAG, "Forums: $forums")
             Log.d(TAG, "Likes: $likes")
-            Log.d(TAG, "comments: $comments")
-
         } catch (e: Exception) {
             Log.e(TAG, "Error fetching forum data: ${e.message}")
         }
@@ -76,6 +101,7 @@ class ForumVM : ViewModel(){
 
                 if (response.isSuccessful) {
                     Log.d(TAG, "Post added successfully: ${response.body()}")
+                    fetchForumData()
                 } else {
                     Log.e(TAG, "Error adding post: Code ${response.code()}, Body: ${response.errorBody()?.string()}")
                 }
@@ -87,6 +113,10 @@ class ForumVM : ViewModel(){
 
     fun getLikesCountForPost(postId: Int): Int {
         return _likeCountState.value.count { it.postId == postId }
+    }
+
+    fun addComment(newComment: NewComment) {
+
     }
 }
 
