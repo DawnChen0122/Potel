@@ -31,17 +31,17 @@ import androidx.navigation.compose.rememberNavController
 fun Resetpassword (viewModel:ResetPassWordViewModel = viewModel()
     ,navController: NavHostController ) {
 
-    val email = viewModel.email.collectAsState()
+    val email by viewModel.email.collectAsState()
 
-    val password = viewModel.password.collectAsState()
+    val password by viewModel.password.collectAsState()
 
     var passwordVisible by remember { mutableStateOf(false) }
 
-    val checkpassword = viewModel.checkpassword.collectAsState()
+    val checkpassword by viewModel.checkpassword.collectAsState()
     var checkpasswordVisible  by remember { mutableStateOf(false) }
 
 
-    val phonenumber = viewModel.phonenumber.collectAsState()
+    val phonenumber by viewModel.phonenumber.collectAsState()
 
 
        Column(
@@ -58,7 +58,7 @@ fun Resetpassword (viewModel:ResetPassWordViewModel = viewModel()
                     )
 
            OutlinedTextField(
-               value = email.value,
+               value = email,
                onValueChange = viewModel::onEmailChanged,
                label = { Text("請輸入信箱") },
                singleLine = true,
@@ -78,7 +78,7 @@ fun Resetpassword (viewModel:ResetPassWordViewModel = viewModel()
                     }
 
                     OutlinedTextField(
-                        value = password.value,
+                        value = password,
                         onValueChange = viewModel::onPasswordChanged,
                         label = { Text(text = "密碼") },
                         leadingIcon = {
@@ -119,7 +119,7 @@ fun Resetpassword (viewModel:ResetPassWordViewModel = viewModel()
                     }
 
                     OutlinedTextField(
-                        value = checkpassword.value,
+                        value = checkpassword,
                         onValueChange = viewModel::onCheckPasswordChanged,
                         label = { Text(text = "再次確認密碼") },
                         leadingIcon = {
@@ -160,7 +160,7 @@ fun Resetpassword (viewModel:ResetPassWordViewModel = viewModel()
                     }
 
                     OutlinedTextField(
-                        value = phonenumber.value,
+                        value = phonenumber,
                         onValueChange = viewModel::onPhonenumberChanged,
                         label = { Text(text = "請輸入手機號碼") },
                         singleLine = true,
@@ -184,10 +184,10 @@ fun Resetpassword (viewModel:ResetPassWordViewModel = viewModel()
 
                     Button(
                         onClick = {
-                            if (email.value.isEmpty() || password.value.isEmpty() || checkpassword.value.isEmpty()
-                                || phonenumber.value.isEmpty() ) {
+                            if (email.isEmpty() || password.isEmpty() || checkpassword.isEmpty()
+                                || phonenumber.isEmpty() ) {
                                 // 顯示錯誤提示
-                            } else if (password.value != checkpassword.value) {
+                            } else if (password != checkpassword) {
                                 // 顯示密碼不一致的錯誤提示
                             } else {
                                 "執行註冊邏輯"

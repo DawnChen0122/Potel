@@ -31,14 +31,14 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 fun Login(viewModel:OpenpageViewModel = viewModel()
           , navController: NavHostController) {
 
-    val inputError = viewModel.inputError.collectAsState()
+    val inputError by viewModel.inputError.collectAsState()
 
-    val phonenumber = viewModel.phonenumber.collectAsState()
+    val phonenumber by viewModel.phonenumber.collectAsState()
 
-    val email = viewModel.email.collectAsState()
+    val email by viewModel.email.collectAsState()
 
 
-    val password = viewModel.password.collectAsState()
+    val password by viewModel.password.collectAsState()
 
     var passwordVisible by remember { mutableStateOf(false) }
 
@@ -76,12 +76,12 @@ fun Login(viewModel:OpenpageViewModel = viewModel()
                     label = { Text(text = "請輸入信箱或手機號碼") },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                 shape = RoundedCornerShape(8.dp),
-                isError = inputError.value,
+                isError = inputError,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 0.dp)
             )
-            if (inputError.value) {
+            if (inputError) {
                 Text(
                     text = "請輸入有效的信箱或手機號碼",
                     color = Color.Red,
@@ -92,7 +92,7 @@ fun Login(viewModel:OpenpageViewModel = viewModel()
 
 
             OutlinedTextField(
-                value = password.value,
+                value = password,
                 onValueChange = viewModel::onPasswordChanged,
                 label = { Text(text = "密碼") },
                 leadingIcon = {
@@ -143,9 +143,9 @@ fun Login(viewModel:OpenpageViewModel = viewModel()
             // 註冊按鈕
             Button(
                 onClick = {
-                    if (email.value.isEmpty() && phonenumber.value.isEmpty()) {
+                    if (email.isEmpty() && phonenumber.isEmpty()) {
                         errorMessage = "信箱或手機號碼欄位不得空白"
-                    } else if (!email.value.matches(viewModel.emailRegex) && !phonenumber.value.matches(viewModel.phonenumberRegex)) {
+                    } else if (!email.matches(viewModel.emailRegex) && !phonenumber.matches(viewModel.phonenumberRegex)) {
                         errorMessage = "請輸入有效的信箱或手機號碼"
                     } else {
                         errorMessage = null // 清除錯誤訊息

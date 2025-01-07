@@ -161,7 +161,7 @@ fun HomeRoute(
                     )
                     {
                         Text(
-                            text = "聊天室",
+                            text = "討論區",
                             style = TextStyle(
                                 fontSize = 27.sp,
                                 lineHeight = 32.sp,
@@ -178,7 +178,7 @@ fun HomeRoute(
                     Button(
                         shape = RoundedCornerShape(20),
                         onClick = {
-                            navController.navigate(route = Screens.PetsFilePreview.name)
+                            navController.navigate(route = Screens.PetsFileFirst.name)
                         },
                         border = BorderStroke(1.dp, Color.Black),
                         colors = ButtonDefaults.outlinedButtonColors(),

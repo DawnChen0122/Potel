@@ -35,9 +35,9 @@ fun Signup(viewModel:AccountViewModel = viewModel(),
            navController: NavHostController) {
 //    val items = viewModel.items.collectAsState()
 
-    val uid = viewModel.uid.collectAsState()
+    val uid by viewModel.uid.collectAsState()
 
-    val email = viewModel.email.collectAsState()
+    val email by viewModel.email.collectAsState()
 
     var inputYear by remember { mutableStateOf("") }
     val yearRange = (1924..2025).map { it.toString() }
@@ -55,21 +55,20 @@ fun Signup(viewModel:AccountViewModel = viewModel(),
     val genderRange = listOf("男", "女", "不願透漏").map { it.toString() }
     var expandedGender by remember { mutableStateOf(false) }
 
-    val password = viewModel.password.collectAsState()
+    val password by viewModel.password.collectAsState()
     var passwordVisible by remember { mutableStateOf(false) }
 
-
-    var checkpassword = viewModel.checkpassword.collectAsState()
+    val checkpassword by viewModel.checkpassword.collectAsState()
     var checkpasswordVisible by remember { mutableStateOf(false) }
 
 
-    val username = viewModel.username.collectAsState()
+    val username by viewModel.username.collectAsState()
 
 
-    val phonenumber = viewModel.phonenumber.collectAsState()
+    val phonenumber by viewModel.phonenumber.collectAsState()
     var phonenumberError by remember { mutableStateOf(false) }
 
-    val address = viewModel.address.collectAsState()
+    val address by viewModel.address.collectAsState()
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -86,7 +85,7 @@ fun Signup(viewModel:AccountViewModel = viewModel(),
 
 
         OutlinedTextField(
-            value = uid.value,
+            value = uid,
             onValueChange = viewModel::onUidChanged,
             label = { Text(text = "請輸入用戶名稱") },
             singleLine = true,
@@ -107,7 +106,7 @@ fun Signup(viewModel:AccountViewModel = viewModel(),
 
 
         OutlinedTextField(
-            value = email.value,
+            value = email,
             onValueChange = viewModel::onEmailChanged,
             label = { Text("請輸入信箱") },
             singleLine = true,
@@ -305,7 +304,7 @@ fun Signup(viewModel:AccountViewModel = viewModel(),
 
 
         OutlinedTextField(
-            value = password.value,
+            value = password,
             onValueChange = viewModel::onPasswordChanged,
             label = { Text(text = "密碼") },
             leadingIcon = {
@@ -346,7 +345,7 @@ fun Signup(viewModel:AccountViewModel = viewModel(),
 
 
         OutlinedTextField(
-            value = checkpassword.value,
+            value = checkpassword,
             onValueChange = viewModel::onCheckPasswordChanged,
             label = { Text(text = "再次確認密碼") },
             leadingIcon = {
@@ -387,7 +386,7 @@ fun Signup(viewModel:AccountViewModel = viewModel(),
 
 
         OutlinedTextField(
-            value = username.value,
+            value = username,
             onValueChange = viewModel::onUsernameChanged,
             label = { Text(text = "請輸入姓名") },
             singleLine = true,
@@ -401,7 +400,7 @@ fun Signup(viewModel:AccountViewModel = viewModel(),
 
 
         OutlinedTextField(
-            value = phonenumber.value,
+            value = phonenumber,
             onValueChange = viewModel::onPhonenumberChanged,
             label = { Text(text = "請輸入手機號碼") },
             singleLine = true,
@@ -422,7 +421,7 @@ fun Signup(viewModel:AccountViewModel = viewModel(),
 
 
         OutlinedTextField(
-            value = address.value,
+            value = address,
             onValueChange = viewModel::onAddressChanged,
             label = { Text(text = "請輸入地址") },
             singleLine = true,
@@ -436,11 +435,11 @@ fun Signup(viewModel:AccountViewModel = viewModel(),
         // 註冊按鈕
         Button(
             onClick = {
-                if (uid.value.isEmpty() || email.value.isEmpty() || password.value.isEmpty() || checkpassword.value.isEmpty()
-                    || username.value.isEmpty() || phonenumber.value.isEmpty() || address.value.isEmpty()
+                if (uid.isEmpty() || email.isEmpty() || password.isEmpty() || checkpassword.isEmpty()
+                    || username.isEmpty() || phonenumber.isEmpty() || address.isEmpty()
                 ) {
                     errorMessage = "欄位不得空白"
-                } else if (password.value != checkpassword.value) {
+                } else if (password != checkpassword) {
                     errorMessage = "密碼與確認密碼不同"
                 } else {
                     "執行註冊邏輯"
