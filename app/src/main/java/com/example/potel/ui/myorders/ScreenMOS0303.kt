@@ -59,7 +59,6 @@ fun ScreenMOS0303(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(20.dp)
                 .background(color = Color(0xFFD9D9D9), shape = RoundedCornerShape(size = 8.dp)),
             horizontalAlignment = Alignment.Start,
             verticalArrangement = Arrangement.Top,
