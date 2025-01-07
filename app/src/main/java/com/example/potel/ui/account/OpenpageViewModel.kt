@@ -27,7 +27,6 @@ class OpenpageViewModel : ViewModel() {
     val email = _email.asStateFlow()
     val emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$".toRegex()
 
-
     private val _password = MutableStateFlow("")
     val password = _password.asStateFlow()
     var passwordError by mutableStateOf(false)
@@ -36,6 +35,7 @@ class OpenpageViewModel : ViewModel() {
         passwordError = !password.matches(passwordRegex)
         _password.value = password
     }
+
 
     fun onInputChanged(input: String) {
         viewModelScope.launch {

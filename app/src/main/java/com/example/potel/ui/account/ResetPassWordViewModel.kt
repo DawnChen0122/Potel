@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
+
 class ResetPassWordViewModel: ViewModel() {
     private val _password = MutableStateFlow("")
     val password = _password.asStateFlow()
@@ -46,6 +47,4 @@ class ResetPassWordViewModel: ViewModel() {
         emailError = !email.matches(emailRegex)
         _email.value = email
     }
-
-
 }

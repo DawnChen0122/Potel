@@ -28,6 +28,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 
+
 fun Login(viewModel:OpenpageViewModel = viewModel()
           , navController: NavHostController) {
 
@@ -37,12 +38,12 @@ fun Login(viewModel:OpenpageViewModel = viewModel()
 
     val email by viewModel.email.collectAsState()
 
-
     val password by viewModel.password.collectAsState()
 
     var passwordVisible by remember { mutableStateOf(false) }
 
     var currentInput by remember { mutableStateOf("") }
+
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -67,6 +68,7 @@ fun Login(viewModel:OpenpageViewModel = viewModel()
                 fontWeight = FontWeight.Bold,
                 color = Color.Blue
             )
+
 
             OutlinedTextField(
                 value = currentInput,
@@ -132,6 +134,7 @@ fun Login(viewModel:OpenpageViewModel = viewModel()
             }
         }
 
+
         Row(
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically,
@@ -167,11 +170,11 @@ fun Login(viewModel:OpenpageViewModel = viewModel()
                     fontSize = 14.sp,
                     modifier = Modifier.padding(top = 8.dp)
                 )
-
             }
         }
     }
 }
+
 
 @Preview(showBackground = true)
 @Composable

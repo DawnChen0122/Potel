@@ -35,6 +35,7 @@ fun Signup(viewModel:AccountViewModel = viewModel(),
            navController: NavHostController) {
 //    val items = viewModel.items.collectAsState()
 
+
     val uid by viewModel.uid.collectAsState()
 
     val email by viewModel.email.collectAsState()
@@ -61,14 +62,13 @@ fun Signup(viewModel:AccountViewModel = viewModel(),
     val checkpassword by viewModel.checkpassword.collectAsState()
     var checkpasswordVisible by remember { mutableStateOf(false) }
 
-
     val username by viewModel.username.collectAsState()
-
 
     val phonenumber by viewModel.phonenumber.collectAsState()
     var phonenumberError by remember { mutableStateOf(false) }
 
     val address by viewModel.address.collectAsState()
+
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -211,8 +211,6 @@ fun Signup(viewModel:AccountViewModel = viewModel(),
             }
 
 
-
-
             ExposedDropdownMenuBox(
                 expanded = expandedDay,
                 onExpandedChange = { expandedDay = it },
@@ -248,16 +246,12 @@ fun Signup(viewModel:AccountViewModel = viewModel(),
         }
 
 
-
-
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 10.dp)
                 .background(Color.White, RoundedCornerShape(8.dp))
         )
-
-
         {
             Text(
                 text = "請選擇性別",
@@ -397,8 +391,6 @@ fun Signup(viewModel:AccountViewModel = viewModel(),
         )
 
 
-
-
         OutlinedTextField(
             value = phonenumber,
             onValueChange = viewModel::onPhonenumberChanged,
@@ -431,6 +423,7 @@ fun Signup(viewModel:AccountViewModel = viewModel(),
                 .padding(top = 16.dp)
         )
 
+
         var errorMessage by remember { mutableStateOf<String?>(null) }
         // 註冊按鈕
         Button(
@@ -462,6 +455,9 @@ fun Signup(viewModel:AccountViewModel = viewModel(),
         }
     }
 }
+
+
+
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview1() {

@@ -26,6 +26,7 @@ class AccountViewModel : ViewModel() {
         _username.value = username
     }
 
+
     private val _password = MutableStateFlow("")
     val password = _password.asStateFlow()
     var passwordError by mutableStateOf(false)
@@ -62,6 +63,7 @@ class AccountViewModel : ViewModel() {
         _address.value = address
     }
 
+
     private val _email = MutableStateFlow("")
     val email = _email.asStateFlow()
     var emailError by mutableStateOf(false)
@@ -70,7 +72,6 @@ class AccountViewModel : ViewModel() {
         emailError = !email.matches(emailRegex)
         _email.value = email
     }
-
 }
 //    fun login(){
 //        val account = _email.value
