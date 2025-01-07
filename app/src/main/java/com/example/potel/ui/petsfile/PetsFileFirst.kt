@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.potel.R
+import com.example.potel.ui.home.AccountScreens
 import com.example.potel.ui.theme.PotelTheme
 
 //class MainActivity : ComponentActivity() {
@@ -67,7 +68,7 @@ fun ScreenPetsFileFirst( navController: NavHostController) {
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Button(onClick = { /* 按下Add Dog的動作 */ }) {
+            Button(onClick = {navController.navigate( route =AccountScreens.Edit.name )}) {
                 Text(text = "Add user")
             }
         }
@@ -99,11 +100,11 @@ fun ScreenPetsFileFirst( navController: NavHostController) {
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Button(onClick = { /* 按下Add Dog的動作 */ }) {
+            Button(onClick = { PetsFileScreens.PetsFileDogs.name }) {
                 Text(text = "Add dog")
             }
             Spacer(modifier = Modifier.width(30.dp))
-            Button(onClick = { /* 按下Add Cat的動作 */ }) {
+            Button(onClick = { PetsFileScreens.PetsFileCats.name}) {
                 Text(text = "Add cat")
             }
         }
