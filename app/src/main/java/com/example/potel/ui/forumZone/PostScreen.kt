@@ -42,7 +42,6 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
-import coil.compose.rememberAsyncImagePainter
 import com.example.potel.R
 
 @Composable
@@ -238,3 +237,4 @@ fun AddCommentSection(postId: Int, forumVM: ForumVM) {
         }
     )
 }
+
