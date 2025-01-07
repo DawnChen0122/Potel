@@ -39,14 +39,18 @@ import androidx.navigation.compose.NavHost
 
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.potel.ui.booking.BookingScreens
 import com.example.potel.ui.booking.PetsScreenRoute
 import com.example.potel.ui.forumZone.ForumScreens
 import com.example.potel.ui.forumZone.forumScreenRoute
-import com.example.potel.ui.home.Screens
+import com.example.potel.ui.home.AccountScreens
 import com.example.potel.ui.myorders.myOrdersScreenRoute
 import com.example.potel.ui.theme.PotelTheme
 import com.example.potel.ui.home.accountRoute
+import com.example.potel.ui.myorders.MyOrdersScreens
+import com.example.potel.ui.petsfile.PetsFileScreens
 import com.example.potel.ui.petsfile.petsfileScreenRoute
+import com.example.potel.ui.shopping.ShopScreens
 import com.example.potel.ui.shopping.shopScreenRoute
 
 
@@ -76,6 +80,15 @@ fun PotelApp(
 
     val isForumScreen = currentScreen in ForumScreens.entries.map { it.name }
 
+    val currentScreenTitle = findEnumTitleByName(currentScreen,
+        AccountScreens::class.java,MyOrdersScreens::class.java,
+        BookingScreens::class.java,ForumScreens::class.java
+        ,PetsFileScreens::class.java,ShopScreens::class.java)
+
+
+
+
+
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
             .fillMaxSize()
@@ -84,7 +97,7 @@ fun PotelApp(
 
             if (!isForumScreen) {
                 MainTopAppBar(
-                    currentScreen = currentScreen,
+                    currentScreen = currentScreenTitle,
                     canNavigateBack = navController.previousBackStackEntry != null,
                     navigateUp = { navController.navigateUp() },
                     scrollBehavior = scrollBehavior
@@ -118,7 +131,7 @@ fun TipNavHost(
     NavHost(
         modifier = modifier,
         navController = navController,
-        startDestination = Screens.HomeRoute.name
+        startDestination = AccountScreens.HomeRoute.name
 
     ) {
         // todo 2-2 置入所有的畫面路徑
@@ -162,6 +175,24 @@ fun MainTopAppBar(
         scrollBehavior = scrollBehavior
     )
 }
+
+
+
+fun findEnumTitleByName(name: String, vararg enums: Class<out Enum<*>>): String {
+    for (enumClass in enums) {
+        val enumConstants = enumClass.enumConstants ?: continue
+        for (enumValue in enumConstants) {
+            if (enumValue.name == name) {
+                val titleField = enumClass.getMethod("getTitle") // 调用 getTitle 方法
+                return titleField.invoke(enumValue) as String
+            }
+        }
+    }
+
+    return ""
+}
+
+
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -218,8 +249,8 @@ fun MainBottomAppBar() {
             onClick = {
                 // 先用popbackstack以避免重複載入頁面造成資源損耗, 若沒進入過該頁才改呼叫navigate
 
-                if (!navController.popBackStack(Screens.HomeRoute.name, false))
-                    navController.navigate(Screens.HomeRoute.name)
+                if (!navController.popBackStack(AccountScreens.HomeRoute.name, false))
+                    navController.navigate(AccountScreens.HomeRoute.name)
             }
         ) {
             Icon(

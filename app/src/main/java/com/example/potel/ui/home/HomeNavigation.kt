@@ -12,7 +12,7 @@ import com.example.potel.ui.account.Signup
  * */
 
 
-enum class Screens(val title: String){
+enum class AccountScreens(val title: String){
 
     Signup (title = "註冊畫面"),
     Login (title = "登入畫面"),
@@ -23,7 +23,7 @@ enum class Screens(val title: String){
 
 fun NavGraphBuilder.accountRoute(navController: NavHostController) {
     composable(
-        route =  Screens.HomeRoute.name,
+        route =  AccountScreens.HomeRoute.name,
     ) {
 
 //        Text(
@@ -35,7 +35,7 @@ fun NavGraphBuilder.accountRoute(navController: NavHostController) {
 
 
     composable(
-        route = Screens.Signup.name
+        route = AccountScreens.Signup.name
     ) {
         Signup(
             navController = navController
@@ -43,7 +43,7 @@ fun NavGraphBuilder.accountRoute(navController: NavHostController) {
     }
 
     composable(
-        route = Screens.Login.name
+        route = AccountScreens.Login.name
     ) {
         Login(
             navController = navController
@@ -51,7 +51,7 @@ fun NavGraphBuilder.accountRoute(navController: NavHostController) {
     }
 
     composable(
-        route = Screens.Reset.name
+        route = AccountScreens.Reset.name
     ) {
         Resetpassword(
             navController = navController
