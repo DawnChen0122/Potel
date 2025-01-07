@@ -1,5 +1,6 @@
 package com.example.potel.ui.home
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.foundation.background
@@ -7,11 +8,15 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -25,8 +30,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.example.potel.MainBottomAppBar
-
+import com.example.potel.ui.booking.BookingScreens
+import com.example.potel.ui.forumZone.ForumScreens
+import com.example.potel.ui.petsfile.Screens
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -36,9 +42,6 @@ fun HomeRoute(
     Scaffold(
         modifier = Modifier
             .fillMaxSize(),
-        bottomBar = {
-            MainBottomAppBar()
-        }
     ) { innerPadding ->
         Column(
             verticalArrangement = Arrangement.spacedBy(39.dp, Alignment.Top),
@@ -46,8 +49,8 @@ fun HomeRoute(
             modifier = Modifier
                 .border(width = 5.dp, color = Color(0xFF000000))
                 .padding(5.dp)
-                .width(412.dp)
-                .height(925.dp)
+                .fillMaxWidth()
+                .fillMaxHeight()
                 .background(color = Color(0xFFF7E3A6))
                 .padding(top = 12.dp, bottom = 12.dp)
                 .padding(innerPadding)
@@ -101,6 +104,7 @@ fun HomeRoute(
                     .fillMaxWidth()
                     .height(122.dp)
             ) {
+
                 Text(
                     text = "顯示房客評價",
                     style = TextStyle(
@@ -115,56 +119,99 @@ fun HomeRoute(
                         .height(49.dp)
                 )
 
-                Text(
-                    text = "房型介紹",
-                    style = TextStyle(
-                        fontSize = 26.sp,
-                        lineHeight = 49.sp,
-                        fontWeight = FontWeight(700),
-                        color = Color(0xFF000000),
-                        textAlign = TextAlign.Center,
-                    ),
+                Button(
+                    shape = RoundedCornerShape(20),
+                    onClick = {
+                        navController.navigate(route = BookingScreens.Booking.name)
+                    },
+                    border = BorderStroke(1.dp, Color.Black),
+                    colors = ButtonDefaults.outlinedButtonColors(),
                     modifier = Modifier
-                        .width(246.dp)
-                        .height(49.dp)
+                        .fillMaxWidth()
+                        .padding(30.dp)
                 )
+                {
+                    Text(
+                        text = "房型介紹",
+                        style = TextStyle(
+                            fontSize = 26.sp,
+                            lineHeight = 49.sp,
+                            fontWeight = FontWeight(700),
+                            color = Color(0xFF000000),
+                            textAlign = TextAlign.Center,
+                        ),
+                        modifier = Modifier
+                            .width(246.dp)
+                            .height(49.dp)
+                    )
+                }
             }
-
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterHorizontally),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Text(
-                    text = "聊天室",
-                    style = TextStyle(
-                        fontSize = 27.sp,
-                        lineHeight = 32.sp,
-                        fontWeight = FontWeight(700),
-                        color = Color(0xFF000000),
-                        textAlign = TextAlign.Center,
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(
+                        10.dp,
+                        Alignment.CenterHorizontally
                     ),
-                    modifier = Modifier
-                        .width(135.dp)
-                        .height(45.dp)
-                )
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Button(
+                        shape = RoundedCornerShape(20),
+                        onClick = {
+                            navController.navigate(route = ForumScreens.ForumScreen.name)
+                        },
+                        border = BorderStroke(1.dp, Color.Black),
+                        colors = ButtonDefaults.outlinedButtonColors(),
+                        modifier = Modifier
 
-                Text(
-                    text = "毛小孩追蹤",
-                    style = TextStyle(
-                        fontSize = 27.sp,
-                        lineHeight = 32.sp,
-                        fontWeight = FontWeight(700),
-                        color = Color(0xFF000000),
-                        textAlign = TextAlign.Center,
-                    ),
-                    modifier = Modifier
-                        .width(135.dp)
-                        .height(45.dp)
-                )
+                            .padding(30.dp)
+                    )
+                    {
+                        Text(
+                            text = "聊天室",
+                            style = TextStyle(
+                                fontSize = 27.sp,
+                                lineHeight = 32.sp,
+                                fontWeight = FontWeight(700),
+                                color = Color(0xFF000000),
+                                textAlign = TextAlign.Center,
+                            ),
+                            modifier = Modifier
+                                .width(135.dp)
+                                .height(45.dp)
+                        )
+                    }
+
+                    Button(
+                        shape = RoundedCornerShape(20),
+                        onClick = {
+                            navController.navigate(route = Screens.PetsFilePreview.name)
+                        },
+                        border = BorderStroke(1.dp, Color.Black),
+                        colors = ButtonDefaults.outlinedButtonColors(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(30.dp)
+                    )
+                    {
+                        Text(
+                            text = "毛小孩追蹤",
+                            style = TextStyle(
+                                fontSize = 27.sp,
+                                lineHeight = 32.sp,
+                                fontWeight = FontWeight(700),
+                                color = Color(0xFF000000),
+                                textAlign = TextAlign.Center,
+                            ),
+                            modifier = Modifier
+                                .width(135.dp)
+                                .height(45.dp)
+                        )
+                    }
+                }
             }
         }
     }
-}
+
+
 
 @Preview(showBackground = true)
 @Composable
