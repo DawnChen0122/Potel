@@ -27,10 +27,10 @@ class MyOrdersViewModel : ViewModel() {
         _prdorderEditState.value = prdorder
     }
 
-    suspend fun getOrders(memberid: Int = 1, orderstate: Char): List<Order> {
+    suspend fun getOrders(memberid: Int = 1, orderstate: Char, dateStart:String? = null, dataEnd: String? = null): List<Order> {
         Log.d(tag, "memberid=$memberid, orderstate=$orderstate")
         try {
-            val response = RetrofitInstance.api.getOrders(memberid, orderstate)
+            val response = RetrofitInstance.api.getOrders(memberid, orderstate, dateStart, dataEnd)
 
             Log.d(tag, "response[0].orderid=${response[0].orderid}")
 
