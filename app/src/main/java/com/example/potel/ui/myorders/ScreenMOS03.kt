@@ -13,18 +13,23 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
+import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
-import androidx.compose.material3.DateRangePicker
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.SelectableDates
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberDateRangePickerState
+import androidx.compose.material3.TextField
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -53,6 +58,7 @@ import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
+@OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ScreenMOS03(
@@ -64,7 +70,9 @@ fun ScreenMOS03(
     val myOrdersViewModel: MyOrdersViewModel = viewModel(backStackEntry, key = "myOrdersVM")
 
     // 是否顯示DateRangerPickerDialog；false代表不顯示
+    var showSearchText by remember { mutableStateOf(false) }
     var showDateRangePickerDialog by remember { mutableStateOf(false) }
+    var isdatestart by remember { mutableStateOf(true) }
     var dateStart by remember { mutableStateOf("") }
     var dateEnd by remember { mutableStateOf("") }
 
@@ -76,7 +84,6 @@ fun ScreenMOS03(
             orderlist = myOrdersViewModel.getOrders(memberid.toInt(), OrderState.CheckedOut.state)
         }
     }
-
 
     Column(
         modifier = Modifier
@@ -98,7 +105,9 @@ fun ScreenMOS03(
                     .fillMaxWidth(),
                 verticalAlignment = Alignment.Bottom
             ) {
-                Row {
+                Row (
+                    verticalAlignment = Alignment.Bottom
+                ){
                     Text(
                         text = "訂房訂單",
                         style = TextStyle(
@@ -126,33 +135,89 @@ fun ScreenMOS03(
                             .padding(5.dp)
                     )
                 }
+                Column(
+                    modifier = Modifier
+                        .weight(1f),
+                    horizontalAlignment = Alignment.End
+                ) {
+                    Row {
+                        Icon(
+                            imageVector = Icons.Default.Search,
+                            contentDescription = "查詢",
+                            modifier = Modifier
+                                .clickable {
+                                    showSearchText = !showSearchText
+                                }
+                        )
+                    }
+                }
             }
 
-            if (showDateRangePickerDialog) {
+            if(showSearchText){
+                TextField(
+                    value = dateStart,
+                    onValueChange = {
+
+                    },
+                    readOnly = true,
+                    label = {
+                        Text(text = "開始日期")
+                    },
+                    singleLine = true,
+                    trailingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.DateRange,
+                            contentDescription = "選擇開始日期",
+                            modifier = Modifier
+                                .clickable {
+                                    showDateRangePickerDialog = true
+                                    isdatestart = true
+                                }
+                        )
+                    }
+                )
+                Text(text = " ～ ")
+                TextField(
+                    value = dateEnd,
+                    onValueChange = {
+
+                    },
+                    readOnly = true,
+                    label = {
+                        Text(text = "結束日期")
+                    },
+                    singleLine = true,
+                    trailingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.DateRange,
+                            contentDescription = "選擇結束日期",
+                            modifier = Modifier
+                                .clickable {
+                                    showDateRangePickerDialog = true
+                                    isdatestart = false
+                                }
+                        )
+                    }
+                )
+            }
+
+            if(showDateRangePickerDialog){
                 MyDatePickerDialog(
-                    // 確定時會接收到選取日期
-                    onConfirm = { pair ->
-                        dateStart = formatMillisToDateString(pair.first?:System.currentTimeMillis())
-                        dateEnd = formatMillisToDateString(pair.second?:System.currentTimeMillis())
-//                        message =
-//                            "Start date: ${
-//                                pair.first?.let {
-//                                    Instant.ofEpochMilli(it).atZone(ZoneId.of("UTC"))
-//                                        .toLocalDate().format(ofLocalizedDate(FormatStyle.MEDIUM))
-//                                } ?: "no selection"
-//                            }\nEnd date: ${
-//                                pair.second?.let {
-//                                    Instant.ofEpochMilli(it).atZone(ZoneId.of("UTC"))
-//                                        .toLocalDate().format(ofLocalizedDate(FormatStyle.MEDIUM))
-//                                } ?: "no selection"
-//                            }"
+                    onDismissRequest = {
                         showDateRangePickerDialog = false
                     },
-                    // 設定取消時欲執行內容
-                    onDismiss = {
-//                        message = "Cancelled"
+                    onConfirm = { selectedDate ->
+                        if(isdatestart){
+                            dateStart = formatMillisToDateString(selectedDate!!)
+                        }else{
+                            dateEnd = formatMillisToDateString(selectedDate!!)
+                        }
                         showDateRangePickerDialog = false
-                    }
+                    },
+                    onDismiss = {
+                        showDateRangePickerDialog = false
+                    },
+                    title = if(isdatestart) "選擇開始日期" else "選擇結束日期"
                 )
             }
 
@@ -174,7 +239,7 @@ fun ScreenMOS03(
                                 shape = RoundedCornerShape(10)
                             )
                             .padding(5.dp)
-                            .clickable{
+                            .clickable {
                                 navController.navigate(route = "${MyOrdersScreens.MOS0301.name}/${order.orderid}")
                             },
                         horizontalArrangement = Arrangement.SpaceBetween
@@ -243,57 +308,63 @@ fun ScreenMOS03(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun MyDatePickerDialog(
-    onConfirm: (Pair<Long?, Long?>) -> Unit,
-    onDismiss: () -> Unit
-) {
-    val dateRangePickerState = rememberDateRangePickerState()
-
-    DatePickerDialog(
-        // 點擊對話視窗外部或back按鈕時呼叫，並非點擊dismissButton時呼叫
-        onDismissRequest = onDismiss,
-        confirmButton = {
-            Button(
-                // 點擊確定按鈕時呼叫onConfirm(Long?)並將選取日期傳入以回饋給原畫面
-                onClick = {
-                    onConfirm(
-                        Pair(
-                            dateRangePickerState.selectedStartDateMillis,
-                            dateRangePickerState.selectedEndDateMillis
-                        )
-                    )
-                }
-            ) {
-                Text("OK")
-            }
-        },
-        // 設定取消按鈕
-        dismissButton = {
-            Button(onClick = onDismiss) {
-                Text("Cancel")
-            }
-        }
-    ) {
-        DateRangePicker(
-            state = dateRangePickerState,
-            title = {
-                Text(text = "Select date range")
-            },
-            // 是否要開啟日期輸入模式
-            showModeToggle = false,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(500.dp)
-                .padding(16.dp)
-        )
-    }
-}
 
 @RequiresApi(Build.VERSION_CODES.O)
 fun formatMillisToDateString(millis: Long): String {
     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
     val date = Instant.ofEpochMilli(millis).atZone(ZoneId.systemDefault()).toLocalDate()
     return date.format(formatter)
+}
+
+// 使用的DatePicker屬於androidx.compose.material3測試功能，需要加上"@OptIn"註記
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun MyDatePickerDialog(
+    onDismissRequest: () -> Unit,
+    onConfirm: (Long?) -> Unit,
+    onDismiss: () -> Unit,
+    title: String
+) {
+    val datePickerState = rememberDatePickerState(
+        // SelectableDates介面用來限制可選擇的日期與年
+        selectableDates = object : SelectableDates {
+            // 將顯示的日期逐一傳給utcTimeMillis參數，回傳true代表該日可選；false代表該日不可選
+            override fun isSelectableDate(utcTimeMillis: Long): Boolean {
+                return true
+            }
+
+            // 將顯示的年逐一傳給year參數，回傳true代表該年可選；false代表該年不可選
+            override fun isSelectableYear(year: Int): Boolean {
+                return true
+            }
+        }
+    )
+
+    DatePickerDialog(
+        // 點擊對話視窗外部或back按鈕時呼叫，並非點擊dismissButton時呼叫
+        onDismissRequest = onDismissRequest,
+        confirmButton = {
+            Button(
+                // 點擊確定按鈕時呼叫onConfirm(Long?)並將選取日期傳入以回饋給原畫面
+                onClick = {
+                    onConfirm(datePickerState.selectedDateMillis)
+                }
+            ) {
+                Text("確定")
+            }
+        },
+        // 設定取消按鈕
+        dismissButton = {
+            Button(onClick = onDismiss) {
+                Text("取消")
+            }
+        }
+    ) {
+        DatePicker(
+            state = datePickerState,
+            title = {
+                Text(text = title)
+            }
+        )
+    }
 }

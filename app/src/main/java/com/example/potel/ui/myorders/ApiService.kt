@@ -15,8 +15,9 @@ interface ApiService {
     suspend fun getOrders(
         @Query("memberid") memberid: Int,
 
-        @Query("orderstate") orderstate:Char
-
+        @Query("orderstate") orderstate:Char,
+        @Query("datestart") dateStart:String?,
+        @Query("dateend") dateEnd:String?
     ): List<Order>
 
     /** 取得指定id的order */
