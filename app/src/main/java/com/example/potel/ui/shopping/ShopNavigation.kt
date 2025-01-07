@@ -12,7 +12,7 @@ import androidx.navigation.compose.composable
 
 
 
-enum class ShopScreens(title: String){
+enum class ShopScreens(var title: String){
     Twoclass(title = "類別"),
     Productlist(title = "類別>商品列表"),
     Information(title = "商品列表>商品資訊"),

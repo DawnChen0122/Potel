@@ -32,7 +32,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.potel.ui.booking.BookingScreens
 import com.example.potel.ui.forumZone.ForumScreens
-import com.example.potel.ui.petsfile.Screens
+import com.example.potel.ui.petsfile.PetsFileScreens
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -178,7 +178,7 @@ fun HomeRoute(
                     Button(
                         shape = RoundedCornerShape(20),
                         onClick = {
-                            navController.navigate(route = Screens.PetsFileFirst.name)
+                            navController.navigate(route = PetsFileScreens.PetsFileFirst.name)
                         },
                         border = BorderStroke(1.dp, Color.Black),
                         colors = ButtonDefaults.outlinedButtonColors(),
