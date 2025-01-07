@@ -19,7 +19,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.example.potel.ui.home.HOME_NAVIGATION_ROUTE
 import androidx.compose.material3.Text
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -60,9 +59,9 @@ fun Login(viewModel:OpenpageViewModel = viewModel()
                 .padding(10.dp)
         ) {
             Text(
-                modifier = Modifier.clickable {
-                    navController.navigate(HOME_NAVIGATION_ROUTE)
-                },
+//                modifier = Modifier.clickable {
+//                    navController.navigate(accountRoute)
+//                },
                 text = "Potel" ,
                 fontSize = 40.sp,
                 fontWeight = FontWeight.Bold,
