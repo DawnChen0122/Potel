@@ -65,10 +65,10 @@ class MyOrdersViewModel : ViewModel() {
     }
 
 
-    suspend fun getPrdOrders(memberid: Int = 1, orderstate: Char): ResponseObject<List<PrdOrder>> {
+    suspend fun getPrdOrders(memberid: Int = 1, orderstate: Char, dateStart: String? = null, dataEnd: String? = null): ResponseObject<List<PrdOrder>> {
         Log.d(tag, "memberid=$memberid, orderstate=$orderstate")
         try {
-            val response = RetrofitInstance.api.getPrdOrders(memberid, orderstate)
+            val response = RetrofitInstance.api.getPrdOrders(memberid, orderstate, dateStart, dataEnd)
 
             Log.d(tag, "response.respcode=${response.respcode}")
             return response // 回傳ResponseObject (resobj= List<PrdOrder>)
