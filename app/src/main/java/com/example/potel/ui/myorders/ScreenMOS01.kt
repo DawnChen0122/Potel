@@ -1,5 +1,6 @@
 package com.example.potel.ui.myorders
 
+import android.content.Context
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -17,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -33,7 +35,11 @@ fun ScreenMOS01(
     navController: NavHostController
 ) {
     val myOrdersVM: MyOrdersViewModel = viewModel(key = "myOrdersVM")
-    val memberid = "1" // TODO: 這應該登入後從登入的資訊中獲取
+
+    val context = LocalContext.current
+    // 開 "settings"這個檔案, 沒有的話就建一個
+    val preferences = context.getSharedPreferences("member", Context.MODE_PRIVATE)
+    val memberid = preferences.getString("uid", "1")!!
 
     Column(
         modifier = Modifier

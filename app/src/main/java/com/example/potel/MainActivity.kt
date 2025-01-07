@@ -213,8 +213,9 @@ fun MainBottomAppBar(navController: NavHostController){
                         .size(60.dp)
                         .weight(0.2f),
                     onClick = {
+                        // 先用popbackstack以避免重複載入頁面造成資源損耗, 若沒進入過該頁才改呼叫navigate
                         if(!navController.popBackStack(MyOrdersScreens.MOS01.name, false))
-                            navController.navigate("${MyOrdersScreens.MOS01.name}/1")
+                            navController.navigate(MyOrdersScreens.MOS01.name)
                     }
                 ) {
                     Icon(
