@@ -40,6 +40,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.potel.ui.booking.BookingScreens
+import com.example.potel.ui.booking.BookingScreens.Booking
 import com.example.potel.ui.booking.PetsScreenRoute
 import com.example.potel.ui.forumZone.ForumScreens
 import com.example.potel.ui.forumZone.forumScreenRoute
@@ -55,6 +56,8 @@ import com.example.potel.ui.shopping.shopScreenRoute
 
 
 
+import kotlin.reflect.KClass
+import kotlin.reflect.full.memberProperties
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -81,9 +84,9 @@ fun PotelApp(
     val isForumScreen = currentScreen in ForumScreens.entries.map { it.name }
 
     val currentScreenTitle = findEnumTitleByName(currentScreen,
-        AccountScreens::class.java,MyOrdersScreens::class.java,
-        BookingScreens::class.java,ForumScreens::class.java
-        ,PetsFileScreens::class.java,ShopScreens::class.java)
+        AccountScreens::class, MyOrdersScreens::class, BookingScreens::class,
+        ForumScreens::class, PetsFileScreens::class, ShopScreens::class
+    )
 
 
 
@@ -105,7 +108,7 @@ fun PotelApp(
             }
         },
         bottomBar = {
-            MainBottomAppBar()
+            MainBottomAppBar(navController = navController)
         }
     ) { innerPadding ->
         Column(
@@ -125,7 +128,7 @@ fun PotelApp(
 @Composable
 fun TipNavHost(
     modifier: Modifier = Modifier,
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController
 ) {
     // todo 2-1 這裡是將所有的畫面路徑都列出來
     NavHost(
@@ -178,14 +181,12 @@ fun MainTopAppBar(
 
 
 
-fun findEnumTitleByName(name: String, vararg enums: Class<out Enum<*>>): String {
+fun findEnumTitleByName(name: String, vararg enums: KClass<out Enum<*>>): String {
     for (enumClass in enums) {
-        val enumConstants = enumClass.enumConstants ?: continue
-        for (enumValue in enumConstants) {
-            if (enumValue.name == name) {
-                val titleField = enumClass.getMethod("getTitle") // 调用 getTitle 方法
-                return titleField.invoke(enumValue) as String
-            }
+        enumClass.java.enumConstants?.firstOrNull { it.name == name }?.let { enumValue ->
+            return enumValue::class.memberProperties
+                .firstOrNull { it.name == "title" }
+                ?.getter?.call(enumValue) as? String ?: ""
         }
     }
 
@@ -198,10 +199,9 @@ fun findEnumTitleByName(name: String, vararg enums: Class<out Enum<*>>): String 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 
-fun MainBottomAppBar() {
-    val navController = rememberNavController()
 
 
+fun MainBottomAppBar(navController: NavHostController) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -217,6 +217,7 @@ fun MainBottomAppBar() {
                 .size(60.dp)
                 .width(10.dp),
             onClick = {
+                navController.navigate(route = Booking.name)
             },
         ) {
             Icon(
@@ -232,6 +233,7 @@ fun MainBottomAppBar() {
                 .size(60.dp)
                 .width(10.dp),
             onClick = {
+                navController.navigate(route = ShopScreens.Twoclass.name)
             },
         ) {
             Icon(
@@ -246,11 +248,11 @@ fun MainBottomAppBar() {
             modifier = Modifier
                 .size(60.dp)
                 .width(10.dp),
-            onClick = {
+            onClick = { navController.navigate(route = MyOrdersScreens.MOS01.name)
                 // 先用popbackstack以避免重複載入頁面造成資源損耗, 若沒進入過該頁才改呼叫navigate
 
-                if (!navController.popBackStack(AccountScreens.HomeRoute.name, false))
-                    navController.navigate(AccountScreens.HomeRoute.name)
+//                if (!navController.popBackStack(AccountScreens.HomeRoute.name, false))
+//                    navController.navigate(AccountScreens.HomeRoute.name)
             }
         ) {
             Icon(
@@ -266,6 +268,7 @@ fun MainBottomAppBar() {
                 .size(60.dp)
                 .width(10.dp),
             onClick = {
+                navController.navigate(route = PetsFileScreens.PetsFileFirst.name)
             }
         ) {
             Icon(
