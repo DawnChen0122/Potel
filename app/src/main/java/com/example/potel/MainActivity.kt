@@ -38,6 +38,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.potel.ui.booking.PetsScreenRoute
+import com.example.potel.ui.forumZone.ForumScreens
 import com.example.potel.ui.forumZone.forumScreenRoute
 import com.example.potel.ui.home.Screens
 import com.example.potel.ui.myorders.myOrdersScreenRoute
