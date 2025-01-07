@@ -114,15 +114,15 @@ fun TipNavHost(
     NavHost(
         modifier = modifier,
         navController = navController,
-        startDestination = ShopScreens.twoclass.name
+        startDestination = ShopScreens.Twoclass.name
     ) {
         // todo 2-2 置入所有的畫面路徑
-        homeScreenRoute(navController) // 02 明駿
-        bookingScreenRoute(navController) // 04 芊伃
-        myOrdersScreenRoute(navController) // 27 正能
+//        homeScreenRoute(navController) // 02 明駿
+//        bookingScreenRoute(navController) // 04 芊伃
+//        myOrdersScreenRoute(navController) // 27 正能
         shopScreenRoute(navController) // 07 柏森
 //        careRecordsScreenRoute(navController) // 25 泰陽
-        discussZoneScreenRoute(navController) // 16 品伃
+//        discussZoneScreenRoute(navController) // 16 品伃
 //        petsScreenRoute(navController) // 18 勇慶
     }
 

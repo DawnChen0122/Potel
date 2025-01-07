@@ -1,5 +1,6 @@
 package com.example.potel.ui.shopping
 
+import android.content.Context
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -17,16 +18,26 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import com.example.potel.ui.theme.PotelTheme
+
 
 
 @Composable
-fun TwoClassScreen(navController: NavHostController) {
+fun TwoClassScreen(
+    navController: NavHostController
+) {
+//    val shoppingVM: ShoppingViewModel = viewModel(key = "shoppingVM")
+//    val context = LocalContext.current
+    // 開 "settings"這個檔案, 沒有的話就建一個
+//    val preferences = context.getSharedPreferences("product", Context.MODE_PRIVATE)
+//    val productid = preferences.getString("uid", "1")!!
+
 
     Column (
         modifier = Modifier
@@ -48,7 +59,7 @@ fun TwoClassScreen(navController: NavHostController) {
                 .height(185.dp),
 
             onClick = {
-                navController.navigate(ShopScreens.productlist.name)
+                navController.navigate(route = "${ShopScreens.Productlist.name}/D")
                       },
             colors = ButtonDefaults.buttonColors(
                 // 設定按鈕容器顏色
@@ -75,7 +86,7 @@ fun TwoClassScreen(navController: NavHostController) {
                 .background(Color.White)
                 .height(185.dp),
             onClick = {
-                navController.navigate(ShopScreens.productlist.name)
+                navController.navigate("${ShopScreens.Productlist.name}/C")
             },
             colors = ButtonDefaults.buttonColors(
                 // 設定按鈕容器顏色
