@@ -1,23 +1,12 @@
 package com.example.potel.ui.account
 
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.*
-import androidx.compose.material3.ExposedDropdownMenuDefaults.TrailingIcon
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
@@ -26,435 +15,278 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.window.Popup
 
-
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-
-fun Edit(viewModel:EditAccountViewModel = viewModel(),
-           navController: NavHostController) {
-
+fun Edit(viewModel: EditAccountViewModel = viewModel(), navController: NavHostController) {
     val uid by viewModel.uid.collectAsState()
-
     val email by viewModel.email.collectAsState()
-
-    var inputYear by remember { mutableStateOf("") }
-    val yearRange = (1924..2025).map { it.toString() }
-    var expandedYear by remember { mutableStateOf(false) }
-
-    var inputMonth by remember { mutableStateOf("") }
-    val monthRange = (1..12).map { it.toString() }
-    var expandedMonth by remember { mutableStateOf(false) }
-
-    var inputDay by remember { mutableStateOf("") }
-    val dayRange = (1..31).map { it.toString() }
-    var expandedDay by remember { mutableStateOf(false) }
-
-    var inputGender by remember { mutableStateOf("") }
-    val genderRange = listOf("男", "女", "不願透漏").map { it.toString() }
-    var expandedGender by remember { mutableStateOf(false) }
-
     val password by viewModel.password.collectAsState()
-    var passwordVisible by remember { mutableStateOf(false) }
-
     val checkpassword by viewModel.checkpassword.collectAsState()
-    var checkpasswordVisible by remember { mutableStateOf(false) }
-
     val username by viewModel.username.collectAsState()
-
     val phonenumber by viewModel.phonenumber.collectAsState()
-    var phonenumberError by remember { mutableStateOf(false) }
-
     val address by viewModel.address.collectAsState()
+    val gender by viewModel.gender.collectAsState()
+    val birthdate by viewModel.birthDate.collectAsState()
+    val errorMessage = viewModel.errorMessage
 
+    // 欄位驗證錯誤訊息
+    val isFormValid = uid.isNotEmpty() && email.isNotEmpty() && password == checkpassword &&
+            password.isNotEmpty() && username.isNotEmpty() && phonenumber.isNotEmpty() && address.isNotEmpty()
 
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-        Text(
-            text = "編輯資料",
-            fontSize = 30.sp,
-            fontWeight = FontWeight.Bold,
-            color = Color.Blue
-        )
-
-
-        OutlinedTextField(
+    Column(modifier = Modifier.padding(16.dp)) {
+        CustomOutlinedTextField(
             value = uid,
             onValueChange = viewModel::onUidChanged,
-            label = { Text(text = "請輸入用戶名稱") },
-            singleLine = true,
-            shape = RoundedCornerShape(8.dp),
-            isError = viewModel.uidError,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 16.dp)
+            label = "用戶 ID",
+            isError = uid.isEmpty(),
         )
-        if (viewModel.uidError) {
-            Text(
-                text = "用戶名稱為必填欄位",
-                color = Color.Red,
-                fontSize = 12.sp,
-                modifier = Modifier.padding(start = 16.dp)
-            )
-        }
-
-
-        OutlinedTextField(
+        CustomOutlinedTextField(
             value = email,
             onValueChange = viewModel::onEmailChanged,
-            label = { Text("請輸入信箱") },
-            singleLine = true,
-            shape = RoundedCornerShape(8.dp),
-            isError = viewModel.emailError,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 16.dp)
+            label = "電子郵件",
+            isError = email.isEmpty(),
         )
-        if (viewModel.emailError) {
-            Text(
-                text = "請輸入有效的信箱",
-                color = Color.Red,
-                fontSize = 12.sp,
-                modifier = Modifier.padding(start = 16.dp)
-            )
-        }
-
-
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 10.dp)
-                .background(Color.White, RoundedCornerShape(8.dp))
-        ) {
-            Text(
-                text = "請選擇出生年月日",
-                modifier = Modifier.padding(10.dp)
-            )
-        }
-
-
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalAlignment = Alignment.Top
-        )
-        {
-            ExposedDropdownMenuBox(
-                expanded = expandedYear,
-                onExpandedChange = { expandedYear = it },
-                modifier = Modifier.weight(1f)
-            ) {
-                TextField(
-                    readOnly = true,
-                    modifier = Modifier.menuAnchor(MenuAnchorType.PrimaryEditable, true),
-                    value = inputYear,
-                    onValueChange = {
-                        inputYear = it
-                        expandedYear = true
-                    },
-                    singleLine = true,
-                    label = { Text("年") },
-                    trailingIcon = { TrailingIcon(expanded = expandedYear) }
-                )
-                ExposedDropdownMenu(
-                    expanded = expandedYear,
-                    onDismissRequest = { expandedYear = false }
-                ) {
-                    yearRange.forEach { yearRange ->
-                        DropdownMenuItem(
-                            text = { Text(yearRange) },
-                            onClick = {
-                                inputYear = yearRange
-                                expandedYear = false
-                            }
-                        )
-                    }
-                }
-            }
-
-            ExposedDropdownMenuBox(
-                expanded = expandedMonth,
-                onExpandedChange = { expandedMonth = it },
-                modifier = Modifier.weight(1f)
-            ) {
-                TextField(
-                    readOnly = true,
-                    modifier = Modifier.menuAnchor(MenuAnchorType.PrimaryEditable, true),
-                    value = inputMonth,
-                    onValueChange = {
-                        inputMonth = it
-                        expandedMonth = true
-                    },
-                    singleLine = true,
-                    label = { Text("月") },
-                    trailingIcon = { TrailingIcon(expanded = expandedMonth) }
-                )
-                ExposedDropdownMenu(
-                    expanded = expandedMonth,
-                    onDismissRequest = { expandedMonth = false }
-                ) {
-                    monthRange.forEach { monthRange ->
-                        DropdownMenuItem(
-                            text = { Text(monthRange) },
-                            onClick = {
-                                inputMonth = monthRange
-                                expandedMonth = false
-                            }
-                        )
-                    }
-                }
-            }
-
-
-            ExposedDropdownMenuBox(
-                expanded = expandedDay,
-                onExpandedChange = { expandedDay = it },
-                modifier = Modifier.weight(1f)
-            ) {
-                TextField(
-                    readOnly = true,
-                    modifier = Modifier.menuAnchor(MenuAnchorType.PrimaryEditable, true),
-                    value = inputDay,
-                    onValueChange = {
-                        inputDay = it
-                        expandedDay = true
-                    },
-                    singleLine = true,
-                    label = { Text("日") },
-                    trailingIcon = { TrailingIcon(expanded = expandedDay) }
-                )
-                ExposedDropdownMenu(
-                    expanded = expandedDay,
-                    onDismissRequest = { expandedDay = false }
-                ) {
-                    dayRange.forEach { dayRange ->
-                        DropdownMenuItem(
-                            text = { Text(dayRange) },
-                            onClick = {
-                                inputDay = dayRange
-                                expandedDay = false
-                            }
-                        )
-                    }
-                }
-            }
-        }
-
-
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 10.dp)
-                .background(Color.White, RoundedCornerShape(8.dp))
-        )
-        {
-            Text(
-                text = "請選擇性別",
-                modifier = Modifier.padding(10.dp)
-            )
-        }
-
-
-        ExposedDropdownMenuBox(
-            expanded = expandedGender,
-            onExpandedChange = { expandedGender = it },
-            modifier = Modifier.fillMaxWidth()
-        )
-        {
-            TextField(
-                readOnly = true,
-                modifier = Modifier.menuAnchor(MenuAnchorType.PrimaryEditable, true)
-                    .fillMaxWidth(),
-                value = inputGender,
-                onValueChange = {
-                    inputGender = it
-                    expandedGender = true
-                },
-                singleLine = true,
-                label = { Text("性別") },
-                trailingIcon = { TrailingIcon(expanded = expandedGender) }
-            )
-
-            ExposedDropdownMenu(
-                expanded = expandedGender,
-                onDismissRequest = { expandedGender = false }
-            ) {
-                genderRange.forEach { genderRange ->
-                    DropdownMenuItem(
-                        text = { Text(genderRange) },
-                        onClick = {
-                            inputGender = genderRange
-                            expandedGender = false
-                        }
-                    )
-                }
-            }
-        }
-
-
-        OutlinedTextField(
+        CustomOutlinedTextField(
             value = password,
             onValueChange = viewModel::onPasswordChanged,
-            label = { Text(text = "密碼") },
-            leadingIcon = {
-                Icon(
-                    imageVector = Icons.Default.Lock,
-                    contentDescription = "密碼"
-                )
-            },
-            trailingIcon = {
-                Text(
-                    text = if (passwordVisible) "隱藏" else "顯示",
-                    modifier = Modifier.clickable {
-                        passwordVisible = !passwordVisible
-                    }
-                )
-            },
-            isError = viewModel.passwordError,
-            shape = RoundedCornerShape(8.dp),
-            visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-            singleLine = true,
-            colors = TextFieldDefaults.colors(
-                focusedIndicatorColor = Color.Blue,
-                unfocusedIndicatorColor = Color.Gray,
-            ),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 16.dp)
+            label = "密碼",
+            isError = password.isEmpty(),
+            visualTransformation = PasswordVisualTransformation()
         )
-        if (viewModel.passwordError) {
-            Text(
-                text = "密碼需在6至20字符內，且包含字母和數字",
-                color = Color.Red,
-                fontSize = 12.sp,
-                modifier = Modifier.padding(start = 16.dp)
-            )
-        }
-
-
-        OutlinedTextField(
+        CustomOutlinedTextField(
             value = checkpassword,
             onValueChange = viewModel::onCheckPasswordChanged,
-            label = { Text(text = "再次確認密碼") },
-            leadingIcon = {
-                Icon(
-                    imageVector = Icons.Default.Lock,
-                    contentDescription = "再次確認密碼"
-                )
-            },
-            trailingIcon = {
-                Text(
-                    text = if (checkpasswordVisible) "隱藏" else "顯示",
-                    modifier = Modifier.clickable {
-                        checkpasswordVisible = !checkpasswordVisible
-                    }
-                )
-            },
-            isError = viewModel.checkpasswordError,
-            shape = RoundedCornerShape(8.dp),
-            visualTransformation = if (checkpasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-            singleLine = true,
-            colors = TextFieldDefaults.colors(
-                focusedIndicatorColor = Color.Blue,
-                unfocusedIndicatorColor = Color.Gray,
-            ),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 10.dp)
+            label = "確認密碼",
+            isError = checkpassword != password,
+            visualTransformation = PasswordVisualTransformation()
         )
-        if (viewModel.checkpasswordError) {
-            Text(
-                text = "密碼需輸入相同",
-                color = Color.Red,
-                fontSize = 12.sp,
-                modifier = Modifier.padding(start = 16.dp)
-            )
-        }
-
-
-        OutlinedTextField(
+        CustomOutlinedTextField(
             value = username,
             onValueChange = viewModel::onUsernameChanged,
-            label = { Text(text = "請輸入姓名") },
-            singleLine = true,
-            shape = RoundedCornerShape(8.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 10.dp)
+            label = "姓名",
+            isError = username.isEmpty(),
         )
-
-
-        OutlinedTextField(
+        CustomOutlinedTextField(
             value = phonenumber,
-            onValueChange = viewModel::onPhonenumberChanged,
-            label = { Text(text = "請輸入手機號碼") },
-            singleLine = true,
-            shape = RoundedCornerShape(8.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 16.dp),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            onValueChange = viewModel::onPhoneNumberChanged,
+            label = "電話",
+            isError = phonenumber.isEmpty(),
         )
-        if (phonenumberError) {
-            Text(
-                text = "手機號碼為十位數字",
-                color = Color.Red,
-                fontSize = 12.sp,
-                modifier = Modifier.padding(start = 16.dp)
-            )
-        }
-
-
-        OutlinedTextField(
+        CustomOutlinedTextField(
             value = address,
             onValueChange = viewModel::onAddressChanged,
-            label = { Text(text = "請輸入地址") },
-            singleLine = true,
-            shape = RoundedCornerShape(8.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 16.dp)
+            label = "地址",
+            isError = address.isEmpty(),
         )
 
+        // 生日選擇
+        Text("請選擇生日", modifier = Modifier.padding(top = 16.dp))
+        Row {
+            BirthDatePicker(
+                selectedDate = birthdate,
+                onDateChanged = viewModel::onBirthDateChanged
+            )
+        }
 
-        var errorMessage by remember { mutableStateOf<String?>(null) }
-        // 註冊按鈕
+        // 性別選擇
+        Text("請選擇性別", modifier = Modifier.padding(top = 16.dp))
+        GenderPicker(
+            selectedGender = gender,
+            onGenderChanged = viewModel::onGenderChanged
+        )
+
+        // 顯示錯誤訊息
+        errorMessage?.let {
+            Text(text = it, color = Color.Red, modifier = Modifier.padding(top = 8.dp))
+        }
+
+        // 提交按鈕
         Button(
             onClick = {
-                if (uid.isEmpty() || email.isEmpty() || password.isEmpty() || checkpassword.isEmpty()
-                    || username.isEmpty() || phonenumber.isEmpty() || address.isEmpty()
-                ) {
-                    errorMessage = "欄位不得空白"
-                } else if (password != checkpassword) {
-                    errorMessage = "密碼與確認密碼不同"
+                if (isFormValid) {
+                    // 執行表單提交邏輯
+                    // viewModel.submitForm()
                 } else {
-                    "執行註冊邏輯"
+                    viewModel.onError("請填寫所有欄位")
                 }
             },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 16.dp),
-            shape = RoundedCornerShape(8.dp)
+            enabled = isFormValid,
+            modifier = Modifier.fillMaxWidth().padding(top = 16.dp)
         ) {
-            Text(text = "完成", fontSize = 16.sp)
-        }
-        errorMessage?.let {
-            Text(
-                text = it,
-                color = Color.Red,
-                fontSize = 14.sp,
-                modifier = Modifier.padding(top = 8.dp)
-            )
+            Text("提交", fontSize = 16.sp)
         }
     }
 }
 
+@Composable
+fun BirthDatePicker(selectedDate: String, onDateChanged: (String) -> Unit) {
+    var selectedYear by remember { mutableStateOf("") }
+    var selectedMonth by remember { mutableStateOf("") }
+    var selectedDay by remember { mutableStateOf("") }
 
+    var expandedYear by remember { mutableStateOf(false) }
+    var expandedMonth by remember { mutableStateOf(false) }
+    var expandedDay by remember { mutableStateOf(false) }
+
+    val years = (1924..2025).map { it.toString() }
+    val months = (1..12).map { it.toString().padStart(2, '0') }
+    val days = (1..31).map { it.toString().padStart(2, '0') }
+
+    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        DropdownMenuBox(
+            label = "年",
+            expanded = expandedYear,
+            options = years,
+            onSelect = { selectedYear = it },
+            onExpandedChange = { expandedYear = it }
+        )
+        DropdownMenuBox(
+            label = "月",
+            expanded = expandedMonth,
+            options = months,
+            onSelect = { selectedMonth = it },
+            onExpandedChange = { expandedMonth = it }
+        )
+        DropdownMenuBox(
+            label = "日",
+            expanded = expandedDay,
+            options = days,
+            onSelect = { selectedDay = it },
+            onExpandedChange = { expandedDay = it }
+        )
+    }
+
+    if (selectedYear.isNotEmpty() && selectedMonth.isNotEmpty() && selectedDay.isNotEmpty()) {
+        val fullDate = "$selectedYear/$selectedMonth/$selectedDay"
+        onDateChanged(fullDate)
+    }
+}
+
+@Composable
+fun DropdownMenuBox(
+    label: String,
+    expanded: Boolean,
+    options: List<String>,
+    onSelect: (String) -> Unit,
+    onExpandedChange: (Boolean) -> Unit
+) {
+    var selectedOption by remember { mutableStateOf("") }
+
+    Column(modifier = Modifier.fillMaxWidth()) {
+        TextField(
+            readOnly = true,
+            value = selectedOption,
+            onValueChange = {},
+            label = { Text(label) },
+            trailingIcon = { Icon(Icons.Default.ArrowDropDown, contentDescription = "Select") },
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable { onExpandedChange(!expanded) }
+        )
+
+        if (expanded) {
+            Popup(
+                alignment = Alignment.TopStart,
+                onDismissRequest = { onExpandedChange(false) }
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(Color.White, shape = RoundedCornerShape(8.dp))
+                        .padding(8.dp)
+                ) {
+                    options.forEach { option ->
+                        Text(
+                            text = option,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable {
+                                    selectedOption = option
+                                    onSelect(option)
+                                    onExpandedChange(false)
+                                }
+                                .padding(8.dp),
+                            style = MaterialTheme.typography.bodyLarge
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun GenderPicker(selectedGender: String, onGenderChanged: (String) -> Unit) {
+    val genderOptions = listOf("男", "女", "不願透露")
+    var expanded by remember { mutableStateOf(false) }
+
+    Box(modifier = Modifier.fillMaxWidth()) {
+        TextField(
+            readOnly = true,
+            value = selectedGender,
+            onValueChange = {},
+            label = { Text("性別") },
+            trailingIcon = { Icon(Icons.Default.ArrowDropDown, contentDescription = "Select Gender") },
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable { expanded = !expanded }
+        )
+
+        if (expanded) {
+            Popup(
+                alignment = Alignment.TopStart,
+                onDismissRequest = { expanded = false }
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(Color.White)
+                        .border(1.dp, Color.Gray)
+                ) {
+                    genderOptions.forEach { gender ->
+                        Text(
+                            text = gender,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable {
+                                    onGenderChanged(gender)
+                                    expanded = false
+                                }
+                                .padding(8.dp)
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun CustomOutlinedTextField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    label: String,
+    isError: Boolean,
+    visualTransformation: VisualTransformation = VisualTransformation.None,
+    modifier: Modifier = Modifier
+) {
+    OutlinedTextField(
+        value = value,
+        onValueChange = onValueChange,
+        label = { Text(label) },
+        isError = isError,
+        visualTransformation = visualTransformation,
+        modifier = modifier.fillMaxWidth(),
+    )
+}
 
 @Preview(showBackground = true)
 @Composable

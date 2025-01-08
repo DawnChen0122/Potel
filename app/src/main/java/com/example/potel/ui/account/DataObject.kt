@@ -6,3 +6,12 @@ data class LoginResponse(
     val errorMessage: String?
 )
 
+data class UserData(
+    val uid: String,
+    val username: String,
+    val password: String,
+    val checkpassword: String,
+    val phonenumber: String,
+    val address: String,
+    val email: String
+)
