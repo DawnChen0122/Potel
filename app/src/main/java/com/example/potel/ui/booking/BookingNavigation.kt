@@ -33,7 +33,6 @@ enum class BookingScreens(val title: String) {
 
 
 fun NavGraphBuilder.bookingScreenRoute(
-    viewModel: BookingViewModel,
     navController: NavHostController
 ) {
     composable(
@@ -54,7 +53,7 @@ fun NavGraphBuilder.bookingScreenRoute(
         route = "${RoomSelection.name}/{type}",//字串不能帶參數
     ) { backStackEntry ->
         val typeChar = backStackEntry.arguments?.getString("type")?.getOrNull(0) ?: 'C'
-        RoomSelectionScreen(viewModel,navController = navController, type = typeChar)
+        RoomSelectionScreen(viewModel = viewModel(),navController = navController, type = typeChar)
     }
     composable(
         route = Payment.name,

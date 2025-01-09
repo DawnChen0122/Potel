@@ -67,7 +67,7 @@ import com.example.potel.ui.theme.PotelTheme
 
 @Composable
 fun RoomSelectionScreen(
-    viewModel: BookingViewModel,
+    viewModel: BookingViewModel= viewModel(),
     navController: NavHostController,
     type: Char
 ) {

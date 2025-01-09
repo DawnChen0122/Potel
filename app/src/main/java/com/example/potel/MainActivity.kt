@@ -41,7 +41,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.potel.ui.booking.BookingScreens
 import com.example.potel.ui.booking.BookingScreens.Booking
-import com.example.potel.ui.booking.PetsScreenRoute
+import com.example.potel.ui.booking.bookingScreenRoute
 import com.example.potel.ui.forumZone.ForumScreens
 import com.example.potel.ui.forumZone.forumScreenRoute
 import com.example.potel.ui.home.AccountScreens
@@ -139,7 +139,7 @@ fun TipNavHost(
     ) {
         // todo 2-2 置入所有的畫面路徑
         accountRoute(navController) //02 明駿
-        PetsScreenRoute(navController)// 04 芊伃
+        bookingScreenRoute(navController)// 04 芊伃
         myOrdersScreenRoute(navController) // 27 正能
         shopScreenRoute(navController) // 07 柏森
         forumScreenRoute(navController) // 16 品伃
