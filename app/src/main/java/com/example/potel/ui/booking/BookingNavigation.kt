@@ -25,8 +25,8 @@ enum class BookingScreens(val title: String) {
 
 }
 
-const val BOOKING_NAVIGATION_ROUTE = "Booking"
-const val ROOM_SELECTION_ROUTE = "RoomSelection/{type}" // 使用 {type} 來接收參數
+//const val BOOKING_NAVIGATION_ROUTE = "Booking"
+//const val ROOM_SELECTION_ROUTE = "RoomSelection/{type}" // 使用 {type} 來接收參數
 
 
 fun NavGraphBuilder.bookingScreenRoute(
@@ -65,32 +65,3 @@ fun NavGraphBuilder.bookingScreenRoute(
     }
 }
 
-
-//    val HOME_NAVIGATION_ROUTE = "booking"
-//
-//    fun genHomeNavigationRoute() = HOME_NAVIGATION_ROUTE
-//
-//    fun NavGraphBuilder.bookingScreenRoute(navController: NavHostController) {
-//        composable(
-//            route = "BookingScreen",
-//        ) {
-//            BookingScreen(navController = navController)
-//        }
-//        composable(
-//            route = "DateSelectionScreen",
-//        ) {
-//            DateSelectionScreen(navController = navController)
-//        }
-//        composable(
-//            route = "PaymentScreen",
-//        ) {
-//            PaymentScreen(navController = navController)
-//        }
-//        composable(
-//            route = "RoomSelectScreen",
-//        ) {
-//            RoomSelectScreen(navController = navController, type = "dog")
-//        }
-//
-//
-//    }
