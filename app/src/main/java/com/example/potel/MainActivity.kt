@@ -113,10 +113,11 @@ fun TipNavHost(
         modifier = modifier,
         navController = navController,
         startDestination = "DateSelection"
+//        startDestination = "RoomSelection/D"
     ) {
         // todo 2-2 置入所有的畫面路徑
         homeScreenRoute(navController) // 02 明駿
-        bookingScreenRoute(navController) // 04 芊伃
+        bookingScreenRoute(viewModel = bookingViewModel,navController) // 04 芊伃
         myOrdersScreenRoute(navController) // 27 正能
 //        shoppingScreenRoute(navController) // 07 柏森
 //        careRecordsScreenRoute(navController) // 25 泰陽

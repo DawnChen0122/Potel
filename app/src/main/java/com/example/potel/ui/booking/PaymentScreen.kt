@@ -22,7 +22,7 @@ fun PaymentScreen(
     navController: NavHostController
 ) {
     val bookingVM: BookingViewModel = viewModel(key = "bookingVM")
-    val cardNumber by bookingVM.creditCardNumber.collectAsState()
+//    val cardNumber by bookingVM.creditCardNumber.collectAsState()
 
     var expiryDate by remember { mutableStateOf("") }
     var cvv by remember { mutableStateOf("") }
@@ -51,13 +51,14 @@ fun PaymentScreen(
         Text("付款資訊", style = MaterialTheme.typography.titleMedium)
         Spacer(modifier = Modifier.height(16.dp))
 
-        OutlinedTextField(
-            value = cardNumber,
-            onValueChange = bookingVM::onCreditCardNumberChange,
-            label = { Text("信用卡號碼") },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            modifier = fieldModifier
-        )
+
+//        OutlinedTextField(
+//            value = cardNumber,
+//            onValueChange = bookingVM::onCreditCardNumberChange,
+//            label = { Text("信用卡號碼") },
+//            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+//            modifier = fieldModifier
+//        )
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -86,14 +87,14 @@ fun PaymentScreen(
         Text("金額: $$amount")
 
         Spacer(modifier = Modifier.height(24.dp))
-        Button(
-            onClick = {
-                bookingVM.addPaymentInfo("RRRRR")
-                navController.navigate("BookingSuccess") },
-            modifier = Modifier.padding(horizontal = 16.dp)
-        ) {
-            Text("提交")
-        }
+//        Button(
+//            onClick = {
+//                bookingVM.addPaymentInfo("RRRRR")
+//                navController.navigate("BookingSuccess") },
+//            modifier = Modifier.padding(horizontal = 16.dp)
+//        ) {
+//            Text("提交")
+//        }
     }
 }
 

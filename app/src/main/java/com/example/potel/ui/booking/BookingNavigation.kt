@@ -30,6 +30,7 @@ const val ROOM_SELECTION_ROUTE = "RoomSelection/{type}" // 使用 {type} 來接�
 
 
 fun NavGraphBuilder.bookingScreenRoute(
+    viewModel: BookingViewModel,
     navController: NavHostController
 ) {
     composable(
@@ -47,19 +48,18 @@ fun NavGraphBuilder.bookingScreenRoute(
     composable(
         route = "${RoomSelection.name}/{type}",//字串不能帶參數
     ) { backStackEntry ->
-        val type = backStackEntry.arguments?.getString("type") ?: "cat" // 獲取類型參數，預設為 "cat"
-        RoomSelectionScreen(navController = navController, type = type)
+        val typeChar = backStackEntry.arguments?.getString("type")?.getOrNull(0) ?: 'C'
+        RoomSelectionScreen(viewModel,navController = navController, type = typeChar)
     }
     composable(
         route = Payment.name,
     ) {
         PaymentScreen(
-            bookingViewModel = bookingViewModel,
             navController = navController
         )
     }
     composable(
-        route = BookingScreens.BookingSuccess.name,
+        route = BookingSuccess.name,
     ) {
         BookingSuccessScreen(navController = navController)
     }

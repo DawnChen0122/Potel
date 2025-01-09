@@ -21,8 +21,8 @@ import java.time.format.FormatStyle
 fun DateSelectionScreen(navController: NavHostController) {
     val bookingVM: BookingViewModel = viewModel(key = "bookingVM")
 
-    val order by bookingVM.addOrderState.collectAsState();
-    order.amount
+//    val order by bookingVM.addOrderState.collectAsState();
+//    order.amount
 
     var showDateRangePickerDialog by remember { mutableStateOf(false) }
     var message by remember { mutableStateOf("請您選取入住日期和離開日期！") }
