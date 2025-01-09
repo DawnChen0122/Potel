@@ -22,14 +22,12 @@ class BookingViewModel : ViewModel() {
     val apiService = RetrofitInstance.api
 
     // 定義一個可更改的變數, 但是是私有的(private), 只有VM自己可以改, 外部只能透過提供的method做修改
-    private val _addOrderState = MutableStateFlow(
-        Order(
-            amount = 100
-        )
-    )
+    private val _addOrderState = MutableStateFlow(Order())
     private val _petEditState = MutableStateFlow(Pet())
     private val _memberEditState = MutableStateFlow(Member())
     private val _roomTypeSelectedState = MutableStateFlow(RoomType())
+
+    val addOrderEditState = _addOrderState.asStateFlow()
 
     fun setSelectedRoomType(roomType: RoomType) {
         _roomTypeSelectedState.value = roomType
