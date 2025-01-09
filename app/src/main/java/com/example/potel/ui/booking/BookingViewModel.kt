@@ -44,6 +44,7 @@ class BookingViewModel : ViewModel() {
     private suspend fun fetchRoomTypes(): List<RoomType> {
         try {
             val roomTypes = RetrofitInstance.api.fetchRoomTypes()
+
             Log.d(tag, "roomTypes: ${roomTypes.size}")
             Log.d(tag, "roomTypes: $roomTypes")
             return roomTypes

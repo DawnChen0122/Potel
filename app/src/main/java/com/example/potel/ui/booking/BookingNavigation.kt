@@ -41,7 +41,7 @@ fun NavGraphBuilder.bookingScreenRoute(
         )
     }
     composable(
-        route = "Booking.name",
+        route = Booking.name,
     ) {
         BookingScreen(navController = navController)
     }

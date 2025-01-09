@@ -1,5 +1,6 @@
 package com.example.potel.ui.booking
 
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -17,6 +18,7 @@ fun BookingScreen(navController: NavHostController) {
     val bookingVM: BookingViewModel = viewModel(key = "bookingVM")
     var selectedDogWeight by remember { mutableStateOf<String?>(null) }
     var selectedCatRoom by remember { mutableStateOf<String?>(null) }
+    var selectedPetType by remember { mutableStateOf<Char?>(null) }
 
     Column(
         modifier = Modifier
@@ -66,8 +68,9 @@ fun BookingScreen(navController: NavHostController) {
 
         Button(
             onClick = {
-                val type = if (selectedDogWeight != null) "dog" else "cat"
+                val type = if (selectedDogWeight != null) 'D' else 'C'
                 navController.navigate("RoomSelection/$type") // 導航到 RoomSelectionScreen，並傳遞類型
+//                Log.d("Navigation","P2 to P3")
             },
             enabled = selectedDogWeight != null || selectedCatRoom != null // 按鈕啟用條件
         ) {
@@ -75,3 +78,5 @@ fun BookingScreen(navController: NavHostController) {
         }
     }
 }
+
+
