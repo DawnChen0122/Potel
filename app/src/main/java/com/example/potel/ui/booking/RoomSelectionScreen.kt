@@ -21,9 +21,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import coil.compose.AsyncImage
 import com.example.potel.PotelApp
 import com.example.potel.R
 import com.example.potel.ui.theme.PotelTheme
+import java.net.URL
 
 @Composable
 fun RoomSelectionScreen(
@@ -91,6 +93,8 @@ fun RoomCard(
     room: RoomType, // RoomType 是房型的數據模型
     onSelectClick: () -> Unit
 ) {
+    val tag = "RoomCard"
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -112,14 +116,27 @@ fun RoomCard(
                     modifier = Modifier.align(Alignment.CenterVertically)
                 )
                 Spacer(modifier = Modifier.width(16.dp))
-                Image(
-                    painter = painterResource(id = R.drawable.roomtest),
-                    contentDescription = "Room Image",
-                    modifier = Modifier
-                        .size(250.dp)
-                        .clip(RoundedCornerShape(8.dp)),
-                    contentScale = ContentScale.Crop
+
+                val imageUrl = "http://192.168.1.100:8080/PotelServer/api/image?imageId=${room.imageId}"
+                Log.d(tag, "Loading image from URL: $imageUrl")
+
+                AsyncImage(
+                    model = "http://192.168.1.100:8080/PotelServer/api/image?imageId=33",
+
+//                    model = com.example.potel.ui.myorders.composeImageUrl(RoomType.imageId),
+                    contentDescription = "房間照片",
+                    alignment = Alignment.TopCenter,
+                    contentScale = ContentScale.FillWidth,
+                    placeholder = painterResource(R.drawable.placeholder)
                 )
+//                Image(
+//                    painter = painterResource(id = R.drawable.roomtest),
+//                    contentDescription = "Room Image",
+//                    modifier = Modifier
+//                        .size(250.dp)
+//                        .clip(RoundedCornerShape(8.dp)),
+//                    contentScale = ContentScale.Crop
+//                )
             }
 
             Spacer(modifier = Modifier.height(8.dp))
