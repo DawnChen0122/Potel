@@ -54,6 +54,7 @@ data class RoomType(
     var roomTypeId: Int = 0,
     var descpt: String = "",
     var imageId: Int = 28,
+    val imageUrl: String="",
     var price: Int = -1,
     var petType: Char = 'D',
     var weightL: Int = 0,

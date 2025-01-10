@@ -95,6 +95,6 @@ object RetrofitInstance {
     }
 }
 
-fun composeImageUrl(imageid: Int): String{
-    return "${baseurl}api/image?imageid=$imageid"
+fun composeImageUrl(imageId: Int): String{
+    return "${baseurl}booking/image?imageId=$imageId"
 }
