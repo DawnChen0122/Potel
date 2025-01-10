@@ -78,7 +78,7 @@ fun RoomSelectionScreen(
             ) {
                 items(filteredRoomTypes) { room ->
                     RoomCard(
-                        room = room,
+                        roomType = room,
                         onSelectClick = { navController.navigate("payment") }
                     )
                 }
@@ -90,7 +90,7 @@ fun RoomSelectionScreen(
 
 @Composable
 fun RoomCard(
-    room: RoomType, // RoomType 是房型的數據模型
+    roomType: RoomType, // RoomType 是房型的數據模型
     onSelectClick: () -> Unit
 ) {
     val tag = "RoomCard"
@@ -111,20 +111,20 @@ fun RoomCard(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
-                    text = "${room.descpt} - $${room.price}",
+                    text = "${roomType.descpt} - $${roomType.price}",
                     style = MaterialTheme.typography.bodyMedium,
                     modifier = Modifier.align(Alignment.CenterVertically)
                 )
                 Spacer(modifier = Modifier.width(16.dp))
 
-                val imageUrl = "http://10.0.2.2:8080/PotelServer/api/image?imageId=${room.imageId}"
+                val imageUrl = "http://10.0.2.2:8080/PotelServer/api/image?imageId=${roomType.imageId}"
                 Log.d(tag, "Loading image from URL: $imageUrl")
 
                 AsyncImage(
 //                    model = "http://10.0.2.2:8080/PotelServer/api/image?imageId=28",
 
 //                    model = com.example.potel.ui.myorders.composeImageUrl(RoomType.imageId),
-                    model = com.example.potel.ui.myorders.composeImageUrl(room.imageId),
+                    model = com.example.potel.ui.myorders.composeImageUrl(roomType.imageId),
                     contentDescription = "房間照片",
                     alignment = Alignment.TopCenter,
                     contentScale = ContentScale.FillWidth,
