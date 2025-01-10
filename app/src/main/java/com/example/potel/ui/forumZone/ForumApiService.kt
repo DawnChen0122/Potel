@@ -1,21 +1,20 @@
 package com.example.potel.ui.forumZone
 
-import com.example.potel.ui.myorders.ApiService
 import com.example.potel.ui.myorders.utils.MyCookieJar
 import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import okhttp3.RequestBody
-import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Part
 import retrofit2.http.Path
-import retrofit2.http.Query
 
 interface ForumApiService {
 
@@ -37,6 +36,34 @@ interface ForumApiService {
         @Part image: MultipartBody.Part? // 圖片作為二進制數據上傳
     ): Response<Unit>
 
+    @POST("Forum/AddComment")
+    suspend fun addComment(@Body newComment: NewComment): Response<Comment>
+
+    @DELETE("Forum/posts/{postId}")
+    suspend fun deletePost(@Path("postId") postId: Int): Response<Unit>
+
+    @DELETE("Forum/comments/{commentId}")
+    suspend fun deleteComment(@Path("commentId") commentId: Int): Response<Unit>
+
+
+    @Multipart
+    @PUT("Forum/updatePostWithImage")
+    suspend fun updatePostWithImage(
+        @Part("postId") postId: RequestBody,
+        @Part("title") title: RequestBody,
+        @Part("content") content: RequestBody,
+        @Part image: MultipartBody.Part?
+    ): Response<Unit>
+
+    @PUT("Forum/updatePost")
+    suspend fun updatePost(
+        @Body postUpdateRequest: PostUpdateRequest
+    ): Response<Unit>
+
+    @PUT("Forum/updateComment")
+    suspend fun updateComment(
+        @Body commentUpdateRequest: CommentUpdateRequest
+    ): Response<Unit>
 }
 
 const val baseurl = "http://10.0.2.2:8080/PotelServer/"
@@ -47,7 +74,7 @@ object RetrofitInstance {
 
     val api: ForumApiService by lazy {
         Retrofit.Builder()
-            .baseUrl(com.example.potel.ui.forumZone.baseurl) // Base URL
+            .baseUrl(baseurl) // Base URL
             .client(okHttpClient) // 把自定義的httpclient設置進去使用
             .addConverterFactory(GsonConverterFactory.create()) // GSON for JSON conversion
             .build()
@@ -55,5 +82,5 @@ object RetrofitInstance {
     }
 }
 fun composeImageUrl(imageid: Int): String{
-    return "${com.example.potel.ui.forumZone.baseurl}api/image?imageid=$imageid"
+    return "${baseurl}api/image?imageid=$imageid"
 }

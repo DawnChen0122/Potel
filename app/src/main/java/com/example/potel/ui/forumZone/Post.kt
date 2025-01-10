@@ -1,13 +1,13 @@
 package com.example.potel.ui.forumZone
 
 data class Post(
-    val postId: Int=0, // 設為可選，默認為 null
+    val postId: Int=0,
     val memberId: Int = 0,
     val title: String = "",
     val content: String = "",
     val createDate: String = "",
     val modifyDate: String? = null,
-    val ImageId: Int? = null
+    val imageId: Int? = null
 )
 data class NewPost(
     val memberId: Int = 0,
@@ -18,8 +18,7 @@ data class NewPost(
 data class Like(
     val likeId: Int = 0,
     val memberId: Int = 0,
-    val postId: Int = 0,
-    val createDate: String = ""
+    val postId: Int = 0
 )
 
 data class Comment(
@@ -37,5 +36,15 @@ data class NewComment(
     val content: String = ""
 )
 
+data class PostUpdateRequest(
+    val postId: Int,
+    val title: String,
+    val content: String
+)
+
+data class CommentUpdateRequest(
+    val commentId: Int,
+    val content: String
+)
 
 

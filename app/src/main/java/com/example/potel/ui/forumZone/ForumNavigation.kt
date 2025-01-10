@@ -1,12 +1,10 @@
 package com.example.potel.ui.forumZone
 
-import androidx.compose.material3.Scaffold
-import androidx.compose.runtime.Composable
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 
-enum class ForumScreens(val title: String, val showTopBar: Boolean = true) {
+enum class ForumScreens(val title: String) {
     ForumScreen(title = "討論區"),
     PostScreen(title = "文章"),
     PostEditScreen(title = "編輯文章"),
