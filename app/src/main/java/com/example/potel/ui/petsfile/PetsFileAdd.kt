@@ -124,7 +124,7 @@ fun ScreenPetsFileAdd(
 
                 // Cat 按鈕
                 Button(
-                    onClick = { navController.navigate(Screens.PetsFileDog) },
+                    onClick = { navController.navigate(Screens.PetsFileCats) },
                     modifier = Modifier
                         .clip(RoundedCornerShape(12.dp))
                         .padding(horizontal = 8.dp),
