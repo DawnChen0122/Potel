@@ -53,7 +53,7 @@ data class Member(
 data class RoomType(
     var roomTypeId: Int = 0,
     var descpt: String = "",
-    var imageId: Int = 0,
+    var imageId: Int = 28,
     var price: Int = -1,
     var petType: Char = 'D',
     var weightL: Int = 0,
