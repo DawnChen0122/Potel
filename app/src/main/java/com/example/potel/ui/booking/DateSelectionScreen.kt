@@ -1,6 +1,8 @@
 package com.example.potel.ui.booking
 
 import android.annotation.SuppressLint
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -15,6 +17,12 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeFormatter.ofLocalizedDate
 import java.time.format.FormatStyle
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun formatLongToDateString(timestamp: Long, pattern: String = "yyyy-MM-dd"): String {
+    val formatter = DateTimeFormatter.ofPattern(pattern).withZone(ZoneId.systemDefault())
+    return formatter.format(Instant.ofEpochMilli(timestamp))
+}
 
 @SuppressLint("NewApi")
 @Composable
@@ -57,8 +65,11 @@ fun DateSelectionScreen(navController: NavHostController) {
                         } ?: "no selection"
                     }
                     """.trimIndent()
+                    // 使用 helper 函數將時間戳轉為字串格式
+                    order.expdates = pair.first?.let { formatLongToDateString(it, "yyyy-MM-dd") } ?: ""
+                    order.expdatee = pair.second?.let { formatLongToDateString(it, "yyyy-MM-dd") } ?: ""
 
-                    order.expdates = pair.first.toString()
+//                    order.expdates = pair.first
 
                     showDateRangePickerDialog = false
                     navController.navigate(BookingScreens.Booking.name)

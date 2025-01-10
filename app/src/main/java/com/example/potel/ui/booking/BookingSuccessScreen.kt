@@ -26,7 +26,7 @@ fun BookingSuccessScreen(navController: NavHostController) {
         verticalArrangement = Arrangement.Center
     ) {
         Image(
-            painter = painterResource(id = R.drawable.roomtest),
+            painter = painterResource(id = R.drawable.checkmark),
             contentDescription = "image",
             modifier = Modifier
                 .size(150.dp)

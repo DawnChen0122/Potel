@@ -52,13 +52,18 @@ fun PaymentScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
 
-        OutlinedTextField(
-            value = cardNumber,
-            onValueChange = bookingVM::onCreditCardNumberChange,
-            label = { Text("信用卡號碼") },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            modifier = fieldModifier
-        )
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            OutlinedTextField(
+                value = cardNumber,
+                onValueChange = bookingVM::onCreditCardNumberChange,
+                label = { Text("信用卡號碼") },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                modifier = fieldModifier.weight(2f) // 使用權重控制寬度
+            )
+        }
 
         Spacer(modifier = Modifier.height(16.dp))
 
