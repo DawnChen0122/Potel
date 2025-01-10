@@ -117,13 +117,14 @@ fun RoomCard(
                 )
                 Spacer(modifier = Modifier.width(16.dp))
 
-                val imageUrl = "http://10.0.2.2:8080/PotelServer/booking/image?imageId=${roomType.imageId}"
+                //                val imageUrl = "http://10.0.2.2:8080/PotelServer/booking/image?imageId=${roomType.imageId}"
+                val imageUrl = composeImageUrl(roomType.imageId)
                 Log.d(tag, "Loading image from URL: $imageUrl")
 
                 AsyncImage(
 //                    model = "http://10.0.2.2:8080/PotelServer/api/image?imageId=28",
 //                    model = com.example.potel.ui.booking.composeImageUrl(RoomType.imageId),
-                    model = composeImageUrl(roomType.imageId),
+                    model = imageUrl,
                     contentDescription = "房間照片",
                     alignment = Alignment.TopCenter,
                     contentScale = ContentScale.FillWidth,
