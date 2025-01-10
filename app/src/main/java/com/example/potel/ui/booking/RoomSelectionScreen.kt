@@ -79,7 +79,7 @@ fun RoomSelectionScreen(
                 items(filteredRoomTypes) { room ->
                     RoomCard(
                         roomType = room,
-                        onSelectClick = { navController.navigate("payment") }
+                        onSelectClick = { navController.navigate(BookingScreens.Payment.name) }
                     )
                 }
             }
