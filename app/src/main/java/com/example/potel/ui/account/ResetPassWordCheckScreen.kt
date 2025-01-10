@@ -1,6 +1,7 @@
 package com.example.potel.ui.account
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -19,9 +20,11 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import kotlinx.coroutines.launch
 
 
 @SuppressLint("SuspiciousIndentation")
@@ -40,6 +43,7 @@ fun Resetpassword (viewModel:ResetPassWordViewModel = viewModel()
     var checkpasswordVisible  by remember { mutableStateOf(false) }
 
     val phonenumber by viewModel.phonenumber.collectAsState()
+
 
 
        Column(
@@ -184,13 +188,16 @@ fun Resetpassword (viewModel:ResetPassWordViewModel = viewModel()
                onClick = {
                    if (email.isEmpty() || password.isEmpty() || checkpassword.isEmpty()
                        || phonenumber.isEmpty() ) {
-                   // 顯示錯誤提示
+                   "欄位不得空白"
                    } else if (password != checkpassword) {
-                   // 顯示密碼不一致的錯誤提示
+                   "密碼不一致"
                    } else {
-                       "執行註冊邏輯"
+                       Log.d("tip102", "dfkjghkjdfhgkjdfhgkdjf" )
+                       viewModel.viewModelScope.launch {
+                           viewModel.checkEmailAndCellphone()
+                       }
                    }
-                         },
+               },
                modifier = Modifier
                    .fillMaxWidth()
                    .padding(top = 10.dp),

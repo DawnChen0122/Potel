@@ -134,7 +134,7 @@ fun TipNavHost(
     NavHost(
         modifier = modifier,
         navController = navController,
-        startDestination = AccountScreens.HomeRoute.name
+        startDestination = AccountScreens.Reset.name
 
     ) {
         // todo 2-2 置入所有的畫面路徑

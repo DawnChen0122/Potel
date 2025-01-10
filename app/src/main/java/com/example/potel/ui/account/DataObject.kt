@@ -1,9 +1,8 @@
 package com.example.potel.ui.account
 
-data class LoginResponse(
+data class Check(
     val success: Boolean,
-    val token: String,
-    val errorMessage: String?
+    val message: String?
 )
 
 data class UserData(
@@ -14,4 +13,19 @@ data class UserData(
     val phonenumber: String,
     val address: String,
     val email: String
+)
+
+data class Member(
+var memberid: Int = 0,
+var name: String = "",
+var cellphone: String = "",
+var address: String = "",
+var gender: Char = 'M',
+var birthday: String? = null,
+var email: String = "",
+var imageid: Int = 0,
+var status: Char = '1',
+var createdate: String? = null,
+var modifydate: String? = null
+
 )
