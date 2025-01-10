@@ -48,8 +48,8 @@ fun RoomSelectionScreen(
 
     // 根據 type 過濾房型列表
     val filteredRoomTypes = roomTypeList.filter {
-        Log.d(tag, "it.petType=${it.petType}, type=$type")
-        it.petType == type // 確保 type 和 petType 一致為 Char
+        Log.d(tag, "it.petType=${it.pettype}, type=$type")
+        it.pettype == type // 確保 type 和 petType 一致為 Char
     }
 
     Column(
@@ -118,13 +118,13 @@ fun RoomCard(
                 Spacer(modifier = Modifier.width(16.dp))
 
                 //                val imageUrl = "http://10.0.2.2:8080/PotelServer/booking/image?imageId=${roomType.imageId}"
-                val imageUrl = composeImageUrl(roomType.imageId)
-                Log.d(tag, "Loading image from URL: $imageUrl")
+                val imageurl = composeImageUrl(roomType.imageid)
+                Log.d(tag, "Loading image from URL: $imageurl")
 
                 AsyncImage(
 //                    model = "http://10.0.2.2:8080/PotelServer/api/image?imageId=28",
 //                    model = com.example.potel.ui.booking.composeImageUrl(RoomType.imageId),
-                    model = imageUrl,
+                    model = imageurl,
                     contentDescription = "房間照片",
                     alignment = Alignment.TopCenter,
                     contentScale = ContentScale.FillWidth,

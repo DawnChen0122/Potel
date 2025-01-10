@@ -46,22 +46,22 @@ data class Member(
     var email: String = "",
     var imageid: Int = 0,
     var status: Char = '1',
-    var createDate: String? = null,
-    var modifyDate: String? = null
+    var createdate: String? = null,
+    var modifydate: String? = null
 )
 
 data class RoomType(
-    var roomTypeId: Int = 0,
+    var roomtypeid: Int = 0,
     var descpt: String = "",
-    var imageId: Int = 28,
-    val imageUrl: String="",
+    var imageid: Int = 28,
+    val imageurl: String="",
     var price: Int = -1,
-    var petType: Char = 'D',
-    var weightL: Int = 0,
-    var weightH: Int = 0,
+    var pettype: Char = 'D',
+    var weightl: Int = 0,
+    var weighth: Int = 0,
     var status: Char = '1',
-    var createDate: String? = null,
-    var modifyDate: String? = null
+    var createdate: String? = null,
+    var modifydate: String? = null
 )
 
 
