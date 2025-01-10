@@ -20,7 +20,7 @@ import java.time.format.FormatStyle
 @Composable
 fun DateSelectionScreen(navController: NavHostController) {
     val bookingVM: BookingViewModel = viewModel(key = "bookingVM")
-    val order = bookingVM.addOrderEditState.collectAsState()
+    val order = bookingVM.addOrderEditState.collectAsState().value
 
     var showDateRangePickerDialog by remember { mutableStateOf(false) }
     var message by remember { mutableStateOf("請您選取入住日期和離開日期！") }
@@ -57,6 +57,8 @@ fun DateSelectionScreen(navController: NavHostController) {
                         } ?: "no selection"
                     }
                     """.trimIndent()
+
+                    order.expdates = pair.first.toString()
 
                     showDateRangePickerDialog = false
                     navController.navigate(BookingScreens.Booking.name)

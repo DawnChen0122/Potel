@@ -20,6 +20,15 @@ class BookingViewModel : ViewModel() {
 
     private var tag = "BookingViewModel"
     val apiService = RetrofitInstance.api
+    private val _creditCardNumber = MutableStateFlow("")
+    val creditCardNumber: StateFlow<String> = _creditCardNumber
+
+//    val _creditCardNumber = MutableStateFlow("")
+//    val creditCardNumber = _creditCardNumber.asStateFlow()
+
+    fun onCreditCardNumberChange(text: String) {
+        _creditCardNumber.update { text }
+    }
 
     // 定義一個可更改的變數, 但是是私有的(private), 只有VM自己可以改, 外部只能透過提供的method做修改
     private val _addOrderState = MutableStateFlow(Order())
@@ -61,12 +70,7 @@ class BookingViewModel : ViewModel() {
 //    val memberEditState = _memberEditState.asStateFlow()
 //    val roomTypeSelectedState = _roomTypeSelectedState.asStateFlow()
 
-    val _creditCardNumber = MutableStateFlow("")
-    val creditCardNumber = _creditCardNumber.asStateFlow()
 
-    fun onCreditCardNumberChange(text: String) {
-        _creditCardNumber.update { text }
-    }
 
 
 
