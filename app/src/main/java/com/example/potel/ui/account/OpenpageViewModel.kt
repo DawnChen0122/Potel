@@ -89,8 +89,9 @@ class OpenpageViewModel : ViewModel() {
                     memberid = 0,
                     name = "",
                     passwd = input.passwd,
-                    phonenumber = "",
+                    cellphone = "",
                     address = "",
+                    gender= "",
                     email = input.email // 可以選擇儲存錯誤時的 email
                 )
             }
@@ -102,8 +103,9 @@ class OpenpageViewModel : ViewModel() {
                 memberid = 0,
                 name = "",
                 passwd = input.passwd,
-                phonenumber = "",
+                cellphone = "",
                 address = "",
+                gender= "",
                 email = input.email // 同樣儲存錯誤時的 email
             )
         }

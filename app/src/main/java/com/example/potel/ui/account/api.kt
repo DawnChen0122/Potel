@@ -39,11 +39,9 @@ interface ApiService {
 
 
     @POST("member/add")
-    suspend fun addMember(
-        @Query("email") email: String,
-        @Query("cellphone") cellphone: String,
-        @Query("passwd") password: String
-    ): Member
+    suspend fun addmember(
+        @Body member: Member
+    ): Check
 }
 
 

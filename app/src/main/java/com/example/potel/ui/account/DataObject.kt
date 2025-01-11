@@ -9,10 +9,13 @@ data class Member(
     val memberid: Int = 0,
     val name: String = "",
     val passwd: String = "",
-    val phonenumber: String = "",
+    val cellphone: String = "",
     val address: String = "",
-    val email: String = ""
+    val email: String = "",
+    val gender: String = "M",
+    val birthday: String = ""
 )
+
 
 
 

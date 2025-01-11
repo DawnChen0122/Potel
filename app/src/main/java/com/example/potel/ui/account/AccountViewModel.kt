@@ -1,6 +1,7 @@
 package com.example.potel.ui.account
 
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -72,61 +73,31 @@ class AccountViewModel : ViewModel() {
         emailError = !email.matches(emailRegex)
         _email.value = email
     }
+
+    private val _addmember = MutableStateFlow(Change(success = false, message = ""))
+    val addmember = _addmember.asStateFlow()
+
+    suspend fun addmember(member: Member): Check {
+
+
+        if (member.passwd.isNotEmpty() && !passwordError) {
+            try {
+                Log.d("ChangePassWord", "Valid input, preparing to send request")
+
+                val response =
+                    RetrofitInstance.api.addmember(member)
+                return response
+            } catch (e: Exception) {
+
+                e.printStackTrace() // 打印錯誤堆疊，幫助調試
+                val check = Check(false, e.toString())
+                return check
+
+            }
+        } else {
+            val check = Check(false, "e.toString()")
+            return check
+        }
+    }
+
 }
-//    fun login(){
-//        val account = _email.value
-//        val passwd = _password.value
-//        viewModelScope.launch{
-//           val user =  RetrofitInstance.api.login(loginid = account, passwd = passwd)
-//            // 跳轉業面跟儲存
-//        }
-//    }
-//
-//}
-
-// 假設的 ApiService，負責處理登入請求
-//object ApiService3 {
-//    fun Login3(callback: (Result) -> Unit) {
-//        // 模擬的 API 呼叫，假設登入成功
-//        // 這裡您可以處理 API 的回應
-//        callback(Result())
-//    }
-//}
-//
-//// 假設的 Result 類別，用來表示 API 回應
-//class Result
-
-//    fun getApiData() {
-//        // todo 2-5 取得 API 資料，目前先用假資料
-//        _items.update {
-//            listOf(
-//                TipHomeItemUiState(
-//                    title = "Home",
-//                    imageVector = Icons.Filled.Home
-//                ),
-//                TipHomeItemUiState(
-//                    title = "Search",
-//                    imageVector = Icons.Filled.Search
-//                ),
-//                TipHomeItemUiState(
-//                    title = "Delete",
-//                    imageVector = Icons.Filled.Delete
-//                ),
-//            )
-//        }
-//    }
-
-//private fun ApiService.Companion.Login(string: String) {}
-//API 翻轉頁面 資料交互
-
-//    fun onConfirmClick() {
-//        ApiService.Login { result ->
-//            // 更新 _uid 資料，可以根據 API 回應來改變 uid
-//            _uid.value = listOf(
-//                TipHomeItemUiState(title = "User ID", imageVector = Icons.Filled.Person),
-////                TipHomeItemUiState(title = "User Data", imageVector = Icons.Filled.DataUsage)
-//            )
-//        }
-//    }
-//}
-
