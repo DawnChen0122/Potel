@@ -1,5 +1,6 @@
 package com.example.potel.ui.shopping
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -27,7 +28,7 @@ class ShopViewModel : ViewModel() {
 
 //            Log.d(tag, "response[0].prdtype=${response[0].prdtype}")
 
-            return response // 回傳List<Order>
+            return response
         } catch (e: Exception) {
 //            Log.e(tag, "error: ${e.message}")
             return emptyList()
@@ -35,13 +36,23 @@ class ShopViewModel : ViewModel() {
     }
 
     suspend fun getProduct(prdId: Int): Product? {
-//        Log.d(tag, "memberid=$memberid, orderstate=$orderstate")
+        val tag = "getProduct"
+        Log.d(tag, "prdId=$prdId")
         try {
             val response = RetrofitInstance.api.getProduct(prdId)
+            return response
+        } catch (e: Exception) {
+//            Log.e(tag, "error: ${e.message}")
+            return null
+        }
+    }
 
-//            Log.d(tag, "response[0].prdtype=${response[0].prdtype}")
-
-            return response // 回傳List<Order>
+    suspend fun addorder(prdId: Int): Product? {
+        val tag = "getProduct"
+        Log.d(tag, "prdId=$prdId")
+        try {
+            val response = RetrofitInstance.api.getProduct(prdId)
+            return response
         } catch (e: Exception) {
 //            Log.e(tag, "error: ${e.message}")
             return null

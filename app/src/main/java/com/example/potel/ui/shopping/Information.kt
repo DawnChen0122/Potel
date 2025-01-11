@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import coil.compose.AsyncImage
 import com.example.potel.R
 import com.example.potel.ui.theme.PotelTheme
 import kotlinx.coroutines.launch
@@ -41,25 +42,28 @@ import kotlinx.coroutines.launch
 @Composable
 fun InformationScreen(
     navController: NavHostController,
-    prdId: Int
+    prdId: String
 ) {
     val tag = "InformationScreen"
+
     val backStackEntry = navController.getBackStackEntry(ShopScreens.Twoclass.name)
-    val ShopViewModel: ShopViewModel = viewModel(backStackEntry, key = "shoppingVM")
+    val shopViewModel: ShopViewModel = viewModel(backStackEntry, key = "shoppingVM")
     val coroutineScope = rememberCoroutineScope()
     var product by remember { mutableStateOf<Product?>(null)}
-    Log.d(tag, "prdId=$prdId")
+    var count by remember { mutableStateOf(1) }
+    var amount by remember { mutableStateOf(0) }
+
 
     LaunchedEffect(Unit) {
         coroutineScope.launch {
-            product = ShopViewModel.getProduct(prdId)
+            Log.d(tag, "prdId=$prdId")
+            product = shopViewModel.getProduct(prdId.toInt())
+            amount = count * (product?.price?:0)
         }
     }
 
 //    var title by viewModel.title.collectAsState()
-    var count by remember { mutableStateOf(1) }
-    var amount by remember { mutableStateOf(1) }
-    LaunchedEffect(count) { amount = count * 230 }
+//    LaunchedEffect(count) { amount = count * 230 }
 
     Column(
         modifier = Modifier
@@ -69,19 +73,25 @@ fun InformationScreen(
         verticalArrangement = Arrangement.SpaceEvenly
     ) {
         // 顯示圖片，並設置圓角
-        Image(
-            painter = painterResource(id = R.drawable.salmonfro),
-            contentDescription = "商品圖片",
-            modifier = Modifier
-                .size(250.dp) // 圖片大小設為 250.dp
-                .clip(RoundedCornerShape(16.dp)), // 圓角邊框
-            contentScale = ContentScale.Fit // 剪裁圖片來適應容器
+//        Image(
+//            painter = painterResource(id = R.drawable.salmonfro),
+//            contentDescription = "商品圖片",
+//            modifier = Modifier
+//                .size(250.dp) // 圖片大小設為 250.dp
+//                .clip(RoundedCornerShape(16.dp)), // 圓角邊框
+//            contentScale = ContentScale.Fit // 剪裁圖片來適應容器
+//        )
+        AsyncImage(
+            model = composeImageUrl(product?.imageId?:0),
+            contentDescription = "寵物照片",
+            alignment = Alignment.TopCenter,
+            contentScale = ContentScale.FillWidth,
         )
 
 
         // 顯示標題
         Text(
-            text = "【優格】鮮肉佐餐凍乾(鮭魚配方)\n60克(狗零食)",
+            text = product?.prdName?:"",
             fontSize = 24.sp, // 字型大小: 24sp
             fontWeight = FontWeight.Bold, // 字體樣式: 粗體
             color = Color.Black, // 字的顏色: 黑色
@@ -89,7 +99,7 @@ fun InformationScreen(
         )
         //顯示內文
         Text(
-            text = "【成份：雞鮮肉、樹薯粉、鮭魚鮮肉、糙米粉、啤酒酵母、紅藜麥、鮭魚油、蕃茄粉、南瓜粉、益生菌（腸球F菌、嗜酸乳桿菌、乳雙歧桿菌、鼠李糖乳桿菌）、維生素E",
+            text = product?.prdDesc?:"",
             fontSize = 16.sp, // 字型大小: 16sp
             fontWeight = FontWeight.Thin, // 字體樣式: 細體
             color = Color.DarkGray, // 字的顏色: 深灰色
@@ -108,6 +118,7 @@ fun InformationScreen(
                     modifier = Modifier.size(36.dp).clickable {
                         if (count > 0) {
                             count--
+                            amount = count * (product?.price?:0)
                         }
                     }, imageVector = Icons.Default.ArrowDropDown, contentDescription = null
                 )
@@ -121,7 +132,10 @@ fun InformationScreen(
             Box(modifier = Modifier.padding(8.dp).background(Color.Yellow, shape = CircleShape)) {
 
                 Image(
-                    modifier = Modifier.size(36.dp).clickable { count++ },
+                    modifier = Modifier.size(36.dp).clickable {
+                        count++
+                        amount = count * (product?.price?:0)
+                                                              },
                     imageVector = Icons.Default.KeyboardArrowUp, contentDescription = null
                 )
             }

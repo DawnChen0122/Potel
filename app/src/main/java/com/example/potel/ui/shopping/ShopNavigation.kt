@@ -34,11 +34,11 @@ fun NavGraphBuilder.shopScreenRoute(navController: NavHostController) {
         )
     }
     composable(
-        route = "${ShopScreens.Information.name}/{prdID}",
+        route = "${ShopScreens.Information.name}/{prdId}",
     ) { backStackEntry ->
         InformationScreen(
             navController = navController,
-            prdId = backStackEntry.arguments?.getInt("prdId") ?: 0
+            prdId = backStackEntry.arguments?.getString("prdId") ?: "0"
         )
     }
     composable(

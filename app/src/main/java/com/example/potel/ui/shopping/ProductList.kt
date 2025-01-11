@@ -25,6 +25,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
@@ -60,13 +61,13 @@ fun ProductListScreen(
 
     ListGrid(
         products = productList,
-        onItemClick = {
+        onItemClick = {product ->
             // 跳轉到商品詳情頁面，傳遞商品ID
-            navController.navigate(ShopScreens.Information.name)
+            Log.d(tag, "ListGrid==>prdId=${product.prdId}")
+            navController.navigate("${ShopScreens.Information.name}/${product.prdId}")
         }
     )
 }
-
 
 
 @Composable
@@ -112,7 +113,11 @@ fun ListGrid(
                     text = product.prdName,
                     fontWeight = FontWeight.Bold
                 )
-                Text(text = product.price.toString())
+                Text(
+                    text = "$ ${product.price}",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 22.sp
+                )
             }
         }
     }

@@ -22,30 +22,32 @@ interface ApiService {
 //    suspend fun getProductInformation(@Query("categoryId") categoryId: Int): List<Product>
 
     /** 取得指定商品詳細資訊 */
-    @GET("shopping/Information")
+    @GET("shopping/Product")
     suspend fun getProduct(
         @Query("prdId") prdId: Int
     ): Product
 
     /** 提交訂單 */
     @POST("shopping/Order")
-    suspend fun addOrder(@Body orderRequest: OrderRequest): Response<OrderResponse>
+    suspend fun addOrder(
+        @Body orderRequest: OrderRequest
+    ): Int
 
 
-    /** 修改訂單狀態（例如，付款、發貨等） */
-    @PUT("api/order")
-    suspend fun updateOrderStatus(
-        @Query("orderId") orderId: Int,
-        @Body updateOrderRequest: OrderRequest
-    ): OrderResponse
+//    /** 修改訂單狀態（例如，付款、發貨等） */
+//    @PUT("api/order")
+//    suspend fun updateOrderStatus(
+//        @Query("orderId") orderId: Int,
+//        @Body updateOrderRequest: OrderRequest
+//    ): OrderResponse
 }
 
-
+val baseurl = "http://10.0.2.2:8080/PotelServer/"
 // 基本的 API 基礎 URL
 object RetrofitInstance {
     val api: ApiService by lazy {
         Retrofit.Builder()
-            .baseUrl("http://10.0.2.2:8080/PotelServer/")
+            .baseUrl(baseurl)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(ApiService::class.java)
@@ -68,9 +70,11 @@ data class Category(
 data class Product(
     val prdId: Int, // 商品 ID
     val prdName: String, // 商品名稱
-    val price: Double, // 商品價格
-    val imageId: Int // 商品圖片 ID
+    val price: Int, // 商品價格
+    val imageId: Int, // 商品圖片 ID
+    val prdDesc: String //商品描述
 )
+
 
 //// 定義商品詳細資料模型
 //data class ProductDetail(
@@ -84,12 +88,13 @@ data class Product(
 // 定義訂單請求資料模型
 data class OrderRequest(
     val prdId: Int, // 商品 ID
-    val quantity: Int, // 訂購數量
-    val memberId: Int // 會員 ID
+    val prdCount: Int, // 訂購數量
+    val memberId: Int, // 會員 ID
+    val amount: Int //總價
 )
 
 // 定義訂單回應資料模型
-data class OrderResponse(
-    val orderId: Int, // 訂單 ID
-    val status: String // 訂單狀態
-)
+//data class OrderResponse(
+//    val orderId: Int, // 訂單 ID
+//    val status: String // 訂單狀態
+//)
