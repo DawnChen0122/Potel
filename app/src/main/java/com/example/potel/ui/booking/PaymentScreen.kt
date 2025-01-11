@@ -27,7 +27,8 @@ fun PaymentScreen(
     val selectedRoomType by bookingVM.roomTypeSelectedState.collectAsState()
     var expiryDate by remember { mutableStateOf("") }
     var cvv by remember { mutableStateOf("") }
-    val amount = "100"
+
+//    val amount = "100"
 
 
     val fieldModifier = Modifier
@@ -91,11 +92,14 @@ fun PaymentScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
         val totalAmount = days * selectedRoomType.price
-        Text("金額: $$totalAmount")
+        Text("全部金額: $$totalAmount")
 
         Spacer(modifier = Modifier.height(24.dp))
         Button(
             onClick = {
+//                val newOrder = Order(memberId = memberId, title = title, content = content)
+//                bookingVM.addOrder(newOrder)
+//                )
                 bookingVM.onCheckOutClick()
 //                bookingVM.addPaymentInfo("RRRRR")
                 navController.navigate("BookingSuccess") },

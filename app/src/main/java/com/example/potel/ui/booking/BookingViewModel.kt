@@ -8,7 +8,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlin.time.Duration.Companion.days
 
 
 /**
@@ -47,7 +46,22 @@ class BookingViewModel : ViewModel() {
             _daySelectState.value = days // 更新值
         }
 
-
+    // 確認並新增訂單
+    fun addOrder(order: Order) {
+        viewModelScope.launch {
+            try {
+                val response = apiService.addOrder(order)
+                if (response.isSuccessful) {
+                    Log.d(tag, "Order added successfully!")
+                    _addOrderState.value = order // 更新狀態以顯示成功訂單
+                } else {
+                    Log.e(tag, "Failed to add order: ${response.errorBody()?.string()}")
+                }
+            } catch (e: Exception) {
+                Log.e(tag, "Error adding order: ${e.message}")
+            }
+        }
+    }
 
 
 

@@ -1,16 +1,13 @@
 package com.example.potel.ui.booking
 
-import com.example.potel.ui.myorders.Order
-import com.example.potel.ui.myorders.PrdOrder
-import com.example.potel.ui.myorders.ResponseObject
 import com.example.potel.ui.myorders.utils.MyCookieJar
 import okhttp3.OkHttpClient
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.GET
-import retrofit2.http.PUT
-import retrofit2.http.Query
+import retrofit2.http.POST
 import java.sql.Timestamp
 
 
@@ -34,6 +31,9 @@ interface ApiService {
 //    ): List<RoomTypeResponse>
     @GET("booking/findroomtype")
     suspend fun fetchRoomTypes(): List<RoomType>
+
+    @POST("booking/addorder")
+    suspend fun addOrder(@Body orderRequest:Order): Response<Unit>
 
 //    /** 取得所有該會員的訂房訂單orders */
 //    @GET("booking/findroomtype")
