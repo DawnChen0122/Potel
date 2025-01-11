@@ -14,8 +14,8 @@ interface ApiService {
     /** 取得所有商品類別 */
     @GET("shopping/List")
     suspend fun getProductList(
-        @Query("prdtype") prdtype:String
-    ):List<Product>
+        @Query("prdtype") prdtype: String
+    ): List<Product>
 
 //    /** 根據類別獲取商品列表 */
 //    @GET("shopping/Information")
@@ -23,11 +23,24 @@ interface ApiService {
 
     /** 取得指定商品詳細資訊 */
     @GET("shopping/Information")
-    suspend fun getProductInformation(@Query("productId") productId: Int): ProductDetail
+    suspend fun getProduct(
+        @Query("prdId") prdId: Int
+    ): Product
 
-    /** 提交訂單 */
-    @POST("shopping/Order")
-    suspend fun getOrder(@Body orderRequest: OrderRequest): OrderResponse
+//    /** 提交訂單 */
+//    @POST("shopping/Order")
+//    suspend fun getOrder(@Body orderRequest: OrderRequest): Response<OrderResponse>
+//
+//    object RetrofitInstance {
+//        val api: ShopApiService by lazy {
+//            Retrofit.Builder()
+//                .baseUrl("http://10.0.2.2:8080/TripAppEnd/") // Base URL
+//                .addConverterFactory(GsonConverterFactory.create()) // GSON for JSON conversion
+//                .build()
+//                .create(ShopApiService::class.java)
+//        }
+//    }
+
 
     /** 修改訂單狀態（例如，付款、發貨等） */
     @PUT("api/order")
@@ -61,24 +74,24 @@ data class Category(
 
 // 定義商品資料模型
 data class Product(
-    val id: Int, // 商品 ID
-    val name: String, // 商品名稱
+    val prdId: Int, // 商品 ID
+    val prdName: String, // 商品名稱
     val price: Double, // 商品價格
-    val imageid: Int // 商品圖片 ID
+    val imageId: Int // 商品圖片 ID
 )
 
-// 定義商品詳細資料模型
-data class ProductDetail(
-    val id: Int, // 商品 ID
-    val name: String, // 商品名稱
-    val description: String, // 商品描述
-    val price: Double, // 商品價格
-    val stock: Int // 商品庫存量
-)
+//// 定義商品詳細資料模型
+//data class ProductDetail(
+//    val id: Int, // 商品 ID
+//    val name: String, // 商品名稱
+//    val description: String, // 商品描述
+//    val price: Int, // 商品價格
+//    val stock: Int // 商品庫存量
+//)
 
 // 定義訂單請求資料模型
 data class OrderRequest(
-    val productId: Int, // 商品 ID
+    val prdId: Int, // 商品 ID
     val quantity: Int, // 訂購數量
     val memberId: Int // 會員 ID
 )

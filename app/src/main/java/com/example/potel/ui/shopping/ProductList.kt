@@ -31,13 +31,13 @@ import coil.compose.AsyncImage
 import com.example.potel.R
 import kotlinx.coroutines.launch
 
-//// 定義產品資料類別
-//data class Products(
-//    val id: String,
-//    val name: String,
-//    val price: Double,
-//    val image: Int
-//)
+// 定義產品資料類別
+data class Products(
+    val id: String,
+    val name: String,
+    val price: Int,
+    val image: Int
+)
 
 @Composable
 fun ProductListScreen(
@@ -46,16 +46,16 @@ fun ProductListScreen(
 ) {
     val tag = "ProductListScreen"
     val backStackEntry = navController.getBackStackEntry(ShopScreens.Twoclass.name)
-//    val shoppingViewModel: ShoppingViewModel = viewModel(backStackEntry, key = "shoppingVM")
+    val ShopViewModel: ShopViewModel = viewModel(backStackEntry, key = "shoppingVM")
     val coroutineScope = rememberCoroutineScope()
     var productList by remember { mutableStateOf<List<Product>>(emptyList()) }
     Log.d(tag, "prdtype=$prdtype")
 
-//    LaunchedEffect(Unit) {
-//        coroutineScope.launch {
-//            productList = shoppingViewModel.getProductList(prdtype)
-//        }
-//    }
+    LaunchedEffect(Unit) {
+        coroutineScope.launch {
+            productList = ShopViewModel.getProductList(prdtype)
+        }
+    }
 
 
     ListGrid(
@@ -74,6 +74,8 @@ fun ListGrid(
     products: List<Product>, // 傳入顯示的產品列表
     onItemClick: (Product) -> Unit // 點擊事件的回傳
 ) {
+    val tag = "ListGrid"
+    Log.d(tag, "products=${products.size}")
     LazyVerticalGrid(
         columns = GridCells.Fixed(2), // 設定最小欄寬為128dp
         modifier = Modifier
@@ -82,6 +84,7 @@ fun ListGrid(
     ) {
         items(products.size) { index -> // 遍歷每個產品
             val product = products[index]
+            Log.d(tag, "product=$product")
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(10.dp),
@@ -92,7 +95,7 @@ fun ListGrid(
                     .clickable { onItemClick(product) } // 直接呼叫onItemClick
             ) {
                 AsyncImage(
-                    model = composeImageUrl(product.imageid),
+                    model = composeImageUrl(product.imageId),
                     contentDescription = "寵物照片",
                     alignment = Alignment.TopCenter,
                     contentScale = ContentScale.FillWidth,
@@ -106,7 +109,7 @@ fun ListGrid(
 //                    contentScale = ContentScale.FillWidth
 //                )
                 Text(
-                    text = product.name,
+                    text = product.prdName,
                     fontWeight = FontWeight.Bold
                 )
                 Text(text = product.price.toString())

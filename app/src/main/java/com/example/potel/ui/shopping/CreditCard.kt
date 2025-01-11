@@ -1,7 +1,6 @@
 package com.example.potel.ui.shopping
 
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -26,19 +25,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.example.potel.ui.theme.PotelTheme
 
 @Composable
-fun CreditCardScreen(viewModel: CreditCardViewModel = viewModel(), navController: NavHostController) {    // 使用 remember 和 mutableStateOf 來保存並更新顯示的文本
+fun CreditCardScreen(viewModel: ShopViewModel = viewModel(), navController: NavHostController) {    // 使用 remember 和 mutableStateOf 來保存並更新顯示的文本
 
     val cardnumber  by viewModel.cardnumber.collectAsState()
-
     var expiredate by remember { mutableStateOf("") }
-
     var safecode by remember { mutableStateOf("") }
 
     Column(

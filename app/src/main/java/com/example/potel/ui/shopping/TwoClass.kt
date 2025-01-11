@@ -32,10 +32,9 @@ import androidx.navigation.NavHostController
 fun TwoClassScreen(
     navController: NavHostController
 ) {
-//    val shoppingVM: ShoppingViewModel = viewModel(key = "shoppingVM")
-//    val context = LocalContext.current
-    // 開 "settings"這個檔案, 沒有的話就建一個
-//    val preferences = context.getSharedPreferences("product", Context.MODE_PRIVATE)
+    val shoppingVM: ShopViewModel = viewModel(key = "shoppingVM")
+    val context = LocalContext.current
+    val preferences = context.getSharedPreferences("member", Context.MODE_PRIVATE)
 //    val productid = preferences.getString("uid", "1")!!
 
 
