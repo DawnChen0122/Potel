@@ -132,7 +132,7 @@ fun CommentEditScreen(
                 OutlinedTextField(
                     value = content,
                     onValueChange = { if (it.length <= 150) content = it },
-                    placeholder = { Text("內容", color = Color.LightGray)},
+                    placeholder = { Text("輸入留言內容", color = Color.LightGray)},
                     modifier = Modifier
                         .fillMaxWidth(),
                     colors = OutlinedTextFieldDefaults.colors(

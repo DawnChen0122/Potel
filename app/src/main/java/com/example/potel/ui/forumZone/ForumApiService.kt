@@ -15,6 +15,7 @@ import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Part
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface ForumApiService {
 
@@ -63,6 +64,19 @@ interface ForumApiService {
     @PUT("Forum/updateComment")
     suspend fun updateComment(
         @Body commentUpdateRequest: CommentUpdateRequest
+    ): Response<Unit>
+
+
+    @POST("Forum/LikeControl")
+    suspend fun likePost(
+        @Query("postId") postId: Int,
+        @Query("memberId") memberId: Int
+    ): Response<Unit>
+
+    @DELETE("Forum/UnLikeControl")
+    suspend fun unlikePost(
+        @Query("postId") postId: Int,
+        @Query("memberId") memberId: Int
     ): Response<Unit>
 }
 

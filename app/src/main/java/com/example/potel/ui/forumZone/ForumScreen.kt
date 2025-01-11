@@ -73,7 +73,7 @@ fun ForumScreen(
 ) {
     val forumVM: ForumVM = viewModel()
     val posts by forumVM.forumsState.collectAsState()
-    val memberId = 3
+    val memberId = 5
     Column(Modifier
         .fillMaxSize()
         .background(colorResource(R.color.forum))
@@ -231,7 +231,7 @@ fun PostCard(
             .background(colorResource(R.color.forum))
             .padding(5.dp)
             .clickable {
-                forumVM.setSelectedPost(post)
+                forumVM.setSelectedPost(post, memberId)
                 navController.navigate(ForumScreens.PostScreen.name)
             }
     ) {
@@ -268,7 +268,7 @@ fun PostCard(
             onOptionSelected = { actionOption ->
                 when (actionOption) {
                     "編輯" -> {
-                        forumVM.setSelectedPost(post)
+                        forumVM.setSelectedPost(post, memberId)
                         navController.navigate(ForumScreens.PostEditScreen.name)
                     }
                     "刪除" -> {
@@ -455,7 +455,7 @@ fun PostFooter(likesCount: Int, liked: Boolean, commentCount: Int) {
         horizontalArrangement = Arrangement.Center
     ) {
         if (liked) Icon(Icons.Filled.Favorite, contentDescription = "讚數", tint = Color.Red)
-        else Icon(Icons.Filled.FavoriteBorder, contentDescription = "讚數", tint = Color.Red)
+        else Icon(Icons.Filled.FavoriteBorder, contentDescription = "讚數", tint = Color.White)
         Spacer(Modifier.size(5.dp))
         Text(text = likesCount.toString(), fontSize = 14.sp, color = Color.White)
         Spacer(Modifier.size(15.dp))

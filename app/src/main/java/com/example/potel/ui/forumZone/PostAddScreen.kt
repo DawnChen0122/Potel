@@ -69,7 +69,7 @@ fun PostAddScreen(
     // 從導航堆疊中取得 ForumVM 這個 ViewModel
     val forumVM: ForumVM = viewModel(navController.getBackStackEntry(ForumScreens.ForumScreen.name))
 
-    val memberId = 1 // 使用固定的 memberId，未來可以根據用戶登入情況動態改變
+    val memberId = 5 // 使用固定的 memberId，未來可以根據用戶登入情況動態改變
     var title by remember { mutableStateOf("") }
     var content by remember { mutableStateOf("") }
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }

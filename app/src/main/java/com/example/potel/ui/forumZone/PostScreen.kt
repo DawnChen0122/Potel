@@ -206,9 +206,8 @@ fun PostBodySection(post: Post) {
 
 @Composable
 fun LikeController(forumVM: ForumVM, post: Post, memberId: Int) {
-
-    val liked by remember { mutableStateOf(forumVM.isPostLikedByMember(post.postId, memberId)) }
-    val likesCount by remember { mutableIntStateOf(forumVM.getLikesCountForPost(post.postId)) }
+    var liked by remember { mutableStateOf(forumVM.isPostLikedByMember(post.postId, memberId))}
+    var likesCount by remember { mutableIntStateOf(forumVM.getLikesCountForPost(post.postId)) }
 
     Row(
         modifier = Modifier
@@ -220,10 +219,14 @@ fun LikeController(forumVM: ForumVM, post: Post, memberId: Int) {
         IconButton(
             onClick = {
                 if (liked) {
-
+                    forumVM.unLike(post.postId,memberId)
+                    likesCount--
                 } else {
-
+                    forumVM.Like(post.postId,memberId)
+                    likesCount++
                 }
+                liked =!liked
+                Log.d("LikeController", "like: $liked")
             },
             modifier = Modifier.width(55.dp)
         ) {
@@ -234,7 +237,7 @@ fun LikeController(forumVM: ForumVM, post: Post, memberId: Int) {
                     imageVector = if (liked) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
                     contentDescription = "按讚按鈕",
                     modifier = Modifier.size(20.dp),
-                    tint = Color.Red
+                    tint = if (liked) Color.Red else Color.LightGray
                 )
                 Spacer(Modifier.size(5.dp))
                 Text(

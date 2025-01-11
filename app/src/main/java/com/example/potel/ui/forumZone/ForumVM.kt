@@ -29,7 +29,7 @@ class ForumVM : ViewModel() {
     val forumsState: StateFlow<List<Post>> = _forumsState.asStateFlow()
 
     private val _likeCountState = MutableStateFlow(emptyList<Like>())
-//    val likeCountState: StateFlow<List<Like>> = _likeCountState.asStateFlow()
+    val likeCountState: StateFlow<List<Like>> = _likeCountState.asStateFlow()
 
     private val _commentsState = MutableStateFlow(emptyList<Comment>())
 //    val commentsState: StateFlow<List<Comment>> = _commentsState.asStateFlow()
@@ -44,7 +44,7 @@ class ForumVM : ViewModel() {
     }
 
     // 更新選中貼文和其留言
-    fun setSelectedPost(post: Post) {
+    fun setSelectedPost(post: Post, memberId: Int) {
         _postSelectedState.value = post
         _postSelectedCommentsList.value = _commentsState.value.filter { it.postId == post.postId }
     }
@@ -118,11 +118,6 @@ class ForumVM : ViewModel() {
         }
     }
 
-    // 計算某貼文的按讚數
-    fun getLikesCountForPost(postId: Int): Int {
-        return _likeCountState.value.count { it.postId == postId }
-    }
-
     fun getCommentCountForPost(postId: Int): Int {
         return _commentsState.value.count { it.postId == postId }
     }
@@ -183,10 +178,6 @@ class ForumVM : ViewModel() {
         }
     }
 
-    fun isPostLikedByMember(postId: Int, memberId: Int): Boolean {
-        return _likeCountState.value.any { it.postId == postId && it.memberId == memberId }
-    }
-
     fun updatePostWithImage(post: Post, imagePart: MultipartBody.Part?) {
         viewModelScope.launch {
             try {
@@ -204,7 +195,7 @@ class ForumVM : ViewModel() {
 
                 if (response.isSuccessful) {
                     Log.d(tag, "updatePostWithImage successfully: ${response.body()}")
-                    fetchForumData()  // 重新加載論壇資料
+                    fetchForumData()
                 } else {
                     Log.e(tag, "Error updatePostWithImage Code ${response.code()}")
                 }
@@ -221,7 +212,7 @@ class ForumVM : ViewModel() {
                 val response = RetrofitInstance.api.updatePost(postUpdateRequest)
                 if (response.isSuccessful) {
                     Log.d(tag, "updatePost successfully: ${response.body()}")
-                    fetchForumData()  // 重新加載論壇資料
+                    fetchForumData()
                 } else {
                     Log.e(tag, "Error updatePost: Code ${response.code()}")
                 }
@@ -246,6 +237,47 @@ class ForumVM : ViewModel() {
                 Log.e(tag, "Error updateComment: ${e.message}")
             }
         }
+    }
+
+    fun getLikesCountForPost(postId: Int): Int {
+        return _likeCountState.value.count { it.postId == postId }
+    }
+
+    fun isPostLikedByMember(postId: Int, memberId: Int): Boolean {
+        return _likeCountState.value.any { it.postId == postId && it.memberId == memberId }
+    }
+
+    fun unLike(postId: Int, memberId: Int) {
+        viewModelScope.launch {
+            try {
+                val response = RetrofitInstance.api.unlikePost(postId, memberId)
+                if (response.isSuccessful) {
+                    Log.d(tag, "Post unliked successfully")
+                    fetchLikeData()
+                } else {
+                    Log.e(tag, "Error unliking post: Code ${response.code()}")
+                }
+            } catch (e: Exception) {
+                Log.e(tag, "Error unliking post: ${e.message}")
+            }
+        }
+    }
+
+    fun Like(postId: Int, memberId: Int) {
+        viewModelScope.launch {
+            try {
+                val response = RetrofitInstance.api.likePost(postId, memberId)
+                if (response.isSuccessful) {
+                    Log.d(tag, "Post liked successfully")
+                    fetchLikeData()
+                } else {
+                    Log.e(tag, "Error liking post: Code ${response.code()}")
+                }
+            } catch (e: Exception) {
+                Log.e(tag, "Error liking post: ${e.message}")
+            }
+        }
+
     }
 }
 
