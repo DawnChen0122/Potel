@@ -27,39 +27,31 @@ interface ApiService {
         @Query("prdId") prdId: Int
     ): Product
 
-//    /** 提交訂單 */
-//    @POST("shopping/Order")
-//    suspend fun getOrder(@Body orderRequest: OrderRequest): Response<OrderResponse>
-//
-//    object RetrofitInstance {
-//        val api: ShopApiService by lazy {
-//            Retrofit.Builder()
-//                .baseUrl("http://10.0.2.2:8080/TripAppEnd/") // Base URL
-//                .addConverterFactory(GsonConverterFactory.create()) // GSON for JSON conversion
-//                .build()
-//                .create(ShopApiService::class.java)
-//        }
-//    }
+    /** 提交訂單 */
+    @POST("shopping/Order")
+    suspend fun addOrder(@Body orderRequest: OrderRequest): Response<OrderResponse>
 
 
     /** 修改訂單狀態（例如，付款、發貨等） */
     @PUT("api/order")
-    suspend fun updateOrderStatus(@Query("orderId") orderId: Int, @Body updateOrderRequest: OrderRequest): OrderResponse
+    suspend fun updateOrderStatus(
+        @Query("orderId") orderId: Int,
+        @Body updateOrderRequest: OrderRequest
+    ): OrderResponse
 }
 
-// 基本的 API 基礎 URL
-const val baseurl = "http://10.0.2.2:8080/PotelServer/"
 
-// 單例模式，建立一個符合 ApiService 介面的物件
+// 基本的 API 基礎 URL
 object RetrofitInstance {
     val api: ApiService by lazy {
         Retrofit.Builder()
-            .baseUrl(baseurl) // 設定基本 URL
-            .addConverterFactory(GsonConverterFactory.create()) // 使用 GSON 來處理 JSON 轉換
+            .baseUrl("http://10.0.2.2:8080/PotelServer/")
+            .addConverterFactory(GsonConverterFactory.create())
             .build()
-            .create(ApiService::class.java) // 創建 API 介面的實現
+            .create(ApiService::class.java)
     }
 }
+
 
 // 根據圖片 ID 生成圖片 URL
 fun composeImageUrl(imageId: Int): String {
