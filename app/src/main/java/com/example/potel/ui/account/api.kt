@@ -32,7 +32,7 @@ interface ApiService {
     suspend fun login(
         @Query("INPUT") input: String,
         @Query("PASSWORD") password: String
-    ): Check
+    ): Member
 
 
 

@@ -156,7 +156,7 @@ fun Resetpassword2 (viewModel:ResetPassWordViewModel = viewModel()
                     "密碼不一致"
                 } else {
                     viewModel.viewModelScope.launch {
-                        val member = Member(email = email ,passwd = password)
+                        val member = Member(email = email ,password = password)
 
                         viewModel.ChangePassWord(member)
                     }

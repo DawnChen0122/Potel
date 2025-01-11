@@ -6,11 +6,21 @@ data class Check(
 )
 
 data class Member(
-    val email: String,
-    val passwd: String
+    val memberid: Int = 0,
+    val name: String = "",
+    val password: String = "",
+    val phonenumber: String = "",
+    val address: String = "",
+    val email: String = ""
 )
 
 
+
+
+data class Input(
+    val email: String,
+    val passwd: String
+)
 
 
 

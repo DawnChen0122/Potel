@@ -1,5 +1,9 @@
 package com.example.potel.ui.account
 
+import android.R.id.input
+import android.content.Context
+import android.util.Log
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
@@ -20,10 +24,17 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import androidx.compose.material3.Text
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.potel.ui.forumZone.ForumScreens
 import com.example.potel.ui.home.AccountScreens
+import com.example.potel.ui.petsfile.PetsFileScreens
+import kotlinx.coroutines.launch
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -32,6 +43,17 @@ import com.example.potel.ui.home.AccountScreens
 
 fun Login(viewModel:OpenpageViewModel = viewModel()
           , navController: NavHostController) {
+
+    val context = LocalContext.current
+    // 開 "settings"這個檔案, 沒有的話就建一個
+    val preferences = context.getSharedPreferences("member", Context.MODE_PRIVATE)
+//    val memberid = preferences.getString("uid", "1")!!
+//    val member = Member()
+
+
+
+
+
 
     val inputError by viewModel.inputError.collectAsState()
 
@@ -64,7 +86,7 @@ fun Login(viewModel:OpenpageViewModel = viewModel()
 //                modifier = Modifier.clickable {
 //                    navController.navigate(accountRoute)
 //                },
-                text = "Potel" ,
+                text = "Potel",
                 fontSize = 40.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.Blue
@@ -75,8 +97,9 @@ fun Login(viewModel:OpenpageViewModel = viewModel()
                 value = currentInput,
                 onValueChange = { value ->
                     currentInput = value
-                    viewModel.onInputChanged(value)},
-                    label = { Text(text = "請輸入信箱或手機號碼") },
+                    viewModel.onInputChanged(value)
+                },
+                label = { Text(text = "請輸入信箱或手機號碼") },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                 shape = RoundedCornerShape(8.dp),
                 isError = inputError,
@@ -137,12 +160,76 @@ fun Login(viewModel:OpenpageViewModel = viewModel()
 
 
         Row(
+            horizontalArrangement = Arrangement.Start,
+        ) {
+            Button(
+                shape = RoundedCornerShape(20),
+                onClick = {
+                    navController.navigate(route = AccountScreens.Edit.name)
+                },
+                border = BorderStroke(1.dp, Color.Black),
+                colors = ButtonDefaults.outlinedButtonColors(),
+                modifier = Modifier
+
+            )
+            {
+                Text(
+                    text = "註冊",
+                    style = TextStyle(
+                        fontSize = 27.sp,
+                        lineHeight = 32.sp,
+                        fontWeight = FontWeight(700),
+                        color = Color(0xFF000000),
+                        textAlign = TextAlign.Center,
+                    ),
+                    modifier = Modifier
+                        .width(135.dp)
+                        .height(45.dp)
+                )
+            }
+
+            Button(
+                shape = RoundedCornerShape(20),
+                onClick = {
+                    navController.navigate(route = AccountScreens.Reset.name)
+                },
+                border = BorderStroke(1.dp, Color.Black),
+                colors = ButtonDefaults.outlinedButtonColors(),
+                modifier = Modifier
+
+            )
+            {
+                Text(
+                    text = "忘記密碼",
+                    style = TextStyle(
+                        fontSize = 27.sp,
+                        lineHeight = 32.sp,
+                        fontWeight = FontWeight(700),
+                        color = Color(0xFF000000),
+                        textAlign = TextAlign.Center,
+                    ),
+                    modifier = Modifier
+                        .width(135.dp)
+                        .height(45.dp)
+                )
+            }
+        }
+
+
+
+
+        Row(
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
 
                 .padding(10.dp)
-        ) {
+        )
+
+        {
+
+
+
             var errorMessage by remember { mutableStateOf<String?>(null) }
             // 註冊按鈕
             Button(
@@ -153,13 +240,22 @@ fun Login(viewModel:OpenpageViewModel = viewModel()
                         errorMessage = "請輸入有效的信箱或手機號碼"
                     } else {
                         errorMessage = null // 清除錯誤訊息
-                        viewModel.login(input,password)
-                        "執行登入"
-                        if (){
+                        val input = Input(email, password)
+                        viewModel.viewModelScope.launch {
+                            val issucc = viewModel.login(input)
+                            Log.d("Login", "已登入0，issucc=$issucc")
 
-                            (
-                            navController.navigate(AccountScreens.HomeRoute.name)
-                            )
+                            if (issucc.memberid != 0) {  // 判斷登入是否成功（假設成功的 memberid 會非 0）
+                                preferences.edit().putInt("memberid", issucc.memberid)
+                                    .putString("name",issucc.name)
+                                    .apply()
+                                Log.d("Login", "已登入1，輸入的信箱/手機號碼: $issucc")
+                                navController.navigate(AccountScreens.HomeRoute.name)
+                                Log.d("Login", "已登入2，輸入的信箱/手機號碼: $input")
+                            } else {
+                                // 登入失敗，顯示錯誤訊息
+                                Log.d("Login", "登入失敗，錯誤訊息: 登入失敗，請檢查您的帳號密碼")
+                            }
                         }
                     }
                 },
@@ -168,7 +264,7 @@ fun Login(viewModel:OpenpageViewModel = viewModel()
                     .padding(top = 16.dp),
                 shape = RoundedCornerShape(8.dp)
             ) {
-                Text(text = "登入", fontSize = 16.sp)
+                Text(text = "登入", fontSize = 30.sp)
             }
             errorMessage?.let {
                 Text(

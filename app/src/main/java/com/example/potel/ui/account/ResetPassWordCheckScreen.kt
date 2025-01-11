@@ -63,7 +63,7 @@ fun Resetpassword (viewModel:ResetPassWordViewModel = viewModel()
            OutlinedTextField(
                value = email,
                onValueChange = viewModel::onEmailChanged,
-               label = { Text("請輸入信箱") },
+               label = { Text("請輸入信箱進行確認") },
                singleLine = true,
                shape = RoundedCornerShape(8.dp),
                isError = viewModel.emailError,
@@ -79,6 +79,31 @@ fun Resetpassword (viewModel:ResetPassWordViewModel = viewModel()
                             modifier = Modifier.padding(start = 16.dp)
                         )
                     }
+
+
+
+           OutlinedTextField(
+               value = phonenumber,
+               onValueChange = viewModel::onPhonenumberChanged,
+               label = { Text(text = "請輸入手機號碼進行確認") },
+               singleLine = true,
+               shape = RoundedCornerShape(8.dp),
+               isError = viewModel.phonenumberError,
+               modifier = Modifier
+                   .fillMaxWidth()
+                   .padding(top = 10.dp),
+               keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+           )
+           if (viewModel.phonenumberError) {
+               Text(
+                   text = "手機號碼為十位數字",
+                   color = Color.Red,
+                   fontSize = 12.sp,
+                   modifier = Modifier.padding(start = 16.dp)
+               )
+           }
+
+
 
            OutlinedTextField(
                value = password,
@@ -162,26 +187,6 @@ fun Resetpassword (viewModel:ResetPassWordViewModel = viewModel()
                     }
 
 
-           OutlinedTextField(
-               value = phonenumber,
-               onValueChange = viewModel::onPhonenumberChanged,
-               label = { Text(text = "請輸入手機號碼") },
-               singleLine = true,
-               shape = RoundedCornerShape(8.dp),
-               isError = viewModel.phonenumberError,
-               modifier = Modifier
-                   .fillMaxWidth()
-                   .padding(top = 10.dp),
-               keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-               )
-           if (viewModel.phonenumberError) {
-               Text(
-                   text = "手機號碼為十位數字",
-                   color = Color.Red,
-                   fontSize = 12.sp,
-                   modifier = Modifier.padding(start = 16.dp)
-               )
-           }
 
 
            Button(
@@ -192,7 +197,7 @@ fun Resetpassword (viewModel:ResetPassWordViewModel = viewModel()
                    } else if (password != checkpassword) {
                    "密碼不一致"
                    } else {
-                       val member = Member(email, password)
+                       val member = Member(email = email, phonenumber = phonenumber, password = password )
                        viewModel.viewModelScope.launch {
                            viewModel.checkEmailAndCellphone()
                            viewModel.ChangePassWord(member)

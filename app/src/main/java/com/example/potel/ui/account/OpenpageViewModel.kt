@@ -68,38 +68,45 @@ class OpenpageViewModel : ViewModel() {
     private val _login = MutableStateFlow(Change(success = false, message = ""))
     val login = _login.asStateFlow()
 
-    suspend fun login(member: Member): Check {
+    suspend fun login(input: Input): Member {
         val password = _password.value
+
+        Log.d("Login", "嘗試登入，輸入: ${input.toString()}, 密碼: $password")
 
         if (password.isNotEmpty() && !passwordError) {
             try {
-                Log.d("ChangePassWord", "Valid input, preparing to send request")
+                Log.d("Login", "登入成功")
+                // 這裡假設 Retrofit 回傳的是 Member 類型的物件
+                val response = RetrofitInstance.api.login(input.email, input.passwd)
 
-                val response = RetrofitInstance.api.login(input.toString(), password)
-                return response
+                // 假設 response 是 Member 類型，可以直接返回
+                return response // 直接返回成功的 Member 物件
             } catch (e: Exception) {
-
                 e.printStackTrace() // 打印錯誤堆疊，幫助調試
-                val check = Check(false, e.toString())
-                return check
+                Log.d("Login", "登入失敗: ${e.toString()}") // 記錄登入失敗
 
+                // 登入失敗時，返回一個 Member 物件，表示失敗，並可以填充錯誤訊息
+                return Member(
+                    memberid = 0,
+                    name = "",
+                    password = input.passwd,
+                    phonenumber = "",
+                    address = "",
+                    email = input.email // 可以選擇儲存錯誤時的 email
+                )
             }
-        }else{
-            val check = Check(false, "e.toString()")
-            return check
+        } else {
+            Log.d("Login", "登入失敗")
+
+            // 如果密碼錯誤，仍然返回一個 Member 物件，並保持原始值
+            return Member(
+                memberid = 0,
+                name = "",
+                password = input.passwd,
+                phonenumber = "",
+                address = "",
+                email = input.email // 同樣儲存錯誤時的 email
+            )
         }
     }
-
-
-
-
-
-
-
-
-
-
 }
-
-
-

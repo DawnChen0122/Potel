@@ -119,7 +119,7 @@ val ChangePassWord = _ChangePassWord.asStateFlow()
             try {
                 Log.d("ChangePassWord", "Valid input, preparing to send request")
 
-                val response = RetrofitInstance.api.ChangePassWord(Member(email.value, password))
+                val response = RetrofitInstance.api.ChangePassWord(Member(email= email.toString(), password = password))
                 return response
             } catch (e: Exception) {
 
