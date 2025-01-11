@@ -38,6 +38,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.potel.ui.booking.BookingScreens
 import com.example.potel.ui.forumZone.ForumScreens
 import com.example.potel.ui.forumZone.forumScreenRoute
 import com.example.potel.ui.home.Screens
@@ -120,7 +121,7 @@ fun TipNavHost(
     NavHost(
         modifier = modifier,
         navController = navController,
-        startDestination = Screens.HomeRoute.name
+        startDestination = BookingScreens.Payment.name
 
     ) {
         // todo 2-2 置入所有的畫面路徑

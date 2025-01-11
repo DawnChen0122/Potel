@@ -22,6 +22,7 @@ fun PaymentScreen(
     navController: NavHostController,
     bookingVM: BookingViewModel
 ) {
+    val memberId =13
     val cardNumber by bookingVM.creditCardNumber.collectAsState()
     val days by bookingVM.daySelectState.collectAsState()
     val selectedRoomType by bookingVM.roomTypeSelectedState.collectAsState()
@@ -96,8 +97,16 @@ fun PaymentScreen(
         Spacer(modifier = Modifier.height(24.dp))
         Button(
             onClick = {
-                bookingVM.onCheckOutClick()
-//                bookingVM.addPaymentInfo("RRRRR")
+                val newOrder =newOrder(
+                    memberId=memberId,
+                    roomId = 99,
+                    expdatee = "2025-01-09",
+                    expdates = "2025-01-11",
+                    amount = 1000,
+                    roomTypeId = 99,
+                    petId = 99
+                )
+                bookingVM.addOrder(newOrder)
                 navController.navigate("BookingSuccess") },
             modifier = Modifier.padding(horizontal = 16.dp)
         ) {

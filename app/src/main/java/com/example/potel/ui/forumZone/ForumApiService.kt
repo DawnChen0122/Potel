@@ -78,6 +78,8 @@ interface ForumApiService {
         @Query("postId") postId: Int,
         @Query("memberId") memberId: Int
     ): Response<Unit>
+
+
 }
 
 const val baseurl = "http://10.0.2.2:8080/PotelServer/"
