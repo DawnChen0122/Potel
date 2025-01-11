@@ -37,31 +37,37 @@ fun NavGraphBuilder.bookingScreenRoute(
         route = DateSelection.name,
     ) {
         DateSelectionScreen(
+            bookingVM = viewModel,
             navController = navController
         )
     }
     composable(
         route = Booking.name,
     ) {
-        BookingScreen(navController = navController)
+        BookingScreen(
+            bookingVM = viewModel, navController = navController)
     }
     composable(
         route = "${RoomSelection.name}/{type}",//字串不能帶參數
     ) { backStackEntry ->
         val typeChar = backStackEntry.arguments?.getString("type")?.getOrNull(0) ?: 'C'
-        RoomSelectionScreen(viewModel,navController = navController, type = typeChar)
+        RoomSelectionScreen(viewModel, navController = navController, type = typeChar)
     }
     composable(
         route = Payment.name,
     ) {
         PaymentScreen(
+            bookingVM = viewModel,
             navController = navController
         )
     }
     composable(
         route = BookingSuccess.name,
     ) {
-        BookingSuccessScreen(navController = navController)
+        BookingSuccessScreen(
+            bookingVM = viewModel,
+            navController = navController
+        )
     }
 }
 

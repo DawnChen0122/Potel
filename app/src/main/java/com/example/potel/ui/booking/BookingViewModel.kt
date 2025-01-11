@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.days
 
 
 /**
@@ -29,12 +30,33 @@ class BookingViewModel : ViewModel() {
     fun onCreditCardNumberChange(text: String) {
         _creditCardNumber.update { text }
     }
+    private val _currentOrder = MutableStateFlow<Order?>(Order()) // 初始化為空訂單
+    val currentOrder: StateFlow<Order?> get() = _currentOrder
+
+    fun setOrder(order: Order) {
+        _currentOrder.value = order
+    }
+    fun updateOrder(order: Order) {
+        _currentOrder.value = order
+    }
+    //把days傳到信用卡頁面
+        private val _daySelectState = MutableStateFlow(0) // 初始化值
+        val daySelectState = _daySelectState.asStateFlow()
+
+        fun setDay(days: Int) {
+            _daySelectState.value = days // 更新值
+        }
+
+
+
+
 
     // 定義一個可更改的變數, 但是是私有的(private), 只有VM自己可以改, 外部只能透過提供的method做修改
     private val _addOrderState = MutableStateFlow(Order())
     private val _petEditState = MutableStateFlow(Pet())
     private val _memberEditState = MutableStateFlow(Member())
     private val _roomTypeSelectedState = MutableStateFlow(RoomType())
+     val roomTypeSelectedState = _roomTypeSelectedState.asStateFlow()
 
     val addOrderEditState = _addOrderState.asStateFlow()
 
@@ -47,7 +69,8 @@ class BookingViewModel : ViewModel() {
     init {
         // Launch a coroutine in the viewModelScope to call the suspend function
         viewModelScope.launch {
-            _roomTypesState.value = fetchRoomTypes()
+            val roomTypes = fetchRoomTypes()
+            _roomTypesState.update { roomTypes }
         }
     }
     private suspend fun fetchRoomTypes(): List<RoomType> {
@@ -61,6 +84,12 @@ class BookingViewModel : ViewModel() {
             Log.e(tag, "error: ${e.message}")
             return emptyList()
         }
+    }
+
+    fun onCheckOutClick() {
+        val totalPrice = _roomTypeSelectedState.value.price * (_daySelectState?.value ?:0)
+        RetrofitInstance.api
+
     }
 }
 

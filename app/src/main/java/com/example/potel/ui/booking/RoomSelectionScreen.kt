@@ -29,11 +29,10 @@ import java.net.URL
 
 @Composable
 fun RoomSelectionScreen(
-    viewModel: BookingViewModel,
+    bookingVM: BookingViewModel,
     navController: NavHostController,
     type: Char
 ) {
-    val bookingVM: BookingViewModel = viewModel(key = "bookingVM")
     val tag = "RoomSelectionScreen"
 
     // 從 ViewModel 獲取房型列表
@@ -79,7 +78,10 @@ fun RoomSelectionScreen(
                 items(filteredRoomTypes) { room ->
                     RoomCard(
                         roomType = room,
-                        onSelectClick = { navController.navigate(BookingScreens.Payment.name) }
+                        onSelectClick = {
+                            bookingVM.setSelectedRoomType(roomType = room)
+                            navController.navigate(BookingScreens.Payment.name)
+                        }
                     )
                 }
             }

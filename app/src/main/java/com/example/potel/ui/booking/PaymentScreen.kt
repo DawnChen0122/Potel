@@ -19,11 +19,12 @@ import com.example.potel.R
 
 @Composable
 fun PaymentScreen(
-    navController: NavHostController
+    navController: NavHostController,
+    bookingVM: BookingViewModel
 ) {
-    val bookingVM: BookingViewModel = viewModel(key = "bookingVM")
     val cardNumber by bookingVM.creditCardNumber.collectAsState()
-
+    val days by bookingVM.daySelectState.collectAsState()
+    val selectedRoomType by bookingVM.roomTypeSelectedState.collectAsState()
     var expiryDate by remember { mutableStateOf("") }
     var cvv by remember { mutableStateOf("") }
     val amount = "100"
@@ -89,11 +90,13 @@ fun PaymentScreen(
         }
 
         Spacer(modifier = Modifier.height(16.dp))
-        Text("金額: $$amount")
+        val totalAmount = days * selectedRoomType.price
+        Text("金額: $$totalAmount")
 
         Spacer(modifier = Modifier.height(24.dp))
         Button(
             onClick = {
+                bookingVM.onCheckOutClick()
 //                bookingVM.addPaymentInfo("RRRRR")
                 navController.navigate("BookingSuccess") },
             modifier = Modifier.padding(horizontal = 16.dp)

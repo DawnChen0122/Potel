@@ -16,8 +16,10 @@ import androidx.navigation.NavHostController
 import com.example.potel.R
 
 @Composable
-fun BookingSuccessScreen(navController: NavHostController) {
-    val bookingVM: BookingViewModel = viewModel(key = "bookingVM")
+fun BookingSuccessScreen(
+    bookingVM: BookingViewModel,
+    navController: NavHostController
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()

@@ -9,7 +9,6 @@ data class Order(
     var datee: String = "",
     var amount: Int = -1,
     var refundamount: Int = -1,
-
     var orderstate: Char = '0',
     var paymentstate: Char = '0',
     var refundstate: Char = '0',

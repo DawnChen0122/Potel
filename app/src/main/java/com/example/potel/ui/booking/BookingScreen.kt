@@ -14,8 +14,10 @@ import androidx.navigation.NavHostController
 import com.example.potel.R
 
 @Composable
-fun BookingScreen(navController: NavHostController) {
-    val bookingVM: BookingViewModel = viewModel(key = "bookingVM")
+fun BookingScreen(
+    bookingVM: BookingViewModel,
+    navController: NavHostController
+) {
     var selectedDogWeight by remember { mutableStateOf<String?>(null) }
     var selectedCatRoom by remember { mutableStateOf<String?>(null) }
     var selectedPetType by remember { mutableStateOf<Char?>(null) }
