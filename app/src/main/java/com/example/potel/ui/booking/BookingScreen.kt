@@ -1,17 +1,26 @@
 package com.example.potel.ui.booking
 
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.example.potel.R
 
 @Composable
-fun BookingScreen(navController: NavHostController) {
+fun BookingScreen(
+    bookingVM: BookingViewModel,
+    navController: NavHostController
+) {
     var selectedDogWeight by remember { mutableStateOf<String?>(null) }
     var selectedCatRoom by remember { mutableStateOf<String?>(null) }
+    var selectedPetType by remember { mutableStateOf<Char?>(null) }
 
     Column(
         modifier = Modifier
@@ -19,7 +28,8 @@ fun BookingScreen(navController: NavHostController) {
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = "選擇狗的重量或貓的房型", style = MaterialTheme.typography.titleMedium)
+
+        Text(text = "請選擇狗的重量或貓的房型", style = MaterialTheme.typography.titleMedium)
         Spacer(modifier = Modifier.height(16.dp))
 
         // 狗重量選擇
@@ -31,12 +41,13 @@ fun BookingScreen(navController: NavHostController) {
                     selected = selectedDogWeight == weight,
                     onClick = {
                         selectedDogWeight = weight
-                        selectedCatRoom = null
+                        selectedCatRoom = null // 清除貓房型選擇
                     }
                 )
                 Text(text = weight)
             }
         }
+
         Spacer(modifier = Modifier.height(16.dp))
 
         // 貓房型選擇
@@ -48,22 +59,26 @@ fun BookingScreen(navController: NavHostController) {
                     selected = selectedCatRoom == room,
                     onClick = {
                         selectedCatRoom = room
-                        selectedDogWeight = null
+                        selectedDogWeight = null // 清除狗重量選擇
                     }
                 )
                 Text(text = room)
             }
         }
+
         Spacer(modifier = Modifier.height(24.dp))
 
         Button(
             onClick = {
-                val type = if (selectedDogWeight != null) "dog" else "cat"
-                navController.navigate("roomSelect/$type")
+                val type = if (selectedDogWeight != null) 'D' else 'C'
+                navController.navigate("RoomSelection/$type") // 導航到 RoomSelectionScreen，並傳遞類型
+//                Log.d("Navigation","P2 to P3")
             },
-            enabled = selectedDogWeight != null || selectedCatRoom != null
+            enabled = selectedDogWeight != null || selectedCatRoom != null // 按鈕啟用條件
         ) {
-            Text("下一步")
+            Text("Booking Now")
         }
     }
 }
+
+

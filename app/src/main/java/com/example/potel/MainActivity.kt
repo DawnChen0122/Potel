@@ -11,8 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-
-
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -32,17 +30,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import com.example.potel.ui.carerecords.homeScreenRoute
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.potel.ui.booking.PetsScreenRoute
 import com.example.potel.ui.forumZone.ForumScreens
 import com.example.potel.ui.forumZone.forumScreenRoute
 import com.example.potel.ui.home.Screens
+import com.example.potel.ui.booking.BookingViewModel
+import com.example.potel.ui.booking.bookingScreenRoute
 import com.example.potel.ui.myorders.myOrdersScreenRoute
 import com.example.potel.ui.theme.PotelTheme
 import com.example.potel.ui.home.accountRoute
@@ -114,6 +114,8 @@ fun TipNavHost(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController()
 ) {
+    val bookingViewModel : BookingViewModel = viewModel()
+
     // todo 2-1 這裡是將所有的畫面路徑都列出來
     NavHost(
         modifier = modifier,
@@ -123,7 +125,8 @@ fun TipNavHost(
     ) {
         // todo 2-2 置入所有的畫面路徑
         accountRoute(navController) //02 明駿
-        PetsScreenRoute(navController)// 04 芊伃
+        homeScreenRoute(navController) // 02 明駿
+        bookingScreenRoute(viewModel = bookingViewModel,navController) // 04 芊伃
         myOrdersScreenRoute(navController) // 27 正能
         shopScreenRoute(navController) // 07 柏森
         forumScreenRoute(navController) // 16 品伃
