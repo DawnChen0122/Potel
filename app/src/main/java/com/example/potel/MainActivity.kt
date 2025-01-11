@@ -34,6 +34,7 @@ import androidx.compose.ui.graphics.BlendMode.Companion.Screen
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -49,6 +50,7 @@ import com.example.potel.ui.shopping.shopScreenRoute
 
 import com.example.potel.ui.myorders.Screens
 import com.example.potel.ui.shopping.ShopScreens
+import com.example.potel.ui.shopping.ShopViewModel
 import kotlinx.coroutines.launch
 
 
@@ -75,7 +77,8 @@ fun PotelApp(
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
 
     Scaffold(
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
+        modifier = Modifier
+            .nestedScroll(scrollBehavior.nestedScrollConnection)
             .fillMaxSize(),
         topBar = {
             MainTopAppBar(
@@ -108,7 +111,8 @@ fun PotelApp(
 @Composable
 fun TipNavHost(
     modifier: Modifier = Modifier,
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController = rememberNavController(),
+    viewModel: ShopViewModel = viewModel()
 ) {
     // todo 2-1 這裡是將所有的畫面路徑都列出來
     NavHost(
@@ -120,7 +124,7 @@ fun TipNavHost(
 //        homeScreenRoute(navController) // 02 明駿
 //        bookingScreenRoute(navController) // 04 芊伃
 //        myOrdersScreenRoute(navController) // 27 正能
-        shopScreenRoute(navController) // 07 柏森
+        shopScreenRoute(viewModel = viewModel, navController) // 07 柏森
 //        careRecordsScreenRoute(navController) // 25 泰陽
 //        discussZoneScreenRoute(navController) // 16 品伃
 //        petsScreenRoute(navController) // 18 勇慶
@@ -162,7 +166,7 @@ fun MainTopAppBar(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainBottomAppBar(){
+fun MainBottomAppBar() {
     BottomAppBar(
         // 動作按鈕
         actions = {

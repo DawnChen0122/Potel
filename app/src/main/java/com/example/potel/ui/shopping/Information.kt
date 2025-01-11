@@ -6,8 +6,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowDropDown
@@ -17,6 +19,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -42,24 +45,18 @@ import kotlinx.coroutines.launch
 @Composable
 fun InformationScreen(
     navController: NavHostController,
+    shopViewModel: ShopViewModel,
     prdId: String
 ) {
     val tag = "InformationScreen"
-
-    val backStackEntry = navController.getBackStackEntry(ShopScreens.Twoclass.name)
-    val shopViewModel: ShopViewModel = viewModel(backStackEntry, key = "shoppingVM")
-    val coroutineScope = rememberCoroutineScope()
-    var product by remember { mutableStateOf<Product?>(null)}
-    var count by remember { mutableStateOf(1) }
-    var amount by remember { mutableStateOf(0) }
+    val count by shopViewModel.productCount.collectAsState()
+    val product by shopViewModel.product.collectAsState()
+    var amount = count * (product?.price ?: 0)
 
 
     LaunchedEffect(Unit) {
-        coroutineScope.launch {
-            Log.d(tag, "prdId=$prdId")
-            product = shopViewModel.getProduct(prdId.toInt())
-            amount = count * (product?.price?:0)
-        }
+        Log.d(tag, "prdId=$prdId")
+        shopViewModel.getProduct(prdId.toInt())
     }
 
 //    var title by viewModel.title.collectAsState()
@@ -68,7 +65,8 @@ fun InformationScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(30.dp),
+            .padding(30.dp)
+            .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceEvenly
     ) {
@@ -82,7 +80,7 @@ fun InformationScreen(
 //            contentScale = ContentScale.Fit // 剪裁圖片來適應容器
 //        )
         AsyncImage(
-            model = composeImageUrl(product?.imageId?:0),
+            model = composeImageUrl(product?.imageId ?: 0),
             contentDescription = "寵物照片",
             alignment = Alignment.TopCenter,
             contentScale = ContentScale.FillWidth,
@@ -91,15 +89,16 @@ fun InformationScreen(
 
         // 顯示標題
         Text(
-            text = product?.prdName?:"",
+            text = product?.prdName ?: "",
             fontSize = 24.sp, // 字型大小: 24sp
             fontWeight = FontWeight.Bold, // 字體樣式: 粗體
             color = Color.Black, // 字的顏色: 黑色
             modifier = Modifier.padding(top = 0.dp) // 上方間隔
         )
+
         //顯示內文
         Text(
-            text = product?.prdDesc?:"",
+            text = product?.prdDesc ?: "",
             fontSize = 16.sp, // 字型大小: 16sp
             fontWeight = FontWeight.Thin, // 字體樣式: 細體
             color = Color.DarkGray, // 字的顏色: 深灰色
@@ -108,19 +107,24 @@ fun InformationScreen(
 
 
         Row(
-            modifier = Modifier.padding(top = 40.dp)
+            modifier = Modifier
+                .padding(top = 40.dp)
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.End,
         ) {
 
-            Box(modifier = Modifier.padding(8.dp).background(Color.Yellow, shape = CircleShape)) {
+            Box(
+                modifier = Modifier
+                    .padding(8.dp)
+                    .background(Color.Yellow, shape = CircleShape)
+            ) {
                 Image(
-                    modifier = Modifier.size(36.dp).clickable {
-                        if (count > 0) {
-                            count--
-                            amount = count * (product?.price?:0)
-                        }
-                    }, imageVector = Icons.Default.ArrowDropDown, contentDescription = null
+                    modifier = Modifier
+                        .size(36.dp)
+                        .clickable {
+                            val newCount = count - 1
+                            shopViewModel.onCountChanged(newCount)
+                        }, imageVector = Icons.Default.ArrowDropDown, contentDescription = null
                 )
             }
 
@@ -129,13 +133,19 @@ fun InformationScreen(
                 text = count.toString()
             )
 
-            Box(modifier = Modifier.padding(8.dp).background(Color.Yellow, shape = CircleShape)) {
+            Box(
+                modifier = Modifier
+                    .padding(8.dp)
+                    .background(Color.Yellow, shape = CircleShape)
+            ) {
 
                 Image(
-                    modifier = Modifier.size(36.dp).clickable {
-                        count++
-                        amount = count * (product?.price?:0)
-                                                              },
+                    modifier = Modifier
+                        .size(36.dp)
+                        .clickable {
+                            val newCount = count + 1
+                            shopViewModel.onCountChanged(newCount)
+                        },
                     imageVector = Icons.Default.KeyboardArrowUp, contentDescription = null
                 )
             }
@@ -143,11 +153,12 @@ fun InformationScreen(
 
 
         Row(
-            modifier = Modifier.padding(top = 40.dp)
+            modifier = Modifier
+                .padding(top = 40.dp)
                 .border(width = 2.dp, color = Color.DarkGray, shape = RoundedCornerShape(30))
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceAround,
-        ){
+        ) {
 
             Text(
                 text = "總價:",
@@ -176,7 +187,7 @@ fun InformationScreen(
             verticalAlignment = Alignment.CenterVertically // 子元素垂直置中
         ) {
             Button(
-                onClick = { navController.navigate(ShopScreens.Creditcard.name)},
+                onClick = { navController.navigate(ShopScreens.Creditcard.name) },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color.Black, // 按鈕背景色
                     contentColor = Color.Yellow // 按鈕文字顏色

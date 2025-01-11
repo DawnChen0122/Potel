@@ -10,8 +10,7 @@ import androidx.navigation.compose.composable
  * */
 
 
-
-enum class ShopScreens(title: String){
+enum class ShopScreens(title: String) {
     Twoclass(title = "類別"),
     Productlist(title = "類別>商品列表"),
     Information(title = "商品列表>商品資訊"),
@@ -19,36 +18,52 @@ enum class ShopScreens(title: String){
     Ordercheck(title = "信用卡資訊>完成訂單"),
 }
 
-fun NavGraphBuilder.shopScreenRoute(navController: NavHostController) {
+fun NavGraphBuilder.shopScreenRoute(
+    viewModel: ShopViewModel,
+    navController: NavHostController
+) {
     composable(
         route = ShopScreens.Twoclass.name,
     ) {
         TwoClassScreen(navController = navController)
     }
+
     composable(
         route = "${ShopScreens.Productlist.name}/{prdtype}",
     ) { backStackEntry ->
         ProductListScreen(
+            shopViewModel = viewModel,
             navController = navController,
             prdtype = backStackEntry.arguments?.getString("prdtype") ?: "D"
         )
     }
+
     composable(
         route = "${ShopScreens.Information.name}/{prdId}",
     ) { backStackEntry ->
         InformationScreen(
             navController = navController,
-            prdId = backStackEntry.arguments?.getString("prdId") ?: "0"
+            prdId = backStackEntry.arguments?.getString("prdId") ?: "0",
+            shopViewModel = viewModel
         )
     }
+
     composable(
         route = ShopScreens.Creditcard.name,
     ) {
-        CreditCardScreen(navController = navController)
+        CreditCardScreen(
+            viewModel = viewModel,
+            navController = navController
+        )
     }
+
     composable(
         route = ShopScreens.Ordercheck.name,
     ) {
-        OrderCheckScreen(navController = navController, onDismissRequest = { /* 自定義行為 */ })
+        OrderCheckScreen(
+            navController = navController,
+            onDismissRequest = { /* 自定義行為 */ },
+            shopViewModel = viewModel
+        )
     }
 }

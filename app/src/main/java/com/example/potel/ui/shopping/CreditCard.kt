@@ -108,7 +108,7 @@ fun CreditCardScreen(viewModel: ShopViewModel = viewModel(), navController: NavH
 
         // 顯示按鈕
         Button(
-            onClick = {navController.navigate(ShopScreens.Ordercheck.name)},
+            onClick = viewModel::onSubmitClick,
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color.Black, // 設定按鈕容器顏色
                 contentColor = Color.Yellow // 設定按鈕內容顏色

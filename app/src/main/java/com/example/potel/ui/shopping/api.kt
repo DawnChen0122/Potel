@@ -17,15 +17,13 @@ interface ApiService {
         @Query("prdtype") prdtype: String
     ): List<Product>
 
-//    /** 根據類別獲取商品列表 */
-//    @GET("shopping/Information")
-//    suspend fun getProductInformation(@Query("categoryId") categoryId: Int): List<Product>
 
     /** 取得指定商品詳細資訊 */
     @GET("shopping/Product")
     suspend fun getProduct(
         @Query("prdId") prdId: Int
     ): Product
+
 
     /** 提交訂單 */
     @POST("shopping/Order")
@@ -74,7 +72,6 @@ data class Product(
     val imageId: Int, // 商品圖片 ID
     val prdDesc: String //商品描述
 )
-
 
 //// 定義商品詳細資料模型
 //data class ProductDetail(

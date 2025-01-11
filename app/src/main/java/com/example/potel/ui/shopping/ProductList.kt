@@ -1,7 +1,6 @@
 package com.example.potel.ui.shopping
 
 import android.util.Log
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -12,25 +11,18 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
-import com.example.potel.R
-import kotlinx.coroutines.launch
 
 // 定義產品資料類別
 data class Products(
@@ -43,21 +35,16 @@ data class Products(
 @Composable
 fun ProductListScreen(
     navController: NavHostController,
-    prdtype: String
+    prdtype: String,
+    shopViewModel:ShopViewModel = viewModel()
 ) {
     val tag = "ProductListScreen"
-    val backStackEntry = navController.getBackStackEntry(ShopScreens.Twoclass.name)
-    val ShopViewModel: ShopViewModel = viewModel(backStackEntry, key = "shoppingVM")
-    val coroutineScope = rememberCoroutineScope()
-    var productList by remember { mutableStateOf<List<Product>>(emptyList()) }
+    val productList by shopViewModel.productList.collectAsState()
     Log.d(tag, "prdtype=$prdtype")
 
     LaunchedEffect(Unit) {
-        coroutineScope.launch {
-            productList = ShopViewModel.getProductList(prdtype)
-        }
+        shopViewModel.initProductList(prdtype)
     }
-
 
     ListGrid(
         products = productList,

@@ -5,14 +5,26 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 class ShopViewModel : ViewModel() {
 
     private val _cardnumber = MutableStateFlow("")
-
     val cardnumber = _cardnumber.asStateFlow()
+
+    private val _productList = MutableStateFlow<List<Product>>(listOf())
+    val productList = _productList.asStateFlow()
+
+    private val _product = MutableStateFlow<Product?>(null)
+    val product = _product.asStateFlow()
+
+    private val _productCount = MutableStateFlow(1)
+    val productCount = _productCount.asStateFlow()
+
 
     var cardnumberError by mutableStateOf(false)
     fun onCardnumberChanged(cardnumber: String) {
@@ -21,7 +33,14 @@ class ShopViewModel : ViewModel() {
         _cardnumber.value = cardnumber
     }
 
-    suspend fun getProductList(prdtype: String): List<Product> {
+    fun initProductList(prdType: String) {
+        viewModelScope.launch {
+            val productList = fetchProductList(prdType)
+            _productList.update { productList }
+        }
+    }
+
+    private suspend fun fetchProductList(prdtype: String): List<Product> {
 //        Log.d(tag, "memberid=$memberid, orderstate=$orderstate")
         try {
             val response = RetrofitInstance.api.getProductList(prdtype)
@@ -35,7 +54,14 @@ class ShopViewModel : ViewModel() {
         }
     }
 
-    suspend fun getProduct(prdId: Int): Product? {
+    fun getProduct(prdId: Int) {
+        viewModelScope.launch {
+            val product = fetchProduct(prdId)
+            _product.update { product }
+        }
+    }
+
+    private suspend fun fetchProduct(prdId: Int): Product? {
         val tag = "getProduct"
         Log.d(tag, "prdId=$prdId")
         try {
@@ -47,16 +73,38 @@ class ShopViewModel : ViewModel() {
         }
     }
 
-    suspend fun addorder(prdId: Int): Product? {
-        val tag = "getProduct"
-        Log.d(tag, "prdId=$prdId")
+    fun onSubmitClick(){
+        viewModelScope.launch {
+            val addOrderResponse = addorder()
+        }
+    }
+
+    suspend fun addorder(): Int? {
+        Log.d("shopViewModel","addOrder: ${_product.value?.prdName} ${_product.value?.prdId}")
+        val productId = _product.value?.prdId ?: return null
+        val productCount = _productCount.value
+        val memberId = 0
+        val amount = productCount *( _product.value?.price ?:0)
+        Log.d("shopViewModel","pid: $$productId")
+        Log.d("shopViewModel","productCount: $$productCount")
+        Log.d("shopViewModel","memberId: $$memberId")
+        Log.d("shopViewModel","amount: $$amount")
         try {
-            val response = RetrofitInstance.api.getProduct(prdId)
-            return response
+            val response = RetrofitInstance.api.addOrder(OrderRequest(
+                prdId = productId,
+                prdCount = productCount,
+                memberId = memberId,
+                amount = amount
+            ))
+            return 0
         } catch (e: Exception) {
 //            Log.e(tag, "error: ${e.message}")
             return null
         }
+    }
+
+    fun onCountChanged(count: Int) {
+        _productCount.update { count }
     }
 }
 
