@@ -222,7 +222,7 @@ fun LikeController(forumVM: ForumVM, post: Post, memberId: Int) {
                     forumVM.unLike(post.postId,memberId)
                     likesCount--
                 } else {
-                    forumVM.Like(post.postId,memberId)
+                    forumVM.like(post.postId,memberId)
                     likesCount++
                 }
                 liked =!liked

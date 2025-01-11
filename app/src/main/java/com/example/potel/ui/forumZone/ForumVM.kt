@@ -29,7 +29,7 @@ class ForumVM : ViewModel() {
     val forumsState: StateFlow<List<Post>> = _forumsState.asStateFlow()
 
     private val _likeCountState = MutableStateFlow(emptyList<Like>())
-    val likeCountState: StateFlow<List<Like>> = _likeCountState.asStateFlow()
+//    val likeCountState: StateFlow<List<Like>> = _likeCountState.asStateFlow()
 
     private val _commentsState = MutableStateFlow(emptyList<Comment>())
 //    val commentsState: StateFlow<List<Comment>> = _commentsState.asStateFlow()
@@ -44,7 +44,7 @@ class ForumVM : ViewModel() {
     }
 
     // 更新選中貼文和其留言
-    fun setSelectedPost(post: Post, memberId: Int) {
+    fun setSelectedPost(post: Post) {
         _postSelectedState.value = post
         _postSelectedCommentsList.value = _commentsState.value.filter { it.postId == post.postId }
     }
@@ -263,7 +263,7 @@ class ForumVM : ViewModel() {
         }
     }
 
-    fun Like(postId: Int, memberId: Int) {
+    fun like(postId: Int, memberId: Int) {
         viewModelScope.launch {
             try {
                 val response = RetrofitInstance.api.likePost(postId, memberId)

@@ -231,7 +231,7 @@ fun PostCard(
             .background(colorResource(R.color.forum))
             .padding(5.dp)
             .clickable {
-                forumVM.setSelectedPost(post, memberId)
+                forumVM.setSelectedPost(post)
                 navController.navigate(ForumScreens.PostScreen.name)
             }
     ) {
@@ -268,7 +268,7 @@ fun PostCard(
             onOptionSelected = { actionOption ->
                 when (actionOption) {
                     "編輯" -> {
-                        forumVM.setSelectedPost(post, memberId)
+                        forumVM.setSelectedPost(post)
                         navController.navigate(ForumScreens.PostEditScreen.name)
                     }
                     "刪除" -> {
