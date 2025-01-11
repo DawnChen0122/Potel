@@ -197,10 +197,9 @@ fun Resetpassword (viewModel:ResetPassWordViewModel = viewModel()
                    } else if (password != checkpassword) {
                    "密碼不一致"
                    } else {
-                       val member = Member(email = email, phonenumber = phonenumber, password = password )
                        viewModel.viewModelScope.launch {
                            viewModel.checkEmailAndCellphone()
-                           viewModel.ChangePassWord(member)
+                           viewModel.ChangePassWord()
                        }
                    }
                },

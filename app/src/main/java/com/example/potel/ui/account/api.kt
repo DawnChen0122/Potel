@@ -42,7 +42,7 @@ interface ApiService {
     suspend fun addMember(
         @Query("email") email: String,
         @Query("cellphone") cellphone: String,
-        @Query("password") password: String
+        @Query("passwd") password: String
     ): Member
 }
 

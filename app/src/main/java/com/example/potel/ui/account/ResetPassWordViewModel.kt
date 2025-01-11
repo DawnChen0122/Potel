@@ -1,15 +1,12 @@
 package com.example.potel.ui.account
 
 import android.util.Log
-import android.util.Log.e
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
 
 
 class ResetPassWordViewModel: ViewModel() {
@@ -112,14 +109,15 @@ class ResetPassWordViewModel: ViewModel() {
 private val _ChangePassWord = MutableStateFlow(Change(success = false, message = ""))
 val ChangePassWord = _ChangePassWord.asStateFlow()
 
-    suspend fun ChangePassWord(member: Member): Check {
+    suspend fun ChangePassWord(): Check {
+        val email = _email.value
         val password = _password.value
 
         if (password.isNotEmpty() && !passwordError) {
             try {
                 Log.d("ChangePassWord", "Valid input, preparing to send request")
 
-                val response = RetrofitInstance.api.ChangePassWord(Member(email= email.toString(), password = password))
+                val response = RetrofitInstance.api.ChangePassWord(Member(email= email, passwd = password))
                 return response
             } catch (e: Exception) {
 

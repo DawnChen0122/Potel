@@ -6,7 +6,7 @@ import androidx.navigation.compose.composable
 import com.example.potel.ui.account.Edit
 import com.example.potel.ui.account.Login
 import com.example.potel.ui.account.Resetpassword
-import com.example.potel.ui.account.Resetpassword2
+//import com.example.potel.ui.account.Resetpassword2
 import com.example.potel.ui.account.Signup
 
 /**

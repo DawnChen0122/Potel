@@ -8,7 +8,7 @@ data class Check(
 data class Member(
     val memberid: Int = 0,
     val name: String = "",
-    val password: String = "",
+    val passwd: String = "",
     val phonenumber: String = "",
     val address: String = "",
     val email: String = ""
@@ -55,6 +55,6 @@ data class UserData(
 //var status: Char = '1',
 //var createdate: String? = null,
 //var modifydate: String? = null,
-//val password: String,
+//val passwd: String,
 //
 //)

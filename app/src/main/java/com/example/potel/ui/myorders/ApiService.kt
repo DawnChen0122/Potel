@@ -59,7 +59,7 @@ interface ApiService {
     @GET
     suspend fun login(
         @Query("loginId") account: String,
-        @Query("password") password: String
+        @Query("passwd") password: String
     ): User
 
 

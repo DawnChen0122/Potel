@@ -75,9 +75,9 @@ class AccountViewModel : ViewModel() {
 }
 //    fun login(){
 //        val account = _email.value
-//        val password = _password.value
+//        val passwd = _password.value
 //        viewModelScope.launch{
-//           val user =  RetrofitInstance.api.login(loginid = account, password = password)
+//           val user =  RetrofitInstance.api.login(loginid = account, passwd = passwd)
 //            // 跳轉業面跟儲存
 //        }
 //    }
