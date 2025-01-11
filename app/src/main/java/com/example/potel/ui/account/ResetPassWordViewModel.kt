@@ -1,6 +1,7 @@
 package com.example.potel.ui.account
 
 import android.util.Log
+import android.util.Log.e
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -57,8 +58,9 @@ class ResetPassWordViewModel: ViewModel() {
     val checkEmailAndCellphone = _checkEmailAndCellphone.asStateFlow()
 
 
+
     suspend fun checkEmailAndCellphone() {
-//        val password = _password.value
+
         val email = _email.value
         val phonenumber = _phonenumber.value
 
@@ -102,6 +104,33 @@ class ResetPassWordViewModel: ViewModel() {
         } else {
             Log.d("checkEmailAndCellphone", "Invalid email or phone number")
             println("Invalid email or phone number")
+        }
+    }
+
+
+
+private val _ChangePassWord = MutableStateFlow(Change(success = false, message = ""))
+val ChangePassWord = _ChangePassWord.asStateFlow()
+
+    suspend fun ChangePassWord(member: Member): Check {
+        val password = _password.value
+
+        if (password.isNotEmpty() && !passwordError) {
+            try {
+                Log.d("ChangePassWord", "Valid input, preparing to send request")
+
+                val response = RetrofitInstance.api.ChangePassWord(Member(email.value, password))
+                return response
+            } catch (e: Exception) {
+
+                e.printStackTrace() // 打印錯誤堆疊，幫助調試
+                val check = Check(false, e.toString())
+                return check
+
+            }
+        }else{
+            val check = Check(false, "e.toString()")
+            return check
         }
     }
 }

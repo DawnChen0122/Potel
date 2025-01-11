@@ -83,7 +83,7 @@ fun Resetpassword (viewModel:ResetPassWordViewModel = viewModel()
            OutlinedTextField(
                value = password,
                onValueChange = viewModel::onPasswordChanged,
-               label = { Text(text = "密碼") },
+               label = { Text(text = "請輸入新密碼") },
                leadingIcon = {
                    Icon(
                        imageVector = Icons.Default.Lock,
@@ -124,7 +124,7 @@ fun Resetpassword (viewModel:ResetPassWordViewModel = viewModel()
            OutlinedTextField(
                value = checkpassword,
                onValueChange = viewModel::onCheckPasswordChanged,
-               label = { Text(text = "再次確認密碼") },
+               label = { Text(text = "再次確認新密碼") },
                leadingIcon = {
                    Icon(
                        imageVector = Icons.Default.Lock,
@@ -192,9 +192,10 @@ fun Resetpassword (viewModel:ResetPassWordViewModel = viewModel()
                    } else if (password != checkpassword) {
                    "密碼不一致"
                    } else {
-                       Log.d("tip102", "dfkjghkjdfhgkjdfhgkdjf" )
+                       val member = Member(email, password)
                        viewModel.viewModelScope.launch {
                            viewModel.checkEmailAndCellphone()
+                           viewModel.ChangePassWord(member)
                        }
                    }
                },

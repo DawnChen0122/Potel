@@ -23,6 +23,7 @@ import androidx.compose.material3.Text
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.potel.ui.home.AccountScreens
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -152,8 +153,14 @@ fun Login(viewModel:OpenpageViewModel = viewModel()
                         errorMessage = "請輸入有效的信箱或手機號碼"
                     } else {
                         errorMessage = null // 清除錯誤訊息
-                        // 執行註冊邏輯
+                        viewModel.login(input,password)
                         "執行登入"
+                        if (){
+
+                            (
+                            navController.navigate(AccountScreens.HomeRoute.name)
+                            )
+                        }
                     }
                 },
                 modifier = Modifier

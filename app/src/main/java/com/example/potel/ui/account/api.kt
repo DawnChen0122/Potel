@@ -8,6 +8,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Query
 
 
@@ -18,6 +19,21 @@ interface ApiService {
         @Query("EMAIL") email: String,
         @Query("CELLPHONE") cellphone: String
     ): Check
+
+
+    @PUT("member/reset")
+    suspend fun ChangePassWord(
+        @Body member: Member
+    ): Check
+
+
+
+    @GET("member/login")
+    suspend fun login(
+        @Query("INPUT") input: String,
+        @Query("PASSWORD") password: String
+    ): Check
+
 
 
 

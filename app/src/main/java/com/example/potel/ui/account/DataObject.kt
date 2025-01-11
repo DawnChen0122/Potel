@@ -5,6 +5,24 @@ data class Check(
     val message: String?
 )
 
+data class Member(
+    val email: String,
+    val passwd: String
+)
+
+
+
+
+
+
+
+data class Change(
+
+    val success: Boolean,
+    val message: String?
+)
+
+
 data class UserData(
     val uid: String,
     val username: String,
@@ -15,17 +33,18 @@ data class UserData(
     val email: String
 )
 
-data class Member(
-var memberid: Int = 0,
-var name: String = "",
-var cellphone: String = "",
-var address: String = "",
-var gender: Char = 'M',
-var birthday: String? = null,
-var email: String = "",
-var imageid: Int = 0,
-var status: Char = '1',
-var createdate: String? = null,
-var modifydate: String? = null
-
-)
+//data class Member(
+//var memberid: Int = 0,
+//var name: String = "",
+//var cellphone: String = "",
+//var address: String = "",
+//var gender: Char = 'M',
+//var birthday: String? = null,
+//var email: String = "",
+//var imageid: Int = 0,
+//var status: Char = '1',
+//var createdate: String? = null,
+//var modifydate: String? = null,
+//val password: String,
+//
+//)

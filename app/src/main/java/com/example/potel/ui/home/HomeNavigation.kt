@@ -6,6 +6,7 @@ import androidx.navigation.compose.composable
 import com.example.potel.ui.account.Edit
 import com.example.potel.ui.account.Login
 import com.example.potel.ui.account.Resetpassword
+import com.example.potel.ui.account.Resetpassword2
 import com.example.potel.ui.account.Signup
 
 /**
@@ -19,7 +20,8 @@ enum class AccountScreens(val title: String){
     Login (title = "登入畫面"),
     Reset (title = "重設密碼"),
     HomeRoute (title = "首頁"),
-    Edit (title = "編輯會員資料")
+    Edit (title = "編輯會員資料"),
+//    Change(title="變更密碼" )
 }
 
 
@@ -67,4 +69,15 @@ fun NavGraphBuilder.accountRoute(navController: NavHostController) {
             navController = navController
         )
     }
+
+
+//    composable(
+//        route = AccountScreens.Change.name
+//    ) {
+//        Resetpassword2(
+//            navController = navController
+//        )
+//    }
+
+
 }

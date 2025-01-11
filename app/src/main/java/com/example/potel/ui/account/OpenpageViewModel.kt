@@ -2,6 +2,8 @@ package com.example.potel.ui.account
 
 
 
+import android.R.id.input
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -61,6 +63,42 @@ class OpenpageViewModel : ViewModel() {
             }
         }
     }
+
+
+    private val _login = MutableStateFlow(Change(success = false, message = ""))
+    val login = _login.asStateFlow()
+
+    suspend fun login(member: Member): Check {
+        val password = _password.value
+
+        if (password.isNotEmpty() && !passwordError) {
+            try {
+                Log.d("ChangePassWord", "Valid input, preparing to send request")
+
+                val response = RetrofitInstance.api.login(input.toString(), password)
+                return response
+            } catch (e: Exception) {
+
+                e.printStackTrace() // 打印錯誤堆疊，幫助調試
+                val check = Check(false, e.toString())
+                return check
+
+            }
+        }else{
+            val check = Check(false, "e.toString()")
+            return check
+        }
+    }
+
+
+
+
+
+
+
+
+
+
 }
 
 
