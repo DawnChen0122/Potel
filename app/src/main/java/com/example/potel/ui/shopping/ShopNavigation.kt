@@ -10,7 +10,6 @@ import androidx.navigation.compose.composable
  * */
 
 
-
 const val SHOP_NAVIGATION_ROUTE = "Shop"
 
 //fun genShopNavigationRoute() = HOME_NAVIGATION_ROUTE
@@ -23,11 +22,10 @@ enum class ShopScreens(title: String){
     ordercheck(title = "信用卡資訊>完成訂單"),
 }
 
-fun NavGraphBuilder.shopScreenRoute(navController: NavHostController) {
+
+fun NavGraphBuilder.shoppingScreenRoute(navController: NavHostController) {
     composable(
-
-        route = ShopScreens.twoclass.name,
-
+        route = "home",
     ) {
         TwoClassScreen(navController = navController)
     }

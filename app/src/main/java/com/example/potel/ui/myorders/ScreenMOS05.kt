@@ -1,10 +1,13 @@
 package com.example.potel.ui.myorders
 
-import android.util.Log
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -15,7 +18,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -38,6 +46,8 @@ import androidx.navigation.NavHostController
 import com.example.potel.R
 import kotlinx.coroutines.launch
 
+@RequiresApi(Build.VERSION_CODES.O)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ScreenMOS05(
     navController: NavHostController
@@ -46,6 +56,13 @@ fun ScreenMOS05(
     val tag = "ScreenMOS05"
     val backStackEntry = navController.getBackStackEntry(MyOrdersScreens.MOS01.name)
     val myOrdersViewModel: MyOrdersViewModel = viewModel(backStackEntry, key = "myOrdersVM")
+
+    // 是否顯示DateRangerPickerDialog；false代表不顯示
+    var showSearchText by remember { mutableStateOf(false) }
+    var showDateRangePickerDialog by remember { mutableStateOf(false) }
+    var isdatestart by remember { mutableStateOf(true) }
+    var dateStart by remember { mutableStateOf("") }
+    var dateEnd by remember { mutableStateOf("") }
 
     val coroutineScope = rememberCoroutineScope()
     var prdorderlist by remember { mutableStateOf<List<PrdOrder>>(emptyList()) }
@@ -58,7 +75,6 @@ fun ScreenMOS05(
             }else{
                 emptyList()
             }
-            Log.d(tag, "prdorderlist=${prdorderlist.size}")
         }
     }
 
@@ -73,7 +89,6 @@ fun ScreenMOS05(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(20.dp)
                 .background(color = Color(0xFFD9D9D9), shape = RoundedCornerShape(size = 8.dp)),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
@@ -81,35 +96,144 @@ fun ScreenMOS05(
             Row(
                 modifier = Modifier
                     .fillMaxWidth(),
-                verticalAlignment = Alignment.Bottom
+                verticalAlignment = Alignment.Bottom,
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(
-                    text = "購物訂單",
-                    style = TextStyle(
-                        fontSize = 24.sp,
-                        lineHeight = 32.sp,
-                        fontFamily = FontFamily(Font(R.font.dm_sans)),
-                        fontWeight = FontWeight(700),
-                        color = Color(0xFF000000),
-                        textAlign = TextAlign.Center,
-                    ),
+                Row (
                     modifier = Modifier
-                        .padding(5.dp)
-                )
-                Text(
-                    text = ">歷史訂單",
-                    style = TextStyle(
-                        fontSize = 16.sp,
-                        lineHeight = 32.sp,
-                        fontFamily = FontFamily(Font(R.font.dm_sans)),
-                        fontWeight = FontWeight(700),
-                        color = Color(0xFF000000),
-                        textAlign = TextAlign.Start
-                    ),
+                        .weight(0.9f),
+                    verticalAlignment = Alignment.Bottom,
+                    horizontalArrangement = Arrangement.Start
+                ) {
+                    Text(
+                        text = "購物訂單",
+                        style = TextStyle(
+                            fontSize = 24.sp,
+                            lineHeight = 32.sp,
+                            fontFamily = FontFamily(Font(R.font.dm_sans)),
+                            fontWeight = FontWeight(700),
+                            color = Color(0xFF000000),
+                            textAlign = TextAlign.Center,
+                        ),
+                        modifier = Modifier
+                            .padding(5.dp)
+                    )
+                    Text(
+                        text = ">歷史訂單",
+                        style = TextStyle(
+                            fontSize = 16.sp,
+                            lineHeight = 32.sp,
+                            fontFamily = FontFamily(Font(R.font.dm_sans)),
+                            fontWeight = FontWeight(700),
+                            color = Color(0xFF000000),
+                            textAlign = TextAlign.Start
+                        ),
+                        modifier = Modifier
+                            .padding(5.dp)
+                    )
+                }
+                Icon(
+                    imageVector = Icons.Default.Search,
+                    contentDescription = "查詢",
                     modifier = Modifier
-                        .padding(5.dp)
+                        .weight(0.1f)
+                        .combinedClickable(
+                            onClick = {
+                                coroutineScope.launch {
+                                    val responseObject = myOrdersViewModel.getPrdOrders(memberid.toInt(), 'A', dateStart, dateEnd)
+                                    prdorderlist = if(responseObject.respcode==0){
+                                        responseObject.resobj as List<PrdOrder>
+                                    }else{
+                                        emptyList()
+                                    }
+                                }
+                            },
+                            onLongClick = {
+                                showSearchText = !showSearchText
+                            },
+                        )
+
                 )
             }
+
+            if(showSearchText){
+                Row(
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    TextField(
+                        modifier = Modifier.weight(0.45f),
+                        value = dateStart,
+                        onValueChange = {
+
+                        },
+                        readOnly = true,
+                        label = {
+                            Text(text = "開始日期")
+                        },
+                        singleLine = true,
+                        trailingIcon = {
+                            Icon(
+                                imageVector = Icons.Default.DateRange,
+                                contentDescription = "選擇開始日期",
+                                modifier = Modifier
+                                    .clickable {
+                                        showDateRangePickerDialog = true
+                                        isdatestart = true
+                                    }
+                            )
+                        }
+                    )
+                    Text(
+                        modifier = Modifier.weight(0.1f),
+                        text = " ～ "
+                    )
+                    TextField(
+                        modifier = Modifier.weight(0.45f),
+                        value = dateEnd,
+                        onValueChange = {
+
+                        },
+                        readOnly = true,
+                        label = {
+                            Text(text = "結束日期")
+                        },
+                        singleLine = true,
+                        trailingIcon = {
+                            Icon(
+                                imageVector = Icons.Default.DateRange,
+                                contentDescription = "選擇結束日期",
+                                modifier = Modifier
+                                    .clickable {
+                                        showDateRangePickerDialog = true
+                                        isdatestart = false
+                                    }
+                            )
+                        }
+                    )
+                }
+            }
+
+            if(showDateRangePickerDialog){
+                MyDatePickerDialog(
+                    onDismissRequest = {
+                        showDateRangePickerDialog = false
+                    },
+                    onConfirm = { selectedDate ->
+                        if(isdatestart){
+                            dateStart = formatMillisToDateString(selectedDate!!)
+                        }else{
+                            dateEnd = formatMillisToDateString(selectedDate!!)
+                        }
+                        showDateRangePickerDialog = false
+                    },
+                    onDismiss = {
+                        showDateRangePickerDialog = false
+                    },
+                    title = if(isdatestart) "選擇開始日期" else "選擇結束日期"
+                )
+            }
+
+
 
             LazyVerticalGrid(
                 columns = GridCells.Fixed(1), // 每列 1 行

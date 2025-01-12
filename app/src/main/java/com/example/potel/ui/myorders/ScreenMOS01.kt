@@ -55,7 +55,8 @@ fun ScreenMOS01(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(0.45f)
-                .background(color = Color(0xFFD9D9D9), shape = RoundedCornerShape(size = 8.dp)),
+                .background(color = Color(0xFFD9D9D9),
+            shape = RoundedCornerShape(size = 8.dp)),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
         ) {

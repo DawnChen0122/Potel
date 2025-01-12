@@ -44,14 +44,11 @@ import com.example.potel.ui.forumZone.forumScreenRoute
 import com.example.potel.ui.home.Screens
 import com.example.potel.ui.booking.BookingViewModel
 import com.example.potel.ui.booking.bookingScreenRoute
-import com.example.potel.ui.myorders.myOrdersScreenRoute
-import com.example.potel.ui.theme.PotelTheme
 import com.example.potel.ui.home.accountRoute
+import com.example.potel.ui.myorders.myOrdersScreenRoute
 import com.example.potel.ui.petsfile.petsfileScreenRoute
 import com.example.potel.ui.shopping.shopScreenRoute
-
-
-
+import com.example.potel.ui.theme.PotelTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -132,7 +129,6 @@ fun TipNavHost(
         shopScreenRoute(navController) // 07 柏森
         forumScreenRoute(navController) // 16 品伃
         petsfileScreenRoute(navController) // 18 勇慶
-
     }
 
 }
