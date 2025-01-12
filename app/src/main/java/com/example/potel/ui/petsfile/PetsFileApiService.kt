@@ -1,7 +1,6 @@
 package com.example.potel.ui.petsfile
 
 import okhttp3.MultipartBody
-import okhttp3.OkHttpClient
 import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.Retrofit
@@ -29,12 +28,11 @@ interface PetsFileApiService {
     @POST("PetsFile/AddDog")
     suspend fun addDog(
         @Body body: AddDogBody,
-        @Part catImages: MultipartBody.Part? // 图片作为二进制数据上传
+//        @Part dogImages: MultipartBody.Part? // 图片作为二进制数据上传
     ): Response<Unit>
 
     data class AddDogBody(
         val dogOwner: String,
-        val dodId: String,
         val dogName: String,
         val dogBreed: String,
         val dogGender: String,
@@ -45,12 +43,17 @@ interface PetsFileApiService {
     @Multipart
     @POST("PetsFile/AddCat")
     suspend fun addCat(
-        @Part("catOwner") catOwner: RequestBody,
-        @Part("catName") catName: RequestBody,
-        @Part("catBreed") catBreed: RequestBody,
-        @Part("catGender") catGender: RequestBody,
-        @Part catImages: MultipartBody.Part? // 图片作为二进制数据上传
+        @Body body: AddCatBody,
+//        @Part catImages: MultipartBody.Part? // 图片作为二进制数据上传
     ): Response<Unit>
+
+    data class AddCatBody(
+        val catOwner: String,
+        val catName: String,
+        val catBreed: String,
+        val catGender: String,
+        val catImage: Int,
+    )
 
     // 更新狗信息
     @PUT("PetsFile/updateDog")

@@ -1,9 +1,11 @@
 package com.example.potel.ui.petsfile
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -11,7 +13,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -35,11 +40,11 @@ fun ScreenPetsFileAdd(
     navController: NavHostController
 ) {
     val ownerName by viewModel.ownerName.collectAsState()
+    val petId by viewModel.petId.collectAsState()
     val petName by viewModel.petName.collectAsState()
+    val petBreed by viewModel.petBreed.collectAsState()
     val petGender by viewModel.petGender.collectAsState()
-    val contactInfo by viewModel.contactInfo.collectAsState()
-    val petDiscribe by viewModel.petDiscribe.collectAsState()
-    val petImage by viewModel.petImage.collectAsState()
+    val petImages by viewModel.petImages.collectAsState()
 
     Box(
         modifier = Modifier
@@ -60,7 +65,7 @@ fun ScreenPetsFileAdd(
                 text = "Pet Information",
                 style = TextStyle(
                     fontSize = 30.sp,
-                    fontWeight = androidx.compose.ui.text.font.FontWeight.Bold
+                    fontWeight = FontWeight.Bold
                 ),
                 color = Color.Black
             )
@@ -79,27 +84,55 @@ fun ScreenPetsFileAdd(
             )
 
             PetInfoTextField(
-                label = "請輸入寵物性別",
-                textState = petGender,
-                onValueChange = { viewModel.updatePetGender(it) }
+                label = "請輸入寵物品種",
+                textState = petBreed,
+                onValueChange = { viewModel.updatePetBreed(it) }
             )
 
-            PetInfoTextField(
-                label = "請輸飼主聯絡方式",
-                textState = contactInfo,
-                onValueChange = { viewModel.updateContactInfo(it) }
-            )
 
-            PetInfoTextField(
-                label = "請輸入寵物描述",
-                textState = petDiscribe,
-                onValueChange = { viewModel.updatePetDiscribe(it) }
-            )
+            Row {
+                val isMale = petGender == "Male"
+                Text(
+                    modifier = Modifier
 
-            PetInfoTextField(
-                label = "請上傳寵物影像",
-                textState = petImage,
-                onValueChange = { viewModel.updatePetImage(it) }
+                        .padding(horizontal = 12.dp)
+                        .weight(1f)
+                        .border(
+                            if (isMale) 3.dp else 0.dp,
+                            color = Color.Black,
+                            shape = RoundedCornerShape(12.dp)
+                        )
+                        .background(Color.Blue, shape = RoundedCornerShape(12.dp))
+                        .padding(vertical = 12.dp)
+                        .clickable(onClick = viewModel::onMaleClick),
+                    text = "公",
+                    textAlign = TextAlign.Center
+                )
+                val isFemale = petGender == "Female"
+                Text(
+                    modifier = Modifier
+
+                        .padding(horizontal = 12.dp)
+                        .weight(1f)
+                        .border(
+                            if (isFemale) 3.dp else 0.dp,
+                            color = Color.Black,
+                            shape = RoundedCornerShape(12.dp)
+                        )
+                        .background(Color.Red, shape = RoundedCornerShape(12.dp))
+                        .padding(vertical = 12.dp)
+                        .clickable(onClick = viewModel::onFemaleClick),
+                    text = "母",
+                    textAlign = TextAlign.Center
+                )
+
+            }
+
+            // petImages 改為數字輸入
+            PetInfoNumberField(
+                label = "請上傳寵物圖片",
+                numberState = petImages,
+                onValueChange = { viewModel.updatePetImages(it) }
             )
         }
 
@@ -118,7 +151,7 @@ fun ScreenPetsFileAdd(
                 // Dog 按鈕
                 Button(
                     onClick = {
-                        viewModel.onAddDogClick()
+                        viewModel.onAddDogClick() // 提交資料
                         navController.navigate(Screens.PetsFileDogs.name)
                     },
                     modifier = Modifier
@@ -131,6 +164,7 @@ fun ScreenPetsFileAdd(
                 // Cat 按鈕
                 Button(
                     onClick = {
+                        viewModel.onAddCatClick() // 提交資料
                         navController.navigate(Screens.PetsFileCats.name)
                     },
                     modifier = Modifier
@@ -140,12 +174,11 @@ fun ScreenPetsFileAdd(
                     Text(text = "Cat", color = Color.White)
                 }
             }
-
-
         }
     }
 }
 
+// 用於一般文字輸入的 TextField
 @Composable
 fun PetInfoTextField(label: String, textState: String, onValueChange: (String) -> Unit) {
     TextField(
@@ -160,6 +193,29 @@ fun PetInfoTextField(label: String, textState: String, onValueChange: (String) -
         singleLine = true
     )
 }
+
+// 用於數字輸入的 TextField
+@Composable
+fun PetInfoNumberField(label: String, numberState: Int, onValueChange: (Int) -> Unit) {
+    TextField(
+        value = numberState.toString(),
+        onValueChange = { newValue ->
+            // 確保是數字才能更新
+            newValue.toIntOrNull()?.let {
+                onValueChange(it)
+            }
+        },
+        label = { Text(text = label) },
+        keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp) // 左右邊距，確保不貼邊
+            .clip(RoundedCornerShape(12.dp)) // 圓角輸入框
+            .background(Color.White), // 輸入框背景顏色
+        singleLine = true
+    )
+}
+
 
 @Preview(showBackground = true)
 @Composable

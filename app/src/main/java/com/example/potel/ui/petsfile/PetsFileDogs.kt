@@ -160,7 +160,7 @@ fun ScreensPetsFileDogs(
             onItemClick = {
                 scope.launch {
                     snackbarHostState.showSnackbar(
-                        "${it.dogName}, $${it.dogbreed}",
+                        "${it.dogName}, $${it.dogBreed}",
                         withDismissAction = true
                     )
                 }
@@ -258,7 +258,7 @@ fun DogsLists(
                     onItemClick(dogs)
                 },
                 headlineContent = { Text(dogs.dogName) },
-                supportingContent = { Text(dogs.dogbreed) },
+                supportingContent = { Text(dogs.dogBreed) },
                 leadingContent = {
                     AsyncImage(
                         modifier = Modifier.size(50.dp),
@@ -343,9 +343,9 @@ fun AddDialog(
                 ) {
                     Button(onClick = {
                         val newDogs = PetsDog(
-                            name, breed, gender,
+                            name,1, breed, gender,"",
                             // 隨意給個封面圖
-                            android.R.drawable.ic_dialog_map
+                            1
                         )
                         onAdd(newDogs)
                     }) {
@@ -368,8 +368,8 @@ fun EditDialog(
     onEdit: (PetsDog) -> Unit
 ) {
     var name by remember { mutableStateOf(dogs.dogName) }
-    var breed by remember { mutableStateOf(dogs.dogbreed) }
-    var gender by remember { mutableStateOf(dogs.doggender) }
+    var breed by remember { mutableStateOf(dogs.dogBreed) }
+    var gender by remember { mutableStateOf(dogs.dogGender) }
     Dialog(onDismissRequest = { onDismiss() }) {
         Card(
             modifier = Modifier
@@ -390,7 +390,7 @@ fun EditDialog(
                     fontWeight = FontWeight.Bold,
                     color = Color.Blue
                 )
-                Text(text = "Dogs: ${dogs.dogName}, ${dogs.dogbreed}, ${dogs.doggender}")
+                Text(text = "Dogs: ${dogs.dogName}, ${dogs.dogBreed}, ${dogs.dogGender}")
                 TextField(
                     value = name,
                     onValueChange = { name = it },
@@ -417,8 +417,8 @@ fun EditDialog(
                     Button(onClick = {
                         // 就將原本書內容替換成使用者輸入的新內容，原始books內容也會更新
                         dogs.dogName = name
-                        dogs.dogbreed = breed
-                        dogs.doggender = gender
+                        dogs.dogBreed = breed
+                        dogs.dogGender = gender
                         onEdit(dogs)
                     }) {
                         Text("Update")
