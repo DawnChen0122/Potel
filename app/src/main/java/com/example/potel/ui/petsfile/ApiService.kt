@@ -4,6 +4,7 @@ import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import okhttp3.RequestBody
 import retrofit2.Response
+import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -14,7 +15,7 @@ import retrofit2.http.PUT
 import retrofit2.http.Part
 import retrofit2.http.Path
 
-interface ApiService {
+interface PetsFileApiService {
 
     // 获取所有狗的帖子
     @GET("PetsFile/getDog")
@@ -76,13 +77,13 @@ object RetrofitInstance {
         .cookieJar(MyCookieJar()) // 设置自定义的 CookieJar
         .build()
 
-    val api: PetsApiService by lazy {
+    val api: PetsFileApiService by lazy {
         Retrofit.Builder()
             .baseUrl(baseurl) // Base URL
             .client(okHttpClient) // 把自定义的httpclient设置进去使用
             .addConverterFactory(GsonConverterFactory.create()) // GSON for JSON conversion
             .build()
-            .create(PetsApiService::class.java)
+            .create(PetsFileApiService::class.java)
     }
 }
 fun composeImageUrl(imageid: Int): String{

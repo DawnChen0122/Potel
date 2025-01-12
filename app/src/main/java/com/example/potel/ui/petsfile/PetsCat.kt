@@ -16,22 +16,5 @@ class PetsCat(
             return name.hashCode() // 使用宠物名字的hashCode作为对象的hash值
         }
     }
-data class DogUpdateRequest(
-    val dogId: Int,
-    val dogOwner: String,
-    val dogName: String,
-    val dogBreed: String,
-    val dogGender: String,
-    val dogImages: Int? // 可选图片ID
-)
-
-data class CatUpdateRequest(
-    val catId: Int,
-    val catOwner: String,
-    val catName: String,
-    val catBreed: String,
-    val catGender: String,
-    val catImages: Int? // 可选图片ID
-)
 
 
