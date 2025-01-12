@@ -1,14 +1,28 @@
 package com.example.potel.ui.petsfile
 
+import okhttp3.MultipartBody
+import okhttp3.OkHttpClient
+import okhttp3.RequestBody
+import retrofit2.Response
+import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.http.Body
+import retrofit2.http.DELETE
+import retrofit2.http.GET
+import retrofit2.http.Multipart
+import retrofit2.http.POST
+import retrofit2.http.PUT
+import retrofit2.http.Part
+import retrofit2.http.Path
+
 interface ApiService {
 
     // 获取所有狗的帖子
-    @GET("PetsFile/getAllDogs")
-    suspend fun fetchAllDogs(): List<Dog>
+    @GET("PetsFile/getDog")
+    suspend fun DogsLists(): List<PetsDog>
 
     // 获取所有猫的帖子
-    @GET("PetsFile/getAllCats")
-    suspend fun fetchAllCats(): List<Cat>
+    @GET("PetsFile/getCat")
+    suspend fun CatsLists(): List<PetsCat>
 
     // 添加狗
     @Multipart
