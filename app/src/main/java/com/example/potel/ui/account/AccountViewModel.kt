@@ -12,58 +12,71 @@ import kotlinx.coroutines.flow.asStateFlow
 class AccountViewModel : ViewModel() {
 
 
-    private val _Gender = MutableStateFlow("")
-    val Gender = _Gender.asStateFlow()
-    fun onGenderChanged(gender: String) {
+    private val _gender = MutableStateFlow("")
+    val gender = _gender.asStateFlow()
+    fun genderchange(gender: String) {
         val genderMap = mapOf(
             "男" to "M",
             "女" to "F",
             "不願透漏" to "N"
         )
-        _Gender.value = genderMap[gender] ?: "N"
+        _gender.value = genderMap[gender] ?: "N"
     }
+
+
+    private val _birthday = MutableStateFlow("")
+    val birthday = _birthday.asStateFlow()
+
+    fun birthdaychange(inputYear: String, inputMonth: String, inputDay: String) {
+        if (inputYear.isNotEmpty() && inputMonth.isNotEmpty() && inputDay.isNotEmpty()) {
+            _birthday.value = "$inputYear-$inputMonth-$inputDay"
+        } else {
+            _birthday.value = ""
+        }
+    }
+
 
 
     private val _name = MutableStateFlow("")
     val name = _name.asStateFlow()
-    fun onnameChanged(name: String) {
+    fun namechange(name: String) {
         _name.value = name
     }
 
 
-    private val _password = MutableStateFlow("")
-    val password = _password.asStateFlow()
-    var passwordError by mutableStateOf(false)
-    fun onPasswordChanged(password: String) {
-        val passwordRegex = Regex("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{6,20}$")
-        passwordError = !password.matches(passwordRegex)
-        _password.value = password
+    private val _passwd = MutableStateFlow("")
+    val passwd = _passwd.asStateFlow()
+    var passwdError by mutableStateOf(false)
+    fun passwdchange(passwd: String) {
+        val passwdRegex = Regex("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{6,20}$")
+        passwdError = !passwd.matches(passwdRegex)
+        _passwd.value = passwd
     }
 
 
-    private val _checkpassword = MutableStateFlow("")
-    val checkpassword = _checkpassword.asStateFlow()
-    var checkpasswordError by mutableStateOf(false)
-    fun onCheckPasswordChanged(checkpassword: String) {
-        val checkpasswordRegex = Regex("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")
-        checkpasswordError = !checkpassword.matches(checkpasswordRegex)
-        _checkpassword.value = checkpassword
+    private val _checkpasswd = MutableStateFlow("")
+    val checkpasswd = _checkpasswd.asStateFlow()
+    var checkpasswdError by mutableStateOf(false)
+    fun checkpasswdchange(checkpassword: String) {
+        val checkpasswdRegex = Regex("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")
+        checkpasswdError = !checkpassword.matches(checkpasswdRegex)
+        _checkpasswd.value = checkpassword
     }
 
 
-    private val _phonenumber = MutableStateFlow("")
-    val phonenumber = _phonenumber.asStateFlow()
-    var phonenumberError by mutableStateOf(false)
-    fun onPhonenumberChanged(phonenumber: String) {
-        val phonenumberRegex = Regex("^[0-9]{10}$")
-        phonenumberError = !phonenumber.matches(phonenumberRegex)
-        _phonenumber.value = phonenumber
+    private val _cellphone = MutableStateFlow("")
+    val cellphone = _cellphone.asStateFlow()
+    var cellphoneError by mutableStateOf(false)
+    fun cellphonechange(cellphone: String) {
+        val cellphoneRegex = Regex("^[0-9]{10}$")
+        cellphoneError = !cellphone.matches(cellphoneRegex)
+        _cellphone.value = cellphone
     }
 
 
     private val _address = MutableStateFlow("")
     val address = _address.asStateFlow()
-    fun onAddressChanged(address: String) {
+    fun addresschange(address: String) {
         _address.value = address
     }
 
@@ -71,7 +84,7 @@ class AccountViewModel : ViewModel() {
     private val _email = MutableStateFlow("")
     val email = _email.asStateFlow()
     var emailError by mutableStateOf(false)
-    fun onEmailChanged(email: String) {
+    fun emailchange(email: String) {
         val emailRegex = Regex("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")
         emailError = !email.matches(emailRegex)
         _email.value = email
@@ -83,7 +96,7 @@ class AccountViewModel : ViewModel() {
     suspend fun addmember(member: Member): Check {
 
 
-        if (member.passwd.isNotEmpty() && !passwordError) {
+        if (member.passwd.isNotEmpty() && !passwdError) {
             try {
                 Log.d("ChangePassWord", "Valid input, preparing to send request")
 

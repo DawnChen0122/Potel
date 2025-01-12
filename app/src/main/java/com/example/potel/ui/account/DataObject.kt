@@ -13,7 +13,7 @@ data class Member(
     val address: String,
     val email: String,
     val gender: String,
-    val birthday: String? = null
+    val birthday: String,
 )
 
 
@@ -34,7 +34,7 @@ data class UserData(
     val uid: String,
     val username: String,
     val password: String,
-    val checkpassword: String,
+    val checkpasswd: String,
     val phonenumber: String,
     val address: String,
     val email: String

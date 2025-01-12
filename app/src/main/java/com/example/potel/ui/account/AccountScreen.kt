@@ -1,6 +1,6 @@
 package com.example.potel.ui.account
 
-import androidx.compose.foundation.ScrollState
+
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
@@ -45,6 +45,8 @@ fun Signup(
 
     val email by viewModel.email.collectAsState()
 
+    val birthday by viewModel.birthday.collectAsState()
+
     var inputYear by remember { mutableStateOf("") }
     val yearRange = (1924..2025).map { it.toString() }
     var expandedYear by remember { mutableStateOf(false) }
@@ -57,22 +59,25 @@ fun Signup(
     val dayRange = (1..31).map { it.toString() }
     var expandedDay by remember { mutableStateOf(false) }
 
+
+
+
     var inputGender by remember { mutableStateOf("") }
     val genderRange = listOf("男", "女", "不願透漏").map { it.toString() }
     var expandedGender by remember { mutableStateOf(false) }
 
-    val Gender by viewModel.Gender.collectAsState()
+    val gender by viewModel.gender.collectAsState()
 
 
-    val password by viewModel.password.collectAsState()
-    var passwordVisible by remember { mutableStateOf(false) }
+    val passwd by viewModel.passwd.collectAsState()
+    var passwdVisible by remember { mutableStateOf(false) }
 
-    val checkpassword by viewModel.checkpassword.collectAsState()
-    var checkpasswordVisible by remember { mutableStateOf(false) }
+    val checkpasswd by viewModel.checkpasswd.collectAsState()
+    var checkpasswdVisible by remember { mutableStateOf(false) }
 
 
-    val phonenumber by viewModel.phonenumber.collectAsState()
-    var phonenumberError by remember { mutableStateOf(false) }
+    val cellphone by viewModel.cellphone.collectAsState()
+    var cellphoneError by remember { mutableStateOf(false) }
 
     val address by viewModel.address.collectAsState()
 
@@ -96,7 +101,7 @@ fun Signup(
 
         OutlinedTextField(
             value = name,
-            onValueChange = viewModel::onnameChanged,
+            onValueChange = viewModel::namechange,
             label = { Text(text = "請輸入姓名") },
             singleLine = true,
             shape = RoundedCornerShape(8.dp),
@@ -108,7 +113,7 @@ fun Signup(
 
         OutlinedTextField(
             value = email,
-            onValueChange = viewModel::onEmailChanged,
+            onValueChange = viewModel::emailchange,
             label = { Text("請輸入信箱") },
             singleLine = true,
             shape = RoundedCornerShape(8.dp),
@@ -145,6 +150,11 @@ fun Signup(
             verticalAlignment = Alignment.Top
         )
         {
+
+            LaunchedEffect(inputYear, inputMonth, inputDay) {
+                viewModel.birthdaychange(inputYear, inputMonth, inputDay)
+            }
+
             ExposedDropdownMenuBox(
                 expanded = expandedYear,
                 onExpandedChange = { expandedYear = it },
@@ -292,7 +302,7 @@ fun Signup(
                         onClick = {
                             inputGender = genderOption
                             expandedGender = false
-                            viewModel.onGenderChanged(genderOption)
+                            viewModel.genderchange(genderOption)
                         }
                     )
                 }
@@ -301,8 +311,8 @@ fun Signup(
 
 
         OutlinedTextField(
-            value = password,
-            onValueChange = viewModel::onPasswordChanged,
+            value = passwd,
+            onValueChange = viewModel::passwdchange,
             label = { Text(text = "密碼") },
             leadingIcon = {
                 Icon(
@@ -312,15 +322,15 @@ fun Signup(
             },
             trailingIcon = {
                 Text(
-                    text = if (passwordVisible) "隱藏" else "顯示",
+                    text = if (passwdVisible) "隱藏" else "顯示",
                     modifier = Modifier.clickable {
-                        passwordVisible = !passwordVisible
+                        passwdVisible = !passwdVisible
                     }
                 )
             },
-            isError = viewModel.passwordError,
+            isError = viewModel.passwdError,
             shape = RoundedCornerShape(8.dp),
-            visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+            visualTransformation = if (passwdVisible) VisualTransformation.None else PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             singleLine = true,
             colors = TextFieldDefaults.colors(
@@ -331,7 +341,7 @@ fun Signup(
                 .fillMaxWidth()
                 .padding(top = 16.dp)
         )
-        if (viewModel.passwordError) {
+        if (viewModel.passwdError) {
             Text(
                 text = "密碼需在6至20字符內，且包含字母和數字",
                 color = Color.Red,
@@ -342,8 +352,8 @@ fun Signup(
 
 
         OutlinedTextField(
-            value = checkpassword,
-            onValueChange = viewModel::onCheckPasswordChanged,
+            value = checkpasswd,
+            onValueChange = viewModel::checkpasswdchange,
             label = { Text(text = "再次確認密碼") },
             leadingIcon = {
                 Icon(
@@ -353,15 +363,15 @@ fun Signup(
             },
             trailingIcon = {
                 Text(
-                    text = if (checkpasswordVisible) "隱藏" else "顯示",
+                    text = if (checkpasswdVisible) "隱藏" else "顯示",
                     modifier = Modifier.clickable {
-                        checkpasswordVisible = !checkpasswordVisible
+                        checkpasswdVisible = !checkpasswdVisible
                     }
                 )
             },
-            isError = viewModel.checkpasswordError,
+            isError = viewModel.checkpasswdError,
             shape = RoundedCornerShape(8.dp),
-            visualTransformation = if (checkpasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+            visualTransformation = if (checkpasswdVisible) VisualTransformation.None else PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             singleLine = true,
             colors = TextFieldDefaults.colors(
@@ -372,7 +382,7 @@ fun Signup(
                 .fillMaxWidth()
                 .padding(top = 10.dp)
         )
-        if (viewModel.checkpasswordError) {
+        if (viewModel.checkpasswdError) {
             Text(
                 text = "密碼需輸入相同",
                 color = Color.Red,
@@ -386,8 +396,8 @@ fun Signup(
 
 
         OutlinedTextField(
-            value = phonenumber,
-            onValueChange = viewModel::onPhonenumberChanged,
+            value = cellphone,
+            onValueChange = viewModel::cellphonechange,
             label = { Text(text = "請輸入手機號碼") },
             singleLine = true,
             shape = RoundedCornerShape(8.dp),
@@ -396,7 +406,7 @@ fun Signup(
                 .padding(top = 16.dp),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
         )
-        if (phonenumberError) {
+        if (cellphoneError) {
             Text(
                 text = "手機號碼為十位數字",
                 color = Color.Red,
@@ -408,7 +418,7 @@ fun Signup(
 
         OutlinedTextField(
             value = address,
-            onValueChange = viewModel::onAddressChanged,
+            onValueChange = viewModel::addresschange,
             label = { Text(text = "請輸入地址") },
             singleLine = true,
             shape = RoundedCornerShape(8.dp),
@@ -423,22 +433,22 @@ fun Signup(
         Button(
             onClick = {
 
-                if (email.isEmpty() || password.isEmpty() || checkpassword.isEmpty()
-                    || name.isEmpty() || phonenumber.isEmpty() || address.isEmpty()
+                if (email.isEmpty() || passwd.isEmpty() || checkpasswd.isEmpty()
+                    || name.isEmpty() || cellphone.isEmpty() || address.isEmpty()
                 ) {
                     errorMessage = "欄位不得空白"
-                } else if (password != checkpassword) {
+                } else if (passwd != checkpasswd) {
                     errorMessage = "密碼與確認密碼不同"
                 } else {
                     viewModel.viewModelScope.launch {
                         val member = Member(
                             name = name,
                             email = email,
-                            gender = Gender.toString(),
-                            passwd = password,
-                            cellphone = phonenumber,
+                            gender = gender.toString(),
+                            passwd = passwd,
+                            cellphone = cellphone,
                             address = address,
-
+                            birthday = birthday
                             )
                         viewModel.addmember(member)
                     }

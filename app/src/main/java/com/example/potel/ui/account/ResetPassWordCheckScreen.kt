@@ -1,7 +1,6 @@
 package com.example.potel.ui.account
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -37,11 +36,11 @@ fun Resetpassword(
 
     val email by viewModel.email.collectAsState()
 
-    val password by viewModel.password.collectAsState()
+    val passwd by viewModel.passwd.collectAsState()
     var passwordVisible by remember { mutableStateOf(false) }
 
-    val checkpassword by viewModel.checkpassword.collectAsState()
-    var checkpasswordVisible by remember { mutableStateOf(false) }
+    val checkpasswd by viewModel.checkpasswd.collectAsState()
+    var checkpasswdVisible by remember { mutableStateOf(false) }
 
     val phonenumber by viewModel.phonenumber.collectAsState()
 
@@ -107,8 +106,8 @@ fun Resetpassword(
 
 
         OutlinedTextField(
-            value = password,
-            onValueChange = viewModel::onPasswordChanged,
+            value = passwd,
+            onValueChange = viewModel::passwdchange,
             label = { Text(text = "請輸入新密碼") },
             leadingIcon = {
                 Icon(
@@ -124,7 +123,7 @@ fun Resetpassword(
                     }
                 )
             },
-            isError = viewModel.passwordError,
+            isError = viewModel.passwdError,
             shape = RoundedCornerShape(8.dp),
             visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
@@ -137,7 +136,7 @@ fun Resetpassword(
                 .fillMaxWidth()
                 .padding(top = 10.dp)
         )
-        if (viewModel.passwordError) {
+        if (viewModel.passwdError) {
             Text(
                 text = "密碼需在6 至 20 字內數字英文至少各一",
                 color = Color.Red,
@@ -148,8 +147,8 @@ fun Resetpassword(
 
 
         OutlinedTextField(
-            value = checkpassword,
-            onValueChange = viewModel::onCheckPasswordChanged,
+            value = checkpasswd,
+            onValueChange = viewModel::checkpasswdchange,
             label = { Text(text = "再次確認新密碼") },
             leadingIcon = {
                 Icon(
@@ -159,15 +158,15 @@ fun Resetpassword(
             },
             trailingIcon = {
                 Text(
-                    text = if (checkpasswordVisible) "隱藏" else "顯示",
+                    text = if (checkpasswdVisible) "隱藏" else "顯示",
                     modifier = Modifier.clickable {
-                        checkpasswordVisible = !checkpasswordVisible
+                        checkpasswdVisible = !checkpasswdVisible
                     }
                 )
             },
-            isError = viewModel.checkpasswordError,
+            isError = viewModel.checkpasswdError,
             shape = RoundedCornerShape(8.dp),
-            visualTransformation = if (checkpasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+            visualTransformation = if (checkpasswdVisible) VisualTransformation.None else PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             singleLine = true,
             colors = TextFieldDefaults.colors(
@@ -178,7 +177,7 @@ fun Resetpassword(
                 .fillMaxWidth()
                 .padding(top = 10.dp)
         )
-        if (viewModel.checkpasswordError) {
+        if (viewModel.checkpasswdError) {
             Text(
                 text = "密碼需輸入相同",
                 color = Color.Red,
@@ -192,16 +191,16 @@ fun Resetpassword(
 
         Button(
             onClick = {
-                if (email.isEmpty() || password.isEmpty() || checkpassword.isEmpty()
+                if (email.isEmpty() || passwd.isEmpty() || checkpasswd.isEmpty()
                     || phonenumber.isEmpty()
                 ) {
                     "欄位不得空白"
-                } else if (password != checkpassword) {
+                } else if (passwd != checkpasswd) {
                     "密碼不一致"
                 } else {
                     viewModel.viewModelScope.launch {
                         viewModel.checkEmailAndCellphone()
-                        viewModel.ChangePassWord()
+                        viewModel.changepasswd()
                     }
                 }
             },

@@ -11,23 +11,23 @@ import kotlinx.coroutines.flow.asStateFlow
 
 class ResetPassWordViewModel : ViewModel() {
 
-    private val _password = MutableStateFlow("")
-    val password = _password.asStateFlow()
-    var passwordError by mutableStateOf(false)
-    fun onPasswordChanged(password: String) {
-        val passwordRegex = Regex("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{6,20}$")
-        passwordError = !password.matches(passwordRegex)
-        _password.value = password
+    private val _passwd = MutableStateFlow("")
+    val passwd = _passwd.asStateFlow()
+    var passwdError by mutableStateOf(false)
+    fun passwdchange(passwd: String) {
+        val passwdRegex = Regex("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{6,20}$")
+        passwdError = !passwd.matches(passwdRegex)
+        _passwd.value = passwd
     }
 
 
-    private val _checkpassword = MutableStateFlow("")
-    val checkpassword = _checkpassword.asStateFlow()
-    var checkpasswordError by mutableStateOf(false)
-    fun onCheckPasswordChanged(checkpassword: String) {
-        val checkpasswordRegex = Regex("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{6,20}$")
-        checkpasswordError = !checkpassword.matches(checkpasswordRegex)
-        _checkpassword.value = checkpassword
+    private val _checkpasswd = MutableStateFlow("")
+    val checkpasswd = _checkpasswd.asStateFlow()
+    var checkpasswdError by mutableStateOf(false)
+    fun checkpasswdchange(checkpasswd: String) {
+        val checkpasswdRegex = Regex("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{6,20}$")
+        checkpasswdError = !checkpasswd.matches(checkpasswdRegex)
+        _checkpasswd.value = checkpasswd
     }
 
 
@@ -104,18 +104,18 @@ class ResetPassWordViewModel : ViewModel() {
     }
 
 
-    private val _ChangePassWord = MutableStateFlow(Change(success = false, message = ""))
-    val ChangePassWord = _ChangePassWord.asStateFlow()
+    private val _changepasswd = MutableStateFlow(Change(success = false, message = ""))
+    val changepasswd = _changepasswd.asStateFlow()
 
-    suspend fun ChangePassWord(): Check {
+    suspend fun changepasswd(): Check {
         val email = _email.value
-        val password = _password.value
+        val password = _passwd.value
 
-        if (password.isNotEmpty() && !passwordError) {
+        if (password.isNotEmpty() && !passwdError) {
             try {
                 Log.d("ChangePassWord", "Valid input, preparing to send request")
 
-                val response = RetrofitInstance.api.ChangePassWord(
+                val response = RetrofitInstance.api.changepasswd(
                     Input(
                         email = email, passwd = password,
                     )

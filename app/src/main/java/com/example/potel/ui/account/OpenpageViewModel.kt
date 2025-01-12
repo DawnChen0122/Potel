@@ -91,7 +91,8 @@ class OpenpageViewModel : ViewModel() {
                     cellphone = "",
                     address = "",
                     gender = "",
-                    email = input.email // 可以選擇儲存錯誤時的 email
+                    email = input.email,
+                    birthday = "",
                 )
             }
         } else {
@@ -105,7 +106,8 @@ class OpenpageViewModel : ViewModel() {
                 cellphone = "",
                 address = "",
                 gender = "",
-                email = input.email // 同樣儲存錯誤時的 email
+                email = input.email,
+                birthday = "",
             )
         }
     }
