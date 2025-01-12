@@ -55,6 +55,12 @@ interface ApiService {
         @Body updatePrdOrderRequest: PrdOrder
     ): ResponseObject<Any>
 
+    @GET
+    suspend fun login(
+        @Query("loginId") account: String,
+        @Query("password") password: String
+    ): User
+
 
 //    /** 修改user */
 //    @PUT("/api/users/{id}")
@@ -64,7 +70,12 @@ interface ApiService {
 //    ): UpdateUserResponse?
 }
 
+data class User(
+    val email: String
+)
+
 const val baseurl = "http://10.0.2.2:8080/PotelServer/"
+
 // singleton-pattern, 建立一個符合APIService介面的物件
 object RetrofitInstance {
     private val okHttpClient = OkHttpClient.Builder()
@@ -81,6 +92,6 @@ object RetrofitInstance {
     }
 }
 
-fun composeImageUrl(imageid: Int): String{
+fun composeImageUrl(imageid: Int): String {
     return "${baseurl}api/image?imageid=$imageid"
 }
