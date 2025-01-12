@@ -1,6 +1,7 @@
 package com.example.potel.ui.forumZone
 
 import android.net.Uri
+import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -117,6 +118,7 @@ fun PostAddScreen(
                             }
                             val newPost = NewPost(memberId = memberId, title = title, content = content)
                             forumVM.addPost(newPost, imagePart)
+                            forumVM.setPostSuccessMessage("發文成功！")
                             navController.popBackStack()
                         }
                     }, shape = RoundedCornerShape(8.dp), colors = ButtonDefaults.buttonColors(

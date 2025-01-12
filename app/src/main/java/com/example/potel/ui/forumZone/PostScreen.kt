@@ -421,17 +421,19 @@ fun CommentHeader(comment: Comment, isLastComment: Boolean, memberId: Int, navCo
                 .weight(1f),
             horizontalAlignment = Alignment.End
         ) {
-            IconButton(
-                onClick = {
-                    showDialog=true
-                }, enabled = comment.memberId == memberId
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.Menu,
-                    contentDescription = "更多操作",
-                    Modifier.size(30.dp),
-                    tint = Color.Gray
-                )
+            if(comment.memberId == memberId) {
+                IconButton(
+                    onClick = {
+                        showDialog = true
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.Menu,
+                        contentDescription = "更多操作",
+                        Modifier.size(30.dp),
+                        tint = Color.Gray
+                    )
+                }
             }
         }
     }
@@ -477,7 +479,7 @@ fun DeleteCommentConfirmationDialog(
         content = {
             Column(
                 Modifier
-                    .background(Color.LightGray.copy(alpha = 0.8f), shape = RoundedCornerShape(8.dp))
+                    .background(Color.LightGray.copy(alpha = 0.9f), shape = RoundedCornerShape(8.dp))
                     .height(240.dp),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
