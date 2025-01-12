@@ -20,7 +20,7 @@ class PetsFileCatsViewModel : ViewModel() {
     }
 
     /** 新增一本書到List並更新_bookState內容 */
-    fun addItem(item: PetsCat) {
+    fun addCat(item: PetsCat) {
         _catsState.update {
             val catsList = it.toMutableList()
             catsList.add(item)

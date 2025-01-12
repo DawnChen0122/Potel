@@ -1,5 +1,4 @@
 package com.example.potel.ui.petsfile
-
 import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.compose.foundation.Image
@@ -87,7 +86,7 @@ class PetsFileCatsActivity : ComponentActivity() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ScreensPetsFileCats(petsFileViewModel: PetsFileCatsViewModel = viewModel(),
-                            navController: NavHostController
+                        navController: NavHostController
 ) {
     var inputText by remember { mutableStateOf("") }
     // 從StateFlow取得並呈現最新的值
@@ -197,7 +196,7 @@ fun ScreensPetsFileCats(petsFileViewModel: PetsFileCatsViewModel = viewModel(),
             // onAdd: 確定新增時欲執行內容
             {
                 // 將欲新增的書加入到list
-                petsFileViewModel.addItem(it)
+                petsFileViewModel.addCat(it)
                 showAddDialog = false
                 // 新增成功後該書會被加到最後一筆，使用者可能看不到該書資訊；
                 // 將查詢文字換成新增的書名，可立即顯示該書資訊
