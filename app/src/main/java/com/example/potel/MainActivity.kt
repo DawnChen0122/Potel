@@ -1,10 +1,8 @@
 package com.example.potel
 
-import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -32,7 +30,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -52,8 +49,8 @@ import com.example.potel.ui.petsfile.petsfileScreenRoute
 import com.example.potel.ui.shopping.shoppingScreenRoute
 import com.example.potel.ui.theme.PotelTheme
 
+
 class MainActivity : ComponentActivity() {
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -65,23 +62,24 @@ class MainActivity : ComponentActivity() {
 }
 
 
-@Preview(showBackground = true)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PotelApp(
     navController: NavHostController = rememberNavController()
 ) {
-
+    // todo 1-2 先宣告一個完整頁面，包含 BottomBar / NavHost
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentScreen = backStackEntry?.destination?.route?.split("/")?.first() ?: "home"
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
+    val currentScreenTitle = findEnumTitleByName(currentScreen,
+        MyOrdersScreens::class.java)
 
     val isForumScreen = currentScreen in ForumScreens.entries.map { it.name }
 
     Scaffold(
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
-            .fillMaxSize()
-            .fillMaxWidth(),
+        modifier = Modifier
+            .nestedScroll(scrollBehavior.nestedScrollConnection)
+            .fillMaxSize(),
         topBar = {
 
             if (!isForumScreen) {
@@ -101,9 +99,11 @@ fun PotelApp(
             modifier = Modifier
                 .padding(innerPadding)
         ) {
+            // todo 1-3 將 NavHost 放在 Scaffold Content 裡
             TipNavHost(
                 modifier = Modifier
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .weight(1f),
                 navController = navController
             )
         }
@@ -111,8 +111,6 @@ fun PotelApp(
 }
 
 // todo 1-6 將 NavHost 放在一個獨立的 Composable 裡
-
-
 @Composable
 fun TipNavHost(
     modifier: Modifier = Modifier,
@@ -170,6 +168,8 @@ fun MainTopAppBar(
     )
 }
 
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainBottomAppBar(navController: NavHostController){
     BottomAppBar(
@@ -187,6 +187,7 @@ fun MainBottomAppBar(navController: NavHostController){
                         .size(60.dp)
                         .weight(0.2f),
                     onClick = {
+                        navController.navigate(Screens.HomeRoute.name)
                     }
                 ) {
                     Icon(
@@ -253,6 +254,24 @@ fun MainBottomAppBar(navController: NavHostController){
                     )
                 }
             }
-        }
+        },
     )
+}
+
+fun findEnumTitleByName(name: String, vararg enums: Class<out Enum<*>>): String {
+    // 遍历传入的每个枚举类
+    for (enumClass in enums) {
+        // 获取当前枚举类的所有枚举实例
+        val enumConstants = enumClass.enumConstants ?: continue
+        for (enumValue in enumConstants) {
+            // 检查枚举实例的名称是否匹配
+            if (enumValue.name == name) {
+                // 使用反射获取 title 属性值
+                val titleField = enumClass.getMethod("getTitle") // 调用 getTitle 方法
+                return titleField.invoke(enumValue) as String
+            }
+        }
+    }
+    // 如果未找到，返回 null
+    return ""
 }
