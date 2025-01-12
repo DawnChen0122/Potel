@@ -1,5 +1,7 @@
 package com.example.potel.ui.myorders
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
@@ -25,6 +27,7 @@ enum class MyOrdersScreens(val title: String){
 }
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 fun NavGraphBuilder.myOrdersScreenRoute(
     navController: NavHostController
 ) {
