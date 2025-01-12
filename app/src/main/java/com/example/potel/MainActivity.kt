@@ -1,8 +1,10 @@
 package com.example.potel
 
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -51,6 +53,7 @@ import com.example.potel.ui.shopping.shoppingScreenRoute
 import com.example.potel.ui.theme.PotelTheme
 
 class MainActivity : ComponentActivity() {
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -61,6 +64,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -107,6 +111,8 @@ fun PotelApp(
 }
 
 // todo 1-6 將 NavHost 放在一個獨立的 Composable 裡
+
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun TipNavHost(
     modifier: Modifier = Modifier,
