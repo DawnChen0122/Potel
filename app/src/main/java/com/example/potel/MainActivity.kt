@@ -65,7 +65,7 @@ fun PotelApp(
     val currentScreen = backStackEntry?.destination?.route?.split("/")?.first() ?: "home"
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
     val currentScreenTitle = findEnumTitleByName(currentScreen,
-        MyOrdersScreens::class.java)
+        MyOrdersScreens::class.java,)
 
 
     Scaffold(
