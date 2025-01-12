@@ -32,6 +32,12 @@ class ShopViewModel : ViewModel() {
     private val _prdorderid = MutableStateFlow(1)
     val productorderId = _prdorderid.asStateFlow()
 
+    private val _navRequest = MutableStateFlow<String?>(null)
+    val navRequest = _navRequest.asStateFlow()
+
+    private val _completeOrderId = MutableStateFlow<Int?>(null)
+    val completeOrderId = _completeOrderId.asStateFlow()
+
 
     var cardnumberError by mutableStateOf(false)
     fun onCardnumberChanged(cardnumber: String) {
@@ -80,38 +86,45 @@ class ShopViewModel : ViewModel() {
         }
     }
 
-    fun onSubmitClick(){
+    fun onSubmitClick() {
         viewModelScope.launch {
             val addOrderResponse = addorder()
+            Log.d("completeOrder", "addOrderResponse: $addOrderResponse")
+            if ((addOrderResponse ?: 0) > 0) {
+                _completeOrderId.update { addOrderResponse }
+                _navRequest.update { ShopScreens.Ordercheck.name }
+            }
         }
     }
 
     suspend fun addorder(): Int? {
-        Log.d("shopViewModel","addOrder: ${_product.value?.prdName} ${_product.value?.prdId}")
+        Log.d("shopViewModel", "addOrder: ${_product.value?.prdName} ${_product.value?.prdId}")
         val productId = _product.value?.prdId ?: return null
         val productCount = _productCount.value
         val memberId = 0
-        val amount = productCount *( _product.value?.price ?:0)
+        val amount = productCount * (_product.value?.price ?: 0)
 
 
-        Log.d("shopViewModel","pid: $productId")
-        Log.d("shopViewModel","productCount: $productCount")
-        Log.d("shopViewModel","memberId: $memberId")
-        Log.d("shopViewModel","amount: $amount")
-        Log.d("shopViewModel","status: $status")
-        Log.d("shopViewModel","prdorderid: $productorderId")
+        Log.d("shopViewModel", "pid: $productId")
+        Log.d("shopViewModel", "productCount: $productCount")
+        Log.d("shopViewModel", "memberId: $memberId")
+        Log.d("shopViewModel", "amount: $amount")
+        Log.d("shopViewModel", "status: $status")
+        Log.d("shopViewModel", "prdorderid: $productorderId")
 
         try {
-            val response = RetrofitInstance.api.addOrder(OrderRequest(
-                prdId = productId,
-                prdCount = productCount,
-                memberId = memberId,
-                amount = amount,
-                status = status.value,
-                prdorderid = productorderId.value,
+            val response = RetrofitInstance.api.addOrder(
+                OrderRequest(
+                    prdId = productId,
+                    prdCount = productCount,
+                    memberId = memberId,
+                    amount = amount,
+                    status = status.value,
+                    prdorderid = productorderId.value,
 
-            ))
-            return 0
+                    )
+            )
+            return response.rc ?: 0
         } catch (e: Exception) {
 //            Log.e(tag, "error: ${e.message}")
             return null

@@ -1,5 +1,6 @@
 package com.example.potel.ui.shopping
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -14,6 +15,9 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -30,6 +34,11 @@ fun OrderCheckScreen(
     navController: NavHostController,
     onDismissRequest: () -> Unit,
 ) {
+
+    val completeOrderId by shopViewModel.completeOrderId.collectAsState()
+    LaunchedEffect(completeOrderId) {
+        Log.d("completeOrder", "completeOrderId: $completeOrderId")
+    }
 
     Dialog(onDismissRequest = onDismissRequest) {
         // 使用 Card 來呈現對話框內容
@@ -65,7 +74,7 @@ fun OrderCheckScreen(
                     fontWeight = FontWeight.Bold // 字體樣式: 粗體
                 )
                 Text(
-                    text = "訂單編號:\n123456789",
+                    text = "訂單編號:\n$completeOrderId",
                     modifier = Modifier.padding(16.dp),
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold // 字體樣式: 粗體
