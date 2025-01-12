@@ -28,7 +28,8 @@ interface PetsFileApiService {
     // 添加狗
     @POST("PetsFile/AddDog")
     suspend fun addDog(
-        @Body body: AddDogBody
+        @Body body: AddDogBody,
+        @Part catImages: MultipartBody.Part? // 图片作为二进制数据上传
     ): Response<Unit>
 
     data class AddDogBody(

@@ -164,7 +164,7 @@ fun ScreensPetsFileCats(petsFileViewModel: PetsFileCatsViewModel = viewModel(),
             onItemClick = {
                 scope.launch {
                     snackbarHostState.showSnackbar(
-                        "${it.name}, $${it.breed}",
+                        "${it.name}, $${it.catbreed}",
                         withDismissAction = true
                     )
                 }
@@ -262,7 +262,7 @@ fun CatsLists(
                     onItemClick(cats)
                 },
                 headlineContent = { Text(cats.name) },
-                supportingContent = { Text(cats.breed) },
+                supportingContent = { Text(cats.catbreed) },
                 leadingContent = {
                     Image(
                         painter = painterResource(id = cats.image), contentDescription = "cats"
@@ -370,8 +370,8 @@ fun EditDialog(
     onEdit: (PetsCat) -> Unit
 ) {
     var name by remember { mutableStateOf(cats.name) }
-    var breed by remember { mutableStateOf(cats.breed) }
-    var gender by remember { mutableStateOf(cats.gender) }
+    var breed by remember { mutableStateOf(cats.catbreed) }
+    var gender by remember { mutableStateOf(cats.catgender) }
     Dialog(onDismissRequest = { onDismiss() }) {
         Card(
             modifier = Modifier
@@ -392,7 +392,7 @@ fun EditDialog(
                     fontWeight = FontWeight.Bold,
                     color = Color.Blue
                 )
-                Text(text = "Cats: ${cats.name}, ${cats.breed}, ${cats.gender}")
+                Text(text = "Cats: ${cats.name}, ${cats.catbreed}, ${cats.catgender}")
                 TextField(
                     value = name,
                     onValueChange = { name = it },
@@ -419,8 +419,8 @@ fun EditDialog(
                     Button(onClick = {
                         // 就將原本書內容替換成使用者輸入的新內容，原始books內容也會更新
                         cats.name = name
-                        cats.breed = breed
-                        cats.gender = gender
+                        cats.catbreed = breed
+                        cats.catgender = gender
                         onEdit(cats)
                     }) {
                         Text("Update")

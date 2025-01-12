@@ -3,7 +3,6 @@ package com.example.potel.ui.petsfile
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -14,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -54,7 +54,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
@@ -64,6 +63,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import coil.compose.AsyncImage
 import com.example.potel.ui.theme.PotelTheme
 import kotlinx.coroutines.launch
 
@@ -71,7 +71,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            PotelTheme  {
+            PotelTheme {
                 ScreensPetsFileDogs(navController = rememberNavController())
             }
         }
@@ -80,8 +80,9 @@ class MainActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ScreensPetsFileDogs(petsFileViewModel: PetsFileDogsViewModel = viewModel(),
-         navController: NavHostController
+fun ScreensPetsFileDogs(
+    petsFileViewModel: PetsFileDogsViewModel = viewModel(),
+    navController: NavHostController
 ) {
     var inputText by remember { mutableStateOf("") }
     // 從StateFlow取得並呈現最新的值
@@ -159,7 +160,7 @@ fun ScreensPetsFileDogs(petsFileViewModel: PetsFileDogsViewModel = viewModel(),
             onItemClick = {
                 scope.launch {
                     snackbarHostState.showSnackbar(
-                        "${it.dogName}, $${it.breed}",
+                        "${it.dogName}, $${it.dogbreed}",
                         withDismissAction = true
                     )
                 }
@@ -257,10 +258,12 @@ fun DogsLists(
                     onItemClick(dogs)
                 },
                 headlineContent = { Text(dogs.dogName) },
-                supportingContent = { Text(dogs.breed) },
+                supportingContent = { Text(dogs.dogbreed) },
                 leadingContent = {
-                    Image(
-                        painter = painterResource(id = dogs.image), contentDescription = "dogs"
+                    AsyncImage(
+                        modifier = Modifier.size(50.dp),
+                        model = "http://10.0.2.2:8080/PotelServer/api/image?imageid=${dogs.dogImages}",
+                        contentDescription = ""
                     )
                 },
                 trailingContent = {
@@ -365,8 +368,8 @@ fun EditDialog(
     onEdit: (PetsDog) -> Unit
 ) {
     var name by remember { mutableStateOf(dogs.dogName) }
-    var breed by remember { mutableStateOf(dogs.breed) }
-    var gender by remember { mutableStateOf(dogs.gender) }
+    var breed by remember { mutableStateOf(dogs.dogbreed) }
+    var gender by remember { mutableStateOf(dogs.doggender) }
     Dialog(onDismissRequest = { onDismiss() }) {
         Card(
             modifier = Modifier
@@ -387,7 +390,7 @@ fun EditDialog(
                     fontWeight = FontWeight.Bold,
                     color = Color.Blue
                 )
-                Text(text = "Dogs: ${dogs.dogName}, ${dogs.breed}, ${dogs.gender}")
+                Text(text = "Dogs: ${dogs.dogName}, ${dogs.dogbreed}, ${dogs.doggender}")
                 TextField(
                     value = name,
                     onValueChange = { name = it },
@@ -414,8 +417,8 @@ fun EditDialog(
                     Button(onClick = {
                         // 就將原本書內容替換成使用者輸入的新內容，原始books內容也會更新
                         dogs.dogName = name
-                        dogs.breed = breed
-                        dogs.gender = gender
+                        dogs.dogbreed = breed
+                        dogs.doggender = gender
                         onEdit(dogs)
                     }) {
                         Text("Update")
@@ -429,10 +432,11 @@ fun EditDialog(
         }
     }
 }
+
 @Preview(showBackground = true)
 @Composable
 fun ScreensPetsFileDogsPreview() {
-    PotelTheme  {
+    PotelTheme {
         ScreensPetsFileDogs(navController = rememberNavController())
     }
 }
