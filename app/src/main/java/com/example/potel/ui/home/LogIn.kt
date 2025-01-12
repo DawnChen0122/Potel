@@ -44,7 +44,7 @@ fun LogIn(navController: NavHostController) {
         OutlinedTextField(
             value = uid.value,
             onValueChange = { uid.value = it },
-            label = { Text(text = "請輸入手機號碼/信箱") },
+            label = { Text(text = "用戶 ID") },
             singleLine = true,
             shape = RoundedCornerShape(8.dp),
             modifier = Modifier

@@ -3,9 +3,10 @@ package com.example.potel.ui.home
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
+import com.example.potel.ui.home.*
 
-enum class Screens (title: String){
-    LogIn(title = "登入畫面")
+enum class Screens(title: String){
+    LogIn(title = "登入")
 }
 
 fun NavGraphBuilder.homeScreen1Route(navController: NavHostController) {
