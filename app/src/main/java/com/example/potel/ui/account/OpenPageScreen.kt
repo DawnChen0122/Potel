@@ -241,14 +241,14 @@ fun Login(
                         errorMessage = null // 清除錯誤訊息
                         val input = Input(email, password)
                         viewModel.viewModelScope.launch {
-                            val issucc = viewModel.login(input)
-                            Log.d("Login", "已登入0，issucc=$issucc")
+                            val member = viewModel.login(input)
+                            Log.d("Login", "已登入0，issucc=$member")
 
-                            if (issucc.memberid != 0) {  // 判斷登入是否成功（假設成功的 memberid 會非 0）
-                                preferences.edit().putInt("memberid", issucc.memberid)
-                                    .putString("name", issucc.name)
+                            if (member.memberid != 0) {  // 判斷登入是否成功（假設成功的 memberid 會非 0）
+                                preferences.edit().putInt("memberid", member.memberid)
+                                    .putString("name", member.name)
                                     .apply()
-                                Log.d("Login", "已登入1，輸入的信箱/手機號碼: $issucc")
+                                Log.d("Login", "已登入1，輸入的信箱/手機號碼: $member")
                                 navController.navigate(AccountScreens.HomeRoute.name)
                                 Log.d("Login", "已登入2，輸入的信箱/手機號碼: $input")
                             } else {

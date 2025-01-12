@@ -15,7 +15,6 @@ import kotlinx.coroutines.launch
 
 class OpenpageViewModel : ViewModel() {
 
-
     private val _inputError = MutableStateFlow(false)
     val inputError = _inputError.asStateFlow()
 
