@@ -30,18 +30,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.potel.ui.booking.BookingViewModel
 import com.example.potel.ui.booking.bookingScreenRoute
-import com.example.potel.ui.discussZone.discussZoneScreenRoute
-import com.example.potel.ui.home.homeScreenRoute
+import com.example.potel.ui.carerecords.homeScreenRoute
+import com.example.potel.ui.forumZone.ForumScreens
+import com.example.potel.ui.forumZone.forumScreenRoute
+import com.example.potel.ui.home.Screens
+import com.example.potel.ui.home.accountRoute
 import com.example.potel.ui.myorders.MyOrdersScreens
 import com.example.potel.ui.myorders.myOrdersScreenRoute
+import com.example.potel.ui.petsfile.petsfileScreenRoute
+import com.example.potel.ui.shopping.shoppingScreenRoute
 import com.example.potel.ui.theme.PotelTheme
-
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,45 +61,45 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-
+@Preview(showBackground = true)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PotelApp(
     navController: NavHostController = rememberNavController()
 ) {
-    // todo 1-2 先宣告一個完整頁面，包含 BottomBar / NavHost
+
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentScreen = backStackEntry?.destination?.route?.split("/")?.first() ?: "home"
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
-    val currentScreenTitle = findEnumTitleByName(currentScreen,
-        MyOrdersScreens::class.java)
 
+    val isForumScreen = currentScreen in ForumScreens.entries.map { it.name }
 
     Scaffold(
-        modifier = Modifier
-            .nestedScroll(scrollBehavior.nestedScrollConnection)
-            .fillMaxSize(),
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
+            .fillMaxSize()
+            .fillMaxWidth(),
         topBar = {
-            MainTopAppBar(
-                currentScreen = currentScreenTitle,
-                canNavigateBack = navController.previousBackStackEntry != null,
-                navigateUp = { navController.navigateUp() },
-                scrollBehavior = scrollBehavior
-            )
+
+            if (!isForumScreen) {
+                MainTopAppBar(
+                    currentScreen = currentScreen,
+                    canNavigateBack = navController.previousBackStackEntry != null,
+                    navigateUp = { navController.navigateUp() },
+                    scrollBehavior = scrollBehavior
+                )
+            }
         },
         bottomBar = {
-            MainBottomAppBar(navController)
+            MainBottomAppBar()
         }
     ) { innerPadding ->
         Column(
             modifier = Modifier
                 .padding(innerPadding)
         ) {
-            // todo 1-3 將 NavHost 放在 Scaffold Content 裡
             TipNavHost(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f),
+                    .fillMaxWidth(),
                 navController = navController
             )
         }
@@ -105,20 +112,23 @@ fun TipNavHost(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController()
 ) {
+    val bookingViewModel : BookingViewModel = viewModel()
+
     // todo 2-1 這裡是將所有的畫面路徑都列出來
     NavHost(
         modifier = modifier,
         navController = navController,
-        startDestination = MyOrdersScreens.MOS01.name
+        startDestination = Screens.HomeRoute.name
+
     ) {
         // todo 2-2 置入所有的畫面路徑
+        accountRoute(navController) //02 明駿
         homeScreenRoute(navController) // 02 明駿
-        bookingScreenRoute(navController) // 04 芊伃
+        bookingScreenRoute(viewModel = bookingViewModel,navController) // 04 芊伃
         myOrdersScreenRoute(navController) // 27 正能
-//        shopScreenRoute(navController) // 07 柏森
-//        careRecordsScreenRoute(navController) // 25 泰陽
-        discussZoneScreenRoute(navController) // 16 品伃
-//        petsScreenRoute(navController) // 18 勇慶
+        shoppingScreenRoute(navController) // 07 柏森
+        forumScreenRoute(navController) // 16 品伃
+        petsfileScreenRoute(navController) // 18 勇慶
     }
 
 }
@@ -154,10 +164,10 @@ fun MainTopAppBar(
     )
 }
 
-
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainBottomAppBar(navController: NavHostController){
+
+fun MainBottomAppBar() {
+    val navController = rememberNavController()
     BottomAppBar(
         // 動作按鈕
         actions = {
@@ -239,43 +249,6 @@ fun MainBottomAppBar(navController: NavHostController){
                     )
                 }
             }
-        },
-
-
-        // BottomAppBar也可放FloatingActionButton
-//        floatingActionButton = {
-//            FloatingActionButton(
-//                onClick = {
-////                    scope.launch {
-////                        snackbarHostState.showSnackbar(
-////                            "BottomAppBar - Add",
-////                            withDismissAction = true
-////                        )
-////                    }
-//                },
-//                containerColor = BottomAppBarDefaults.bottomAppBarFabColor,
-//                elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation()
-//            ) {
-//                Icon(Icons.Filled.Add, "Localized description")
-//            }
-//        }
-    )
-}
-
-fun findEnumTitleByName(name: String, vararg enums: Class<out Enum<*>>): String {
-    // 遍历传入的每个枚举类
-    for (enumClass in enums) {
-        // 获取当前枚举类的所有枚举实例
-        val enumConstants = enumClass.enumConstants ?: continue
-        for (enumValue in enumConstants) {
-            // 检查枚举实例的名称是否匹配
-            if (enumValue.name == name) {
-                // 使用反射获取 title 属性值
-                val titleField = enumClass.getMethod("getTitle") // 调用 getTitle 方法
-                return titleField.invoke(enumValue) as String
-            }
         }
-    }
-    // 如果未找到，返回 null
-    return ""
+    )
 }
