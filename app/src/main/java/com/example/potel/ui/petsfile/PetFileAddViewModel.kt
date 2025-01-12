@@ -2,8 +2,11 @@ package com.example.potel.ui.petsfile
 
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.potel.R
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 
 class PetFileAddViewModel : ViewModel() {
 
@@ -60,5 +63,23 @@ class PetFileAddViewModel : ViewModel() {
     fun onAddClicked() {
         // 在此處理提交的邏輯，這裡只是示範
         println("資料已提交：$ownerName, $petName, $petGender, $contactInfo, $petDiscribe, $petImage")
+    }
+
+    fun onAddDogClick() {
+        val name = _petName.value
+        val image: Int = R.drawable.dog
+        val owner: String = _ownerName.value
+        viewModelScope.launch {
+            RetrofitInstance.api.addDog(
+                PetsFileApiService.AddDogBody(
+                    dogOwner = owner,
+                    dodId = "123",
+                    dogName = name,
+                    dogBreed = "123",
+                    dogGender = "Male",
+                    dogImage = image,
+                )
+            )
+        }
     }
 }

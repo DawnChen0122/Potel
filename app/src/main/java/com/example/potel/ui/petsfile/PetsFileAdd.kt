@@ -58,7 +58,10 @@ fun ScreenPetsFileAdd(
             Spacer(modifier = Modifier.height(5.dp))
             Text(
                 text = "Pet Information",
-                style = TextStyle(fontSize = 30.sp, fontWeight = androidx.compose.ui.text.font.FontWeight.Bold),
+                style = TextStyle(
+                    fontSize = 30.sp,
+                    fontWeight = androidx.compose.ui.text.font.FontWeight.Bold
+                ),
                 color = Color.Black
             )
 
@@ -114,7 +117,10 @@ fun ScreenPetsFileAdd(
             ) {
                 // Dog 按鈕
                 Button(
-                    onClick = { navController.navigate(Screens.PetsFileDogs) },
+                    onClick = {
+                        viewModel.onAddDogClick()
+                        navController.navigate(Screens.PetsFileDogs.name)
+                    },
                     modifier = Modifier
                         .clip(RoundedCornerShape(12.dp))
                         .padding(horizontal = 8.dp),
@@ -124,7 +130,9 @@ fun ScreenPetsFileAdd(
 
                 // Cat 按鈕
                 Button(
-                    onClick = { navController.navigate(Screens.PetsFileCats) },
+                    onClick = {
+                        navController.navigate(Screens.PetsFileCats.name)
+                    },
                     modifier = Modifier
                         .clip(RoundedCornerShape(12.dp))
                         .padding(horizontal = 8.dp),

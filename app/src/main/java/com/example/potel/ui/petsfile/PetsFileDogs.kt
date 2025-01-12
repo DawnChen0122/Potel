@@ -131,7 +131,7 @@ fun ScreensPetsFileDogs(petsFileViewModel: PetsFileDogsViewModel = viewModel(),
             BottomAppBar(actions = {
                 // 新增按鈕
                 IconButton(onClick = {
-                    showAddDialog = true
+                    navController.navigate(Screens.PetsFileAdd.name)
                 }) {
                     Icon(Icons.Filled.Add, contentDescription = "add")
                 }
@@ -153,13 +153,13 @@ fun ScreensPetsFileDogs(petsFileViewModel: PetsFileDogsViewModel = viewModel(),
 
     ) { innerPadding ->
         // 一定要套用innerPadding，否則內容無法跟TopAppBar對齊
-        DogsLists(dogs.filter { it.name.contains(inputText, true) },
+        DogsLists(dogs.filter { it.dogName.contains(inputText, true) },
             innerPadding,
             // 項目被點擊時執行
             onItemClick = {
                 scope.launch {
                     snackbarHostState.showSnackbar(
-                        "${it.name}, $${it.breed}",
+                        "${it.dogName}, $${it.breed}",
                         withDismissAction = true
                     )
                 }
@@ -177,7 +177,7 @@ fun ScreensPetsFileDogs(petsFileViewModel: PetsFileDogsViewModel = viewModel(),
                 // 將刪除的書名以Snackbar顯示
                 scope.launch {
                     snackbarHostState.showSnackbar(
-                        "${it.name} deleted", withDismissAction = true
+                        "${it.dogName} deleted", withDismissAction = true
                     )
                 }
             })
@@ -195,11 +195,11 @@ fun ScreensPetsFileDogs(petsFileViewModel: PetsFileDogsViewModel = viewModel(),
                 showAddDialog = false
                 // 新增成功後該書會被加到最後一筆，使用者可能看不到該書資訊；
                 // 將查詢文字換成新增的書名，可立即顯示該書資訊
-                inputText = it.name
+                inputText = it.dogName
                 // 將新增的書名以Snackbar顯示
                 scope.launch {
                     snackbarHostState.showSnackbar(
-                        "${it.name} added", withDismissAction = true
+                        "${it.dogName} added", withDismissAction = true
                     )
                 }
             }
@@ -216,11 +216,11 @@ fun ScreensPetsFileDogs(petsFileViewModel: PetsFileDogsViewModel = viewModel(),
             {
                 showEditDialog = false
                 // 編輯成功後將查詢文字換成編輯的書名，可立即顯示該書資訊
-                inputText = it.name
+                inputText = it.dogName
                 // 將修改好的書名以Snackbar顯示
                 scope.launch {
                     snackbarHostState.showSnackbar(
-                        "${it.name} updated", withDismissAction = true
+                        "${it.dogName} updated", withDismissAction = true
                     )
                 }
             }
@@ -256,7 +256,7 @@ fun DogsLists(
                 modifier = Modifier.clickable {
                     onItemClick(dogs)
                 },
-                headlineContent = { Text(dogs.name) },
+                headlineContent = { Text(dogs.dogName) },
                 supportingContent = { Text(dogs.breed) },
                 leadingContent = {
                     Image(
@@ -290,7 +290,7 @@ fun DogsLists(
 @Composable
 fun AddDialog(
     onDismiss: () -> Unit,
-    onAdd: (PetsDog) -> Unit
+    onAdd: (PetsDog) -> Unit,
 ) {
     var name by remember { mutableStateOf("") }
     var breed by remember { mutableStateOf("") }
@@ -364,7 +364,7 @@ fun EditDialog(
     onDismiss: () -> Unit,
     onEdit: (PetsDog) -> Unit
 ) {
-    var name by remember { mutableStateOf(dogs.name) }
+    var name by remember { mutableStateOf(dogs.dogName) }
     var breed by remember { mutableStateOf(dogs.breed) }
     var gender by remember { mutableStateOf(dogs.gender) }
     Dialog(onDismissRequest = { onDismiss() }) {
@@ -387,7 +387,7 @@ fun EditDialog(
                     fontWeight = FontWeight.Bold,
                     color = Color.Blue
                 )
-                Text(text = "Dogs: ${dogs.name}, ${dogs.breed}, ${dogs.gender}")
+                Text(text = "Dogs: ${dogs.dogName}, ${dogs.breed}, ${dogs.gender}")
                 TextField(
                     value = name,
                     onValueChange = { name = it },
@@ -413,7 +413,7 @@ fun EditDialog(
                 ) {
                     Button(onClick = {
                         // 就將原本書內容替換成使用者輸入的新內容，原始books內容也會更新
-                        dogs.name = name
+                        dogs.dogName = name
                         dogs.breed = breed
                         dogs.gender = gender
                         onEdit(dogs)

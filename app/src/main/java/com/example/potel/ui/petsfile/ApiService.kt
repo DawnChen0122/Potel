@@ -18,23 +18,27 @@ import retrofit2.http.Path
 interface PetsFileApiService {
 
     // 获取所有狗的帖子
-    @GET("PetsFile/getDog")
+    @GET("PetsFile/Dogs")
     suspend fun DogsLists(): List<PetsDog>
 
     // 获取所有猫的帖子
-    @GET("PetsFile/getCat")
+    @GET("PetsFile/Cats")
     suspend fun CatsLists(): List<PetsCat>
 
     // 添加狗
-    @Multipart
     @POST("PetsFile/AddDog")
     suspend fun addDog(
-        @Part("dogOwner") dogOwner: RequestBody,
-        @Part("dogName") dogName: RequestBody,
-        @Part("dogBreed") dogBreed: RequestBody,
-        @Part("dogGender") dogGender: RequestBody,
-        @Part dogImages: MultipartBody.Part? // 图片作为二进制数据上传
+        @Body body: AddDogBody
     ): Response<Unit>
+
+    data class AddDogBody(
+        val dogOwner: String,
+        val dodId: String,
+        val dogName: String,
+        val dogBreed: String,
+        val dogGender: String,
+        val dogImage: Int,
+    )
 
     // 添加猫
     @Multipart
@@ -70,22 +74,19 @@ interface PetsFileApiService {
 }
 
 
-
 const val baseurl = "http://10.0.2.2:8080/PotelServer/"
+
 object RetrofitInstance {
-    private val okHttpClient = OkHttpClient.Builder()
-        .cookieJar(MyCookieJar()) // 设置自定义的 CookieJar
-        .build()
 
     val api: PetsFileApiService by lazy {
         Retrofit.Builder()
             .baseUrl(baseurl) // Base URL
-            .client(okHttpClient) // 把自定义的httpclient设置进去使用
             .addConverterFactory(GsonConverterFactory.create()) // GSON for JSON conversion
             .build()
             .create(PetsFileApiService::class.java)
     }
 }
-fun composeImageUrl(imageid: Int): String{
+
+fun composeImageUrl(imageid: Int): String {
     return "${baseurl}api/image?imageid=$imageid"
 }

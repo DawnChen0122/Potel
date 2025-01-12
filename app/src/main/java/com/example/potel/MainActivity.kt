@@ -107,7 +107,7 @@ fun TipNavHost(
     NavHost(
         modifier = modifier,
         navController = navController,
-        startDestination = Screens.MOS0501.name
+        startDestination = com.example.potel.ui.petsfile.Screens.PetsFileFirst.name
     ) {
         // todo 2-2 置入所有的畫面路徑
         homeScreenRoute(navController) // 02 明駿

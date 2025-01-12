@@ -3,7 +3,9 @@ package com.example.potel.ui.petsfile
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -36,7 +38,8 @@ fun ScreenPetsFileFirst( navController: NavHostController) {
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
-            .background(Color(0xFFF0E68C)),
+            .background(Color(0xFFF0E68C))
+            .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
@@ -101,11 +104,11 @@ fun ScreenPetsFileFirst( navController: NavHostController) {
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Button(onClick = { navController.navigate(Screens.PetsFileDogs)}) {
+            Button(onClick = { navController.navigate(Screens.PetsFileDogs.name)}) {
                 Text(text = "Add dog")
             }
             Spacer(modifier = Modifier.width(30.dp))
-            Button(onClick = { navController.navigate(Screens.PetsFileCats) }) {
+            Button(onClick = { navController.navigate(Screens.PetsFileCats.name) }) {
                 Text(text = "Add cat")
             }
         }
