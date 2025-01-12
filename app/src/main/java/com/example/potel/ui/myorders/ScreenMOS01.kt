@@ -15,6 +15,9 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -37,12 +40,13 @@ import com.example.potel.ui.theme.PotelTheme
 fun ScreenMOS01(
     navController: NavHostController
 ) {
+    val tag = "ScreenMOS01"
     val myOrdersVM: MyOrdersViewModel = viewModel(key = "myOrdersVM")
 
     val context = LocalContext.current
-    // 開 "settings"這個檔案, 沒有的話就建一個
     val preferences = context.getSharedPreferences("member", Context.MODE_PRIVATE)
-    val memberid = preferences.getString("uid", "1")!!
+    val memberid by remember { mutableStateOf(preferences.getString("memberid", "1")) }
+
 
     Column(
         modifier = Modifier
