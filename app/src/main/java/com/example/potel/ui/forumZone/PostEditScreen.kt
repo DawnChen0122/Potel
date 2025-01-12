@@ -173,6 +173,7 @@ fun PostEditScreen(
                                         forumVM.updatePostWithImage(updatePost, imagePart)
                                     }
                                 }
+                                forumVM.setPostSuccessMessage("編輯完成！")
                                 navController.popBackStack()
                             }
                         }, shape = RoundedCornerShape(8.dp), colors = ButtonDefaults.buttonColors(

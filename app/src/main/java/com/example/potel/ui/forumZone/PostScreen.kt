@@ -36,15 +36,21 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -54,12 +60,15 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.potel.R
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -69,6 +78,28 @@ fun PostScreen(navController: NavHostController) {
     val forumVM: ForumVM = viewModel(backStackEntry)
     val postDetail = forumVM.postSelectedState.collectAsState()
     val comments by forumVM.postSelectedCommentsList.collectAsState()
+
+    val scope = rememberCoroutineScope()
+    val hostState = remember { SnackbarHostState() }
+
+    // 监听需要显示的消息
+    LaunchedEffect(forumVM.postSuccessMessage.value) {
+        val message = forumVM.postSuccessMessage.value
+        if (message != null) {
+            scope.launch {
+                val job = launch {
+                    hostState.showSnackbar(
+                        message = message,
+                        duration = SnackbarDuration.Indefinite // 显示时间由延时控制
+                    )
+                }
+                delay(1500) // 自定义 2 秒显示时间
+                job.cancel()
+            }
+            forumVM.setPostSuccessMessage(null) // 清空消息，防止重复显示
+        }
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -81,37 +112,78 @@ fun PostScreen(navController: NavHostController) {
                             tint = Color.LightGray
                         )
                     }
-                }, colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = colorResource(R.color.forum) // 背景色設置
+                },
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    containerColor = colorResource(R.color.forum) // 背景色设置
                 )
             )
         }
     ) { paddingValues ->
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(top = paddingValues.calculateTopPadding())
-                .background(colorResource(R.color.forum))
-        ) {
-            item {
-                Spacer(Modifier.height(20.dp))
-                PostDetailContent(postDetail.value)
-                LikeController(forumVM, postDetail.value, memberId)
+        Box(modifier = Modifier.fillMaxSize()) {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(top = paddingValues.calculateTopPadding())
+                    .background(colorResource(R.color.forum))
+            ) {
+                item {
+                    Spacer(Modifier.height(20.dp))
+                    PostDetailContent(postDetail.value)
+                    LikeController(forumVM, postDetail.value, memberId)
+                }
+                // 显示新增评论区
+                item {
+                    Spacer(Modifier.height(20.dp))
+                    AddCommentHeader(comments)
+                    AddCommentSection(postDetail.value.postId, forumVM, memberId)
+                }
+                // 显示评论区
+                item {
+                    Spacer(Modifier.height(20.dp))
+                    CommentsSection(comments, memberId, navController, forumVM)
+                }
             }
-            // 顯示新增留言區
-            item {
-                Spacer(Modifier.height(20.dp))
-                AddCommentHeader(comments)
-                AddCommentSection(postDetail.value.postId, forumVM, memberId)
-            }
-            // 顯示留言區
-            item {
-                Spacer(Modifier.height(20.dp))
-                CommentsSection(comments, memberId, navController, forumVM)
-            }
+
+
+            SnackbarHost(
+                hostState = hostState,
+                modifier = Modifier.align(Alignment.BottomCenter),
+                snackbar = { data ->
+                    Snackbar(
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .width(200.dp), // 添加额外的 padding 和宽度
+                        containerColor = Color.White, // 背景色：白色
+                        contentColor = Color.Black, // 文字颜色：黑色
+                        shape = RoundedCornerShape(16.dp), // 设置圆角半径
+                        content = {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically, // 垂直居中
+                                horizontalArrangement = Arrangement.Start // 从左到右排列
+                            ) {
+                                Icon(
+                                    modifier = Modifier
+                                        .size(60.dp)
+                                        .padding(end = 8.dp), // 图标和文字之间的间距
+                                    painter = painterResource(id = R.drawable.dogandcat),
+                                    contentDescription = "完成通知"
+                                )
+                                Text(
+                                    text = data.visuals.message,
+                                    modifier = Modifier.weight(1f), // 使文本占用剩余空间
+                                    fontSize = 20.sp,
+                                    textAlign = TextAlign.Center
+                                )
+                            }
+                        }
+                    )
+                }
+            )
         }
     }
 }
+
 
 @Composable
 fun PostDetailContent(post: Post) {
@@ -344,6 +416,7 @@ fun AddCommentSection(postId: Int, forumVM: ForumVM, memberId: Int) {
                 )
                 forumVM.addComment(newComment)
                 commentText = ""
+                forumVM.setPostSuccessMessage("留言成功！")
             },
             shape = RoundedCornerShape(8.dp),
             colors = ButtonDefaults.buttonColors(containerColor = colorResource(R.color.foruButton)),

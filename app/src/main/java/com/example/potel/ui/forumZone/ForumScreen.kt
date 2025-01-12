@@ -41,17 +41,23 @@ import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -68,6 +74,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -76,6 +83,7 @@ import coil.compose.AsyncImage
 import com.example.potel.R
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -86,40 +94,124 @@ fun ForumScreen(
     val posts by forumVM.forumsState.collectAsState()
     val memberId = 5
 
-    Column(
-        Modifier
-            .fillMaxSize()
-            .background(colorResource(R.color.forum))
-    ) {
-        CenterAlignedTopAppBar(
-            title = {
-                Text(
-                    text = "討論區",
-                    color = Color.White // 設置文字顏色為白色
-                )
-            },
-            navigationIcon = {
-                IconButton(onClick = { navController.navigateUp() }) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = stringResource(R.string.back_button),
-                        tint = Color.White // 設置返回按鈕圖標為白色
-                    )
+    val scope = rememberCoroutineScope()
+    val hostState = remember { SnackbarHostState() }
+
+    // 监听消息并显示
+    LaunchedEffect(forumVM.postSuccessMessage.value) {
+        val message = forumVM.postSuccessMessage.value
+        if (message != null) {
+            scope.launch {
+                val job = launch {
+                    hostState.showSnackbar(message, duration = SnackbarDuration.Indefinite)
                 }
-            },
-            colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                containerColor = colorResource(R.color.forum) // 背景色設置
+                delay(1500) // 自定义 3 秒显示时间
+                job.cancel() // 隐藏
+            }
+            forumVM.setPostSuccessMessage(null) // 清除消息
+        }
+    }
+
+    // State to control visibility of items
+    var isItemsVisible by remember { mutableStateOf(true) }
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        // Column or other content for your ForumScreen UI
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(colorResource(R.color.forum))
+        ) {
+            CenterAlignedTopAppBar(
+                title = {
+                    Text(
+                        text = "討論區",
+                        color = Color.White // 设置文字颜色为白色
+                    )
+                },
+                navigationIcon = {
+                    IconButton(onClick = { navController.navigateUp() }) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = stringResource(R.string.back_button),
+                            tint = Color.White // 设置返回按钮图标为白色
+                        )
+                    }
+                },
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    containerColor = colorResource(R.color.forum) // 背景色设置
+                )
             )
+            HorizontalDivider(
+                Modifier.padding(start = 10.dp, end = 10.dp),
+                thickness = 1.dp,
+                color = Color.DarkGray
+            )
+            Spacer(Modifier.height(20.dp))
+            if (isItemsVisible) {
+                ForumTabContent(forumVM, navController, posts, memberId)
+            }
+        }
+
+        SnackbarHost(
+            hostState = hostState,
+            modifier = Modifier.align(Alignment.BottomCenter), // 显示在底部
+            snackbar = { data ->
+                Snackbar(
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .width(200.dp), // 添加额外的 padding 和宽度
+                    containerColor = Color.White, // 背景色：白色
+                    contentColor = Color.Black, // 文字颜色：黑色
+                    shape = RoundedCornerShape(16.dp), // 设置圆角半径
+                    content = {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically, // 垂直居中
+                            horizontalArrangement = Arrangement.Start // 从左到右排列
+                        ) {
+                            Icon(
+                                modifier = Modifier
+                                    .size(60.dp)
+                                    .padding(end = 8.dp), // 图标和文字之间的间距
+                                painter = painterResource(id = R.drawable.dogandcat),
+                                contentDescription = "完成通知"
+                            )
+                            Text(
+                                text = data.visuals.message,
+                                modifier = Modifier.weight(1f), // 使文本占用剩余空间
+                                fontSize = 20.sp,
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                    }
+                )
+            }
         )
-        HorizontalDivider(
-            Modifier.padding(start = 10.dp, end = 10.dp),
-            thickness = 1.dp,
-            color = Color.DarkGray
-        )
-        Spacer(Modifier.height(20.dp))
-        ForumTabContent(forumVM, navController, posts, memberId)
+
+        FloatingActionButton(
+            onClick = {
+                // Hide items when the button is clicked
+                isItemsVisible = false
+                // Navigate to the add post screen
+                navController.navigate(ForumScreens.PostAddScreen.name)
+            },
+            containerColor = colorResource(R.color.foruButton),
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(16.dp)
+        ) {
+            Icon(
+                imageVector = Icons.Default.Add,
+                contentDescription = "新增貼文",
+                modifier = Modifier
+                    .border(2.dp, Color.Black, RoundedCornerShape(4.dp))
+                    .size(35.dp)
+            )
+        }
     }
 }
+
 
 @Composable
 fun ForumTabContent(
@@ -130,7 +222,6 @@ fun ForumTabContent(
 ) {
     val pagerState = rememberPagerState { 1 }
     var selectedTabIndex by remember { mutableIntStateOf(0) }
-
     Box(Modifier.fillMaxSize()) {
         Column {
             ForumTabSelector(selectedTabIndex) { selectedTabIndex = it }
@@ -154,23 +245,6 @@ fun ForumTabContent(
                     )
                 }
             }
-        }
-        FloatingActionButton(
-            onClick = {
-                navController.navigate(ForumScreens.PostAddScreen.name)
-            },
-            containerColor = colorResource(R.color.foruButton),
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(16.dp)
-        ) {
-            Icon(
-                imageVector = Icons.Default.Add,
-                contentDescription = "新增貼文",
-                modifier = Modifier
-                    .border(2.dp, Color.Black, RoundedCornerShape(4.dp))
-                    .size(35.dp)
-            )
         }
     }
 }
@@ -223,38 +297,58 @@ fun PostListView(
     memberId: Int
 ) {
     val coroutineScope = rememberCoroutineScope()
-
     var isRefreshing by remember { mutableStateOf(false) }
+
+
+    // 模拟初始加载完成
+    LaunchedEffect(Unit) {
+        coroutineScope.launch {
+            isRefreshing=true
+            delay(1000) // 设置加载时间
+            isRefreshing = false
+        }
+    }
+
     val onRefresh: () -> Unit = {
         Log.d("PullToRefresh", "Refresh started")
         isRefreshing = true
         coroutineScope.launch {
-            delay(1000) // 模擬刷新操作
+            delay(1000) // 模拟刷新操作
             forumVM.refresh()
             isRefreshing = false
             Log.d("PullToRefresh", "Refresh finished")
         }
     }
+
     PullToRefreshBox(
         isRefreshing = isRefreshing,
         onRefresh = onRefresh,
         indicator = {
-            CustomRefreshIndicator(isRefreshing = isRefreshing)
+            CustomRefreshIndicator(isRefreshing)
         }
     ) {
-        LazyColumn(modifier = Modifier.fillMaxSize()) {
-            items(posts) { post ->
-                PostCard(post, forumVM, navController, showEditButton, memberId)
-                HorizontalDivider(
-                    Modifier.padding(start = 15.dp, end = 15.dp),
-                    thickness = 1.dp,
-                    color = Color.DarkGray
-                )
-                Spacer(Modifier.height(3.dp))
+        when {
+            !isRefreshing -> {
+                LazyColumn(modifier = Modifier.fillMaxSize()) {
+                    items(
+                        if(!showEditButton)posts.shuffled()
+                        else posts
+                    ) { post ->
+                        PostCard(post, forumVM, navController, showEditButton, memberId)
+                        HorizontalDivider(
+                            Modifier.padding(start = 15.dp, end = 15.dp),
+                            thickness = 1.dp,
+                            color = Color.DarkGray
+                        )
+                        Spacer(Modifier.height(3.dp))
+                    }
+                }
             }
         }
     }
 }
+
+
 
 @Composable
 fun CustomRefreshIndicator(isRefreshing: Boolean) {
@@ -269,16 +363,16 @@ fun CustomRefreshIndicator(isRefreshing: Boolean) {
         if (isRefreshing) {
             Box(
                 modifier = Modifier
-                    .size(50.dp) // 背景的總大小
-                    .background(color = colorResource(R.color.foruButton), shape = CircleShape)
-                    .align(Alignment.TopCenter)
+                    .size(70.dp) // 背景的總大小
+                    .background(color = colorResource(R.color.forumTab), shape = CircleShape)
+                    .align(Alignment.Center)
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.animalrefresh), // 使用內建的刷新圖標
                     contentDescription = "Refreshing",
-                    tint = Color.Black, // 自定義顏色
+                    tint = Color.White, // 自定義顏色
                     modifier = Modifier
-                        .size(40.dp) // 圖標大小
+                        .size(60.dp) // 圖標大小
                         .align(Alignment.Center)
                         .rotate(rotation) // 添加旋轉動畫
                 )
@@ -487,7 +581,7 @@ fun PostHeader(post: Post) {
         Row(
             Modifier
                 .height(45.dp)
-                .width(350.dp)
+                .width(390.dp)
                 .padding(start = 25.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -532,7 +626,7 @@ fun PostContent(post: Post) {
                     color = Color.White
                 )
             }
-            Spacer(Modifier.size(20.dp))
+            Spacer(Modifier.size(40.dp))
             PostImage(post.imageId)
         } else {
             val truncatedContent = post.content.truncateToLength(85)
@@ -566,6 +660,7 @@ fun PostFooter(likesCount: Int, liked: Boolean, commentCount: Int) {
         Text(text = likesCount.toString(), fontSize = 14.sp, color = Color.White)
         Spacer(Modifier.size(15.dp))
         Icon(Icons.Filled.MailOutline, contentDescription = "留言數", tint = Color.LightGray)
+        Spacer(Modifier.size(5.dp))
         Text(text = commentCount.toString(), fontSize = 14.sp, color = Color.White)
     }
 }
@@ -623,6 +718,7 @@ fun String.truncateToLength(maxLength: Int): String {
 fun Char.isChinese(): Boolean {
     return this in '\u4e00'..'\u9fa5'
 }
+
 
 
 

@@ -183,6 +183,7 @@ fun CommentEditScreen(
                         Button(
                             onClick = {
                                 showDialog = false
+                                forumVM.setPostSuccessMessage("編輯完成！")
                                 navController.navigate(ForumScreens.PostScreen.name)
                             },
                             colors = ButtonDefaults.buttonColors(
