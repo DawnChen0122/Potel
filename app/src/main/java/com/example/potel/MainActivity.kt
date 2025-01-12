@@ -90,7 +90,7 @@ fun PotelApp(
             }
         },
         bottomBar = {
-            MainBottomAppBar()
+            MainBottomAppBar(navController)
         }
     ) { innerPadding ->
         Column(
@@ -165,9 +165,7 @@ fun MainTopAppBar(
 }
 
 @Composable
-
-fun MainBottomAppBar() {
-    val navController = rememberNavController()
+fun MainBottomAppBar(navController: NavHostController){
     BottomAppBar(
         // 動作按鈕
         actions = {
