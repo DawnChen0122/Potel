@@ -11,23 +11,29 @@ data class Order(
     var datee: String = "",
     var amount: Int = -1,
 //    var refundamount: Int = -1,
-//    var petid: Int = 0,
-//    var orderstate: Char = '0',
-//    var paymentstate: Char = '0',
-//    var refundstate: Char = '0',
-//    var score: Int = 0,
-//    var comment: String = "",
-//    var paydatetime: String = "",
-//    var refunddatetime: String = "",
-//    var createdate: String = "",
-//    var modifydate: String? = null,
+    var petid: Int = 0,
+    var orderstate: Char = '0',
+    var paymentstate: Char = '0',
+    var refundstate: Char = '0',
+    var score: Int = 0,
+    var comment: String = "",
+    var paydatetime: String = "",
+    var refunddatetime: String = "",
+    var createdate: String = "",
+    var modifydate: String? = null,
     var roomtype: RoomType = RoomType(),
     var member: Member = Member(),
-    var pet: Pet = Pet()
+    var cardNumber: String = "",
+    var expiryDate: String = "",
+    var cvv: String ="",
+    var price: Int = -1,
+    var pet: Pet = Pet(),
+    var nickname: String = "Lucky",
+
 )
 
 data class Pet(
-    var petid: Int = 0,
+    var petid: Int = 1,
     var pettype: Char = 'D',
     var nickname: String = "",
     var weight: Double = 0.0,
@@ -39,8 +45,8 @@ data class Pet(
 )
 
 data class Member(
-    var memberid: Int = 0,
-    var name: String = "",
+//    var memberid: Int = 0,
+    var name: String = "Dawn",
     var cellphone: String = "",
     var address: String = "",
     var gender: Char = 'M',

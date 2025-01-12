@@ -35,6 +35,13 @@ fun RoomSelectionScreen(
 ) {
     val tag = "RoomSelectionScreen"
 
+    val order = bookingVM.addOrderEditState.collectAsState().value
+
+    val days by bookingVM.daySelectState.collectAsState()
+    val selectedRoomType by bookingVM.roomTypeSelectedState.collectAsState()
+
+    order.amount = days * order.price
+
     // 從 ViewModel 獲取房型列表
     val roomTypeList by bookingVM.roomTypesState.collectAsState()
 

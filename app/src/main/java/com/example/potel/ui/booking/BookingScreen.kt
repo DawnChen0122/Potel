@@ -18,9 +18,16 @@ fun BookingScreen(
     bookingVM: BookingViewModel,
     navController: NavHostController
 ) {
+    val tag = "BookingScreen"
+
     var selectedDogWeight by remember { mutableStateOf<String?>(null) }
     var selectedCatRoom by remember { mutableStateOf<String?>(null) }
     var selectedPetType by remember { mutableStateOf<Char?>(null) }
+
+    val order = bookingVM.addOrderEditState.collectAsState().value
+
+
+
 
     Column(
         modifier = Modifier

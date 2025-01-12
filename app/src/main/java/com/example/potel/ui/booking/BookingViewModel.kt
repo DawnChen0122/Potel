@@ -51,11 +51,12 @@ class BookingViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 val response = apiService.addOrder(order)
-                if (response.isSuccessful) {
+                if (response.rc>0) {
                     Log.d(tag, "Order added successfully!")
+                    order.orderid = response.orderid
                     _addOrderState.value = order // 更新狀態以顯示成功訂單
                 } else {
-                    Log.e(tag, "Failed to add order: ${response.errorBody()?.string()}")
+                    Log.e(tag, "Failed to add order: ${response.rm}")
                 }
             } catch (e: Exception) {
                 Log.e(tag, "Error adding order: ${e.message}")
@@ -67,10 +68,22 @@ class BookingViewModel : ViewModel() {
 
     // 定義一個可更改的變數, 但是是私有的(private), 只有VM自己可以改, 外部只能透過提供的method做修改
     private val _addOrderState = MutableStateFlow(Order())
-    private val _petEditState = MutableStateFlow(Pet())
-    private val _memberEditState = MutableStateFlow(Member())
+//    private val _petEditState = MutableStateFlow(Pet())
+//    private val _memberEditState = MutableStateFlow(Member())
     private val _roomTypeSelectedState = MutableStateFlow(RoomType())
      val roomTypeSelectedState = _roomTypeSelectedState.asStateFlow()
+
+    private val _memberTypeState = MutableStateFlow(Member())
+    val memberTypeState = _memberTypeState.asStateFlow()
+    fun setMemberType(Member: Member) {
+        _memberTypeState.value = Member
+    }
+
+    private val _petTypeState = MutableStateFlow(Pet())
+    val petTypeState = _petTypeState.asStateFlow()
+    fun setPetType(Pet: Pet) {
+        _petTypeState.value = Pet
+    }
 
     val addOrderEditState = _addOrderState.asStateFlow()
 
