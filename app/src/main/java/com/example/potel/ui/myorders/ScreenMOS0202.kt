@@ -4,15 +4,19 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -23,14 +27,30 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.potel.R
+import kotlinx.coroutines.launch
 
 @Composable
 fun ScreenMOS0202(
-//    myOrdersViewModel: MyOrdersViewModel = viewModel(),
     navController: NavHostController
 ) {
+    val backStackEntry = navController.getBackStackEntry(MyOrdersScreens.MOS01.name)
+    val myOrdersViewModel: MyOrdersViewModel = viewModel(backStackEntry, key = "myOrdersVM")
+    val order = myOrdersViewModel.orderEditState.collectAsState();
+    order.value?.orderstate = OrderState.Canceled.state
+    var responseObject by remember { mutableStateOf<ResponseObject<Any>?>(null) }
+
+    val coroutineScope = rememberCoroutineScope()
+    LaunchedEffect(Unit) {
+        coroutineScope.launch {
+            responseObject = myOrdersViewModel.updateOrder("cancel", order.value as Order)
+            myOrdersViewModel.setOrder(order.value)
+        }
+    }
+//    Log.d("ScreenMOS0202", "code=${responseObject?.respcode}, msg=${responseObject?.respmsg}")
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -41,7 +61,7 @@ fun ScreenMOS0202(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(20.dp)
+//                .padding(20.dp)
                 .background(color = Color(0xFFD9D9D9), shape = RoundedCornerShape(size = 8.dp)),
             horizontalAlignment = Alignment.Start,
             verticalArrangement = Arrangement.Top,
@@ -89,7 +109,7 @@ fun ScreenMOS0202(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "取消訂單成功!",
+                    text = responseObject?.respmsg ?: "",
                     style = TextStyle(
                         fontSize = 30.sp,
                         lineHeight = 32.sp,
