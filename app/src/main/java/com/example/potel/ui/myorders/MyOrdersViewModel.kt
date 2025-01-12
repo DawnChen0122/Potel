@@ -11,14 +11,14 @@ class MyOrdersViewModel : ViewModel() {
     // 定義一個可更改的變數, 但是是私有的(private), 只有VM自己可以改, 外部只能透過提供的method做修改
     private val _orderEditState = MutableStateFlow<Order?>(Order())
     private val _prdorderEditState = MutableStateFlow<PrdOrder?>(PrdOrder())
-    private val _petEditState = MutableStateFlow(Pet())
-    private val _memberEditState = MutableStateFlow(Member())
+//    private val _petEditState = MutableStateFlow(Pet())
+//    private val _memberEditState = MutableStateFlow(Member())
 
     // 提供外部讀取目前的值, 但不能直接更動, 因為提出的可能是物件, 這個會讓外部讀出的物件也不能更改內容值
     val orderEditState = _orderEditState.asStateFlow()
     val prdorderEditState = _prdorderEditState.asStateFlow()
-    val petEditState = _petEditState.asStateFlow()
-    val memberEditState = _memberEditState.asStateFlow()
+//    val petEditState = _petEditState.asStateFlow()
+//    val memberEditState = _memberEditState.asStateFlow()
 
     fun setOrder(order: Order?){
         _orderEditState.value = order

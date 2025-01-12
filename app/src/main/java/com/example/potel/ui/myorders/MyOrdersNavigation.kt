@@ -40,8 +40,7 @@ fun NavGraphBuilder.myOrdersScreenRoute(
     ) { backStackEntry ->
         ScreenMOS02(
             navController = navController,
-            memberid = backStackEntry.arguments?.getString("memberid") ?: ""
-        )
+            memberid = backStackEntry.arguments?.getString("memberid") ?: "")
     }
     composable(
         route = "${MyOrdersScreens.MOS0201.name}/{orderid}",
