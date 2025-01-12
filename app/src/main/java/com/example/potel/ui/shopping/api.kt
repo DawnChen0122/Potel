@@ -29,7 +29,7 @@ interface ApiService {
     @POST("shopping/Order")
     suspend fun addOrder(
         @Body orderRequest: OrderRequest
-    ): Int
+    ): Response
 
 
 //    /** 修改訂單狀態（例如，付款、發貨等） */
@@ -91,7 +91,7 @@ data class OrderRequest(
 )
 
 // 定義訂單回應資料模型
-//data class OrderResponse(
-//    val orderId: Int, // 訂單 ID
-//    val status: String // 訂單狀態
-//)
+data class Response(
+    val rc: Int, // 訂單 ID
+    val status: String // 訂單狀態
+)
