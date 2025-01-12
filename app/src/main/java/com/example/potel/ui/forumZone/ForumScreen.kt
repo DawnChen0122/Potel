@@ -1,6 +1,11 @@
 package com.example.potel.ui.forumZone
 
 import android.util.Log
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -21,6 +26,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -31,6 +37,7 @@ import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.MailOutline
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -44,16 +51,19 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
@@ -65,6 +75,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.potel.R
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -74,9 +86,11 @@ fun ForumScreen(
     val forumVM: ForumVM = viewModel()
     val posts by forumVM.forumsState.collectAsState()
     val memberId = 5
-    Column(Modifier
-        .fillMaxSize()
-        .background(colorResource(R.color.forum))
+
+    Column(
+        Modifier
+            .fillMaxSize()
+            .background(colorResource(R.color.forum))
     ) {
         CenterAlignedTopAppBar(
             title = {
@@ -124,7 +138,14 @@ fun ForumTabContent(
             Spacer(Modifier.size(5.dp))
             HorizontalPager(state = pagerState) {
                 when (selectedTabIndex) {
-                    0 -> PostListView(posts, forumVM, navController, showEditButton = false, memberId)
+                    0 -> PostListView(
+                        posts,
+                        forumVM,
+                        navController,
+                        showEditButton = false,
+                        memberId
+                    )
+
                     1 -> PostListView(
                         posts.filter { it.memberId == memberId }, // fix me
                         forumVM,
@@ -147,7 +168,9 @@ fun ForumTabContent(
             Icon(
                 imageVector = Icons.Default.Add,
                 contentDescription = "新增貼文",
-                modifier = Modifier.border(2.dp, Color.Black, RoundedCornerShape(4.dp)).size(35.dp)
+                modifier = Modifier
+                    .border(2.dp, Color.Black, RoundedCornerShape(4.dp))
+                    .size(35.dp)
             )
         }
     }
@@ -191,6 +214,7 @@ fun ForumTabSelector(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PostListView(
     posts: List<Post>,
@@ -199,15 +223,67 @@ fun PostListView(
     showEditButton: Boolean,
     memberId: Int
 ) {
-    LazyColumn(modifier = Modifier.fillMaxSize()) {
-        items(posts) { post ->
-            PostCard(post, forumVM, navController, showEditButton, memberId)
-            HorizontalDivider(
-                Modifier.padding(start = 15.dp, end = 15.dp),
-                thickness = 1.dp,
-                color = Color.DarkGray
-            )
-            Spacer(Modifier.height(3.dp))
+    val coroutineScope = rememberCoroutineScope()
+
+    var isRefreshing by remember { mutableStateOf(false) }
+    val onRefresh: () -> Unit = {
+        Log.d("PullToRefresh", "Refresh started")
+        isRefreshing = true
+        coroutineScope.launch {
+            delay(1000) // 模擬刷新操作
+            forumVM.refresh()
+            isRefreshing = false
+            Log.d("PullToRefresh", "Refresh finished")
+        }
+    }
+    PullToRefreshBox(
+        isRefreshing = isRefreshing,
+        onRefresh = onRefresh,
+        indicator = {
+            CustomRefreshIndicator(isRefreshing = isRefreshing)
+        }
+    ) {
+        LazyColumn(modifier = Modifier.fillMaxSize()) {
+            items(posts) { post ->
+                PostCard(post, forumVM, navController, showEditButton, memberId)
+                HorizontalDivider(
+                    Modifier.padding(start = 15.dp, end = 15.dp),
+                    thickness = 1.dp,
+                    color = Color.DarkGray
+                )
+                Spacer(Modifier.height(3.dp))
+            }
+        }
+    }
+}
+
+@Composable
+fun CustomRefreshIndicator(isRefreshing: Boolean) {
+    val rotation by animateFloatAsState(
+        targetValue = if (isRefreshing) 360f else 0f, // 如果正在刷新，圖片旋轉一圈
+        animationSpec = infiniteRepeatable(
+            animation = tween(durationMillis = 1000, easing = LinearEasing),
+            repeatMode = RepeatMode.Restart
+        ), label = ""
+    )
+    Box(modifier = Modifier.fillMaxSize()) {
+        if (isRefreshing) {
+            Box(
+                modifier = Modifier
+                    .size(40.dp) // 背景的總大小
+                    .background(color = colorResource(R.color.foruButton), shape = CircleShape)
+                    .align(Alignment.TopCenter)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Refresh, // 使用內建的刷新圖標
+                    contentDescription = "Refreshing",
+                    tint = Color.Black, // 自定義顏色
+                    modifier = Modifier
+                        .size(30.dp) // 圖標大小
+                        .align(Alignment.Center)
+                        .rotate(rotation) // 添加旋轉動畫
+                )
+            }
         }
     }
 }
@@ -218,7 +294,7 @@ fun PostCard(
     forumVM: ForumVM,
     navController: NavHostController,
     showEditButton: Boolean,
-    memberId :Int
+    memberId: Int
 ) {
     val liked by remember { mutableStateOf(forumVM.isPostLikedByMember(post.postId, memberId)) }
     val likesCount by remember { mutableIntStateOf(forumVM.getLikesCountForPost(post.postId)) }
@@ -271,6 +347,7 @@ fun PostCard(
                         forumVM.setSelectedPost(post)
                         navController.navigate(ForumScreens.PostEditScreen.name)
                     }
+
                     "刪除" -> {
                         showConfirmDeleteDialog = true
                     }
@@ -302,7 +379,10 @@ fun DeleteConfirmationDialog(
         content = {
             Column(
                 Modifier
-                    .background(Color.LightGray.copy(alpha = 0.8f), shape = RoundedCornerShape(8.dp))
+                    .background(
+                        Color.LightGray.copy(alpha = 0.8f),
+                        shape = RoundedCornerShape(8.dp)
+                    )
                     .height(240.dp),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
@@ -353,7 +433,10 @@ fun PostOptionsDialog(onDismissRequest: () -> Unit, onOptionSelected: (String) -
         content = {
             Column(
                 Modifier
-                    .background(Color.LightGray.copy(alpha = 0.8f), shape = RoundedCornerShape(8.dp))
+                    .background(
+                        Color.LightGray.copy(alpha = 0.8f),
+                        shape = RoundedCornerShape(8.dp)
+                    )
                     .height(240.dp),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
@@ -367,7 +450,9 @@ fun PostOptionsDialog(onDismissRequest: () -> Unit, onOptionSelected: (String) -
                         contentColor = Color.Black
                     ),
                     border = BorderStroke(2.dp, Color.DarkGray),
-                    modifier = Modifier.height(70.dp).width(180.dp)
+                    modifier = Modifier
+                        .height(70.dp)
+                        .width(180.dp)
                 ) {
                     Icon(imageVector = Icons.Default.Edit, contentDescription = "編輯")
                     Spacer(Modifier.width(8.dp))
@@ -383,7 +468,9 @@ fun PostOptionsDialog(onDismissRequest: () -> Unit, onOptionSelected: (String) -
                         contentColor = Color.Black
                     ),
                     border = BorderStroke(2.dp, Color.DarkGray),
-                    modifier = Modifier.height(70.dp).width(180.dp)
+                    modifier = Modifier
+                        .height(70.dp)
+                        .width(180.dp)
                 ) {
                     Icon(imageVector = Icons.Default.Delete, contentDescription = "編輯")
                     Spacer(Modifier.width(8.dp))
@@ -412,7 +499,11 @@ fun PostHeader(post: Post) {
                     .padding(start = 10.dp)
             ) {
                 Text("用戶代碼 : ${post.memberId}", fontSize = 15.sp, color = Color.White) // 用戶代碼
-                Text(post.createDate.toFormattedDate(), color = colorResource(R.color.forumTab), fontSize = 13.sp) // 日期
+                Text(
+                    post.createDate.toFormattedDate(),
+                    color = colorResource(R.color.forumTab),
+                    fontSize = 13.sp
+                ) // 日期
             }
         }
     }
@@ -429,19 +520,35 @@ fun PostContent(post: Post) {
     ) {
         if (post.imageId != null) {
             val truncatedContent = post.content.truncateToLength(60)
-            Column{
+            Column {
                 Text(post.title, fontSize = 20.sp, maxLines = 1, color = Color.White)
                 Spacer(Modifier.size(5.dp))
-                Text(truncatedContent, Modifier.width(250.dp).height(50.dp), fontSize = 15.sp, maxLines = 2, color = Color.White)
+                Text(
+                    truncatedContent,
+                    Modifier
+                        .width(250.dp)
+                        .height(50.dp),
+                    fontSize = 15.sp,
+                    maxLines = 2,
+                    color = Color.White
+                )
             }
             Spacer(Modifier.size(20.dp))
             PostImage(post.imageId)
         } else {
             val truncatedContent = post.content.truncateToLength(85)
-            Column{
+            Column {
                 Text(post.title, fontSize = 20.sp, maxLines = 1, color = Color.White)
                 Spacer(Modifier.size(5.dp))
-                Text(truncatedContent, Modifier.width(370.dp).height(50.dp), fontSize = 15.sp, maxLines = 2, color = Color.White)
+                Text(
+                    truncatedContent,
+                    Modifier
+                        .width(370.dp)
+                        .height(50.dp),
+                    fontSize = 15.sp,
+                    maxLines = 2,
+                    color = Color.White
+                )
             }
         }
     }
