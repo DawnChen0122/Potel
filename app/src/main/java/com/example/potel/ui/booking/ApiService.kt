@@ -14,11 +14,7 @@ interface ApiService {
 
     @GET("booking/findroomtype")
     suspend fun fetchRoomTypes(): List<RoomType>
-
-    @POST("orders")
-    suspend fun addOrder(
-        @Body newOrder: newOrder
-    ): Response<Unit>
+    
 }
 
 const val baseurl = "http://10.0.2.2:8080/PotelServer/"

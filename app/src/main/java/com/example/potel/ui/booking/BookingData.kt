@@ -1,14 +1,5 @@
 package com.example.potel.ui.booking
 
-data class newOrder(
-    var memberId :Int =0,
-    var roomId: Int = 0,
-    var expdates: String = "",
-    var expdatee: String = "",
-    var amount: Int = -1,
-    var roomTypeId: Int =0,
-    var petId: Int =0
-)
 
 data class RoomType(
     var roomtypeid: Int = 0,
