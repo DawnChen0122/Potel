@@ -12,6 +12,7 @@ enum class ForumScreens(val title: String) {
     CommentEditScreen(title = "編輯留言")
 }
 
+
 fun NavGraphBuilder.forumScreenRoute(navController: NavHostController) {
     composable(
         route = ForumScreens.ForumScreen.name,

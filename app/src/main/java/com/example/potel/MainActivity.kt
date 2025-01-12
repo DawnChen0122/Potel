@@ -11,8 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-
-
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -32,19 +30,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import com.example.potel.ui.carerecords.homeScreenRoute
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.potel.ui.booking.BookingScreens
-import com.example.potel.ui.booking.BookingScreens.Booking
-import com.example.potel.ui.booking.bookingScreenRoute
+import com.example.potel.ui.home.AccountScreens
 import com.example.potel.ui.forumZone.ForumScreens
 import com.example.potel.ui.forumZone.forumScreenRoute
-import com.example.potel.ui.home.AccountScreens
+import com.example.potel.ui.booking.bookingScreenRoute
 import com.example.potel.ui.myorders.myOrdersScreenRoute
 import com.example.potel.ui.theme.PotelTheme
 import com.example.potel.ui.home.accountRoute
@@ -53,9 +50,6 @@ import com.example.potel.ui.petsfile.PetsFileScreens
 import com.example.potel.ui.petsfile.petsfileScreenRoute
 import com.example.potel.ui.shopping.ShopScreens
 import com.example.potel.ui.shopping.shopScreenRoute
-
-
-
 import kotlin.reflect.KClass
 import kotlin.reflect.full.memberProperties
 
@@ -93,7 +87,8 @@ fun PotelApp(
 
 
     Scaffold(
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
+        modifier = Modifier
+            .nestedScroll(scrollBehavior.nestedScrollConnection)
             .fillMaxSize()
             .fillMaxWidth(),
         topBar = {
@@ -134,16 +129,21 @@ fun TipNavHost(
     NavHost(
         modifier = modifier,
         navController = navController,
+
         startDestination = AccountScreens.Login.name
+
+
 
     ) {
         // todo 2-2 置入所有的畫面路徑
         accountRoute(navController) //02 明駿
         bookingScreenRoute(navController)// 04 芊伃
+        homeScreenRoute(navController) // 02 明駿
         myOrdersScreenRoute(navController) // 27 正能
         shopScreenRoute(navController) // 07 柏森
         forumScreenRoute(navController) // 16 品伃
         petsfileScreenRoute(navController) // 18 勇慶
+
     }
 
 }

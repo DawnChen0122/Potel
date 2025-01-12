@@ -19,11 +19,13 @@ import com.example.potel.R
 
 @Composable
 fun PaymentScreen(
-    navController: NavHostController
+    navController: NavHostController,
+    bookingVM: BookingViewModel
 ) {
-    val bookingVM: BookingViewModel = viewModel(key = "bookingVM")
-//    val cardNumber by bookingVM.creditCardNumber.collectAsState()
-
+    val memberId =13
+    val cardNumber by bookingVM.creditCardNumber.collectAsState()
+    val days by bookingVM.daySelectState.collectAsState()
+    val selectedRoomType by bookingVM.roomTypeSelectedState.collectAsState()
     var expiryDate by remember { mutableStateOf("") }
     var cvv by remember { mutableStateOf("") }
     val amount = "100"
@@ -52,13 +54,18 @@ fun PaymentScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
 
-//        OutlinedTextField(
-//            value = cardNumber,
-//            onValueChange = bookingVM::onCreditCardNumberChange,
-//            label = { Text("信用卡號碼") },
-//            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-//            modifier = fieldModifier
-//        )
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            OutlinedTextField(
+                value = cardNumber,
+                onValueChange = bookingVM::onCreditCardNumberChange,
+                label = { Text("信用卡號碼") },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                modifier = fieldModifier.weight(2f) // 使用權重控制寬度
+            )
+        }
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -84,17 +91,27 @@ fun PaymentScreen(
         }
 
         Spacer(modifier = Modifier.height(16.dp))
-        Text("金額: $$amount")
+        val totalAmount = days * selectedRoomType.price
+        Text("金額: $$totalAmount")
 
         Spacer(modifier = Modifier.height(24.dp))
-//        Button(
-//            onClick = {
-//                bookingVM.addPaymentInfo("RRRRR")
-//                navController.navigate("BookingSuccess") },
-//            modifier = Modifier.padding(horizontal = 16.dp)
-//        ) {
-//            Text("提交")
-//        }
+        Button(
+            onClick = {
+                val newOrder =newOrder(
+                    memberId=memberId,
+                    roomId = 99,
+                    expdatee = "2025-01-09",
+                    expdates = "2025-01-11",
+                    amount = 1000,
+                    roomTypeId = 99,
+                    petId = 99
+                )
+                bookingVM.addOrder(newOrder)
+                navController.navigate("BookingSuccess") },
+            modifier = Modifier.padding(horizontal = 16.dp)
+        ) {
+            Text("提交")
+        }
     }
 }
 

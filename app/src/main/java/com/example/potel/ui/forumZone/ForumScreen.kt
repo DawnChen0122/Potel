@@ -1,9 +1,17 @@
 package com.example.potel.ui.forumZone
 
 import android.util.Log
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -18,54 +26,99 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.MailOutline
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material3.Divider
+import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material3.BasicAlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.example.potel.R
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
-
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ForumScreen(
     navController: NavHostController,
 ) {
     val forumVM: ForumVM = viewModel()
     val posts by forumVM.forumsState.collectAsState()
+    val memberId = 5
 
-    Column(Modifier
+    Column(
+        Modifier
             .fillMaxSize()
             .background(colorResource(R.color.forum))
     ) {
+        CenterAlignedTopAppBar(
+            title = {
+                Text(
+                    text = "討論區",
+                    color = Color.White // 設置文字顏色為白色
+                )
+            },
+            navigationIcon = {
+                IconButton(onClick = { navController.navigateUp() }) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = stringResource(R.string.back_button),
+                        tint = Color.White // 設置返回按鈕圖標為白色
+                    )
+                }
+            },
+            colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                containerColor = colorResource(R.color.forum) // 背景色設置
+            )
+        )
+        HorizontalDivider(
+            Modifier.padding(start = 10.dp, end = 10.dp),
+            thickness = 1.dp,
+            color = Color.DarkGray
+        )
         Spacer(Modifier.height(20.dp))
-        ForumTabContent(forumVM, navController, posts)
+        ForumTabContent(forumVM, navController, posts, memberId)
     }
 }
 
@@ -73,9 +126,10 @@ fun ForumScreen(
 fun ForumTabContent(
     forumVM: ForumVM,
     navController: NavHostController,
-    posts: List<Post>
+    posts: List<Post>,
+    memberId: Int
 ) {
-    val pagerState = rememberPagerState { 2 }
+    val pagerState = rememberPagerState { 1 }
     var selectedTabIndex by remember { mutableIntStateOf(0) }
 
     Box(Modifier.fillMaxSize()) {
@@ -84,12 +138,20 @@ fun ForumTabContent(
             Spacer(Modifier.size(5.dp))
             HorizontalPager(state = pagerState) {
                 when (selectedTabIndex) {
-                    0 -> PostListView(posts, forumVM, navController, showEditButton = false)
-                    1 -> PostListView(
-                        posts.filter { it.memberId == 1 }, //fix me
+                    0 -> PostListView(
+                        posts,
                         forumVM,
                         navController,
-                        showEditButton = true
+                        showEditButton = false,
+                        memberId
+                    )
+
+                    1 -> PostListView(
+                        posts.filter { it.memberId == memberId }, // fix me
+                        forumVM,
+                        navController,
+                        showEditButton = true,
+                        memberId
                     )
                 }
             }
@@ -98,13 +160,17 @@ fun ForumTabContent(
             onClick = {
                 navController.navigate(ForumScreens.PostAddScreen.name)
             },
+            containerColor = colorResource(R.color.foruButton),
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(16.dp)
         ) {
             Icon(
                 imageVector = Icons.Default.Add,
-                contentDescription = "新增貼文"
+                contentDescription = "新增貼文",
+                modifier = Modifier
+                    .border(2.dp, Color.Black, RoundedCornerShape(4.dp))
+                    .size(35.dp)
             )
         }
     }
@@ -122,7 +188,7 @@ fun ForumTabSelector(
             .height(40.dp)
             .fillMaxWidth()
             .background(colorResource(R.color.forum))
-            .padding(start = 15.dp, end =15.dp),
+            .padding(start = 15.dp, end = 15.dp),
         selectedTabIndex = selectedTabIndex,
         containerColor = Color.Transparent
     ) {
@@ -134,7 +200,7 @@ fun ForumTabSelector(
                         colorResource(R.color.forumTab)
                     else
                         Color.White,
-                    shape = if(index == 0)
+                    shape = if (index == 0)
                         RoundedCornerShape(topStart = 10.dp, bottomStart = 10.dp)
                     else
                         RoundedCornerShape(topEnd = 10.dp, bottomEnd = 10.dp)
@@ -148,18 +214,76 @@ fun ForumTabSelector(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PostListView(
     posts: List<Post>,
     forumVM: ForumVM,
     navController: NavHostController,
-    showEditButton: Boolean
+    showEditButton: Boolean,
+    memberId: Int
 ) {
-    LazyColumn(modifier = Modifier.fillMaxSize()) {
-        items(posts) { post ->
-            PostCard(post, forumVM, navController, showEditButton)
-            Divider(Modifier.padding(start = 15.dp, end = 15.dp),thickness = 1.dp, color = Color.DarkGray)
-            Spacer(Modifier.height(3.dp))
+    val coroutineScope = rememberCoroutineScope()
+
+    var isRefreshing by remember { mutableStateOf(false) }
+    val onRefresh: () -> Unit = {
+        Log.d("PullToRefresh", "Refresh started")
+        isRefreshing = true
+        coroutineScope.launch {
+            delay(1000) // 模擬刷新操作
+            forumVM.refresh()
+            isRefreshing = false
+            Log.d("PullToRefresh", "Refresh finished")
+        }
+    }
+    PullToRefreshBox(
+        isRefreshing = isRefreshing,
+        onRefresh = onRefresh,
+        indicator = {
+            CustomRefreshIndicator(isRefreshing = isRefreshing)
+        }
+    ) {
+        LazyColumn(modifier = Modifier.fillMaxSize()) {
+            items(posts) { post ->
+                PostCard(post, forumVM, navController, showEditButton, memberId)
+                HorizontalDivider(
+                    Modifier.padding(start = 15.dp, end = 15.dp),
+                    thickness = 1.dp,
+                    color = Color.DarkGray
+                )
+                Spacer(Modifier.height(3.dp))
+            }
+        }
+    }
+}
+
+@Composable
+fun CustomRefreshIndicator(isRefreshing: Boolean) {
+    val rotation by animateFloatAsState(
+        targetValue = if (isRefreshing) 360f else 0f, // 如果正在刷新，圖片旋轉一圈
+        animationSpec = infiniteRepeatable(
+            animation = tween(durationMillis = 1000, easing = LinearEasing),
+            repeatMode = RepeatMode.Restart
+        ), label = ""
+    )
+    Box(modifier = Modifier.fillMaxSize()) {
+        if (isRefreshing) {
+            Box(
+                modifier = Modifier
+                    .size(40.dp) // 背景的總大小
+                    .background(color = colorResource(R.color.foruButton), shape = CircleShape)
+                    .align(Alignment.TopCenter)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Refresh, // 使用內建的刷新圖標
+                    contentDescription = "Refreshing",
+                    tint = Color.Black, // 自定義顏色
+                    modifier = Modifier
+                        .size(30.dp) // 圖標大小
+                        .align(Alignment.Center)
+                        .rotate(rotation) // 添加旋轉動畫
+                )
+            }
         }
     }
 }
@@ -169,9 +293,14 @@ fun PostCard(
     post: Post,
     forumVM: ForumVM,
     navController: NavHostController,
-    showEditButton: Boolean
+    showEditButton: Boolean,
+    memberId: Int
 ) {
-    val likesCount = forumVM.getLikesCountForPost(post.postId)
+    val liked by remember { mutableStateOf(forumVM.isPostLikedByMember(post.postId, memberId)) }
+    val likesCount by remember { mutableIntStateOf(forumVM.getLikesCountForPost(post.postId)) }
+    var showDialog by remember { mutableStateOf(false) }
+    var showConfirmDeleteDialog by remember { mutableStateOf(false) }
+    val commentCount = forumVM.getCommentCountForPost(post.postId)
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -179,20 +308,17 @@ fun PostCard(
             .padding(5.dp)
             .clickable {
                 forumVM.setSelectedPost(post)
-                //fix me nav postScreen
                 navController.navigate(ForumScreens.PostScreen.name)
             }
     ) {
-        Row{
+        Row {
             PostHeader(post)
-            if(showEditButton){
-                Column (
-                    Modifier.height(65.dp)
-                ) {
-                    Spacer(Modifier.height(5.dp))
+            if (showEditButton) {
+                Column(Modifier.height(65.dp)) {
+                    Spacer(Modifier.height(8.dp))
                     IconButton(onClick = {
-
-                    }) { // 點擊後觸發 onMoreOptionsClick
+                        showDialog = true
+                    }) {
                         Icon(
                             imageVector = Icons.Filled.MoreVert,
                             contentDescription = "更多操作",
@@ -206,9 +332,153 @@ fun PostCard(
         Spacer(Modifier.size(10.dp))
         PostContent(post)
         Spacer(Modifier.size(10.dp))
-        PostFooter(post, likesCount)
+        PostFooter(likesCount, liked, commentCount)
         Spacer(Modifier.size(10.dp))
     }
+
+    if (showDialog) {
+        PostOptionsDialog(
+            onDismissRequest = {
+                showDialog = false
+            },
+            onOptionSelected = { actionOption ->
+                when (actionOption) {
+                    "編輯" -> {
+                        forumVM.setSelectedPost(post)
+                        navController.navigate(ForumScreens.PostEditScreen.name)
+                    }
+
+                    "刪除" -> {
+                        showConfirmDeleteDialog = true
+                    }
+                }
+                showDialog = false
+            }
+        )
+    }
+
+    if (showConfirmDeleteDialog) {
+        DeleteConfirmationDialog(
+            onDismissRequest = { showConfirmDeleteDialog = false },
+            onConfirmDelete = {
+                forumVM.deletePost(post.postId)
+                showConfirmDeleteDialog = false
+            }
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DeleteConfirmationDialog(
+    onDismissRequest: () -> Unit,
+    onConfirmDelete: () -> Unit
+) {
+    BasicAlertDialog(
+        onDismissRequest = onDismissRequest,
+        content = {
+            Column(
+                Modifier
+                    .background(
+                        Color.LightGray.copy(alpha = 0.8f),
+                        shape = RoundedCornerShape(8.dp)
+                    )
+                    .height(240.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Spacer(Modifier.height(50.dp))
+                Text(text = "刪除貼文")
+                Text(text = "確定要刪除此貼文?")
+                Spacer(Modifier.height(50.dp))
+                Row(
+                    Modifier.height(50.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    ActionButton(text = "取消刪除", onClick = onDismissRequest)
+                    Spacer(Modifier.width(20.dp))
+                    ActionButton(text = "確認刪除", onClick = onConfirmDelete, color = Color.Red)
+                }
+            }
+        }
+    )
+}
+
+@Composable
+fun ActionButton(
+    text: String,
+    onClick: () -> Unit,
+    color: Color = Color.Black
+) {
+    Button(
+        onClick = onClick,
+        colors = ButtonDefaults.buttonColors(
+            containerColor = Color.Transparent,
+            contentColor = color
+        ),
+        border = BorderStroke(1.dp, Color.DarkGray),
+        modifier = Modifier
+            .width(110.dp)
+    ) {
+        Text(text = text)
+    }
+}
+
+@Composable
+@OptIn(ExperimentalMaterial3Api::class)
+fun PostOptionsDialog(onDismissRequest: () -> Unit, onOptionSelected: (String) -> Unit) {
+    BasicAlertDialog(
+        onDismissRequest = onDismissRequest,
+        content = {
+            Column(
+                Modifier
+                    .background(
+                        Color.LightGray.copy(alpha = 0.8f),
+                        shape = RoundedCornerShape(8.dp)
+                    )
+                    .height(240.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Button(
+                    onClick = {
+                        onOptionSelected("編輯")
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.Transparent,
+                        contentColor = Color.Black
+                    ),
+                    border = BorderStroke(2.dp, Color.DarkGray),
+                    modifier = Modifier
+                        .height(70.dp)
+                        .width(180.dp)
+                ) {
+                    Icon(imageVector = Icons.Default.Edit, contentDescription = "編輯")
+                    Spacer(Modifier.width(8.dp))
+                    Text(text = "編輯貼文", fontSize = 18.sp)
+                }
+                Spacer(Modifier.height(20.dp))
+                Button(
+                    onClick = {
+                        onOptionSelected("刪除")
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.Transparent,
+                        contentColor = Color.Black
+                    ),
+                    border = BorderStroke(2.dp, Color.DarkGray),
+                    modifier = Modifier
+                        .height(70.dp)
+                        .width(180.dp)
+                ) {
+                    Icon(imageVector = Icons.Default.Delete, contentDescription = "編輯")
+                    Spacer(Modifier.width(8.dp))
+                    Text(text = "刪除貼文", fontSize = 18.sp)
+                }
+            }
+        }
+    )
 }
 
 @Composable
@@ -222,15 +492,18 @@ fun PostHeader(post: Post) {
                 .padding(start = 25.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            MemberImage(null)
-            // 用戶頭貼
+            MemberImage() // 用戶頭貼
             Column(
                 Modifier
                     .weight(1f)
                     .padding(start = 10.dp)
             ) {
                 Text("用戶代碼 : ${post.memberId}", fontSize = 15.sp, color = Color.White) // 用戶代碼
-                Text(post.createDate, color = colorResource(R.color.forumTab), fontSize = 13.sp) // 日期
+                Text(
+                    post.createDate.toFormattedDate(),
+                    color = colorResource(R.color.forumTab),
+                    fontSize = 13.sp
+                ) // 日期
             }
         }
     }
@@ -238,40 +511,69 @@ fun PostHeader(post: Post) {
 
 @Composable
 fun PostContent(post: Post) {
-    val truncatedContent = post.content.truncateToLength(55)
-
     Row(
         Modifier
             .fillMaxWidth()
-            .padding(start = 25.dp),
+            .padding(start = 25.dp)
+            .background(colorResource(R.color.forum)),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Column {
-            Text(post.title, fontSize = 20.sp, maxLines = 1, color = Color.White)
-            Spacer(Modifier.size(5.dp))
-            Text(truncatedContent, Modifier.width(235.dp), fontSize = 15.sp, maxLines = 2, color = Color.White)
+        if (post.imageId != null) {
+            val truncatedContent = post.content.truncateToLength(60)
+            Column {
+                Text(post.title, fontSize = 20.sp, maxLines = 1, color = Color.White)
+                Spacer(Modifier.size(5.dp))
+                Text(
+                    truncatedContent,
+                    Modifier
+                        .width(250.dp)
+                        .height(50.dp),
+                    fontSize = 15.sp,
+                    maxLines = 2,
+                    color = Color.White
+                )
+            }
+            Spacer(Modifier.size(20.dp))
+            PostImage(post.imageId)
+        } else {
+            val truncatedContent = post.content.truncateToLength(85)
+            Column {
+                Text(post.title, fontSize = 20.sp, maxLines = 1, color = Color.White)
+                Spacer(Modifier.size(5.dp))
+                Text(
+                    truncatedContent,
+                    Modifier
+                        .width(370.dp)
+                        .height(50.dp),
+                    fontSize = 15.sp,
+                    maxLines = 2,
+                    color = Color.White
+                )
+            }
         }
-        Spacer(Modifier.size(20.dp))
-        if(post.ImageId!=null) PostImage(post.ImageId)
     }
 }
 
 @Composable
-fun PostFooter(post: Post, likesCount: Int) {
+fun PostFooter(likesCount: Int, liked: Boolean, commentCount: Int) {
     Row(
         modifier = Modifier.padding(start = 25.dp),
         verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center
     ) {
-        Icon(Icons.Filled.FavoriteBorder, contentDescription = "留言數", tint = Color.Red)
+        if (liked) Icon(Icons.Filled.Favorite, contentDescription = "讚數", tint = Color.Red)
+        else Icon(Icons.Filled.FavoriteBorder, contentDescription = "讚數", tint = Color.White)
         Spacer(Modifier.size(5.dp))
-        Text(text = "${likesCount} ", fontSize = 14.sp, color = Color.White)
-        Spacer(Modifier.size(10.dp))
+        Text(text = likesCount.toString(), fontSize = 14.sp, color = Color.White)
+        Spacer(Modifier.size(15.dp))
+        Icon(Icons.Filled.MailOutline, contentDescription = "留言數", tint = Color.LightGray)
+        Text(text = commentCount.toString(), fontSize = 14.sp, color = Color.White)
     }
 }
 
 @Composable
 fun PostImage(imageId: Int) {
-    val imageUrl = remember(imageId) { com.example.potel.ui.forumZone.composeImageUrl(imageId) }
+    val imageUrl = remember(imageId) { composeImageUrl(imageId) }
     Log.d("PostImage", "Image URL: $imageUrl") // 檢查URL
     AsyncImage(
         model = (imageUrl),
@@ -284,26 +586,22 @@ fun PostImage(imageId: Int) {
 }
 
 @Composable
-fun MemberImage(userImg: Int?) {
-    val imageResource = R.drawable.room
-
-    Image(
-        painter = painterResource(id = imageResource),
-        contentDescription = "用戶頭貼",
+fun MemberImage() {
+    val imageResource = R.drawable.catvector
+    Box(
         modifier = Modifier
             .size(45.dp)
-            .clip(RoundedCornerShape(5.dp))
-    )
-}
-
-@Composable
-fun PostOptionsDialog(
-    post: Post,
-    forumVM: ForumVM,
-    navController: NavHostController,
-    onDismiss: () -> Unit
-) {
-
+            .background(colorResource(R.color.forumGreen), shape = RoundedCornerShape(5.dp)),
+        contentAlignment = Alignment.Center
+    ) {
+        Image(
+            painter = painterResource(id = imageResource),
+            contentDescription = "用戶頭貼",
+            modifier = Modifier
+                .size(25.dp)
+                .clip(RoundedCornerShape(5.dp))
+        )
+    }
 }
 
 fun String.truncateToLength(maxLength: Int): String {
@@ -320,77 +618,11 @@ fun String.truncateToLength(maxLength: Int): String {
         sb.append(char)
     }
 
-    // 如果截斷發生，則在結尾加上 "..."
     return if (truncationOccurred) sb.append("...").toString() else sb.toString()
 }
 
 fun Char.isChinese(): Boolean {
     return this in '\u4e00'..'\u9fa5'
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun ForumScreenPreview() {
-    // 使用假資料來進行預覽
-    val fakeForumVM = ForumVM()
-    val fakePosts = listOf(
-        Post(postId = 1, title = "First Post", content = "This is the content of the first post."),
-        Post(postId = 2, title = "Second Post", content = "This is the content of the second post.")
-    )
-
-    // 渲染 ForumScreen，傳入假的資料
-    ForumScreen(navController = rememberNavController())
-}
-
-@Preview(showBackground = true)
-@Composable
-fun ForumTabContentPreview() {
-    // 假資料，傳入預設的 forumVM 和假資料
-    val fakeForumVM = ForumVM()
-    val fakePosts = listOf(
-        Post(postId = 1, title = "First Post", content = "This is the content of the first post."),
-        Post(postId = 2, title = "Second Post", content = "This is the content of the second post.")
-    )
-
-    ForumTabContent(
-        forumVM = fakeForumVM,
-        navController = rememberNavController(),
-        posts = fakePosts
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PostListViewPreview() {
-    // 假資料
-    val fakeForumVM = ForumVM()
-    val fakePosts = listOf(
-        Post(postId = 1, title = "First Post", content = "This is the content of the first post."),
-        Post(postId = 2, title = "Second Post", content = "This is the content of the second post.")
-    )
-
-    PostListView(
-        posts = fakePosts,
-        forumVM = fakeForumVM,
-        navController = rememberNavController(),
-        showEditButton = true
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PostCardPreview() {
-    // 假資料
-    val fakePost = Post(postId = 1, title = "First Post", content = "This is the content of the first post.")
-    val fakeForumVM = ForumVM()
-
-    PostCard(
-        post = fakePost,
-        forumVM = fakeForumVM,
-        navController = rememberNavController(),
-        showEditButton = false
-    )
 }
 
 
