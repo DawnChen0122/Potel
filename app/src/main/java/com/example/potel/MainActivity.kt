@@ -64,7 +64,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
+
 @Preview(showBackground = true)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -112,7 +112,7 @@ fun PotelApp(
 
 // todo 1-6 將 NavHost 放在一個獨立的 Composable 裡
 
-@RequiresApi(Build.VERSION_CODES.O)
+
 @Composable
 fun TipNavHost(
     modifier: Modifier = Modifier,
