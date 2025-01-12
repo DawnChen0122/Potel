@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.android.gms.common.api.Status
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -24,6 +25,12 @@ class ShopViewModel : ViewModel() {
 
     private val _productCount = MutableStateFlow(1)
     val productCount = _productCount.asStateFlow()
+
+    private val _status = MutableStateFlow("")
+    val status = _status.asStateFlow()
+
+    private val _prdorderid = MutableStateFlow(1)
+    val productorderId = _prdorderid.asStateFlow()
 
 
     var cardnumberError by mutableStateOf(false)
@@ -85,16 +92,24 @@ class ShopViewModel : ViewModel() {
         val productCount = _productCount.value
         val memberId = 0
         val amount = productCount *( _product.value?.price ?:0)
-        Log.d("shopViewModel","pid: $$productId")
-        Log.d("shopViewModel","productCount: $$productCount")
-        Log.d("shopViewModel","memberId: $$memberId")
-        Log.d("shopViewModel","amount: $$amount")
+
+
+        Log.d("shopViewModel","pid: $productId")
+        Log.d("shopViewModel","productCount: $productCount")
+        Log.d("shopViewModel","memberId: $memberId")
+        Log.d("shopViewModel","amount: $amount")
+        Log.d("shopViewModel","status: $status")
+        Log.d("shopViewModel","prdorderid: $productorderId")
+
         try {
             val response = RetrofitInstance.api.addOrder(OrderRequest(
                 prdId = productId,
                 prdCount = productCount,
                 memberId = memberId,
-                amount = amount
+                amount = amount,
+                status = status.value,
+                prdorderid = productorderId.value,
+
             ))
             return 0
         } catch (e: Exception) {

@@ -87,7 +87,9 @@ data class OrderRequest(
     val prdId: Int, // 商品 ID
     val prdCount: Int, // 訂購數量
     val memberId: Int, // 會員 ID
-    val amount: Int //總價
+    val amount: Int, //總價
+    val status: String, //狀態
+    val prdorderid: Int //訂單 ID
 )
 
 // 定義訂單回應資料模型
