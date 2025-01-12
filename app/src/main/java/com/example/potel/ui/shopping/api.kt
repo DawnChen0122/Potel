@@ -5,7 +5,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
-import retrofit2.http.PUT
 import retrofit2.http.Query
 
 // 定義 API 服務介面
@@ -31,14 +30,8 @@ interface ApiService {
         @Body orderRequest: OrderRequest
     ): Response
 
-
-//    /** 修改訂單狀態（例如，付款、發貨等） */
-//    @PUT("api/order")
-//    suspend fun updateOrderStatus(
-//        @Query("orderId") orderId: Int,
-//        @Body updateOrderRequest: OrderRequest
-//    ): OrderResponse
 }
+
 
 val baseurl = "http://10.0.2.2:8080/PotelServer/"
 // 基本的 API 基礎 URL
@@ -58,11 +51,13 @@ fun composeImageUrl(imageId: Int): String {
     return "${baseurl}shopping/image?imageid=$imageId" // 根據圖片 ID 組成圖片 URL
 }
 
+
 // 定義商品類別資料模型
 data class Category(
     val id: Int, // 類別 ID
     val name: String // 類別名稱
 )
+
 
 // 定義商品資料模型
 data class Product(
@@ -73,14 +68,6 @@ data class Product(
     val prdDesc: String //商品描述
 )
 
-//// 定義商品詳細資料模型
-//data class ProductDetail(
-//    val id: Int, // 商品 ID
-//    val name: String, // 商品名稱
-//    val description: String, // 商品描述
-//    val price: Int, // 商品價格
-//    val stock: Int // 商品庫存量
-//)
 
 // 定義訂單請求資料模型
 data class OrderRequest(
@@ -91,6 +78,7 @@ data class OrderRequest(
     val status: String, //狀態
     val prdorderid: Int //訂單 ID
 )
+
 
 // 定義訂單回應資料模型
 data class Response(

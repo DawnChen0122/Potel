@@ -17,6 +17,12 @@ class ShopViewModel : ViewModel() {
     private val _cardnumber = MutableStateFlow("")
     val cardnumber = _cardnumber.asStateFlow()
 
+    private val _expiredatenumber = MutableStateFlow("")
+    val expiredatenumber = _expiredatenumber.asStateFlow()
+
+    private val _safecodenumber = MutableStateFlow("")
+    val safecodenumber = _safecodenumber.asStateFlow()
+
     private val _productList = MutableStateFlow<List<Product>>(listOf())
     val productList = _productList.asStateFlow()
 
@@ -44,6 +50,18 @@ class ShopViewModel : ViewModel() {
         val cardnumberRegex = Regex("^[0-9]{16}$")
         cardnumberError = !cardnumber.matches(cardnumberRegex)
         _cardnumber.value = cardnumber
+    }
+    var expiredatenumberError by mutableStateOf(false)
+    fun onExpiredatenumberChanged(expiredatenumber: String) {
+        val expiredatenumberRegex = Regex("^[0-9]{4}$")
+        expiredatenumberError = !expiredatenumber.matches(expiredatenumberRegex)
+        _expiredatenumber.value = expiredatenumber
+    }
+    var safecodenumberError by mutableStateOf(false)
+    fun onSafecodenumberChanged(safecodenumber: String) {
+        val safecodenumberRegex = Regex("^[0-9]{3}$")
+        safecodenumberError = !safecodenumber.matches(safecodenumberRegex)
+        _safecodenumber.value = safecodenumber
     }
 
     fun initProductList(prdType: String) {
@@ -121,7 +139,6 @@ class ShopViewModel : ViewModel() {
                     amount = amount,
                     status = status.value,
                     prdorderid = productorderId.value,
-
                     )
             )
             return response.rc ?: 0

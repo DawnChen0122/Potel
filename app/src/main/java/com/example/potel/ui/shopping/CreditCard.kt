@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 
+
 @Composable
 fun CreditCardScreen(
     viewModel: ShopViewModel = viewModel(),
@@ -39,8 +40,9 @@ fun CreditCardScreen(
 
     val navRequest by viewModel.navRequest.collectAsState()
     val cardnumber by viewModel.cardnumber.collectAsState()
-    var expiredate by remember { mutableStateOf("") }
-    var safecode by remember { mutableStateOf("") }
+    val expiredate by viewModel.expiredatenumber.collectAsState()
+    val safecode by viewModel.safecodenumber.collectAsState()
+
 
     LaunchedEffect(navRequest) {
         Log.d("completeOrder", "navRequest: $navRequest")
@@ -49,6 +51,7 @@ fun CreditCardScreen(
             navController.navigate(navRequest!!)
         }
     }
+
 
     Column(
         modifier = Modifier
@@ -59,12 +62,13 @@ fun CreditCardScreen(
     ) {
         // 顯示標題
         Text(
-            text = "信用卡資料",
+            text = "填寫信用卡",
             fontSize = 35.sp, // 字型大小: 35
-            fontWeight = FontWeight.Bold, // 字體樣式: 粗體
+            fontWeight = FontWeight.ExtraBold, // 字體樣式: 粗體
             color = Color.Black, // 字的顏色: 黑色
             modifier = Modifier.padding(bottom = 30.dp) // 下方間距
         )
+
 
         OutlinedTextField(
             value = cardnumber,
@@ -77,10 +81,9 @@ fun CreditCardScreen(
                 .fillMaxWidth()
                 .padding(top = 8.dp),
         )
-
         if (viewModel.cardnumberError) {
             Text(
-                text = "信用卡卡號為十六位數字",
+                text = "信用卡卡號為十六碼",
                 color = Color.Red,
                 fontSize = 12.sp,
                 modifier = Modifier.padding(start = 16.dp)
@@ -91,7 +94,7 @@ fun CreditCardScreen(
 //        Text(text = "MM/YY")
         OutlinedTextField(
             value = expiredate,
-            onValueChange = { expiredate = it },
+            onValueChange = viewModel::onExpiredatenumberChanged,
             label = { Text(text = "MM/YY") },
             singleLine = true,
             shape = RoundedCornerShape(20.dp),
@@ -107,10 +110,19 @@ fun CreditCardScreen(
             colors = OutlinedTextFieldDefaults.colors(
             )
         )
+        if (viewModel.expiredatenumberError) {
+            Text(
+                text = "到期日期為四碼",
+                color = Color.Red,
+                fontSize = 12.sp,
+                modifier = Modifier.padding(start = 16.dp)
+            )
+        }
+
 
         OutlinedTextField(
             value = safecode,
-            onValueChange = { safecode = it },
+            onValueChange = viewModel::onSafecodenumberChanged,
             label = { Text(text = "CVV") },
             singleLine = true,
             shape = RoundedCornerShape(20.dp),
@@ -119,6 +131,15 @@ fun CreditCardScreen(
                 .fillMaxWidth()
                 .padding(top = 8.dp),
         )
+        if (viewModel.safecodenumberError) {
+            Text(
+                text = "安全碼為三碼",
+                color = Color.Red,
+                fontSize = 12.sp,
+                modifier = Modifier.padding(start = 16.dp)
+            )
+        }
+
 
         // 顯示按鈕
         Button(

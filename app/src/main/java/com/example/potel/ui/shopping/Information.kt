@@ -42,6 +42,7 @@ import com.example.potel.R
 import com.example.potel.ui.theme.PotelTheme
 import kotlinx.coroutines.launch
 
+
 @Composable
 fun InformationScreen(
     navController: NavHostController,
@@ -65,11 +66,12 @@ fun InformationScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(30.dp)
+            .padding(50.dp)
             .verticalScroll(rememberScrollState()),
-        horizontalAlignment = Alignment.CenterHorizontally,
+        horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.SpaceEvenly
     ) {
+
         // 顯示圖片，並設置圓角
 //        Image(
 //            painter = painterResource(id = R.drawable.salmonfro),
@@ -79,11 +81,15 @@ fun InformationScreen(
 //                .clip(RoundedCornerShape(16.dp)), // 圓角邊框
 //            contentScale = ContentScale.Fit // 剪裁圖片來適應容器
 //        )
+
         AsyncImage(
             model = composeImageUrl(product?.imageId ?: 0),
             contentDescription = "寵物照片",
-            alignment = Alignment.TopCenter,
-            contentScale = ContentScale.FillWidth,
+            alignment = Alignment.Center,
+            modifier = Modifier
+                .size(250.dp) // 圖片大小設為 250.dp
+                .clip(RoundedCornerShape(16.dp)), // 圓角邊框
+            contentScale = ContentScale.FillHeight,
         )
 
 
@@ -108,7 +114,7 @@ fun InformationScreen(
 
         Row(
             modifier = Modifier
-                .padding(top = 40.dp)
+                .padding(top = 20.dp)
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.End,
         ) {
@@ -155,7 +161,7 @@ fun InformationScreen(
         Row(
             modifier = Modifier
                 .padding(top = 40.dp)
-                .border(width = 2.dp, color = Color.DarkGray, shape = RoundedCornerShape(30))
+                .border(width = 2.dp, color = Color.Gray, shape = RoundedCornerShape(30))
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceAround,
         ) {
@@ -164,7 +170,7 @@ fun InformationScreen(
                 text = "總價:",
                 fontSize = 24.sp, // 字型大小: 24
                 fontWeight = FontWeight.Bold, // 字體樣式: 粗體
-                color = Color.DarkGray, // 字的顏色: 深灰色
+                color = Color.Black, // 字的顏色: 黑色
                 modifier = Modifier.padding(bottom = 0.dp) // 下方間距
             )
             Text(
@@ -180,7 +186,7 @@ fun InformationScreen(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(200.dp)
+                .height(115.dp)
                 .background(Color.Transparent)
                 .padding(horizontal = 10.dp), // 內部水平間隔
             horizontalArrangement = Arrangement.Center, // 子元素水平置中

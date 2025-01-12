@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -32,6 +33,7 @@ data class Products(
     val image: Int
 )
 
+
 @Composable
 fun ProductListScreen(
     navController: NavHostController,
@@ -46,6 +48,7 @@ fun ProductListScreen(
         shopViewModel.initProductList(prdtype)
     }
 
+
     ListGrid(
         products = productList,
         onItemClick = {product ->
@@ -57,6 +60,7 @@ fun ProductListScreen(
 }
 
 
+
 @Composable
 fun ListGrid(
     products: List<Product>, // 傳入顯示的產品列表
@@ -65,7 +69,7 @@ fun ListGrid(
     val tag = "ListGrid"
     Log.d(tag, "products=${products.size}")
     LazyVerticalGrid(
-        columns = GridCells.Fixed(2), // 設定最小欄寬為128dp
+        columns = GridCells.Fixed(2),
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
@@ -87,7 +91,6 @@ fun ListGrid(
                     contentDescription = "寵物照片",
                     alignment = Alignment.TopCenter,
                     contentScale = ContentScale.FillWidth,
-//                    placeholder = painterResource(R.drawable.placeholder)
                 )
 
 //                Image(
@@ -98,12 +101,15 @@ fun ListGrid(
 //                )
                 Text(
                     text = product.prdName,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black,
+                    fontSize = 16.sp
                 )
                 Text(
-                    text = "$ ${product.price}",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 22.sp
+                    text = "$${product.price}.",
+                    fontWeight = FontWeight.Normal,
+                    color = Color.DarkGray,
+                    fontSize = 18.sp
                 )
             }
         }

@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavHostController
 
+
 @Composable
 fun OrderCheckScreen(
     shopViewModel: ShopViewModel,
@@ -39,6 +40,7 @@ fun OrderCheckScreen(
     LaunchedEffect(completeOrderId) {
         Log.d("completeOrder", "completeOrderId: $completeOrderId")
     }
+
 
     Dialog(onDismissRequest = onDismissRequest) {
         // 使用 Card 來呈現對話框內容
@@ -58,6 +60,7 @@ fun OrderCheckScreen(
                 verticalArrangement = Arrangement.SpaceAround,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+
                 // 顯示圖片，這裡使用了 painterResource 來加載圖片資源
 //                Image(
 //                    painter = painterResource(id = R.drawable.room), // 用您自己的圖片資源替換
