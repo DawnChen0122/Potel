@@ -1,6 +1,5 @@
 package com.example.potel.ui.account
 
-import android.R.id.input
 import android.content.Context
 import android.util.Log
 import androidx.compose.foundation.BorderStroke
@@ -31,9 +30,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.potel.ui.forumZone.ForumScreens
 import com.example.potel.ui.home.AccountScreens
-import com.example.potel.ui.petsfile.PetsFileScreens
 import kotlinx.coroutines.launch
 
 
@@ -48,8 +45,6 @@ fun Login(
     val context = LocalContext.current
     // 開 "settings"這個檔案, 沒有的話就建一個
     val preferences = context.getSharedPreferences("member", Context.MODE_PRIVATE)
-//    val memberid = preferences.getString("uid", "1")!!
-//    val member = Member()
 
 
     val inputError by viewModel.inputError.collectAsState()
