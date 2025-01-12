@@ -74,7 +74,7 @@ fun PostAddScreen(
     var content by remember { mutableStateOf("") }
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
     val scope = rememberCoroutineScope()
-    val snackbarHostState = remember { SnackbarHostState() }
+    val hostState = remember { SnackbarHostState() }
     val context = LocalContext.current
     var showDialog by remember { mutableStateOf(false) }
 
@@ -107,7 +107,7 @@ fun PostAddScreen(
                 actions = {
                     Button(onClick = {
                         if (title.isEmpty() || content.isEmpty()) {
-                            scope.launch { snackbarHostState.showSnackbar("標題和內容都必須填寫！") }
+                            scope.launch { hostState.showSnackbar("標題和內容都必須填寫！", withDismissAction = true) }
                         } else {
                             val imagePart = selectedImageUri?.let { uri ->
                                 context.contentResolver.openInputStream(uri)?.readBytes()?.let {
@@ -130,11 +130,12 @@ fun PostAddScreen(
             )
         },
         snackbarHost = {
-            SnackbarHost(hostState = snackbarHostState) { snackbarData ->
+            SnackbarHost(hostState = hostState) { data ->
                 Snackbar(
-                    snackbarData = snackbarData,
+                    snackbarData = data,
                     containerColor = Color.White,
-                    contentColor = Color.Black
+                    contentColor = Color.Black,
+                    dismissActionContentColor = Color.Black
                 )
             }
         }

@@ -94,7 +94,7 @@ fun PostEditScreen(
 
     // 狀態管理
     val scope = rememberCoroutineScope()
-    val snackbarHostState = remember { SnackbarHostState()}
+    val hostState = remember { SnackbarHostState()}
     val context = LocalContext.current
     var showDialog by remember { mutableStateOf(false)}
 
@@ -130,7 +130,7 @@ fun PostEditScreen(
                     Button(
                         onClick = {
                             if (title.isEmpty() || content.isEmpty()) {
-                                scope.launch { snackbarHostState.showSnackbar("標題和內容都必須填寫！") }
+                                scope.launch { hostState.showSnackbar("標題和內容都必須填寫！", withDismissAction = true) }
                             } else {
                                 when (selectedImageUri) {
                                     null -> {
@@ -187,11 +187,12 @@ fun PostEditScreen(
             )
         },
         snackbarHost = {
-            SnackbarHost(hostState = snackbarHostState) { snackbarData ->
+            SnackbarHost(hostState = hostState) { data ->
                 Snackbar(
-                    snackbarData = snackbarData,
+                    snackbarData = data,
                     containerColor = Color.White,
-                    contentColor = Color.Black
+                    contentColor = Color.Black,
+                    dismissActionContentColor = Color.Black
                 )
             }
         }

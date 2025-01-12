@@ -62,7 +62,7 @@ fun CommentEditScreen(
     Log.d(tag, "CommentEditScreen - Comment: ${comment.value}")
     var content by remember { mutableStateOf(comment.value.content)}
     val scope = rememberCoroutineScope()
-    val snackbarHostState = remember { SnackbarHostState() }
+    val hostState = remember { SnackbarHostState() }
     var showDialog by remember { mutableStateOf(false)}
 
     Scaffold(
@@ -88,7 +88,7 @@ fun CommentEditScreen(
                    Button(
                        onClick = {
                            if (content.isEmpty()) {
-                               scope.launch { snackbarHostState.showSnackbar("內容必須填寫！") }
+                               scope.launch { hostState.showSnackbar("內容必須填寫！", withDismissAction = true) }
                            }else{
                                val updateComment =Comment(
                                    commentId = comment.value.commentId,
@@ -108,11 +108,12 @@ fun CommentEditScreen(
            )
         },
         snackbarHost = {
-            SnackbarHost(hostState = snackbarHostState) { snackbarData ->
+            SnackbarHost(hostState = hostState) { data ->
                 Snackbar(
-                    snackbarData = snackbarData,
+                    snackbarData = data,
                     containerColor = Color.White,
-                    contentColor = Color.Black
+                    contentColor = Color.Black,
+                    dismissActionContentColor = Color.Black
                 )
             }
         }
