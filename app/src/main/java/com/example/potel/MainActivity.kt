@@ -10,9 +10,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -30,21 +30,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import com.example.potel.ui.carerecords.homeScreenRoute
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.potel.ui.booking.BookingScreens
+import com.example.potel.ui.booking.BookingViewModel
+import com.example.potel.ui.booking.bookingScreenRoute
+import com.example.potel.ui.carerecords.homeScreenRoute
 import com.example.potel.ui.forumZone.ForumScreens
 import com.example.potel.ui.forumZone.forumScreenRoute
 import com.example.potel.ui.home.Screens
-import com.example.potel.ui.booking.BookingViewModel
-import com.example.potel.ui.booking.bookingScreenRoute
 import com.example.potel.ui.home.accountRoute
+import com.example.potel.ui.myorders.MyOrdersScreens
 import com.example.potel.ui.myorders.myOrdersScreenRoute
 import com.example.potel.ui.petsfile.petsfileScreenRoute
 import com.example.potel.ui.shopping.shoppingScreenRoute
@@ -164,85 +164,91 @@ fun MainTopAppBar(
     )
 }
 
-
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 
 fun MainBottomAppBar() {
     val navController = rememberNavController()
+    BottomAppBar(
+        // 動作按鈕
+        actions = {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp), // 增加水平間距
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center // 將內容置中
+            ) {
+                IconButton(
+                    modifier = Modifier
+                        .size(60.dp)
+                        .weight(0.2f),
+                    onClick = {
+                    }
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.home),
+                        contentDescription = "Home",
+                        modifier = Modifier.size(150.dp)
+                    )
+                }
 
+                IconButton(
+                    modifier = Modifier
+                        .size(60.dp)
+                        .weight(0.2f),
+                    onClick = {
+                    },
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.booking),
+                        contentDescription = "Booking",
+                        modifier = Modifier.size(150.dp)
+                    )
+                }
 
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp), // 這裡給Row一點邊距
-        horizontalArrangement = Arrangement.SpaceBetween, // 按鈕平均分佈
-        verticalAlignment = Alignment.CenterVertically // 垂直居中
+                IconButton(
+                    modifier = Modifier
+                        .size(60.dp)
+                        .weight(0.2f),
+                    onClick = {
+                    },
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.shopping),
+                        contentDescription = "Shopping",
+                        modifier = Modifier.size(150.dp)
+                    )
+                }
+                IconButton(
+                    modifier = Modifier
+                        .size(60.dp)
+                        .weight(0.2f),
+                    onClick = {
+                        // 先用popbackstack以避免重複載入頁面造成資源損耗, 若沒進入過該頁才改呼叫navigate
+                        if(!navController.popBackStack(MyOrdersScreens.MOS01.name, false))
+                            navController.navigate(MyOrdersScreens.MOS01.name)
+                    }
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.myorders),
+                        contentDescription = "MyOrders",
+                        modifier = Modifier.size(150.dp)
+                    )
+                }
+                IconButton(
+                    modifier = Modifier
+                        .size(60.dp)
+                        .weight(0.2f),
+                    onClick = {
+                    }
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.myinfo),
+                        contentDescription = "MyInfo",
+                        modifier = Modifier.size(150.dp)
+                    )
+                }
+            }
+        }
     )
-
-    {
-
-        IconButton(
-            modifier = Modifier
-                .size(60.dp)
-                .width(10.dp),
-            onClick = {
-            },
-        ) {
-            Icon(
-                painter = painterResource(R.drawable.booking),
-                contentDescription = "Booking",
-                modifier = Modifier.size(150.dp)
-            )
-        }
-
-
-        IconButton(
-            modifier = Modifier
-                .size(60.dp)
-                .width(10.dp),
-            onClick = {
-            },
-        ) {
-            Icon(
-                painter = painterResource(R.drawable.shopping),
-                contentDescription = "Shopping",
-                modifier = Modifier.size(150.dp)
-            )
-        }
-
-
-        IconButton(
-            modifier = Modifier
-                .size(60.dp)
-                .width(10.dp),
-            onClick = {
-                // 先用popbackstack以避免重複載入頁面造成資源損耗, 若沒進入過該頁才改呼叫navigate
-
-                if (!navController.popBackStack(Screens.HomeRoute.name, false))
-                    navController.navigate(Screens.HomeRoute.name)
-            }
-        ) {
-            Icon(
-                painter = painterResource(R.drawable.myorders),
-                contentDescription = "MyOrders",
-                modifier = Modifier.size(150.dp)
-            )
-        }
-
-
-        IconButton(
-            modifier = Modifier
-                .size(60.dp)
-                .width(10.dp),
-            onClick = {
-            }
-        ) {
-            Icon(
-                painter = painterResource(R.drawable.myinfo),
-                contentDescription = "MyInfo",
-                modifier = Modifier.size(150.dp)
-            )
-        }
-    }
 }
