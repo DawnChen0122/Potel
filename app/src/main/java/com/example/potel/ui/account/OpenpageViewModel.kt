@@ -18,9 +18,9 @@ class OpenpageViewModel : ViewModel() {
     private val _inputError = MutableStateFlow(false)
     val inputError = _inputError.asStateFlow()
 
-    private val _phonenumber = MutableStateFlow("")
-    val phonenumber = _phonenumber.asStateFlow()
-    val phonenumberRegex = "^[0-9]{10}$".toRegex()
+    private val _cellphone = MutableStateFlow("")
+    val cellphone = _cellphone.asStateFlow()
+    val cellphoneRegex = "^[0-9]{10}$".toRegex()
 
     private val _email = MutableStateFlow("")
     val email = _email.asStateFlow()
@@ -38,25 +38,38 @@ class OpenpageViewModel : ViewModel() {
 
     fun onInputChanged(input: String) {
         viewModelScope.launch {
-            delay(500)
+            delay(500)  // 延遲500毫秒後處理輸入
             if (input.isNotEmpty()) {
+                Log.d("PhoneNumberValidation", "Input: $input")  // 記錄輸入的內容
+                Log.d("PhoneNumberValidation", "Regex: $cellphoneRegex")  // 記錄電話號碼的正則表達式
+                Log.d("PhoneNumberValidation", "Email Regex: $emailRegex")  // 記錄電子郵件的正則表達式
+
                 if (input.contains("@")) {
+                    Log.d("PhoneNumberValidation", "輸入看起來是Email")
+
                     if (input.matches(emailRegex)) {
                         _inputError.value = false
                         _email.value = input
+                        Log.d("PhoneNumberValidation", "Email 匹配成功: $input")
                     } else {
                         _inputError.value = true
+                        Log.e("PhoneNumberValidation", "Email 匹配失敗: $input")
                     }
                 } else {
-                    if (input.matches(phonenumberRegex)) {
+                    Log.d("PhoneNumberValidation", "輸入看起來是電話號碼")
+
+                    if (input.matches(cellphoneRegex)) {
                         _inputError.value = false
-                        _phonenumber.value = input
+                        _cellphone.value = input
+                        Log.d("PhoneNumberValidation", "電話號碼 匹配成功: $input")
                     } else {
                         _inputError.value = true
+                        Log.e("PhoneNumberValidation", "電話號碼 匹配失敗: $input")
                     }
                 }
             } else {
                 _inputError.value = false
+                Log.d("PhoneNumberValidation", "輸入為空，清除錯誤狀態")
             }
         }
     }
@@ -65,16 +78,16 @@ class OpenpageViewModel : ViewModel() {
     private val _login = MutableStateFlow(Change(success = false, message = ""))
     val login = _login.asStateFlow()
 
-    suspend fun login(input: Input): Member {
+    suspend fun login(inputRequest: InputRequest): Member {
         val password = _password.value
 
-        Log.d("Login", "嘗試登入，輸入: ${input.toString()}, 密碼: $password")
+        Log.d("Login", "嘗試登入，輸入: $inputRequest, 密碼: $password")
 
         if (password.isNotEmpty() && !passwordError) {
             try {
                 Log.d("Login", "登入成功")
                 // 這裡假設 Retrofit 回傳的是 Member 類型的物件
-                val response = RetrofitInstance.api.login(input.email, input.passwd)
+                val response = RetrofitInstance.api.login(inputRequest.input, inputRequest.passwd)
 
                 // 假設 response 是 Member 類型，可以直接返回
                 return response // 直接返回成功的 Member 物件
@@ -86,11 +99,11 @@ class OpenpageViewModel : ViewModel() {
                 return Member(
                     memberid = 0,
                     name = "",
-                    passwd = input.passwd,
+                    passwd = inputRequest.passwd,
                     cellphone = "",
                     address = "",
                     gender = "",
-                    email = input.email,
+                    email = "",
                     birthday = "",
                 )
             }
@@ -101,11 +114,11 @@ class OpenpageViewModel : ViewModel() {
             return Member(
                 memberid = 0,
                 name = "",
-                passwd = input.passwd,
+                passwd = inputRequest.passwd,
                 cellphone = "",
                 address = "",
                 gender = "",
-                email = input.email,
+                email = "",
                 birthday = "",
             )
         }

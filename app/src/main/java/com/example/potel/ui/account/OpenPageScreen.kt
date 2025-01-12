@@ -49,7 +49,8 @@ fun Login(
 
     val inputError by viewModel.inputError.collectAsState()
 
-    val phonenumber by viewModel.phonenumber.collectAsState()
+    val cellphone by viewModel.cellphone.collectAsState()
+
 
     val email by viewModel.email.collectAsState()
 
@@ -151,6 +152,77 @@ fun Login(
         }
 
 
+
+
+
+
+        Row(
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+
+                .padding(10.dp)
+        )
+
+        {
+
+            var errorMessage by remember { mutableStateOf<String?>(null) }
+            // 註冊按鈕
+            Button(
+                onClick = {
+                    if (email.isEmpty() &&  cellphone.isEmpty()) {
+                        errorMessage = "信箱或手機號碼欄位不得空白"
+                    } else if (!email.matches(viewModel.emailRegex) && ! cellphone.matches(
+                            viewModel.cellphoneRegex
+                        )
+                    ) {
+                        errorMessage = "請輸入有效的信箱或手機號碼"
+                    } else {
+                        errorMessage = null // 清除錯誤訊息
+                        val inputRequest = InputRequest(currentInput,password)
+                        viewModel.viewModelScope.launch {
+                            val member = viewModel.login(inputRequest)
+                            Log.d("Login", "已登入0，issucc=$member")
+
+                            if (member.memberid != 0) {  // 判斷登入是否成功（假設成功的 memberid 會非 0）
+                                preferences.edit().putInt("memberid", member.memberid)
+                                    .putString("name", member.name)
+                                    .putString("passwd", member.passwd)
+                                    .putString("cellphone", member.cellphone)
+                                    .putString("address", member.address)
+                                    .putString("email", member.email)
+                                    .putString("gender", member.gender)
+                                    .putString("birthday", member.birthday)
+                                    .apply()
+                                Log.d("Login", "已登入1，輸入的信箱/手機號碼: $member")
+                                navController.navigate(AccountScreens.HomeRoute.name)
+                                Log.d("Login", "已登入2，輸入的信箱/手機號碼: $inputRequest")
+                            } else {
+                                // 登入失敗，顯示錯誤訊息
+                                Log.d("Login", "登入失敗，錯誤訊息: 登入失敗，請檢查您的帳號密碼")
+                            }
+                        }
+                    }
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 16.dp),
+                shape = RoundedCornerShape(8.dp)
+            ) {
+                Text(text = "登入", fontSize = 30.sp)
+            }
+            errorMessage?.let {
+                Text(
+                    text = it,
+                    color = Color.Red,
+                    fontSize = 14.sp,
+                    modifier = Modifier.padding(top = 8.dp)
+                )
+            }
+        }
+
+
+
         Row(
             horizontalArrangement = Arrangement.Start,
         ) {
@@ -207,68 +279,6 @@ fun Login(
             }
         }
 
-
-
-
-        Row(
-            horizontalArrangement = Arrangement.SpaceEvenly,
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-
-                .padding(10.dp)
-        )
-
-        {
-
-
-            var errorMessage by remember { mutableStateOf<String?>(null) }
-            // 註冊按鈕
-            Button(
-                onClick = {
-                    if (email.isEmpty() && phonenumber.isEmpty()) {
-                        errorMessage = "信箱或手機號碼欄位不得空白"
-                    } else if (!email.matches(viewModel.emailRegex) && !phonenumber.matches(
-                            viewModel.phonenumberRegex
-                        )
-                    ) {
-                        errorMessage = "請輸入有效的信箱或手機號碼"
-                    } else {
-                        errorMessage = null // 清除錯誤訊息
-                        val input = Input(email, password)
-                        viewModel.viewModelScope.launch {
-                            val member = viewModel.login(input)
-                            Log.d("Login", "已登入0，issucc=$member")
-
-                            if (member.memberid != 0) {  // 判斷登入是否成功（假設成功的 memberid 會非 0）
-                                preferences.edit().putInt("memberid", member.memberid)
-                                    .putString("name", member.name)
-                                    .apply()
-                                Log.d("Login", "已登入1，輸入的信箱/手機號碼: $member")
-                                navController.navigate(AccountScreens.HomeRoute.name)
-                                Log.d("Login", "已登入2，輸入的信箱/手機號碼: $input")
-                            } else {
-                                // 登入失敗，顯示錯誤訊息
-                                Log.d("Login", "登入失敗，錯誤訊息: 登入失敗，請檢查您的帳號密碼")
-                            }
-                        }
-                    }
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 16.dp),
-                shape = RoundedCornerShape(8.dp)
-            ) {
-                Text(text = "登入", fontSize = 30.sp)
-            }
-            errorMessage?.let {
-                Text(
-                    text = it,
-                    color = Color.Red,
-                    fontSize = 14.sp,
-                    modifier = Modifier.padding(top = 8.dp)
-                )
-            }
-        }
     }
 }
 

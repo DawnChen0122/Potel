@@ -23,7 +23,7 @@ interface ApiService {
 
     @PUT("member/reset")
     suspend fun changepasswd(
-        @Body member: Input
+        @Body member: InputRequest
     ): Check
 
 

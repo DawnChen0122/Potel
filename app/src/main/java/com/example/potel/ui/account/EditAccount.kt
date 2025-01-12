@@ -1,6 +1,7 @@
 package com.example.potel.ui.account
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -30,6 +31,11 @@ fun Edit(
 ) {
     val member by viewModel.member.collectAsState()  // 觀察 member 資料並且自動更新 UI
     val scrollState = rememberScrollState()
+
+    LaunchedEffect(member) {
+        viewModel.loadMember()
+        Log.d("EditScreen", "Member updated: $member")
+    }
 
     Column(
         horizontalAlignment = Alignment.Start,

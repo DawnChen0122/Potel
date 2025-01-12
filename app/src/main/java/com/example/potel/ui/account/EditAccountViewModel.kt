@@ -1,13 +1,14 @@
 package com.example.potel.ui.account
 
 import android.content.SharedPreferences
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 class EditViewModel(private val preferences: SharedPreferences) : ViewModel() {
 
-    private val _member = MutableStateFlow<Member>(
+    private val _member = MutableStateFlow(
         Member(
             memberid = 0,
             name = "",
@@ -23,9 +24,9 @@ class EditViewModel(private val preferences: SharedPreferences) : ViewModel() {
     // 外部可讀取的 StateFlow，監控 Member 資料變化
     val member: StateFlow<Member> get() = _member
 
-
     // 更新手機號碼
     fun updateCellphone(cellphone: String) {
+        Log.d("EditViewModel", "更新手機號碼: $cellphone")
         _member.value = _member.value.copy(cellphone = cellphone)
         saveMemberToPreferences(_member.value)
     }
@@ -62,4 +63,23 @@ class EditViewModel(private val preferences: SharedPreferences) : ViewModel() {
             apply()
         }
     }
+
+    // 載入 Member 資料（假設是從 SharedPreferences 或其他地方）
+    fun loadMember() {
+        // 假設資料來自 SharedPreferences 或從網絡獲取
+        val loadedMember = Member(
+            memberid = preferences.getInt("memberid", 0),
+            name = preferences.getString("name", "") ?: "",
+            passwd = preferences.getString("passwd", "") ?: "",
+            cellphone = preferences.getString("cellphone", "") ?: "",
+            address = preferences.getString("address", "") ?: "",
+            email = preferences.getString("email", "") ?: "",
+            gender = preferences.getString("gender", "") ?: "",
+            birthday = preferences.getString("birthday", "") ?: ""
+        )
+        Log.d("EditViewModel", "載入會員資料: $loadedMember")
+        _member.value = loadedMember
+    }
 }
+
+

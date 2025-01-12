@@ -1,5 +1,6 @@
 package com.example.potel.ui.account
 
+import android.R.id.input
 import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -31,13 +32,13 @@ class ResetPassWordViewModel : ViewModel() {
     }
 
 
-    private val _phonenumber = MutableStateFlow("")
-    val phonenumber = _phonenumber.asStateFlow()
-    var phonenumberError by mutableStateOf(false)
-    fun onPhonenumberChanged(phonenumber: String) {
-        val phonenumberRegex = Regex("^[0-9]{10}$")
-        phonenumberError = !phonenumber.matches(phonenumberRegex)
-        _phonenumber.value = phonenumber
+    private val _cellphone = MutableStateFlow("")
+    val  cellphone = _cellphone.asStateFlow()
+    var cellphoneError by mutableStateOf(false)
+    fun oncellphoneChanged( cellphone: String) {
+        val  cellphoneRegex = Regex("^[0-9]{10}$")
+        cellphoneError = ! cellphone.matches( cellphoneRegex)
+        _cellphone.value =  cellphone
     }
 
 
@@ -58,16 +59,16 @@ class ResetPassWordViewModel : ViewModel() {
     suspend fun checkEmailAndCellphone() {
 
         val email = _email.value
-        val phonenumber = _phonenumber.value
+        val  cellphone = _cellphone.value
 
         Log.d("checkEmailAndCellphone", "Checking email and phone number:")
-        Log.d("checkEmailAndCellphone", "Email: $email, Phone number: $phonenumber")
+        Log.d("checkEmailAndCellphone", "Email: $email, Phone number: $ cellphone")
 
-        if (email.isNotEmpty() && phonenumber.isNotEmpty() && !emailError && !phonenumberError) {
+        if (email.isNotEmpty() &&  cellphone.isNotEmpty() && !emailError && !cellphoneError) {
             try {
                 Log.d("checkEmailAndCellphone", "Valid input, preparing to send request")
 
-                val response = RetrofitInstance.api.checkEmailAndCellphone(email, phonenumber)
+                val response = RetrofitInstance.api.checkEmailAndCellphone(email,  cellphone)
 
                 if (response != null) {
                     Log.d("checkEmailAndCellphone", "API response raw: $response")
@@ -110,14 +111,15 @@ class ResetPassWordViewModel : ViewModel() {
     suspend fun changepasswd(): Check {
         val email = _email.value
         val password = _passwd.value
+        val cellphone =  _cellphone.value
 
         if (password.isNotEmpty() && !passwdError) {
             try {
                 Log.d("ChangePassWord", "Valid input, preparing to send request")
 
                 val response = RetrofitInstance.api.changepasswd(
-                    Input(
-                        email = email, passwd = password,
+                    InputRequest(
+                        input = input.toString(), passwd = password,
                     )
                 )
                 return response

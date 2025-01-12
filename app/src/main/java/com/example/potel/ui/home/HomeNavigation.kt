@@ -3,6 +3,7 @@ package com.example.potel.ui.home
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
+import com.example.potel.ui.account.Edit
 //import com.example.potel.ui.account.Edit
 import com.example.potel.ui.account.Login
 import com.example.potel.ui.account.Resetpassword
@@ -62,13 +63,13 @@ fun NavGraphBuilder.accountRoute(navController: NavHostController) {
         )
     }
 
-//    composable(
-//        route = AccountScreens.Edit.name
-//    ) {
-//        Edit(
-//            navController = navController
-//        )
-//    }
+    composable(
+        route = AccountScreens.Edit.name
+    ) {
+        Edit(
+            navController = navController
+        )
+    }
 
 
 //    composable(

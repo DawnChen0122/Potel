@@ -42,7 +42,7 @@ fun Resetpassword(
     val checkpasswd by viewModel.checkpasswd.collectAsState()
     var checkpasswdVisible by remember { mutableStateOf(false) }
 
-    val phonenumber by viewModel.phonenumber.collectAsState()
+    val  cellphone by viewModel. cellphone.collectAsState()
 
 
 
@@ -83,18 +83,18 @@ fun Resetpassword(
 
 
         OutlinedTextField(
-            value = phonenumber,
-            onValueChange = viewModel::onPhonenumberChanged,
+            value =  cellphone,
+            onValueChange = viewModel::oncellphoneChanged,
             label = { Text(text = "請輸入手機號碼進行確認") },
             singleLine = true,
             shape = RoundedCornerShape(8.dp),
-            isError = viewModel.phonenumberError,
+            isError = viewModel.cellphoneError,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 10.dp),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
         )
-        if (viewModel.phonenumberError) {
+        if (viewModel.cellphoneError) {
             Text(
                 text = "手機號碼為十位數字",
                 color = Color.Red,
@@ -192,7 +192,7 @@ fun Resetpassword(
         Button(
             onClick = {
                 if (email.isEmpty() || passwd.isEmpty() || checkpasswd.isEmpty()
-                    || phonenumber.isEmpty()
+                    ||  cellphone.isEmpty()
                 ) {
                     "欄位不得空白"
                 } else if (passwd != checkpasswd) {

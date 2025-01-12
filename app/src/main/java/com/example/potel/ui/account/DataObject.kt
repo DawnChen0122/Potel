@@ -17,8 +17,8 @@ data class Member(
 )
 
 
-data class Input(
-    val email: String,
+data class InputRequest(
+    val input : String,
     val passwd: String
 )
 
@@ -35,7 +35,7 @@ data class UserData(
     val username: String,
     val password: String,
     val checkpasswd: String,
-    val phonenumber: String,
+    val cellphone: String,
     val address: String,
     val email: String
 )
