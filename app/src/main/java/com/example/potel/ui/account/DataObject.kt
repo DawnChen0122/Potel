@@ -7,26 +7,20 @@ data class Check(
 
 data class Member(
     val memberid: Int = 0,
-    val name: String = "",
-    val passwd: String = "",
-    val cellphone: String = "",
-    val address: String = "",
-    val email: String = "",
-    val gender: String = "M",
-    val birthday: String = ""
+    val name: String,
+    val passwd: String,
+    val cellphone: String,
+    val address: String,
+    val email: String,
+    val gender: String,
+    val birthday: String? = null
 )
-
-
-
 
 
 data class Input(
     val email: String,
     val passwd: String
 )
-
-
-
 
 
 data class Change(

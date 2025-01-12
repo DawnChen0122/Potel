@@ -36,11 +36,12 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 
-fun Signup(viewModel:AccountViewModel = viewModel(),
-           navController: NavHostController) {
+fun Signup(
+    viewModel: AccountViewModel = viewModel(),
+    navController: NavHostController
+) {
 
-
-    val uid by viewModel.uid.collectAsState()
+    val name by viewModel.name.collectAsState()
 
     val email by viewModel.email.collectAsState()
 
@@ -60,13 +61,15 @@ fun Signup(viewModel:AccountViewModel = viewModel(),
     val genderRange = listOf("男", "女", "不願透漏").map { it.toString() }
     var expandedGender by remember { mutableStateOf(false) }
 
+    val Gender by viewModel.Gender.collectAsState()
+
+
     val password by viewModel.password.collectAsState()
     var passwordVisible by remember { mutableStateOf(false) }
 
     val checkpassword by viewModel.checkpassword.collectAsState()
     var checkpasswordVisible by remember { mutableStateOf(false) }
 
-    val username by viewModel.username.collectAsState()
 
     val phonenumber by viewModel.phonenumber.collectAsState()
     var phonenumberError by remember { mutableStateOf(false) }
@@ -90,25 +93,17 @@ fun Signup(viewModel:AccountViewModel = viewModel(),
         )
 
 
+
         OutlinedTextField(
-            value = uid,
-            onValueChange = viewModel::onUidChanged,
-            label = { Text(text = "請輸入用戶名稱") },
+            value = name,
+            onValueChange = viewModel::onnameChanged,
+            label = { Text(text = "請輸入姓名") },
             singleLine = true,
             shape = RoundedCornerShape(8.dp),
-            isError = viewModel.uidError,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 16.dp)
+                .padding(top = 10.dp)
         )
-        if (viewModel.uidError) {
-            Text(
-                text = "用戶名稱為必填欄位",
-                color = Color.Red,
-                fontSize = 12.sp,
-                modifier = Modifier.padding(start = 16.dp)
-            )
-        }
 
 
         OutlinedTextField(
@@ -274,7 +269,8 @@ fun Signup(viewModel:AccountViewModel = viewModel(),
         {
             TextField(
                 readOnly = true,
-                modifier = Modifier.menuAnchor(MenuAnchorType.PrimaryEditable, true)
+                modifier = Modifier
+                    .menuAnchor(MenuAnchorType.PrimaryEditable, true)
                     .fillMaxWidth(),
                 value = inputGender,
                 onValueChange = {
@@ -290,12 +286,13 @@ fun Signup(viewModel:AccountViewModel = viewModel(),
                 expanded = expandedGender,
                 onDismissRequest = { expandedGender = false }
             ) {
-                genderRange.forEach { genderRange ->
+                genderRange.forEach { genderOption ->
                     DropdownMenuItem(
-                        text = { Text(genderRange) },
+                        text = { Text(genderOption) },
                         onClick = {
-                            inputGender = genderRange
+                            inputGender = genderOption
                             expandedGender = false
+                            viewModel.onGenderChanged(genderOption)
                         }
                     )
                 }
@@ -303,175 +300,167 @@ fun Signup(viewModel:AccountViewModel = viewModel(),
         }
 
 
-            OutlinedTextField(
-                value = password,
-                onValueChange = viewModel::onPasswordChanged,
-                label = { Text(text = "密碼") },
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Default.Lock,
-                        contentDescription = "密碼"
-                    )
-                },
-                trailingIcon = {
-                    Text(
-                        text = if (passwordVisible) "隱藏" else "顯示",
-                        modifier = Modifier.clickable {
-                            passwordVisible = !passwordVisible
-                        }
-                    )
-                },
-                isError = viewModel.passwordError,
-                shape = RoundedCornerShape(8.dp),
-                visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                singleLine = true,
-                colors = TextFieldDefaults.colors(
-                    focusedIndicatorColor = Color.Blue,
-                    unfocusedIndicatorColor = Color.Gray,
-                ),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 16.dp)
-            )
-            if (viewModel.passwordError) {
-                Text(
-                    text = "密碼需在6至20字符內，且包含字母和數字",
-                    color = Color.Red,
-                    fontSize = 12.sp,
-                    modifier = Modifier.padding(start = 16.dp)
+        OutlinedTextField(
+            value = password,
+            onValueChange = viewModel::onPasswordChanged,
+            label = { Text(text = "密碼") },
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Default.Lock,
+                    contentDescription = "密碼"
                 )
-            }
-
-
-            OutlinedTextField(
-                value = checkpassword,
-                onValueChange = viewModel::onCheckPasswordChanged,
-                label = { Text(text = "再次確認密碼") },
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Default.Lock,
-                        contentDescription = "再次確認密碼"
-                    )
-                },
-                trailingIcon = {
-                    Text(
-                        text = if (checkpasswordVisible) "隱藏" else "顯示",
-                        modifier = Modifier.clickable {
-                            checkpasswordVisible = !checkpasswordVisible
-                        }
-                    )
-                },
-                isError = viewModel.checkpasswordError,
-                shape = RoundedCornerShape(8.dp),
-                visualTransformation = if (checkpasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                singleLine = true,
-                colors = TextFieldDefaults.colors(
-                    focusedIndicatorColor = Color.Blue,
-                    unfocusedIndicatorColor = Color.Gray,
-                ),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 10.dp)
-            )
-            if (viewModel.checkpasswordError) {
+            },
+            trailingIcon = {
                 Text(
-                    text = "密碼需輸入相同",
-                    color = Color.Red,
-                    fontSize = 12.sp,
-                    modifier = Modifier.padding(start = 16.dp)
+                    text = if (passwordVisible) "隱藏" else "顯示",
+                    modifier = Modifier.clickable {
+                        passwordVisible = !passwordVisible
+                    }
                 )
-            }
-
-
-            OutlinedTextField(
-                value = username,
-                onValueChange = viewModel::onUsernameChanged,
-                label = { Text(text = "請輸入姓名") },
-                singleLine = true,
-                shape = RoundedCornerShape(8.dp),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 10.dp)
+            },
+            isError = viewModel.passwordError,
+            shape = RoundedCornerShape(8.dp),
+            visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+            singleLine = true,
+            colors = TextFieldDefaults.colors(
+                focusedIndicatorColor = Color.Blue,
+                unfocusedIndicatorColor = Color.Gray,
+            ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp)
+        )
+        if (viewModel.passwordError) {
+            Text(
+                text = "密碼需在6至20字符內，且包含字母和數字",
+                color = Color.Red,
+                fontSize = 12.sp,
+                modifier = Modifier.padding(start = 16.dp)
             )
+        }
 
 
-            OutlinedTextField(
-                value = phonenumber,
-                onValueChange = viewModel::onPhonenumberChanged,
-                label = { Text(text = "請輸入手機號碼") },
-                singleLine = true,
-                shape = RoundedCornerShape(8.dp),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 16.dp),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            )
-            if (phonenumberError) {
+        OutlinedTextField(
+            value = checkpassword,
+            onValueChange = viewModel::onCheckPasswordChanged,
+            label = { Text(text = "再次確認密碼") },
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Default.Lock,
+                    contentDescription = "再次確認密碼"
+                )
+            },
+            trailingIcon = {
                 Text(
-                    text = "手機號碼為十位數字",
-                    color = Color.Red,
-                    fontSize = 12.sp,
-                    modifier = Modifier.padding(start = 16.dp)
+                    text = if (checkpasswordVisible) "隱藏" else "顯示",
+                    modifier = Modifier.clickable {
+                        checkpasswordVisible = !checkpasswordVisible
+                    }
                 )
-            }
-
-
-            OutlinedTextField(
-                value = address,
-                onValueChange = viewModel::onAddressChanged,
-                label = { Text(text = "請輸入地址") },
-                singleLine = true,
-                shape = RoundedCornerShape(8.dp),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 16.dp)
+            },
+            isError = viewModel.checkpasswordError,
+            shape = RoundedCornerShape(8.dp),
+            visualTransformation = if (checkpasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+            singleLine = true,
+            colors = TextFieldDefaults.colors(
+                focusedIndicatorColor = Color.Blue,
+                unfocusedIndicatorColor = Color.Gray,
+            ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 10.dp)
+        )
+        if (viewModel.checkpasswordError) {
+            Text(
+                text = "密碼需輸入相同",
+                color = Color.Red,
+                fontSize = 12.sp,
+                modifier = Modifier.padding(start = 16.dp)
             )
+        }
 
 
-            var errorMessage by remember { mutableStateOf<String?>(null) }
-            // 註冊按鈕
-            Button(
-                onClick = {
 
-                    if (uid.isEmpty() || email.isEmpty() || password.isEmpty() || checkpassword.isEmpty()
-                        || username.isEmpty() || phonenumber.isEmpty() || address.isEmpty()
-                    ) {
-                        errorMessage = "欄位不得空白"
-                    } else if (password != checkpassword) {
-                        errorMessage = "密碼與確認密碼不同"
-                    } else {
-                        viewModel.viewModelScope.launch {
-                            val member = Member(
-                                name = uid,
-                                passwd = password,
-                                cellphone = phonenumber,
-                                address = address,
-                                email = email
+
+
+        OutlinedTextField(
+            value = phonenumber,
+            onValueChange = viewModel::onPhonenumberChanged,
+            label = { Text(text = "請輸入手機號碼") },
+            singleLine = true,
+            shape = RoundedCornerShape(8.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+        )
+        if (phonenumberError) {
+            Text(
+                text = "手機號碼為十位數字",
+                color = Color.Red,
+                fontSize = 12.sp,
+                modifier = Modifier.padding(start = 16.dp)
+            )
+        }
+
+
+        OutlinedTextField(
+            value = address,
+            onValueChange = viewModel::onAddressChanged,
+            label = { Text(text = "請輸入地址") },
+            singleLine = true,
+            shape = RoundedCornerShape(8.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp)
+        )
+
+
+        var errorMessage by remember { mutableStateOf<String?>(null) }
+        // 註冊按鈕
+        Button(
+            onClick = {
+
+                if (email.isEmpty() || password.isEmpty() || checkpassword.isEmpty()
+                    || name.isEmpty() || phonenumber.isEmpty() || address.isEmpty()
+                ) {
+                    errorMessage = "欄位不得空白"
+                } else if (password != checkpassword) {
+                    errorMessage = "密碼與確認密碼不同"
+                } else {
+                    viewModel.viewModelScope.launch {
+                        val member = Member(
+                            name = name,
+                            email = email,
+                            gender = Gender.toString(),
+                            passwd = password,
+                            cellphone = phonenumber,
+                            address = address,
 
                             )
-                            viewModel.addmember(member)
-                        }
+                        viewModel.addmember(member)
                     }
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 16.dp),
-                shape = RoundedCornerShape(8.dp)
-            ) {
-                Text(text = "註冊", fontSize = 16.sp)
-            }
-            errorMessage?.let {
-                Text(
-                    text = it,
-                    color = Color.Red,
-                    fontSize = 14.sp,
-                    modifier = Modifier.padding(top = 8.dp)
-                )
-            }
+                }
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp),
+            shape = RoundedCornerShape(8.dp)
+        ) {
+            Text(text = "註冊", fontSize = 16.sp)
+        }
+        errorMessage?.let {
+            Text(
+                text = it,
+                color = Color.Red,
+                fontSize = 14.sp,
+                modifier = Modifier.padding(top = 8.dp)
+            )
         }
     }
+}
 
 
 @Preview(showBackground = true)

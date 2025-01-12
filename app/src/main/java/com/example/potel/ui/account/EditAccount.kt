@@ -119,7 +119,9 @@ fun Edit(viewModel: EditAccountViewModel = viewModel(), navController: NavHostCo
                 }
             },
             enabled = isFormValid,
-            modifier = Modifier.fillMaxWidth().padding(top = 16.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp)
         ) {
             Text("提交", fontSize = 16.sp)
         }
@@ -234,7 +236,12 @@ fun GenderPicker(selectedGender: String, onGenderChanged: (String) -> Unit) {
             value = selectedGender,
             onValueChange = {},
             label = { Text("性別") },
-            trailingIcon = { Icon(Icons.Default.ArrowDropDown, contentDescription = "Select Gender") },
+            trailingIcon = {
+                Icon(
+                    Icons.Default.ArrowDropDown,
+                    contentDescription = "Select Gender"
+                )
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .clickable { expanded = !expanded }

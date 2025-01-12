@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 
-class ResetPassWordViewModel: ViewModel() {
+class ResetPassWordViewModel : ViewModel() {
 
     private val _password = MutableStateFlow("")
     val password = _password.asStateFlow()
@@ -53,7 +53,6 @@ class ResetPassWordViewModel: ViewModel() {
 
     private val _checkEmailAndCellphone = MutableStateFlow(Check(success = false, message = ""))
     val checkEmailAndCellphone = _checkEmailAndCellphone.asStateFlow()
-
 
 
     suspend fun checkEmailAndCellphone() {
@@ -105,9 +104,8 @@ class ResetPassWordViewModel: ViewModel() {
     }
 
 
-
-private val _ChangePassWord = MutableStateFlow(Change(success = false, message = ""))
-val ChangePassWord = _ChangePassWord.asStateFlow()
+    private val _ChangePassWord = MutableStateFlow(Change(success = false, message = ""))
+    val ChangePassWord = _ChangePassWord.asStateFlow()
 
     suspend fun ChangePassWord(): Check {
         val email = _email.value
@@ -117,7 +115,11 @@ val ChangePassWord = _ChangePassWord.asStateFlow()
             try {
                 Log.d("ChangePassWord", "Valid input, preparing to send request")
 
-                val response = RetrofitInstance.api.ChangePassWord(Member(email= email, passwd = password))
+                val response = RetrofitInstance.api.ChangePassWord(
+                    Input(
+                        email = email, passwd = password,
+                    )
+                )
                 return response
             } catch (e: Exception) {
 
@@ -126,7 +128,7 @@ val ChangePassWord = _ChangePassWord.asStateFlow()
                 return check
 
             }
-        }else{
+        } else {
             val check = Check(false, "e.toString()")
             return check
         }

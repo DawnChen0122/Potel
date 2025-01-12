@@ -41,18 +41,15 @@ import kotlinx.coroutines.launch
 @Composable
 
 
-fun Login(viewModel:OpenpageViewModel = viewModel()
-          , navController: NavHostController) {
+fun Login(
+    viewModel: OpenpageViewModel = viewModel(), navController: NavHostController
+) {
 
     val context = LocalContext.current
     // 開 "settings"這個檔案, 沒有的話就建一個
     val preferences = context.getSharedPreferences("member", Context.MODE_PRIVATE)
 //    val memberid = preferences.getString("uid", "1")!!
 //    val member = Member()
-
-
-
-
 
 
     val inputError by viewModel.inputError.collectAsState()
@@ -229,14 +226,16 @@ fun Login(viewModel:OpenpageViewModel = viewModel()
         {
 
 
-
             var errorMessage by remember { mutableStateOf<String?>(null) }
             // 註冊按鈕
             Button(
                 onClick = {
                     if (email.isEmpty() && phonenumber.isEmpty()) {
                         errorMessage = "信箱或手機號碼欄位不得空白"
-                    } else if (!email.matches(viewModel.emailRegex) && !phonenumber.matches(viewModel.phonenumberRegex)) {
+                    } else if (!email.matches(viewModel.emailRegex) && !phonenumber.matches(
+                            viewModel.phonenumberRegex
+                        )
+                    ) {
                         errorMessage = "請輸入有效的信箱或手機號碼"
                     } else {
                         errorMessage = null // 清除錯誤訊息
@@ -247,7 +246,7 @@ fun Login(viewModel:OpenpageViewModel = viewModel()
 
                             if (issucc.memberid != 0) {  // 判斷登入是否成功（假設成功的 memberid 會非 0）
                                 preferences.edit().putInt("memberid", issucc.memberid)
-                                    .putString("name",issucc.name)
+                                    .putString("name", issucc.name)
                                     .apply()
                                 Log.d("Login", "已登入1，輸入的信箱/手機號碼: $issucc")
                                 navController.navigate(AccountScreens.HomeRoute.name)

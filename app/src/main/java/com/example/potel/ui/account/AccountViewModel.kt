@@ -11,20 +11,23 @@ import kotlinx.coroutines.flow.asStateFlow
 
 class AccountViewModel : ViewModel() {
 
-    private val _uid = MutableStateFlow("")
-    val uid = _uid.asStateFlow()
-    var uidError by mutableStateOf(false)
-    fun onUidChanged(uid: String) {
-        val uidRegex = Regex("^[a-zA-Z0-9]{3,20}$")
-        uidError = !uid.matches(uidRegex)
-        _uid.value = uid
+
+    private val _Gender = MutableStateFlow("")
+    val Gender = _Gender.asStateFlow()
+    fun onGenderChanged(gender: String) {
+        val genderMap = mapOf(
+            "男" to "M",
+            "女" to "F",
+            "不願透漏" to "N"
+        )
+        _Gender.value = genderMap[gender] ?: "N"
     }
 
 
-    private val _username = MutableStateFlow("")
-    val username = _username.asStateFlow()
-    fun onUsernameChanged(username: String) {
-        _username.value = username
+    private val _name = MutableStateFlow("")
+    val name = _name.asStateFlow()
+    fun onnameChanged(name: String) {
+        _name.value = name
     }
 
 

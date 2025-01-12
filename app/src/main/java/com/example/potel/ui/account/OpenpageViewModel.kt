@@ -1,7 +1,6 @@
 package com.example.potel.ui.account
 
 
-
 import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -91,7 +90,7 @@ class OpenpageViewModel : ViewModel() {
                     passwd = input.passwd,
                     cellphone = "",
                     address = "",
-                    gender= "",
+                    gender = "",
                     email = input.email // 可以選擇儲存錯誤時的 email
                 )
             }
@@ -105,7 +104,7 @@ class OpenpageViewModel : ViewModel() {
                 passwd = input.passwd,
                 cellphone = "",
                 address = "",
-                gender= "",
+                gender = "",
                 email = input.email // 同樣儲存錯誤時的 email
             )
         }

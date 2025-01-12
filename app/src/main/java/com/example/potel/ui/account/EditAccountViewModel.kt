@@ -41,8 +41,6 @@ class EditAccountViewModel : ViewModel() {
     val birthDate = _birthDate
 
 
-
-
     // 跟蹤錯誤訊息
     var errorMessage by mutableStateOf("")
 
@@ -76,6 +74,7 @@ class EditAccountViewModel : ViewModel() {
     fun onAddressChanged(address: String) {
         _address.value = address
     }
+
     fun onBirthDateChanged(newDate: String) {
         _birthDate.value = newDate
     }
@@ -95,7 +94,8 @@ class EditAccountViewModel : ViewModel() {
     fun validateForm(): Boolean {
         val isUidValid = _uid.value.isNotEmpty()
         val isEmailValid = _email.value.isNotEmpty() && _email.value.contains("@")
-        val isPasswordValid = _password.value == _checkpassword.value && _password.value.isNotEmpty()
+        val isPasswordValid =
+            _password.value == _checkpassword.value && _password.value.isNotEmpty()
         val isUsernameValid = _username.value.isNotEmpty()
         val isPhoneNumberValid = _phonenumber.value.isNotEmpty()
         val isAddressValid = _address.value.isNotEmpty()

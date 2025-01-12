@@ -23,9 +23,8 @@ interface ApiService {
 
     @PUT("member/reset")
     suspend fun ChangePassWord(
-        @Body member: Member
+        @Body member: Input
     ): Check
-
 
 
     @GET("member/login")
@@ -35,15 +34,11 @@ interface ApiService {
     ): Member
 
 
-
-
-
     @POST("member/add")
     suspend fun addmember(
         @Body member: Member
     ): Check
 }
-
 
 
 const val baseurl = "http://10.0.2.2:8080/PotelServer/"
