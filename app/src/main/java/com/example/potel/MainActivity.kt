@@ -47,7 +47,7 @@ import com.example.potel.ui.booking.bookingScreenRoute
 import com.example.potel.ui.home.accountRoute
 import com.example.potel.ui.myorders.myOrdersScreenRoute
 import com.example.potel.ui.petsfile.petsfileScreenRoute
-import com.example.potel.ui.shopping.shopScreenRoute
+import com.example.potel.ui.shopping.shoppingScreenRoute
 import com.example.potel.ui.theme.PotelTheme
 
 class MainActivity : ComponentActivity() {
@@ -126,7 +126,7 @@ fun TipNavHost(
         homeScreenRoute(navController) // 02 明駿
         bookingScreenRoute(viewModel = bookingViewModel,navController) // 04 芊伃
         myOrdersScreenRoute(navController) // 27 正能
-        shopScreenRoute(navController) // 07 柏森
+        shoppingScreenRoute(navController) // 07 柏森
         forumScreenRoute(navController) // 16 品伃
         petsfileScreenRoute(navController) // 18 勇慶
     }

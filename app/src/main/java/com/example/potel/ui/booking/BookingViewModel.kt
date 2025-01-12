@@ -44,8 +44,7 @@ class BookingViewModel : ViewModel() {
 
 
     // 定義一個可更改的變數, 但是是私有的(private), 只有VM自己可以改, 外部只能透過提供的method做修改
-    private val _addOrderState = MutableStateFlow(newOrder())
-    val addOrderEditState = _addOrderState.asStateFlow()
+
 
     private val _roomTypeSelectedState = MutableStateFlow(RoomType())
      val roomTypeSelectedState = _roomTypeSelectedState.asStateFlow()
@@ -75,25 +74,6 @@ class BookingViewModel : ViewModel() {
             return emptyList()
         }
     }
-
-    fun addOrder(newOrder: newOrder) {
-        viewModelScope.launch {
-            try {
-                val response = RetrofitInstance.api.addOrder(newOrder)
-                if (response.isSuccessful) {
-                    Log.d(tag, "addOrder successfully: ${response.body()}")
-                } else {
-                    Log.e(tag, "Error addOrder: Code ${response.code()}")
-                }
-            } catch (e: Exception) {
-                Log.e(tag, "Error addOrder: ${e.message}")
-            }
-        }
-    }
-
-
-
-
 }
 
 

@@ -52,7 +52,6 @@ fun DateSelectionScreen(
     bookingVM: BookingViewModel,
     navController: NavHostController
 ) {
-    val order = bookingVM.addOrderEditState.collectAsState().value
 
     var showDateRangePickerDialog by remember { mutableStateOf(false) }
     var message by remember { mutableStateOf("請您選取入住日期和離開日期！") }
@@ -93,8 +92,10 @@ fun DateSelectionScreen(
                         Difference: $dateDifference days
                     """.trimIndent()
 
-                    order.expdates = startDateString
-                    order.expdatee = endDateString
+
+
+
+
                     showDateRangePickerDialog = false
                     navController.navigate(BookingScreens.Booking.name)
                 },
