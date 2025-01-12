@@ -1,5 +1,6 @@
 package com.example.potel.ui.forumZone
 
+import android.graphics.drawable.Icon
 import android.util.Log
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
@@ -270,16 +271,16 @@ fun CustomRefreshIndicator(isRefreshing: Boolean) {
         if (isRefreshing) {
             Box(
                 modifier = Modifier
-                    .size(40.dp) // 背景的總大小
+                    .size(50.dp) // 背景的總大小
                     .background(color = colorResource(R.color.foruButton), shape = CircleShape)
                     .align(Alignment.TopCenter)
             ) {
                 Icon(
-                    imageVector = Icons.Default.Refresh, // 使用內建的刷新圖標
+                    painter = painterResource(id = R.drawable.animalrefresh), // 使用內建的刷新圖標
                     contentDescription = "Refreshing",
                     tint = Color.Black, // 自定義顏色
                     modifier = Modifier
-                        .size(30.dp) // 圖標大小
+                        .size(40.dp) // 圖標大小
                         .align(Alignment.Center)
                         .rotate(rotation) // 添加旋轉動畫
                 )
@@ -380,7 +381,7 @@ fun DeleteConfirmationDialog(
             Column(
                 Modifier
                     .background(
-                        Color.LightGray.copy(alpha = 0.8f),
+                        Color.LightGray.copy(alpha = 0.9f),
                         shape = RoundedCornerShape(8.dp)
                     )
                     .height(240.dp),
@@ -434,7 +435,7 @@ fun PostOptionsDialog(onDismissRequest: () -> Unit, onOptionSelected: (String) -
             Column(
                 Modifier
                     .background(
-                        Color.LightGray.copy(alpha = 0.8f),
+                        Color.LightGray.copy(alpha = 0.9f),
                         shape = RoundedCornerShape(8.dp)
                     )
                     .height(240.dp),
