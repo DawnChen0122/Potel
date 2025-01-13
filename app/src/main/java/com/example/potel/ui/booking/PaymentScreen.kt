@@ -26,25 +26,21 @@ import java.util.Date
 fun PaymentScreen(
     bookingVM: BookingViewModel,
     navController: NavHostController
-
 ) {
     val tag = "PaymentScreen"
 
-//    val memberid = 22;
-//    val cardNumber by bookingVM.creditCardNumber.collectAsState()
-    val days by bookingVM.daySelectState.collectAsState()
-    val selectedRoomType by bookingVM.roomTypeSelectedState.collectAsState()
     var cardNumber by remember { mutableStateOf("") }
     var expiryDate by remember { mutableStateOf("") }
     var cvv by remember { mutableStateOf("") }
+    var errorMessage by remember { mutableStateOf("") } // 錯誤訊息
 
+    val days by bookingVM.daySelectState.collectAsState()
+    val selectedRoomType by bookingVM.roomTypeSelectedState.collectAsState()
     val order = bookingVM.addOrderEditState.collectAsState().value
 
     order.cardNumber = cardNumber
     order.expiryDate = expiryDate
     order.cvv = cvv
-
-
 
     val fieldModifier = Modifier
         .fillMaxWidth()
@@ -65,22 +61,20 @@ fun PaymentScreen(
             contentScale = ContentScale.Crop
         )
 
-        Text("請輸入付款資訊", style = MaterialTheme.typography.titleMedium,fontSize = 18.sp)
+        Text("請輸入付款資訊", style = MaterialTheme.typography.titleMedium, fontSize = 18.sp)
         Spacer(modifier = Modifier.height(16.dp))
 
-
-        Row(
-            horizontalArrangement = Arrangement.Center,
+        OutlinedTextField(
+            value = cardNumber,
+            onValueChange = { cardNumber = it },
+            label = { Text("信用卡號碼") },
+            isError = !isValidCardNumber(cardNumber),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             modifier = Modifier.fillMaxWidth()
-        ) {
-            OutlinedTextField(
-                value = cardNumber,
-//                onValueChange = bookingVM::onCreditCardNumberChange,
-                onValueChange = { cardNumber = it },
-                label = { Text("信用卡號碼") },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                modifier = Modifier.fillMaxWidth()
-            )
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        if (!isValidCardNumber(cardNumber)) {
+            Text("信用卡號碼格式不正確！", color = MaterialTheme.colorScheme.error)
         }
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -91,47 +85,73 @@ fun PaymentScreen(
         ) {
             OutlinedTextField(
                 value = expiryDate,
-                onValueChange = { updatedValue -> expiryDate = updatedValue },
+                onValueChange = { expiryDate = it },
                 label = { Text("到期日") },
+                isError = !isValidExpiryDate(expiryDate),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 modifier = Modifier.weight(1f)
             )
 
             OutlinedTextField(
                 value = cvv,
-                onValueChange = { updatedValue -> cvv = updatedValue },
+                onValueChange = { cvv = it },
                 label = { Text("驗證碼") },
+                isError = !isValidCVV(cvv),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 modifier = Modifier.weight(1f)
             )
         }
+        Spacer(modifier = Modifier.height(8.dp))
+        if (!isValidExpiryDate(expiryDate)) {
+            Text("到期日格式應為 MM/YY！", color = MaterialTheme.colorScheme.error)
+        }
+        if (!isValidCVV(cvv)) {
+            Text("驗證碼應為 3 或 4 位數字！", color = MaterialTheme.colorScheme.error)
+        }
 
         Spacer(modifier = Modifier.height(16.dp))
         order.amount = days * selectedRoomType.price
-        Text("全部金額: $${order.amount}元",fontSize = 18.sp)
+        Text("全部金額: $${order.amount}元", fontSize = 18.sp)
 
         Spacer(modifier = Modifier.height(24.dp))
         Button(
             onClick = {
-
-                Log.d(tag, "order.expdates=${order.expdates}")
-
-                // 使用 ViewModel 將訂單添加到後端
-                 bookingVM.addOrder(order)
-
-                // 測試成功時的導航邏輯
-                navController.navigate(BookingScreens.BookingSuccess.name)
-
+                if (isValidCardNumber(cardNumber) && isValidExpiryDate(expiryDate) && isValidCVV(cvv)) {
+                    bookingVM.addOrder(order)
+                    navController.navigate(BookingScreens.BookingSuccess.name)
+                } else {
+                    errorMessage = "請正確填寫所有資訊！"
+                }
             },
             modifier = Modifier.padding(horizontal = 16.dp)
         ) {
-            Text("提交",fontSize = 18.sp) // 按鈕顯示文本
+            Text("提交", fontSize = 18.sp)
+        }
+        if (errorMessage.isNotEmpty()) {
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(errorMessage, color = MaterialTheme.colorScheme.error)
         }
     }
 }
 
+// 檢查信用卡號碼是否有效
+fun isValidCardNumber(cardNumber: String): Boolean {
+    return Regex("^\\d{16}$").matches(cardNumber)
+}
+
+// 檢查到期日格式是否正確
+fun isValidExpiryDate(expiryDate: String): Boolean {
+    return Regex("^\\d{2}/\\d{2}$").matches(expiryDate)
+}
+
+// 檢查 CVV 是否有效
+fun isValidCVV(cvv: String): Boolean {
+    return Regex("^\\d{3,4}$").matches(cvv)
+}
+
+
 @Preview(showBackground = true)
 @Composable
-fun prep(){
+fun pre4(){
     PaymentScreen(bookingVM = viewModel(), rememberNavController())
 }

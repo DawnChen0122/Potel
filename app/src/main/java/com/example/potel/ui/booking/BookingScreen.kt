@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -59,7 +60,7 @@ fun BookingScreen(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier
                 .height(45.dp)
-                .background(Color.LightGray)
+                .background(color = Color(0xFFDBC8B6),shape = RoundedCornerShape(size = 8.dp))
                 .padding(horizontal = 18.dp)) {
             // 狗重量選擇
             Text("狗的重量",fontSize = 18.sp)
@@ -89,16 +90,21 @@ fun BookingScreen(
 
         Spacer(modifier = Modifier.height(30.dp))
 
-        Row(// 內部子元件的垂直對齊方式，預設為 Alignment.Top
+        Row(
+            // 內部子元件的垂直對齊方式，預設為 Alignment.Top
             verticalAlignment = Alignment.CenterVertically,
+
             // 內部子元件之間的水平間隔空間大小
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier
                 .height(45.dp)
-                .background(Color.LightGray)
+                .background(color = Color(0xFFDBC8B6),shape = RoundedCornerShape(size = 8.dp))
                 .padding(horizontal = 18.dp)) {
             // 貓房型選擇
+
             Text("貓的房型",fontSize = 18.sp)
+
+
 
         }
 
@@ -132,7 +138,8 @@ fun BookingScreen(
                 navController.navigate("RoomSelection/$type") // 導航到 RoomSelectionScreen，並傳遞類型
 //                Log.d("Navigation","P2 to P3")
             },
-            enabled = selectedDogWeight != null || selectedCatRoom != null // 按鈕啟用條件
+            enabled = selectedDogWeight != null || selectedCatRoom != null, // 按鈕啟用條件
+
         ) {
             Text("預訂",fontSize = 18.sp)
         }

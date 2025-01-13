@@ -12,10 +12,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.potel.R
+
+/**
+ * 將信用卡號格式化，顯示前四位和後四位，中間用 * 遮罩
+ */
+fun maskCardNumber(cardNumber: String): String {
+    return if (cardNumber.length == 16) {
+        val start = cardNumber.take(4)
+        val end = cardNumber.takeLast(4)
+        "$start-****-****-$end"
+    } else {
+        "****-****-****-****" // 如果卡號長度不是16，顯示預設遮罩
+    }
+}
 
 @Composable
 fun BookingSuccessScreen(
@@ -27,8 +42,6 @@ fun BookingSuccessScreen(
     val order = bookingVM.addOrderEditState.collectAsState().value
     val days by bookingVM.daySelectState.collectAsState()
     val selectedRoomType by bookingVM.roomTypeSelectedState.collectAsState()
-
-//    order.totalAmount = totalAmount
 
     Column(
         modifier = Modifier
@@ -42,7 +55,6 @@ fun BookingSuccessScreen(
             contentDescription = "image",
             modifier = Modifier
                 .size(150.dp)
-                // 將圖片裁剪為園角矩形
                 .clip(RoundedCornerShape(8.dp)),
             contentScale = ContentScale.Crop
         )
@@ -57,14 +69,18 @@ fun BookingSuccessScreen(
         Spacer(modifier = Modifier.height(16.dp))
         Text("房間: ${selectedRoomType.descpt}")
         Spacer(modifier = Modifier.height(16.dp))
-//        order.amount = days * selectedRoomType.price
-        Text("信用卡號: ${order.cardNumber}")
+        Text("信用卡號: ${maskCardNumber(order.cardNumber ?: "")}")
         Spacer(modifier = Modifier.height(16.dp))
         Text("入住時間: ${order.expdates}")
         Spacer(modifier = Modifier.height(16.dp))
         Text("離開時間: ${order.expdatee}")
         Spacer(modifier = Modifier.height(16.dp))
         Text("全部金額: $${order.amount}")
-
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun pre5(){
+    BookingSuccessScreen(bookingVM = viewModel(), rememberNavController())
 }
