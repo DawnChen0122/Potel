@@ -76,7 +76,6 @@ fun ScreenMOS0401(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(20.dp)
                 .background(color = Color(0xFFD9D9D9), shape = RoundedCornerShape(size = 8.dp)),
             horizontalAlignment = Alignment.Start,
             verticalArrangement = Arrangement.Top
@@ -117,17 +116,21 @@ fun ScreenMOS0401(
             Text(text = "訂單編號: ${prdorder?.prdorderid}",
                 fontFamily = FontFamily.SansSerif,
                 style = TextStyle(fontWeight = FontWeight(700),
-                    fontSize = 18.sp)
+                    fontSize = 18.sp),
+                modifier = Modifier.padding(5.dp)
             )
-            Text(text = "訂單金額: NTD ${prdorder?.amount}")
-            Text(text = "交易日期: ${prdorder?.createdate}")
+            Text(text = "訂單金額: NTD ${prdorder?.amount}",
+                modifier = Modifier.padding(5.dp))
+            Text(text = "交易日期: ${prdorder?.createdate}",
+                modifier = Modifier.padding(5.dp))
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(12.dp).padding(5.dp))
             HorizontalDivider()
             Text(text = "訂單內容:",
                 fontFamily = FontFamily.SansSerif,
                 style = TextStyle(fontWeight = FontWeight(700),
-                    fontSize = 18.sp)
+                    fontSize = 18.sp),
+                modifier = Modifier.padding(5.dp)
             )
 
             LazyVerticalGrid(
@@ -180,7 +183,9 @@ fun ScreenMOS0401(
                 shape = RoundedCornerShape(20),
                 border = BorderStroke(width = 1.dp, color = Color.Black),
                 contentPadding = PaddingValues(5.dp),
-                modifier = Modifier.align(Alignment.End)
+                modifier = Modifier
+                    .align(Alignment.End)
+                    .padding(5.dp)
             ) {
                 Text(
                     text = "取消訂單",

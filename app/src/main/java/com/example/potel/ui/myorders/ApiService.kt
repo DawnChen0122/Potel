@@ -14,7 +14,9 @@ interface ApiService {
     @GET("api/orders")
     suspend fun getOrders(
         @Query("memberid") memberid: Int,
-        @Query("orderstate") orderstate:Char
+        @Query("orderstate") orderstate:Char,
+        @Query("datestart") dateStart:String?,
+        @Query("dateend") dateEnd:String?
     ): List<Order>
 
     /** 取得指定id的order */
@@ -35,7 +37,9 @@ interface ApiService {
     @GET("api/prdorders")
     suspend fun getPrdOrders(
         @Query("memberid") memberid: Int,
-        @Query("orderstate") orderstate:Char
+        @Query("orderstate") orderstate:Char,
+        @Query("datestart") dateStart: String? = null,
+        @Query("dateend") dateEnd: String? = null,
     ): ResponseObject<List<PrdOrder>>
 
     /** 取得指定id的prdorder */
@@ -51,6 +55,12 @@ interface ApiService {
         @Body updatePrdOrderRequest: PrdOrder
     ): ResponseObject<Any>
 
+    @GET
+    suspend fun login(
+        @Query("loginId") account: String,
+        @Query("password") password: String
+    ): User
+
 
 //    /** 修改user */
 //    @PUT("/api/users/{id}")
@@ -60,7 +70,12 @@ interface ApiService {
 //    ): UpdateUserResponse?
 }
 
+data class User(
+    val email: String
+)
+
 const val baseurl = "http://10.0.2.2:8080/PotelServer/"
+
 // singleton-pattern, 建立一個符合APIService介面的物件
 object RetrofitInstance {
     private val okHttpClient = OkHttpClient.Builder()
@@ -77,6 +92,6 @@ object RetrofitInstance {
     }
 }
 
-fun composeImageUrl(imageid: Int): String{
+fun composeImageUrl(imageid: Int): String {
     return "${baseurl}api/image?imageid=$imageid"
 }
