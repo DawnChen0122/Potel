@@ -289,17 +289,17 @@ fun ForumTabSelector(
                 selected = selectedTabIndex == index,
                 modifier = Modifier.background(
                     color = if (selectedTabIndex == index)
-                        colorResource(R.color.forumTab)
+                        Color.White
                     else
-                        Color.White,
+                        colorResource(R.color.forumTab),
                     shape = if (index == 0)
                         RoundedCornerShape(topStart = 10.dp, bottomStart = 10.dp)
                     else
                         RoundedCornerShape(topEnd = 10.dp, bottomEnd = 10.dp)
                 ),
                 onClick = { onTabSelected(index) },
-                selectedContentColor = Color.White,
-                unselectedContentColor = colorResource(R.color.forumTab),
+                selectedContentColor = colorResource(R.color.forumTab),
+                unselectedContentColor = Color.White,
                 text = { Text(title) }
             )
         }
