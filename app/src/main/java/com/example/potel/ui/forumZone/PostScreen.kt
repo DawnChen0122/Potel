@@ -1,5 +1,6 @@
 package com.example.potel.ui.forumZone
 
+import android.content.Context
 import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -57,6 +58,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -73,7 +75,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PostScreen(navController: NavHostController) {
-    val memberId = 5
+
     val backStackEntry = navController.getBackStackEntry(ForumScreens.ForumScreen.name)
     val forumVM: ForumVM = viewModel(backStackEntry)
     val postDetail = forumVM.postSelectedState.collectAsState()
@@ -81,6 +83,17 @@ fun PostScreen(navController: NavHostController) {
 
     val scope = rememberCoroutineScope()
     val hostState = remember { SnackbarHostState() }
+
+    val context = LocalContext.current
+    val preferences = context.getSharedPreferences("member", Context.MODE_PRIVATE)
+    val memberId by remember {
+        mutableIntStateOf(
+            preferences.getString("memberid", null)?.toIntOrNull() ?: 4
+        )
+    }
+    val memberName by remember {
+        mutableStateOf(preferences.getString("name", null) ?: "預設名字preferences")
+    }
 
     // 监听需要显示的消息
     LaunchedEffect(forumVM.postSuccessMessage.value) {
@@ -135,7 +148,7 @@ fun PostScreen(navController: NavHostController) {
                 item {
                     Spacer(Modifier.height(20.dp))
                     AddCommentHeader(comments)
-                    AddCommentSection(postDetail.value.postId, forumVM, memberId)
+                    AddCommentSection(postDetail.value.postId, forumVM, memberId,memberName)
                 }
                 // 显示评论区
                 item {
@@ -152,26 +165,26 @@ fun PostScreen(navController: NavHostController) {
                     Snackbar(
                         modifier = Modifier
                             .padding(16.dp)
-                            .width(200.dp), // 添加额外的 padding 和宽度
-                        containerColor = Color.White, // 背景色：白色
-                        contentColor = Color.Black, // 文字颜色：黑色
-                        shape = RoundedCornerShape(16.dp), // 设置圆角半径
+                            .width(200.dp),
+                        containerColor = Color.White,
+                        contentColor = Color.Black,
+                        shape = RoundedCornerShape(16.dp),
                         content = {
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
-                                verticalAlignment = Alignment.CenterVertically, // 垂直居中
-                                horizontalArrangement = Arrangement.Start // 从左到右排列
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.Start
                             ) {
                                 Icon(
                                     modifier = Modifier
                                         .size(60.dp)
-                                        .padding(end = 8.dp), // 图标和文字之间的间距
+                                        .padding(end = 8.dp),
                                     painter = painterResource(id = R.drawable.dogandcat),
                                     contentDescription = "完成通知"
                                 )
                                 Text(
                                     text = data.visuals.message,
-                                    modifier = Modifier.weight(1f), // 使文本占用剩余空间
+                                    modifier = Modifier.weight(1f),
                                     fontSize = 20.sp,
                                     textAlign = TextAlign.Center
                                 )
@@ -347,7 +360,7 @@ fun AddCommentHeader(comments: List<Comment>) {
 }
 
 @Composable
-fun AddCommentSection(postId: Int, forumVM: ForumVM, memberId: Int) {
+fun AddCommentSection(postId: Int, forumVM: ForumVM, memberId: Int, memberName:String) {
     var commentText by remember { mutableStateOf("") }
     val scrollState = rememberScrollState()
     Box(
@@ -383,7 +396,7 @@ fun AddCommentSection(postId: Int, forumVM: ForumVM, memberId: Int) {
                 }
                 Spacer(modifier = Modifier.width(10.dp))
                 Column {
-                    Text(text = "現在使用者", fontSize = 16.sp, color = Color.White)
+                    Text(text = memberName, fontSize = 16.sp, color = Color.White)
                 }
             }
         }
@@ -475,7 +488,7 @@ fun CommentHeader(comment: Comment, isLastComment: Boolean, memberId: Int, navCo
         }
         Spacer(modifier = Modifier.width(10.dp))
         Column {
-            Text(text = "用戶${comment.memberId}", fontSize = 16.sp, color = Color.White)
+            Text(text = comment.memberName, fontSize = 16.sp, color = Color.White)
             Spacer(modifier = Modifier.height(3.dp))
             // 如果是最後一條留言，顯示 "最新留言"，否則顯示創建時間
             if (isLastComment) {

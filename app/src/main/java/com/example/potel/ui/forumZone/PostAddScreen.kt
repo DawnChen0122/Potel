@@ -1,5 +1,6 @@
 package com.example.potel.ui.forumZone
 
+import android.content.Context
 import android.net.Uri
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -40,6 +41,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -70,7 +72,6 @@ fun PostAddScreen(
     // 從導航堆疊中取得 ForumVM 這個 ViewModel
     val forumVM: ForumVM = viewModel(navController.getBackStackEntry(ForumScreens.ForumScreen.name))
 
-    val memberId = 5 // 使用固定的 memberId，未來可以根據用戶登入情況動態改變
     var title by remember { mutableStateOf("") }
     var content by remember { mutableStateOf("") }
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
@@ -84,6 +85,17 @@ fun PostAddScreen(
         contract = ActivityResultContracts.PickVisualMedia(),
         onResult = { uri: Uri? -> selectedImageUri = uri }
     )
+
+    val contextPreferences = LocalContext.current
+    val preferences = contextPreferences.getSharedPreferences("member", Context.MODE_PRIVATE)
+    val memberId by remember {
+        mutableIntStateOf(
+            preferences.getString("memberid", null)?.toIntOrNull() ?: 4
+        )
+    }
+    val memberName by remember {
+        mutableStateOf(preferences.getString("name", null) ?: "預設名字")
+    }
 
     // 主界面容器
     Scaffold(

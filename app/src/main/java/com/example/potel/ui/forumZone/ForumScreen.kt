@@ -1,5 +1,6 @@
 package com.example.potel.ui.forumZone
 
+import android.content.Context
 import android.util.Log
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
@@ -70,6 +71,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -91,8 +93,22 @@ fun ForumScreen(
 ) {
     val forumVM: ForumVM = viewModel()
     val posts by forumVM.forumsState.collectAsState()
-    val memberId = 5
 
+    val context = LocalContext.current
+    val preferences = context.getSharedPreferences("member", Context.MODE_PRIVATE)
+    val memberId by remember {
+        mutableIntStateOf(
+            preferences.getString("memberid", null)?.toIntOrNull() ?: 4
+        )
+    }
+    val memberName by remember {
+        mutableStateOf(preferences.getString("name", null) ?: "預設名字")
+    }
+
+    LaunchedEffect(memberId) {
+        Log.d("MemberData", "當前的會員 ID 是: $memberId")
+        Log.d("MemberData", "當前的會員 name 是: $memberName")
+    }
     val scope = rememberCoroutineScope()
     val hostState = remember { SnackbarHostState() }
 
@@ -590,7 +606,7 @@ fun PostHeader(post: Post) {
                     .weight(1f)
                     .padding(start = 10.dp)
             ) {
-                Text("用戶代碼 : ${post.memberId}", fontSize = 15.sp, color = Color.White) // 用戶代碼
+                Text(post.memberName, fontSize = 15.sp, color = Color.White) // 用戶代碼
                 Text(
                     post.createDate.toFormattedDate(),
                     color = colorResource(R.color.forumTab),
