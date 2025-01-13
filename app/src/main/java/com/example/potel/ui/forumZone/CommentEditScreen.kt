@@ -98,7 +98,7 @@ fun CommentEditScreen(
                                navController.popBackStack()
                            }
                        }, shape = RoundedCornerShape(8.dp), colors = ButtonDefaults.buttonColors(
-                           containerColor = colorResource(R.color.foruButton),
+                           containerColor = colorResource(R.color.forumButton),
                            contentColor = Color.Black)
                    ) {
                            Text("保存變更", fontSize = 15.sp)
@@ -141,7 +141,7 @@ fun CommentEditScreen(
                         unfocusedBorderColor = Color.Transparent,
                         focusedTextColor = Color.White,
                         unfocusedTextColor = Color.White,
-                        cursorColor = colorResource(R.color.foruButton)
+                        cursorColor = colorResource(R.color.forumButton)
                     ),
                     minLines = 1
                 )

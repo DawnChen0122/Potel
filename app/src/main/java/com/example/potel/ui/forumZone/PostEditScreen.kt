@@ -171,7 +171,7 @@ fun PostEditScreen(
                                 navController.popBackStack()
                             }
                         }, shape = RoundedCornerShape(8.dp), colors = ButtonDefaults.buttonColors(
-                            containerColor = colorResource(R.color.foruButton),
+                            containerColor = colorResource(R.color.forumButton),
                             contentColor = Color.Black
                         )
                     ) {
@@ -298,7 +298,7 @@ fun PostEditContent(
                         unfocusedBorderColor = Color.LightGray,
                         focusedTextColor = Color.White,
                         unfocusedTextColor = Color.LightGray,
-                        cursorColor = colorResource(R.color.foruButton)
+                        cursorColor = colorResource(R.color.forumButton)
                     )
                 )
                 Spacer(modifier = Modifier.height(8.dp))
@@ -314,7 +314,7 @@ fun PostEditContent(
                         unfocusedBorderColor = Color.LightGray,
                         focusedTextColor = Color.White,
                         unfocusedTextColor = Color.LightGray,
-                        cursorColor = colorResource(R.color.foruButton)
+                        cursorColor = colorResource(R.color.forumButton)
                     ),
                     minLines = 1
                 )

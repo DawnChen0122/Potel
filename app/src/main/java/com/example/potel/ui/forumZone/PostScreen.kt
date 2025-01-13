@@ -1,6 +1,8 @@
 package com.example.potel.ui.forumZone
 
+import android.content.ActivityNotFoundException
 import android.content.Context
+import android.content.Intent
 import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -27,6 +29,7 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -142,7 +145,7 @@ fun PostScreen(navController: NavHostController) {
                 item {
                     Spacer(Modifier.height(20.dp))
                     PostDetailContent(postDetail.value)
-                    LikeController(forumVM, postDetail.value, memberId)
+                    LikeController(forumVM, postDetail.value, memberId, context)
                 }
 
                 item {
@@ -263,7 +266,7 @@ fun UserInformationSection(post: Post) {
         }
         Spacer(modifier = Modifier.width(10.dp))
         Column {
-            Text(text = "用戶${post.memberId}", fontSize = 16.sp, color = Color.White)
+            Text(text = post.memberName, fontSize = 16.sp, color = Color.White)
             Spacer(modifier = Modifier.height(3.dp))
             PostDateText(post.createDate)
         }
@@ -290,7 +293,7 @@ fun PostBodySection(post: Post) {
 }
 
 @Composable
-fun LikeController(forumVM: ForumVM, post: Post, memberId: Int) {
+fun LikeController(forumVM: ForumVM, post: Post, memberId: Int,context : Context ) {
     var liked by remember { mutableStateOf(forumVM.isPostLikedByMember(post.postId, memberId))}
     var likesCount by remember { mutableIntStateOf(forumVM.getLikesCountForPost(post.postId)) }
 
@@ -331,6 +334,33 @@ fun LikeController(forumVM: ForumVM, post: Post, memberId: Int) {
                 )
             }
         }
+        Spacer(Modifier.weight(1f))
+        IconButton(onClick = {
+
+            // 創建分享 Intent
+            val intent = Intent(Intent.ACTION_SEND).apply {
+                type = "text/plain"
+                putExtra(Intent.EXTRA_TEXT, "看看這篇有趣的貼文！標題：${post.title}")
+            }
+
+            // 創建選擇器
+            val chooser = Intent.createChooser(intent, "分享到...")
+
+            // 啟動分享
+            try {
+                context.startActivity(chooser)
+            } catch (e: ActivityNotFoundException) {
+                Log.e("Share", "無法處理分享 Intent", e)
+            }
+
+        }) {
+            Icon(
+                imageVector = Icons.Filled.Share,
+                contentDescription = "分享",
+                modifier = Modifier.size(20.dp),
+                tint =Color.LightGray
+            )
+        }
     }
 }
 
@@ -349,7 +379,7 @@ fun AddCommentHeader(comments: List<Comment>) {
         Column(
             modifier = Modifier
                 .size(30.dp)
-                .background(colorResource(R.color.foruButton), RoundedCornerShape(8.dp)),
+                .background(colorResource(R.color.forumButton), RoundedCornerShape(8.dp)),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -432,7 +462,7 @@ fun AddCommentSection(postId: Int, forumVM: ForumVM, memberId: Int, memberName:S
                 forumVM.setPostSuccessMessage("留言成功！")
             },
             shape = RoundedCornerShape(8.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = colorResource(R.color.foruButton)),
+            colors = ButtonDefaults.buttonColors(containerColor = colorResource(R.color.forumButton)),
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(end = 15.dp, bottom = 12.dp)

@@ -132,7 +132,7 @@ fun PostAddScreen(
                             navController.popBackStack()
                         }
                     }, shape = RoundedCornerShape(8.dp), colors = ButtonDefaults.buttonColors(
-                        containerColor = colorResource(R.color.foruButton),
+                        containerColor = colorResource(R.color.forumButton),
                         contentColor = Color.Black
                     )) {
                         Text("發布貼文", fontSize = 15.sp)
@@ -249,7 +249,7 @@ fun PostAddContent(
                         unfocusedBorderColor = Color.LightGray,
                         focusedTextColor = Color.White,
                         unfocusedTextColor = Color.LightGray,
-                        cursorColor = colorResource(R.color.foruButton)
+                        cursorColor = colorResource(R.color.forumButton)
                     )
                 )
                 Spacer(modifier = Modifier.height(8.dp))
@@ -265,7 +265,7 @@ fun PostAddContent(
                         unfocusedBorderColor = Color.LightGray,
                         focusedTextColor = Color.White,
                         unfocusedTextColor = Color.LightGray,
-                        cursorColor = colorResource(R.color.foruButton)
+                        cursorColor = colorResource(R.color.forumButton)
                     ),
                     minLines = 1
                 )
@@ -288,7 +288,7 @@ fun PostAddContent(
                             onClick = onSelectImage,
                             modifier = Modifier.align(Alignment.Center),
                             colors = ButtonDefaults.buttonColors(
-                                containerColor = colorResource(R.color.foruButton),
+                                containerColor = colorResource(R.color.forumButton),
                                 contentColor = Color.Black
                             )
                         ) {

@@ -215,7 +215,7 @@ fun ForumScreen(
             elevation = FloatingActionButtonDefaults.elevation(
                 pressedElevation = 60.dp,
             ),
-            containerColor = colorResource(R.color.foruButton),
+            containerColor = colorResource(R.color.forumButton),
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(16.dp)
@@ -675,7 +675,7 @@ fun PostFooter(likesCount: Int, liked: Boolean, commentCount: Int) {
         horizontalArrangement = Arrangement.Center
     ) {
         if (liked) Icon(Icons.Filled.Favorite, contentDescription = "讚數", tint = Color.Red)
-        else Icon(Icons.Filled.FavoriteBorder, contentDescription = "讚數", tint = Color.White)
+        else Icon(Icons.Filled.FavoriteBorder, contentDescription = "讚數", tint = Color.LightGray)
         Spacer(Modifier.size(5.dp))
         Text(text = likesCount.toString(), fontSize = 14.sp, color = Color.White)
         Spacer(Modifier.size(15.dp))
