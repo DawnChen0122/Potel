@@ -134,7 +134,7 @@ fun BookingScreen(
             },
             enabled = selectedDogWeight != null || selectedCatRoom != null // 按鈕啟用條件
         ) {
-            Text("Booking Now",fontSize = 20.sp)
+            Text("預訂",fontSize = 18.sp)
         }
     }
 }

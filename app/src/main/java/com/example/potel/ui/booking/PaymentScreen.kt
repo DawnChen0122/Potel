@@ -13,16 +13,20 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.potel.R
 import java.util.Date
 
 @Composable
 fun PaymentScreen(
-    navController: NavHostController,
-    bookingVM: BookingViewModel
+    bookingVM: BookingViewModel,
+    navController: NavHostController
+
 ) {
     val tag = "PaymentScreen"
 
@@ -56,17 +60,17 @@ fun PaymentScreen(
             painter = painterResource(id = R.drawable.credit),
             contentDescription = "Room Image",
             modifier = Modifier
-                .size(200.dp)
+                .size(300.dp)
                 .clip(RoundedCornerShape(8.dp)),
             contentScale = ContentScale.Crop
         )
 
-        Text("付款資訊", style = MaterialTheme.typography.titleMedium)
+        Text("請輸入付款資訊", style = MaterialTheme.typography.titleMedium,fontSize = 18.sp)
         Spacer(modifier = Modifier.height(16.dp))
 
 
         Row(
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            horizontalArrangement = Arrangement.Center,
             modifier = Modifier.fillMaxWidth()
         ) {
             OutlinedTextField(
@@ -75,7 +79,7 @@ fun PaymentScreen(
                 onValueChange = { cardNumber = it },
                 label = { Text("信用卡號碼") },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                modifier = fieldModifier.weight(2f) // 使用權重控制寬度
+                modifier = Modifier.fillMaxWidth()
             )
         }
 
@@ -104,33 +108,11 @@ fun PaymentScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
         order.amount = days * selectedRoomType.price
-        Text("全部金額: $${order.amount}")
+        Text("全部金額: $${order.amount}元",fontSize = 18.sp)
 
         Spacer(modifier = Modifier.height(24.dp))
         Button(
             onClick = {
-                // 創建一個新的 Order 對象並填充預設值
-//                val newOrder = Order(
-//                    memberid = 11, // 預設會員 ID，假設為 1
-//                    roomtypeid = 101, // 預設房型 ID
-//                    roomid = 22, // 預設房間 ID
-//                    amount = 5000, // 預設金額
-//                    expdates = Date().toString(), // 預設入住日期為當前日期
-//                    expdatee = Date(System.currentTimeMillis() + (3 * 24 * 60 * 60 * 1000)).toString(), // 預設退房日期
-//                    dates = Date().toString(), // 預設開始日期
-//                    datee = Date(System.currentTimeMillis() + (3 * 24 * 60 * 60 * 1000)).toString(), // 預設結束日期
-////                    refundamount = 0, // 預設退款金額
-////                    paydatetime = null.toString(), // 預設未付款
-////                    refunddatetime = null.toString(), // 預設未退款
-////                    createdate = Date().toString() ,// 創建時間
-//                    petid = 11,
-////                    cardNumber = cardNumber,
-////                    expiryDate = expiryDate,
-////                    cvv = cvv
-//
-//                )
-
-
 
                 Log.d(tag, "order.expdates=${order.expdates}")
 
@@ -143,8 +125,13 @@ fun PaymentScreen(
             },
             modifier = Modifier.padding(horizontal = 16.dp)
         ) {
-            Text("提交") // 按鈕顯示文本
+            Text("提交",fontSize = 18.sp) // 按鈕顯示文本
         }
     }
 }
 
+@Preview(showBackground = true)
+@Composable
+fun prep(){
+    PaymentScreen(bookingVM = viewModel(), rememberNavController())
+}

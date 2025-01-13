@@ -21,6 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.example.potel.PotelApp
 import com.example.potel.R
@@ -151,5 +152,7 @@ fun RoomCard(
         }
     }
 }
+
+
 
 
