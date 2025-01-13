@@ -1,7 +1,10 @@
 package com.example.potel.ui.petsfile
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.potel.ui.forumZone.Comment
+import com.example.potel.ui.forumZone.CommentUpdateRequest
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -33,7 +36,7 @@ class PetsFileCatsViewModel : ViewModel() {
     }
 
     /** 移除一本書並更新_bookState內容 */
-    fun removeItem(item: PetsCat) {
+    fun removeCat(item: PetsCat) {
         _catsState.update {
             val catsList = it.toMutableList()
             catsList.remove(item)

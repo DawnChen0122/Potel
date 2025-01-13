@@ -1,5 +1,6 @@
 package com.example.potel.ui.petsfile
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -67,7 +68,9 @@ import coil.compose.AsyncImage
 import com.example.potel.ui.theme.PotelTheme
 import kotlinx.coroutines.launch
 
-class MainActivity : ComponentActivity() {
+@SuppressLint("RestrictedApi")
+class PetsFileDogsActivity : ComponentActivity() {
+    @SuppressLint("RestrictedApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -75,6 +78,8 @@ class MainActivity : ComponentActivity() {
                 ScreensPetsFileDogs(navController = rememberNavController())
             }
         }
+    }
+        private fun setContent(function: @Composable () -> Unit) {
     }
 }
 
@@ -174,7 +179,7 @@ fun ScreensPetsFileDogs(
             // 刪除按鈕被點擊時執行
             onDeleteClick = {
                 // 將欲刪除的書從list移除
-                petsFileViewModel.removeItem(it)
+                petsFileViewModel.removeIDog(it)
                 // 將刪除的書名以Snackbar顯示
                 scope.launch {
                     snackbarHostState.showSnackbar(
@@ -192,7 +197,7 @@ fun ScreensPetsFileDogs(
             // onAdd: 確定新增時欲執行內容
             {
                 // 將欲新增的書加入到list
-                petsFileViewModel.addItem(it)
+                petsFileViewModel.addDog(it)
                 showAddDialog = false
                 // 新增成功後該書會被加到最後一筆，使用者可能看不到該書資訊；
                 // 將查詢文字換成新增的書名，可立即顯示該書資訊

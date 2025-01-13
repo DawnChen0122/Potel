@@ -18,3 +18,17 @@ data class CatUpdateRequest(
     val catGender: String,
     val catImages: Int?
 )
+data class Post(
+    val postId: Int=0,
+    val memberId: Int = 0,
+    val title: String = "",
+    val content: String = "",
+    val createDate: String = "",
+    val modifyDate: String? = null,
+    val imageId: Int? = null
+)
+data class NewPost(
+    val memberId: Int = 0,
+    val title: String = "",
+    val content: String = ""
+)

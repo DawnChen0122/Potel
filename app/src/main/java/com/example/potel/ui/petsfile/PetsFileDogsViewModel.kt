@@ -32,7 +32,7 @@ class PetsFileDogsViewModel : ViewModel() {
     }
 
     /** 新增一本書到List並更新_bookState內容 */
-    fun addItem(item: PetsDog) {
+    fun addDog(item: PetsDog) {
         _dogsState.update {
             val dogsList = it.toMutableList()
             dogsList.add(item)
@@ -41,7 +41,7 @@ class PetsFileDogsViewModel : ViewModel() {
     }
 
     /** 移除一本書並更新_bookState內容 */
-    fun removeItem(item: PetsDog) {
+    fun removeIDog(item: PetsDog) {
         _dogsState.update {
             val dogsList = it.toMutableList()
             dogsList.remove(item)

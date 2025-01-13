@@ -1,5 +1,6 @@
 package com.example.potel.ui.petsfile
 
+import com.example.potel.ui.forumZone.PostUpdateRequest
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Response
@@ -25,21 +26,34 @@ interface PetsFileApiService {
     suspend fun CatsLists(): List<PetsCat>
 
     // 添加狗
+    @Multipart
     @POST("PetsFile/AddDog")
     suspend fun addDog(
-        @Body body: AddDogBody,
-//        @Part dogImages: MultipartBody.Part? // 图片作为二进制数据上传
+        @Part("dogOwner") dogOwner: RequestBody,
+        @Part("dogName") dogName: RequestBody,
+        @Part("dogBreed") dogBreed: RequestBody,
+        @Part("dogGender") dogGender: RequestBody,
+        @Part image: MultipartBody.Part?
     ): Response<Unit>
 
-    data class AddDogBody(
-        val dogOwner: String,
-        val dogName: String,
-        val dogBreed: String,
-        val dogGender: String,
-        val dogImage: Int,
-    )
+    @Multipart
+    @PUT("PetsFile/UpdatePostWithImage")
+    suspend fun updatePostWithImage(
+        @Part("postId") postId: RequestBody,
+        @Part("title") title: RequestBody,
+        @Part("content") content: RequestBody,
+        @Part image: MultipartBody.Part?
+    ): Response<Unit>
 
-    // 添加猫
+    @Multipart
+    @POST("PetsFile/AddPost")
+    suspend fun addPost(
+        @Part("memberId") memberId: RequestBody,
+        @Part("title") title: RequestBody,
+        @Part("content") content: RequestBody,
+        @Part image: MultipartBody.Part? // 圖片作為二進制數據上傳
+    ): Response<Unit>
+
     @Multipart
     @POST("PetsFile/AddCat")
     suspend fun addCat(

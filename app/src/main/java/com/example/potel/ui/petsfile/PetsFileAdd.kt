@@ -1,17 +1,25 @@
 package com.example.potel.ui.petsfile
 
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -23,7 +31,14 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import coil.compose.AsyncImage
+import com.example.potel.ui.forumZone.ForumScreens
+import com.example.potel.ui.forumZone.ForumVM
+import com.example.potel.ui.forumZone.NewPost
 import com.example.potel.ui.theme.PotelTheme
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.toRequestBody
 
 //class MainActivity : ComponentActivity() {
 //    override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,14 +52,20 @@ import com.example.potel.ui.theme.PotelTheme
 @Composable
 fun ScreenPetsFileAdd(
     viewModel: PetFileAddViewModel = viewModel(),
-    navController: NavHostController
+    navController: NavHostController,
 ) {
+    val context = LocalContext.current
     val ownerName by viewModel.ownerName.collectAsState()
-    val petId by viewModel.petId.collectAsState()
     val petName by viewModel.petName.collectAsState()
     val petBreed by viewModel.petBreed.collectAsState()
     val petGender by viewModel.petGender.collectAsState()
-    val petImages by viewModel.petImages.collectAsState()
+    var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
+
+    // 用於選擇圖片的功能
+    val pickImageLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickVisualMedia(),
+        onResult = { uri: Uri? -> selectedImageUri = uri }
+    )
 
     Box(
         modifier = Modifier
@@ -52,11 +73,11 @@ fun ScreenPetsFileAdd(
             .padding(16.dp)
             .background(Color(0xFFF0E68C))
     ) {
-        // 上方的內容
         Column(
             modifier = Modifier
+                .verticalScroll(rememberScrollState())
                 .fillMaxWidth()
-                .padding(bottom = 60.dp), // 留出空間給底部按鈕
+                .padding(bottom = 60.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(45.dp)
         ) {
@@ -70,7 +91,6 @@ fun ScreenPetsFileAdd(
                 color = Color.Black
             )
 
-            // 使用 ViewModel 中的函式來更新狀態
             PetInfoTextField(
                 label = "請輸入飼主名稱",
                 textState = ownerName,
@@ -89,12 +109,10 @@ fun ScreenPetsFileAdd(
                 onValueChange = { viewModel.updatePetBreed(it) }
             )
 
-
             Row {
                 val isMale = petGender == "Male"
                 Text(
                     modifier = Modifier
-
                         .padding(horizontal = 12.dp)
                         .weight(1f)
                         .border(
@@ -102,16 +120,16 @@ fun ScreenPetsFileAdd(
                             color = Color.Black,
                             shape = RoundedCornerShape(12.dp)
                         )
-                        .background(Color.Blue, shape = RoundedCornerShape(12.dp))
+                        .background(Color(0xFFADD8E6), shape = RoundedCornerShape(12.dp))
                         .padding(vertical = 12.dp)
                         .clickable(onClick = viewModel::onMaleClick),
-                    text = "公",
-                    textAlign = TextAlign.Center
+                    text = "Male",
+                    textAlign = TextAlign.Center,
+
                 )
                 val isFemale = petGender == "Female"
                 Text(
                     modifier = Modifier
-
                         .padding(horizontal = 12.dp)
                         .weight(1f)
                         .border(
@@ -119,66 +137,94 @@ fun ScreenPetsFileAdd(
                             color = Color.Black,
                             shape = RoundedCornerShape(12.dp)
                         )
-                        .background(Color.Red, shape = RoundedCornerShape(12.dp))
+                        .background(Color(0xFFFFB6C1), shape = RoundedCornerShape(12.dp))
                         .padding(vertical = 12.dp)
                         .clickable(onClick = viewModel::onFemaleClick),
-                    text = "母",
+                    text = "Female",
                     textAlign = TextAlign.Center
+
                 )
-
             }
 
-            // petImages 改為數字輸入
-            PetInfoNumberField(
-                label = "請上傳寵物圖片",
-                numberState = petImages,
-                onValueChange = { viewModel.updatePetImages(it) }
-            )
-        }
+            Box(modifier = Modifier.fillMaxSize()) {
+                selectedImageUri?.let { uri ->
+                    AsyncImage(
+                        model = uri,
+                        contentDescription = "Selected Image",
+                        contentScale = ContentScale.FillWidth,
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                            .padding(horizontal = 12.dp)
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(8.dp))
+                            .border(2.dp, Color.Gray, RoundedCornerShape(8.dp))
+                    )
+                }
 
-        // 底部的 SKIP 按鈕
-        Column(
-            modifier = Modifier
-                .align(Alignment.BottomCenter) // 置中對齊
-                .padding(bottom = 16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(16.dp) // 兩個按鈕之間的間隔
-        ) {
-            Row(
+                Button(
+                    onClick = {
+                        pickImageLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+                    },
+                    modifier = Modifier.align(Alignment.Center),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.LightGray,
+                        contentColor = Color.Black
+                    )
+                ) {
+                    Text(if (selectedImageUri != null) "更改照片" else "上傳照片")
+                }
+            }
+
+            Column(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(16.dp) // 兩個按鈕之間的間隔
             ) {
-                // Dog 按鈕
-                Button(
-                    onClick = {
-                        viewModel.onAddDogClick() // 提交資料
-                        navController.navigate(Screens.PetsFileDogs.name)
-                    },
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(12.dp))
-                        .padding(horizontal = 8.dp),
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center
                 ) {
-                    Text(text = "Dog", color = Color.White)
-                }
+                    // Dog 按鈕
+                    Button(
+                        onClick = {
+                            // 準備圖片和其他資料
+                            val imagePart = selectedImageUri?.let { uri ->
+                                context.contentResolver.openInputStream(uri)?.readBytes()?.let {
+                                    val imageRequestBody = it.toRequestBody("image/*".toMediaTypeOrNull())
+                                    MultipartBody.Part.createFormData("image", "image.jpg", imageRequestBody)
+                                }
+                            }
 
-                // Cat 按鈕
-                Button(
-                    onClick = {
-                        viewModel.onAddCatClick() // 提交資料
-                        navController.navigate(Screens.PetsFileCats.name)
-                    },
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(12.dp))
-                        .padding(horizontal = 8.dp),
-                ) {
-                    Text(text = "Cat", color = Color.White)
+                            viewModel.onAddDogClick(imagePart = imagePart) // 提交資料
+                            navController.navigate(Screens.PetsFileDogs.name)
+                        },
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(12.dp))
+                            .padding(horizontal = 8.dp),
+                    ) {
+                        Text(text = "Dog", color = Color.White)
+                    }
+
+                    // Cat 按鈕
+                    Button(
+                        onClick = {
+                            viewModel.onAddCatClick() // 提交資料
+                            navController.navigate(Screens.PetsFileCats.name)
+                        },
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(12.dp))
+                            .padding(horizontal = 8.dp),
+                    ) {
+                        Text(text = "Cat", color = Color.White)
+                    }
                 }
             }
+
         }
     }
 }
 
-// 用於一般文字輸入的 TextField
+
 @Composable
 fun PetInfoTextField(label: String, textState: String, onValueChange: (String) -> Unit) {
     TextField(
@@ -187,34 +233,15 @@ fun PetInfoTextField(label: String, textState: String, onValueChange: (String) -
         label = { Text(text = label) },
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp) // 左右邊距，確保不貼邊
-            .clip(RoundedCornerShape(12.dp)) // 圓角輸入框
-            .background(Color.White), // 輸入框背景顏色
+            .padding(horizontal = 16.dp)
+            .clip(RoundedCornerShape(12.dp))
+            .background(Color.White),
         singleLine = true
     )
 }
 
-// 用於數字輸入的 TextField
-@Composable
-fun PetInfoNumberField(label: String, numberState: Int, onValueChange: (Int) -> Unit) {
-    TextField(
-        value = numberState.toString(),
-        onValueChange = { newValue ->
-            // 確保是數字才能更新
-            newValue.toIntOrNull()?.let {
-                onValueChange(it)
-            }
-        },
-        label = { Text(text = label) },
-        keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp) // 左右邊距，確保不貼邊
-            .clip(RoundedCornerShape(12.dp)) // 圓角輸入框
-            .background(Color.White), // 輸入框背景顏色
-        singleLine = true
-    )
-}
+
+
 
 
 @Preview(showBackground = true)

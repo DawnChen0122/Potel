@@ -138,7 +138,7 @@ fun ScreensPetsFileCats(petsFileViewModel: PetsFileCatsViewModel = viewModel(),
             BottomAppBar(actions = {
                 // 新增按鈕
                 IconButton(onClick = {
-                    showAddDialog = true
+                    navController.navigate(Screens.PetsFileAdd.name)
                 }) {
                     Icon(Icons.Filled.Add, contentDescription = "add")
                 }
@@ -180,7 +180,7 @@ fun ScreensPetsFileCats(petsFileViewModel: PetsFileCatsViewModel = viewModel(),
             // 刪除按鈕被點擊時執行
             onDeleteClick = {
                 // 將欲刪除的書從list移除
-                petsFileViewModel.removeItem(it)
+                petsFileViewModel.removeCat(it)
                 // 將刪除的書名以Snackbar顯示
                 scope.launch {
                     snackbarHostState.showSnackbar(

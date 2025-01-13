@@ -1,15 +1,22 @@
 package com.example.potel.ui.petsfile
 
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.potel.R
+import com.example.potel.ui.forumZone.NewPost
+import com.example.potel.ui.forumZone.Post
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.toRequestBody
 
 class PetFileAddViewModel : ViewModel() {
+    private val tag = "tag_PetFileAddViewModel"
     private val _ownerName = MutableStateFlow("")
     val ownerName: StateFlow<String> = _ownerName
 
@@ -53,25 +60,76 @@ class PetFileAddViewModel : ViewModel() {
         _petImages.value = images
     }
 
-    fun onAddDogClick() {
+    fun addPost(post: NewPost, imagePart: MultipartBody.Part?) {
+        viewModelScope.launch {
+            try {
+                val memberIdPart =
+                    post.memberId.toString().toRequestBody("text/plain".toMediaTypeOrNull())
+                val titlePart = post.title.toRequestBody("text/plain".toMediaTypeOrNull())
+                val contentPart = post.content.toRequestBody("text/plain".toMediaTypeOrNull())
+
+                val response = RetrofitInstance.api.addPost(
+                    memberId = memberIdPart,
+                    title = titlePart,
+                    content = contentPart,
+                    image = imagePart
+                )
+
+                if (response.isSuccessful) {
+                    Log.d(tag, "Post added successfully: ${response.body()}")
+                } else {
+                    Log.e(tag, "Error adding post: Code ${response.code()}")
+                }
+            } catch (e: Exception) {
+                Log.e(tag, "Error adding post: ${e.message}")
+            }
+        }
+    }
+
+    fun updatePostWithImage(post: Post, imagePart: MultipartBody.Part?) {
+        viewModelScope.launch {
+            try {
+                val postIdPart =
+                    post.postId.toString().toRequestBody("text/plain".toMediaTypeOrNull())
+                val titlePart = post.title.toRequestBody("text/plain".toMediaTypeOrNull())
+                val contentPart = post.content.toRequestBody("text/plain".toMediaTypeOrNull())
+
+                val response = RetrofitInstance.api.updatePostWithImage(
+                    postId = postIdPart,
+                    title = titlePart,
+                    content = contentPart,
+                    image = imagePart
+                )
+
+                if (response.isSuccessful) {
+                    Log.d(tag, "updatePostWithImage successfully: ${response.body()}")
+//                    petsFileData()
+                } else {
+                    Log.e(tag, "Error updatePostWithImage Code ${response.code()}")
+                }
+            } catch (e: Exception) {
+                Log.e(tag, "Error updatePostWithImage: ${e.message}")
+            }
+        }
+    }
+
+    fun onAddDogClick(imagePart: MultipartBody.Part?) {
+        Log.d("onAddDogClick", imagePart.toString())
+
         // 從 ViewModel 獲取變數
-        val ownername: String = _ownerName.value
-        val petid: Int = _petId.value
-        val petname: String = _petName.value
-        val petbreed: String = _petBreed.value
-        val petgender: String = _petGender.value
-        val petimages: Int = _petImages.value
+        val ownername = _ownerName.value.toRequestBody("text/plain".toMediaTypeOrNull())
+        val petname = _petName.value.toRequestBody("text/plain".toMediaTypeOrNull())
+        val petbreed = _petBreed.value.toRequestBody("text/plain".toMediaTypeOrNull())
+        val doggender = _petGender.value.toRequestBody("text/plain".toMediaTypeOrNull())
 
         // 使用 viewModelScope 發起網路請求
         viewModelScope.launch {
             RetrofitInstance.api.addDog(
-                PetsFileApiService.AddDogBody(
-                    dogOwner = ownername,
-                    dogName = "Max",
-                    dogBreed = "123",
-                    dogGender = "Male",
-                    dogImage = petimages,
-                )
+                dogOwner = ownername,
+                dogBreed = petbreed,
+                dogName = petname,
+                dogGender = doggender,
+                image = imagePart
             )
         }
     }
