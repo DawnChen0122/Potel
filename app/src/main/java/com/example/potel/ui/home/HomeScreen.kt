@@ -191,7 +191,7 @@ fun HomeRoute(
                     )
                     {
                         Text(
-                            text = "毛小孩追蹤",
+                            text = "寵物/會員資料",
                             style = TextStyle(
                                 fontSize = 27.sp,
                                 lineHeight = 32.sp,
@@ -200,7 +200,7 @@ fun HomeRoute(
                                 textAlign = TextAlign.Center,
                             ),
                             modifier = Modifier
-                                .width(135.dp)
+                                .width(180.dp)
                                 .height(45.dp)
                         )
                     }
