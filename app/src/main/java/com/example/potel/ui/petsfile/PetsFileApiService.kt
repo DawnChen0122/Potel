@@ -72,7 +72,7 @@ interface PetsFileApiService {
     // 更新狗信息
     @PUT("PetsFile/updateDog")
     suspend fun updateDog(
-        @Body dogUpdateRequest: DogUpdateRequest
+        @Body dogUpdateRequest: PetsDog
     ): Response<Unit>
 
     // 更新猫信息

@@ -45,6 +45,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -79,7 +80,8 @@ class PetsFileDogsActivity : ComponentActivity() {
             }
         }
     }
-        private fun setContent(function: @Composable () -> Unit) {
+
+    private fun setContent(function: @Composable () -> Unit) {
     }
 }
 
@@ -187,49 +189,28 @@ fun ScreensPetsFileDogs(
                     )
                 }
             })
-        if (showAddDialog) {
-            // 顯示新增對話視窗
-            AddDialog(
-                // 取消時欲執行內容
-                onDismiss = {
-                    showAddDialog = false
-                })
-            // onAdd: 確定新增時欲執行內容
-            {
-                // 將欲新增的書加入到list
-                petsFileViewModel.addDog(it)
-                showAddDialog = false
-                // 新增成功後該書會被加到最後一筆，使用者可能看不到該書資訊；
-                // 將查詢文字換成新增的書名，可立即顯示該書資訊
-                inputText = it.dogName
-                // 將新增的書名以Snackbar顯示
-                scope.launch {
-                    snackbarHostState.showSnackbar(
-                        "${it.dogName} added", withDismissAction = true
-                    )
-                }
-            }
-        }
         if (showEditDialog) {
             // 顯示編輯對話視窗
+
             EditDialog(
                 editDogs,
                 // 取消時欲執行內容
                 onDismiss = {
                     showEditDialog = false
+                },
+                onEdit = { petDog->
+                    showEditDialog = false
+                    // 編輯成功後將查詢文字換成編輯的書名，可立即顯示該書資訊
+                    petsFileViewModel.updateDog(petDog)
+                    // 將修改好的書名以Snackbar顯示
+                    scope.launch {
+                        snackbarHostState.showSnackbar(
+                            "${petDog.dogName} updated", withDismissAction = true
+                        )
+                    }
                 })
             // onEdit: 確定編輯時欲執行內容
-            {
-                showEditDialog = false
-                // 編輯成功後將查詢文字換成編輯的書名，可立即顯示該書資訊
-                inputText = it.dogName
-                // 將修改好的書名以Snackbar顯示
-                scope.launch {
-                    snackbarHostState.showSnackbar(
-                        "${it.dogName} updated", withDismissAction = true
-                    )
-                }
-            }
+
         }
     }
 }
@@ -348,7 +329,7 @@ fun AddDialog(
                 ) {
                     Button(onClick = {
                         val newDogs = PetsDog(
-                            name,1, breed, gender,"",
+                            name, 1, breed, gender, "",
                             // 隨意給個封面圖
                             1
                         )

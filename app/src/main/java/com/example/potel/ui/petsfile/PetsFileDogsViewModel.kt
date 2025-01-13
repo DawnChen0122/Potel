@@ -42,10 +42,13 @@ class PetsFileDogsViewModel : ViewModel() {
 
     /** 移除一本書並更新_bookState內容 */
     fun removeIDog(item: PetsDog) {
-        _dogsState.update {
-            val dogsList = it.toMutableList()
-            dogsList.remove(item)
-            dogsList
+        viewModelScope.launch {
+            RetrofitInstance.api.deleteDog(item.dogId)
+            _dogsState.update {
+                val dogsList = it.toMutableList()
+                dogsList.remove(item)
+                dogsList
+            }
         }
     }
 
@@ -73,5 +76,20 @@ class PetsFileDogsViewModel : ViewModel() {
 //            PetsDog("Zoe", "Cocker Spaniel", "Female", R.drawable.dog14),
 //            PetsDog("Toby", "Maltese", "Male", R.drawable.dog15)
 //        )
+    }
+
+    fun updateDog(editPetDog: PetsDog) {
+        viewModelScope.launch {
+            val response = RetrofitInstance.api.updateDog(editPetDog)
+            var editIndex = -1
+            _dogsState.value.toMutableList().forEachIndexed { index, petsDog ->
+                if (editPetDog.dogId == petsDog.dogId) {
+                    editIndex = index
+                }
+            }
+            val newList = _dogsState.value.toMutableList()
+            newList[editIndex] = editPetDog
+            _dogsState.update { newList }
+        }
     }
 }
