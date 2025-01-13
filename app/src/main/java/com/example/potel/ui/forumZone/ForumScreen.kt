@@ -44,6 +44,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -128,7 +129,7 @@ fun ForumScreen(
     }
 
     // State to control visibility of items
-    var isItemsVisible by remember { mutableStateOf(true) }
+    val isItemsVisible by forumVM.isItemsVisible.collectAsState()
 
     Box(modifier = Modifier.fillMaxSize()) {
         // Column or other content for your ForumScreen UI
@@ -141,7 +142,7 @@ fun ForumScreen(
                 title = {
                     Text(
                         text = "討論區",
-                        color = Color.White // 设置文字颜色为白色
+                        color = Color.White
                     )
                 },
                 navigationIcon = {
@@ -154,7 +155,7 @@ fun ForumScreen(
                     }
                 },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = colorResource(R.color.forum) // 背景色设置
+                    containerColor = colorResource(R.color.forum)
                 )
             )
             HorizontalDivider(
@@ -170,31 +171,31 @@ fun ForumScreen(
 
         SnackbarHost(
             hostState = hostState,
-            modifier = Modifier.align(Alignment.BottomCenter), // 显示在底部
+            modifier = Modifier.align(Alignment.BottomCenter),
             snackbar = { data ->
                 Snackbar(
                     modifier = Modifier
                         .padding(16.dp)
-                        .width(200.dp), // 添加额外的 padding 和宽度
-                    containerColor = Color.White, // 背景色：白色
-                    contentColor = Color.Black, // 文字颜色：黑色
-                    shape = RoundedCornerShape(16.dp), // 设置圆角半径
+                        .width(200.dp),
+                    containerColor = Color.White,
+                    contentColor = Color.Black,
+                    shape = RoundedCornerShape(16.dp),
                     content = {
                         Row(
                             modifier = Modifier.fillMaxWidth(),
-                            verticalAlignment = Alignment.CenterVertically, // 垂直居中
-                            horizontalArrangement = Arrangement.Start // 从左到右排列
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Start
                         ) {
                             Icon(
                                 modifier = Modifier
                                     .size(60.dp)
-                                    .padding(end = 8.dp), // 图标和文字之间的间距
+                                    .padding(end = 8.dp),
                                 painter = painterResource(id = R.drawable.dogandcat),
                                 contentDescription = "完成通知"
                             )
                             Text(
                                 text = data.visuals.message,
-                                modifier = Modifier.weight(1f), // 使文本占用剩余空间
+                                modifier = Modifier.weight(1f),
                                 fontSize = 20.sp,
                                 textAlign = TextAlign.Center
                             )
@@ -207,10 +208,13 @@ fun ForumScreen(
         FloatingActionButton(
             onClick = {
                 // Hide items when the button is clicked
-                isItemsVisible = false
+                forumVM.setItemsVisibility(false)
                 // Navigate to the add post screen
                 navController.navigate(ForumScreens.PostAddScreen.name)
             },
+            elevation = FloatingActionButtonDefaults.elevation(
+                pressedElevation = 60.dp,
+            ),
             containerColor = colorResource(R.color.foruButton),
             modifier = Modifier
                 .align(Alignment.BottomEnd)
@@ -252,7 +256,7 @@ fun ForumTabContent(
                     )
 
                     1 -> PostListView(
-                        posts.filter { it.memberId == memberId }, // fix me
+                        posts.filter { it.memberId == memberId },
                         forumVM,
                         navController,
                         showEditButton = true,
@@ -319,7 +323,7 @@ fun PostListView(
     LaunchedEffect(Unit) {
         coroutineScope.launch {
             isRefreshing=true
-            delay(1000) // 设置加载时间
+            delay(1000)
             isRefreshing = false
         }
     }
@@ -328,7 +332,7 @@ fun PostListView(
         Log.d("PullToRefresh", "Refresh started")
         isRefreshing = true
         coroutineScope.launch {
-            delay(1000) // 模拟刷新操作
+            delay(1000)
             forumVM.refresh()
             isRefreshing = false
             Log.d("PullToRefresh", "Refresh finished")
@@ -368,7 +372,7 @@ fun PostListView(
 @Composable
 fun CustomRefreshIndicator(isRefreshing: Boolean) {
     val rotation by animateFloatAsState(
-        targetValue = if (isRefreshing) 360f else 0f, // 如果正在刷新，圖片旋轉一圈
+        targetValue = if (isRefreshing) 360f else 0f,
         animationSpec = infiniteRepeatable(
             animation = tween(durationMillis = 1000, easing = LinearEasing),
             repeatMode = RepeatMode.Restart
@@ -378,18 +382,18 @@ fun CustomRefreshIndicator(isRefreshing: Boolean) {
         if (isRefreshing) {
             Box(
                 modifier = Modifier
-                    .size(70.dp) // 背景的總大小
+                    .size(70.dp)
                     .background(color = colorResource(R.color.forumTab), shape = CircleShape)
                     .align(Alignment.Center)
             ) {
                 Icon(
-                    painter = painterResource(id = R.drawable.animalrefresh), // 使用內建的刷新圖標
+                    painter = painterResource(id = R.drawable.animalrefresh),
                     contentDescription = "Refreshing",
-                    tint = Color.White, // 自定義顏色
+                    tint = Color.White,
                     modifier = Modifier
-                        .size(60.dp) // 圖標大小
+                        .size(60.dp)
                         .align(Alignment.Center)
-                        .rotate(rotation) // 添加旋轉動畫
+                        .rotate(rotation)
                 )
             }
         }
@@ -415,6 +419,7 @@ fun PostCard(
             .background(colorResource(R.color.forum))
             .padding(5.dp)
             .clickable {
+                forumVM.setItemsVisibility(false)
                 forumVM.setSelectedPost(post)
                 navController.navigate(ForumScreens.PostScreen.name)
             }
@@ -600,7 +605,7 @@ fun PostHeader(post: Post) {
                 .padding(start = 25.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            MemberImage() // 用戶頭貼
+            MemberImage()
             Column(
                 Modifier
                     .weight(1f)
@@ -611,7 +616,7 @@ fun PostHeader(post: Post) {
                     post.createDate.toFormattedDate(),
                     color = colorResource(R.color.forumTab),
                     fontSize = 13.sp
-                ) // 日期
+                )
             }
         }
     }
@@ -683,7 +688,7 @@ fun PostFooter(likesCount: Int, liked: Boolean, commentCount: Int) {
 @Composable
 fun PostImage(imageId: Int) {
     val imageUrl = remember(imageId) { composeImageUrl(imageId) }
-    Log.d("PostImage", "Image URL: $imageUrl") // 檢查URL
+    Log.d("PostImage", "Image URL: $imageUrl")
     AsyncImage(
         model = (imageUrl),
         contentDescription = "貼文照片",

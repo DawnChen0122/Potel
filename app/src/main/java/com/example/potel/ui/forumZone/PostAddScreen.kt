@@ -2,11 +2,11 @@ package com.example.potel.ui.forumZone
 
 import android.content.Context
 import android.net.Uri
-import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -52,6 +52,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -93,10 +94,7 @@ fun PostAddScreen(
             preferences.getString("memberid", null)?.toIntOrNull() ?: 4
         )
     }
-    val memberName by remember {
-        mutableStateOf(preferences.getString("name", null) ?: "預設名字")
-    }
-
+    forumVM.setItemsVisibility(true)
     // 主界面容器
     Scaffold(
         topBar = {
@@ -290,11 +288,18 @@ fun PostAddContent(
                             onClick = onSelectImage,
                             modifier = Modifier.align(Alignment.Center),
                             colors = ButtonDefaults.buttonColors(
-                                containerColor = Color.LightGray,
+                                containerColor = colorResource(R.color.foruButton),
                                 contentColor = Color.Black
                             )
                         ) {
-                            Text(if (selectedImageUri != null) "更改照片" else "上傳照片")
+                            val imageResource = R.drawable.uploadimage
+                            Image(
+                                painter = painterResource(id = imageResource),
+                                contentDescription = "上傳照片",
+                                modifier = Modifier
+                                    .size(35.dp).padding(end = 8.dp)
+                            )
+                            Text(if (selectedImageUri != null) "更改照片" else "上傳照片", fontSize = 15.sp)
                         }
                     }
                 }

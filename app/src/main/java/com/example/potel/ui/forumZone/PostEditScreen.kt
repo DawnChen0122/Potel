@@ -72,33 +72,27 @@ fun PostEditScreen(
     val forumVM: ForumVM = viewModel(backStackEntry)
     val post = forumVM.postSelectedState.collectAsState()
 
-    // 讀取當前貼文的標題、內容以及圖片
     var title by remember { mutableStateOf(post.value.title)}
     var content by remember { mutableStateOf(post.value.content)}
 
-    // 將 String 轉換為 Uri
     val imageUri = remember(post.value.imageId) {
         post.value.imageId?.let {
             try {
-                // 將 String URL 轉換為 Uri
                 Uri.parse(composeImageUrl(it))
             } catch (e: Exception) {
-                // 如果轉換失敗，處理異常
                 Log.e("Uri Error", "Invalid Uri: ${e.message}")
                 null
             }
         }
     }
 
-    var selectedImageUri by remember { mutableStateOf(imageUri)} // 假設你有選擇圖片的 Uri
+    var selectedImageUri by remember { mutableStateOf(imageUri)}
 
-    // 狀態管理
     val scope = rememberCoroutineScope()
     val hostState = remember { SnackbarHostState()}
     val context = LocalContext.current
     var showDialog by remember { mutableStateOf(false)}
 
-    // 用於選擇圖片的功能
     val pickImageLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
         onResult = { uri: Uri? -> selectedImageUri = uri }
@@ -276,7 +270,7 @@ fun PostEditContent(
     onTitleChange: (String) -> Unit,
     content: String,
     onContentChange: (String) -> Unit,
-    selectedImageUri: Uri?, // 修改為 Uri 類型
+    selectedImageUri: Uri?,
     onSelectImage: () -> Unit,
     modifier: Modifier = Modifier
 ) {

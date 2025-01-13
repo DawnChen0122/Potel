@@ -36,6 +36,9 @@ class ForumVM : ViewModel() {
     private val _commentsState = MutableStateFlow(emptyList<Comment>())
 //    val commentsState: StateFlow<List<Comment>> = _commentsState.asStateFlow()
 
+    private val _isItemsVisible = MutableStateFlow(true)
+    val isItemsVisible: StateFlow<Boolean> = _isItemsVisible
+
      var postSuccessMessage = mutableStateOf<String?>(null)
          private set
 
@@ -296,6 +299,10 @@ class ForumVM : ViewModel() {
 
     fun setPostSuccessMessage(message: String?) {
         postSuccessMessage.value = message
+    }
+
+    fun setItemsVisibility(isVisible: Boolean) {
+        _isItemsVisible.value = isVisible
     }
 }
 

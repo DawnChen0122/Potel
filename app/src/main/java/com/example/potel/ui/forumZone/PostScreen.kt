@@ -69,7 +69,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.potel.R
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -94,7 +93,7 @@ fun PostScreen(navController: NavHostController) {
     val memberName by remember {
         mutableStateOf(preferences.getString("name", null) ?: "預設名字preferences")
     }
-
+    forumVM.setItemsVisibility(true)
     // 监听需要显示的消息
     LaunchedEffect(forumVM.postSuccessMessage.value) {
         val message = forumVM.postSuccessMessage.value
@@ -103,13 +102,12 @@ fun PostScreen(navController: NavHostController) {
                 val job = launch {
                     hostState.showSnackbar(
                         message = message,
-                        duration = SnackbarDuration.Indefinite // 显示时间由延时控制
+                        duration = SnackbarDuration.Short
                     )
                 }
-                delay(1500) // 自定义 2 秒显示时间
-                job.cancel()
+                job.join()
+                forumVM.setPostSuccessMessage(null)
             }
-            forumVM.setPostSuccessMessage(null) // 清空消息，防止重复显示
         }
     }
 
@@ -118,7 +116,9 @@ fun PostScreen(navController: NavHostController) {
             TopAppBar(
                 title = { Text("") },
                 navigationIcon = {
-                    IconButton(onClick = { navController.navigateUp() }) {
+                    IconButton(onClick = {
+                        navController.navigateUp()
+                    }) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = stringResource(R.string.back_button),
@@ -127,7 +127,7 @@ fun PostScreen(navController: NavHostController) {
                     }
                 },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = colorResource(R.color.forum) // 背景色设置
+                    containerColor = colorResource(R.color.forum)
                 )
             )
         }
@@ -144,13 +144,13 @@ fun PostScreen(navController: NavHostController) {
                     PostDetailContent(postDetail.value)
                     LikeController(forumVM, postDetail.value, memberId)
                 }
-                // 显示新增评论区
+
                 item {
                     Spacer(Modifier.height(20.dp))
                     AddCommentHeader(comments)
                     AddCommentSection(postDetail.value.postId, forumVM, memberId,memberName)
                 }
-                // 显示评论区
+
                 item {
                     Spacer(Modifier.height(20.dp))
                     CommentsSection(comments, memberId, navController, forumVM)
@@ -368,7 +368,7 @@ fun AddCommentSection(postId: Int, forumVM: ForumVM, memberId: Int, memberName:S
             .padding(horizontal = 16.dp)
             .background(colorResource(R.color.addComment), shape = RoundedCornerShape(8.dp))
     ) {
-        // Row 在左上角
+
         Column {
             Spacer(modifier = Modifier.height(10.dp))
             Row(
@@ -411,7 +411,7 @@ fun AddCommentSection(postId: Int, forumVM: ForumVM, memberId: Int, memberName:S
             placeholder = { Text("我想說...", color = Color.White) },
             maxLines = 3,
             colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = Color.Transparent, // 根據條件改變顏色
+                focusedBorderColor = Color.Transparent,
                 unfocusedBorderColor = Color.Transparent,
                 focusedTextColor = Color.White,
                 unfocusedTextColor = Color.White,
@@ -490,7 +490,7 @@ fun CommentHeader(comment: Comment, isLastComment: Boolean, memberId: Int, navCo
         Column {
             Text(text = comment.memberName, fontSize = 16.sp, color = Color.White)
             Spacer(modifier = Modifier.height(3.dp))
-            // 如果是最後一條留言，顯示 "最新留言"，否則顯示創建時間
+
             if (isLastComment) {
                 Text(
                     text = "最新留言",
