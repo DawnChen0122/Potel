@@ -135,25 +135,23 @@ class PetFileAddViewModel : ViewModel() {
     }
 
     // 提交 Cat 資料
-    fun onAddCatClick() {
+    fun onAddCatClick(imagePart: MultipartBody.Part?) {
+        Log.d("onAddCatClick", imagePart.toString())
+
         // 從 ViewModel 獲取變數
-        val ownername: String = _ownerName.value
-        val petid: Int = _petId.value
-        val petname: String = _petName.value
-        val petbreed: String = _petBreed.value
-        val petgender: String = _petGender.value
-        val petimages: Int = _petImages.value
+        val ownername = _ownerName.value.toRequestBody("text/plain".toMediaTypeOrNull())
+        val petname = _petName.value.toRequestBody("text/plain".toMediaTypeOrNull())
+        val petbreed = _petBreed.value.toRequestBody("text/plain".toMediaTypeOrNull())
+        val catgender = _petGender.value.toRequestBody("text/plain".toMediaTypeOrNull())
 
         // 使用 viewModelScope 發起網路請求
         viewModelScope.launch {
             RetrofitInstance.api.addCat(
-                PetsFileApiService.AddCatBody(
-                    catOwner = ownername,
-                    catName = "Max",
-                    catBreed = "123",
-                    catGender = "Male",
-                    catImage = petimages
-                )
+                catOwner = ownername,
+                catBreed = petbreed,
+                catName = petname,
+                catGender = catgender,
+                image = imagePart
             )
         }
     }

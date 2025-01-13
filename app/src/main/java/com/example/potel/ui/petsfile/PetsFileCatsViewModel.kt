@@ -37,10 +37,13 @@ class PetsFileCatsViewModel : ViewModel() {
 
     /** 移除一本書並更新_bookState內容 */
     fun removeCat(item: PetsCat) {
-        _catsState.update {
-            val catsList = it.toMutableList()
-            catsList.remove(item)
-            catsList
+        viewModelScope.launch {
+            RetrofitInstance.api.deleteCat(item.catId)
+            _catsState.update {
+                val catsList = it.toMutableList()
+                catsList.remove(item)
+                catsList
+            }
         }
     }
 
@@ -70,4 +73,19 @@ class PetsFileCatsViewModel : ViewModel() {
 //        )
     }
 
+
+fun updateCat(editPetCat: PetsCat) {
+    viewModelScope.launch {
+        val response = RetrofitInstance.api.updateCat(editPetCat)
+        var editIndex = -1
+        _catsState.value.toMutableList().forEachIndexed { index, petsCat ->
+            if (editPetCat.catId == petsCat.catId) {
+                editIndex = index
+            }
+        }
+        val newList = _catsState.value.toMutableList()
+        newList[editIndex] = editPetCat
+        _catsState.update { newList }
+    }
+}
 }

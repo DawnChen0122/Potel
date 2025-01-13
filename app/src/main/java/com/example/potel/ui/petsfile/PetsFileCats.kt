@@ -188,49 +188,27 @@ fun ScreensPetsFileCats(petsFileViewModel: PetsFileCatsViewModel = viewModel(),
                     )
                 }
             })
-        if (showAddDialog) {
-            // 顯示新增對話視窗
-            AddDialogCats (
-                // 取消時欲執行內容
-                onDismiss = {
-                    showAddDialog = false
-                })
-            // onAdd: 確定新增時欲執行內容
-            {
-                // 將欲新增的書加入到list
-                petsFileViewModel.addCat(it)
-                showAddDialog = false
-                // 新增成功後該書會被加到最後一筆，使用者可能看不到該書資訊；
-                // 將查詢文字換成新增的書名，可立即顯示該書資訊
-                inputText = it.catName
-                // 將新增的書名以Snackbar顯示
-                scope.launch {
-                    snackbarHostState.showSnackbar(
-                        "${it.catName} added", withDismissAction = true
-                    )
-                }
-            }
-        }
+
         if (showEditDialog) {
             // 顯示編輯對話視窗
+
             EditDialog(
                 editCats,
                 // 取消時欲執行內容
                 onDismiss = {
                     showEditDialog = false
+                },
+                onEdit = { petCat->
+                    showEditDialog = false
+                    // 編輯成功後將查詢文字換成編輯的書名，可立即顯示該書資訊
+                    petsFileViewModel.updateCat(petCat)
+                    // 將修改好的書名以Snackbar顯示
+                    scope.launch {
+                        snackbarHostState.showSnackbar(
+                            "${petCat.catName} updated", withDismissAction = true
+                        )
+                    }
                 })
-            // onEdit: 確定編輯時欲執行內容
-            {
-                showEditDialog = false
-                // 編輯成功後將查詢文字換成編輯的書名，可立即顯示該書資訊
-                inputText = it.catName
-                // 將修改好的書名以Snackbar顯示
-                scope.launch {
-                    snackbarHostState.showSnackbar(
-                        "${it.catName} updated", withDismissAction = true
-                    )
-                }
-            }
         }
     }
 }

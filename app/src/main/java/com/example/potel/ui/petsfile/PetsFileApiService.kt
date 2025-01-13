@@ -57,17 +57,12 @@ interface PetsFileApiService {
     @Multipart
     @POST("PetsFile/AddCat")
     suspend fun addCat(
-        @Body body: AddCatBody,
-//        @Part catImages: MultipartBody.Part? // 图片作为二进制数据上传
+        @Part("catOwner") catOwner: RequestBody,
+        @Part("catName") catName: RequestBody,
+        @Part("catBreed") catBreed: RequestBody,
+        @Part("catGender") catGender: RequestBody,
+        @Part image: MultipartBody.Part?
     ): Response<Unit>
-
-    data class AddCatBody(
-        val catOwner: String,
-        val catName: String,
-        val catBreed: String,
-        val catGender: String,
-        val catImage: Int,
-    )
 
     // 更新狗信息
     @PUT("PetsFile/updateDog")
@@ -78,7 +73,7 @@ interface PetsFileApiService {
     // 更新猫信息
     @PUT("PetsFile/updateCat")
     suspend fun updateCat(
-        @Body catUpdateRequest: CatUpdateRequest
+        @Body catUpdateRequest: PetsCat
     ): Response<Unit>
 
     // 删除狗

@@ -73,7 +73,7 @@ fun ScreenPetsFileFirst( navController: NavHostController) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Button(onClick = { /* 按下Add user的動作 */ }) {
-                Text(text = "Add user")
+                Text(text = "Edit user")
             }
         }
             Spacer(modifier = Modifier.height(100.dp))

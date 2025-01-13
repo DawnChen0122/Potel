@@ -184,7 +184,7 @@ fun ScreenPetsFileAdd(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center
                 ) {
-                    // Dog 按鈕
+
                     Button(
                         onClick = {
                             // 準備圖片和其他資料
@@ -204,12 +204,19 @@ fun ScreenPetsFileAdd(
                     ) {
                         Text(text = "Dog", color = Color.White)
                     }
-
-                    // Cat 按鈕
                     Button(
                         onClick = {
-                            viewModel.onAddCatClick() // 提交資料
-                            navController.navigate(Screens.PetsFileCats.name)
+                            // 準備圖片和其他資料
+                            val imagePart = selectedImageUri?.let { uri ->
+                                context.contentResolver.openInputStream(uri)?.readBytes()?.let {
+                                    val imageRequestBody = it.toRequestBody("image/*".toMediaTypeOrNull())
+                                    MultipartBody.Part.createFormData("image", "image.jpg", imageRequestBody)
+                                }
+                            }
+
+
+                            viewModel.onAddCatClick(imagePart = imagePart)// 提交資料
+                            navController.navigate(Screens.PetsFileDogs.name)
                         },
                         modifier = Modifier
                             .clip(RoundedCornerShape(12.dp))
@@ -217,6 +224,7 @@ fun ScreenPetsFileAdd(
                     ) {
                         Text(text = "Cat", color = Color.White)
                     }
+
                 }
             }
 
