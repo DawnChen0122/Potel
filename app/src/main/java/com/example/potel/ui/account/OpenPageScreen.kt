@@ -43,7 +43,7 @@ fun Login(
 ) {
 
     val context = LocalContext.current
-    // 開 "settings"這個檔案, 沒有的話就建一個
+
     val preferences = context.getSharedPreferences("member", Context.MODE_PRIVATE)
 
 
@@ -54,9 +54,9 @@ fun Login(
 
     val email by viewModel.email.collectAsState()
 
-    val password by viewModel.password.collectAsState()
+    val passwd by viewModel.passwd.collectAsState()
 
-    var passwordVisible by remember { mutableStateOf(false) }
+    var passwdVisible by remember { mutableStateOf(false) }
 
     var currentInput by remember { mutableStateOf("") }
 
@@ -111,8 +111,8 @@ fun Login(
 
 
             OutlinedTextField(
-                value = password,
-                onValueChange = viewModel::onPasswordChanged,
+                value = passwd,
+                onValueChange = viewModel::passwdchange,
                 label = { Text(text = "密碼") },
                 leadingIcon = {
                     Icon(
@@ -122,15 +122,15 @@ fun Login(
                 },
                 trailingIcon = {
                     Text(
-                        text = if (passwordVisible) "隱藏" else "顯示",
+                        text = if (passwdVisible) "隱藏" else "顯示",
                         modifier = Modifier.clickable {
-                            passwordVisible = !passwordVisible
+                            passwdVisible = !passwdVisible
                         }
                     )
                 },
-                isError = viewModel.passwordError,
+                isError = viewModel.passwdError,
                 shape = RoundedCornerShape(8.dp),
-                visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                visualTransformation = if (passwdVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                 singleLine = true,
                 colors = TextFieldDefaults.colors(
@@ -141,7 +141,7 @@ fun Login(
                     .fillMaxWidth()
                     .padding(top = 16.dp)
             )
-            if (viewModel.passwordError) {
+            if (viewModel.passwdError) {
                 Text(
                     text = "密碼需在6至20字符內，且包含字母和數字",
                     color = Color.Red,
@@ -179,9 +179,9 @@ fun Login(
                         errorMessage = "請輸入有效的信箱或手機號碼"
                     } else {
                         errorMessage = null // 清除錯誤訊息
-                        val inputRequest = InputRequest(currentInput,password)
+                        val inputlog = Inputlog(currentInput,passwd)
                         viewModel.viewModelScope.launch {
-                            val member = viewModel.login(inputRequest)
+                            val member = viewModel.login(inputlog)
                             Log.d("Login", "已登入0，issucc=$member")
 
                             if (member.memberid != 0) {  // 判斷登入是否成功（假設成功的 memberid 會非 0）
@@ -196,7 +196,7 @@ fun Login(
                                     .apply()
                                 Log.d("Login", "已登入1，輸入的信箱/手機號碼: $member")
                                 navController.navigate(AccountScreens.HomeRoute.name)
-                                Log.d("Login", "已登入2，輸入的信箱/手機號碼: $inputRequest")
+                                Log.d("Login", "已登入2，輸入的信箱/手機號碼: $inputlog")
                             } else {
                                 // 登入失敗，顯示錯誤訊息
                                 Log.d("Login", "登入失敗，錯誤訊息: 登入失敗，請檢查您的帳號密碼")

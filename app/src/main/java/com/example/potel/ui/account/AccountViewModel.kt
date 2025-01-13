@@ -57,10 +57,10 @@ class AccountViewModel : ViewModel() {
     private val _checkpasswd = MutableStateFlow("")
     val checkpasswd = _checkpasswd.asStateFlow()
     var checkpasswdError by mutableStateOf(false)
-    fun checkpasswdchange(checkpassword: String) {
+    fun checkpasswdchange(checkpasswd: String) {
         val checkpasswdRegex = Regex("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")
-        checkpasswdError = !checkpassword.matches(checkpasswdRegex)
-        _checkpasswd.value = checkpassword
+        checkpasswdError = !checkpasswd.matches(checkpasswdRegex)
+        _checkpasswd.value = checkpasswd
     }
 
 
@@ -98,7 +98,7 @@ class AccountViewModel : ViewModel() {
 
         if (member.passwd.isNotEmpty() && !passwdError) {
             try {
-                Log.d("ChangePassWord", "Valid input, preparing to send request")
+                Log.d("ChangePassWd", "Valid input, preparing to send request")
 
                 val response =
                     RetrofitInstance.api.addmember(member)

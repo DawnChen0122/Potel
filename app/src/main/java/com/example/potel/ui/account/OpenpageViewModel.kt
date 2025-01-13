@@ -26,13 +26,13 @@ class OpenpageViewModel : ViewModel() {
     val email = _email.asStateFlow()
     val emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$".toRegex()
 
-    private val _password = MutableStateFlow("")
-    val password = _password.asStateFlow()
-    var passwordError by mutableStateOf(false)
-    fun onPasswordChanged(password: String) {
-        val passwordRegex = Regex("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{6,20}$")
-        passwordError = !password.matches(passwordRegex)
-        _password.value = password
+    private val _passwd = MutableStateFlow("")
+    val passwd = _passwd.asStateFlow()
+    var passwdError by mutableStateOf(false)
+    fun passwdchange(passwd: String) {
+        val passwdRegex = Regex("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{6,20}$")
+        passwdError = !passwd.matches(passwdRegex)
+        _passwd.value = passwd
     }
 
 
@@ -78,16 +78,16 @@ class OpenpageViewModel : ViewModel() {
     private val _login = MutableStateFlow(Change(success = false, message = ""))
     val login = _login.asStateFlow()
 
-    suspend fun login(inputRequest: InputRequest): Member {
-        val password = _password.value
+    suspend fun login(inputlog: Inputlog): Member {
+        val passwd = _passwd.value
 
-        Log.d("Login", "嘗試登入，輸入: $inputRequest, 密碼: $password")
+        Log.d("Login", "嘗試登入，輸入: $inputlog, 密碼: $passwd")
 
-        if (password.isNotEmpty() && !passwordError) {
+        if (passwd.isNotEmpty() && !passwdError) {
             try {
                 Log.d("Login", "登入成功")
                 // 這裡假設 Retrofit 回傳的是 Member 類型的物件
-                val response = RetrofitInstance.api.login(inputRequest.input, inputRequest.passwd)
+                val response = RetrofitInstance.api.login(inputlog.input, inputlog.passwd)
 
                 // 假設 response 是 Member 類型，可以直接返回
                 return response // 直接返回成功的 Member 物件
@@ -99,7 +99,7 @@ class OpenpageViewModel : ViewModel() {
                 return Member(
                     memberid = 0,
                     name = "",
-                    passwd = inputRequest.passwd,
+                    passwd = inputlog.passwd,
                     cellphone = "",
                     address = "",
                     gender = "",
@@ -114,7 +114,7 @@ class OpenpageViewModel : ViewModel() {
             return Member(
                 memberid = 0,
                 name = "",
-                passwd = inputRequest.passwd,
+                passwd = inputlog.passwd,
                 cellphone = "",
                 address = "",
                 gender = "",

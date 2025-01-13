@@ -18,10 +18,16 @@ data class Member(
 
 
 data class InputRequest(
-    val input : String,
+    val email : String,
     val passwd: String
 )
 
+
+
+data class Inputlog(
+    val input : String,
+    val passwd: String
+)
 
 data class Change(
 
@@ -29,29 +35,3 @@ data class Change(
     val message: String?
 )
 
-
-data class UserData(
-    val uid: String,
-    val username: String,
-    val password: String,
-    val checkpasswd: String,
-    val cellphone: String,
-    val address: String,
-    val email: String
-)
-
-//data class Member(
-//var memberid: Int = 0,
-//var name: String = "",
-//var cellphone: String = "",
-//var address: String = "",
-//var gender: Char = 'M',
-//var birthday: String? = null,
-//var email: String = "",
-//var imageid: Int = 0,
-//var status: Char = '1',
-//var createdate: String? = null,
-//var modifydate: String? = null,
-//val passwd: String,
-//
-//)

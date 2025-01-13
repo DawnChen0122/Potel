@@ -37,7 +37,7 @@ fun Resetpassword(
     val email by viewModel.email.collectAsState()
 
     val passwd by viewModel.passwd.collectAsState()
-    var passwordVisible by remember { mutableStateOf(false) }
+    var passwdVisible by remember { mutableStateOf(false) }
 
     val checkpasswd by viewModel.checkpasswd.collectAsState()
     var checkpasswdVisible by remember { mutableStateOf(false) }
@@ -117,15 +117,15 @@ fun Resetpassword(
             },
             trailingIcon = {
                 Text(
-                    text = if (passwordVisible) "隱藏" else "顯示",
+                    text = if (passwdVisible) "隱藏" else "顯示",
                     modifier = Modifier.clickable {
-                        passwordVisible = !passwordVisible
+                        passwdVisible = !passwdVisible
                     }
                 )
             },
             isError = viewModel.passwdError,
             shape = RoundedCornerShape(8.dp),
-            visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+            visualTransformation = if (passwdVisible) VisualTransformation.None else PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             singleLine = true,
             colors = TextFieldDefaults.colors(

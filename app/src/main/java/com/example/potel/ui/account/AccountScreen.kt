@@ -59,9 +59,6 @@ fun Signup(
     val dayRange = (1..31).map { it.toString() }
     var expandedDay by remember { mutableStateOf(false) }
 
-
-
-
     var inputGender by remember { mutableStateOf("") }
     val genderRange = listOf("男", "女", "不願透漏").map { it.toString() }
     var expandedGender by remember { mutableStateOf(false) }
@@ -449,7 +446,7 @@ fun Signup(
                             cellphone = cellphone,
                             address = address,
                             birthday = birthday
-                            )
+                        )
                         viewModel.addmember(member)
                     }
                 }

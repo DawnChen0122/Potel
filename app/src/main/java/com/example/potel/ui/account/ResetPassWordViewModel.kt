@@ -109,17 +109,16 @@ class ResetPassWordViewModel : ViewModel() {
     val changepasswd = _changepasswd.asStateFlow()
 
     suspend fun changepasswd(): Check {
-        val email = _email.value
-        val password = _passwd.value
-        val cellphone =  _cellphone.value
+        val passwd = _passwd.value
+        val  email = _email.value
 
-        if (password.isNotEmpty() && !passwdError) {
+        if (passwd.isNotEmpty() && !passwdError) {
             try {
-                Log.d("ChangePassWord", "Valid input, preparing to send request")
+                Log.d("ChangePassWd", "Valid input, preparing to send request")
 
                 val response = RetrofitInstance.api.changepasswd(
                     InputRequest(
-                        input = input.toString(), passwd = password,
+                        email = email, passwd = passwd,
                     )
                 )
                 return response
@@ -131,6 +130,8 @@ class ResetPassWordViewModel : ViewModel() {
 
             }
         } else {
+            Log.d("checkEmailAndCellphone", "123")
+
             val check = Check(false, "e.toString()")
             return check
         }

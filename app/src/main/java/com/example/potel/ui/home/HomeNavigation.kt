@@ -73,7 +73,7 @@ fun NavGraphBuilder.accountRoute(navController: NavHostController) {
 
 
 //    composable(
-//        route = AccountScreens.Change.name
+//        route = AccountScreens.HomeRoute.name
 //    ) {
 //        Resetpassword2(
 //            navController = navController
