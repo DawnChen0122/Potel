@@ -46,6 +46,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.potel.ui.booking.BookingScreens
 import com.example.potel.ui.booking.BookingViewModel
 import com.example.potel.ui.booking.bookingScreenRoute
 import com.example.potel.ui.carerecords.homeScreenRoute
@@ -225,6 +226,7 @@ fun MainBottomAppBar(navController: NavHostController){
                         .size(60.dp)
                         .weight(0.2f),
                     onClick = {
+                        navController.navigate(BookingScreens.DateSelection.name)
                     },
                 ) {
                     Icon(
