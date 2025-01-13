@@ -8,7 +8,7 @@ import androidx.navigation.compose.composable
  * todo 2-1 將首頁的路由獨立出來
  * */
 
-const val HOME_NAVIGATION_ROUTE = "home"
+const val HOME_NAVIGATION_ROUTE = "pets"
 
 fun genHomeNavigationRoute() = HOME_NAVIGATION_ROUTE
 

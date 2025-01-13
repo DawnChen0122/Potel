@@ -4,7 +4,6 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 
-
 /**
  * todo 2-1 將首頁的路由獨立出來
  * */
