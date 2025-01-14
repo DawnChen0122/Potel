@@ -30,8 +30,15 @@ data class Inputlog(
 )
 
 data class Change(
-
     val success: Boolean,
     val message: String?
+)
+
+data class Edit(
+    val passwd: String,
+    val cellphone: String,
+    val address: String,
+    val email: String,
+
 )
 

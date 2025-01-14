@@ -1,13 +1,18 @@
 package com.example.potel.ui.account
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.*
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -43,20 +48,29 @@ fun Resetpassword(
     var checkpasswdVisible by remember { mutableStateOf(false) }
 
     val  cellphone by viewModel. cellphone.collectAsState()
+    val scrollState = rememberScrollState()
 
 
 
     Column(
+        verticalArrangement = Arrangement.spacedBy(2.dp, Alignment.Top),
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
+            .verticalScroll(scrollState)
+            .border(width = 5.dp, color = Color(0xFF000000))
+            .padding(5.dp)
             .fillMaxSize()
-            .padding(10.dp)
-    ) {
+            .fillMaxWidth()
+            .fillMaxHeight()
+            .background(color = Color(0xFFF7E3A6))
+            .padding(12.dp)
+    )
+    {
         Text(
             text = "重設密碼",
-            fontSize = 20.sp,
+            fontSize = 50.sp,
             fontWeight = FontWeight.Bold,
-            color = Color.Blue
+            color = Color(0xFFFFD700)
         )
 
 
@@ -206,10 +220,14 @@ fun Resetpassword(
             },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 10.dp),
-            shape = RoundedCornerShape(8.dp)
+                .padding(top = 40.dp),
+            shape = RoundedCornerShape(8.dp),
+                    colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFFFFA500),)
         ) {
-            Text(text = "重設密碼", fontSize = 20.sp)
+            Text(text = "重設密碼",
+                fontSize = 20.sp,
+                color = Color.White)
         }
     }
 }

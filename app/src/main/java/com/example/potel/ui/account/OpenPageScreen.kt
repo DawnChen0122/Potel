@@ -3,6 +3,8 @@ package com.example.potel.ui.account
 import android.content.Context
 import android.util.Log
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
@@ -11,6 +13,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.*
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,6 +35,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.potel.ui.home.AccountScreens
 import kotlinx.coroutines.launch
+import androidx.compose.ui.text.style.TextDecoration
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -62,11 +66,15 @@ fun Login(
 
 
     Column(
+        verticalArrangement = Arrangement.spacedBy(20.dp, Alignment.Top),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.SpaceAround,
         modifier = Modifier
-            .fillMaxSize()
-            .padding(10.dp)
+            .border(width = 5.dp, color = Color(0xFF000000))
+            .padding(5.dp)
+            .fillMaxWidth()
+            .fillMaxHeight()
+            .background(color = Color(0xFFF7E3A6))
+            .padding(top = 12.dp, bottom = 12.dp)
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -76,13 +84,11 @@ fun Login(
                 .padding(10.dp)
         ) {
             Text(
-//                modifier = Modifier.clickable {
-//                    navController.navigate(accountRoute)
-//                },
+
                 text = "Potel",
-                fontSize = 40.sp,
+                fontSize = 100.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color.Blue
+                color = Color(0xFFFFD700)
             )
 
 
@@ -170,16 +176,16 @@ fun Login(
             // 註冊按鈕
             Button(
                 onClick = {
-                    if (email.isEmpty() &&  cellphone.isEmpty()) {
+                    if (email.isEmpty() && cellphone.isEmpty()) {
                         errorMessage = "信箱或手機號碼欄位不得空白"
-                    } else if (!email.matches(viewModel.emailRegex) && ! cellphone.matches(
+                    } else if (!email.matches(viewModel.emailRegex) && !cellphone.matches(
                             viewModel.cellphoneRegex
                         )
                     ) {
                         errorMessage = "請輸入有效的信箱或手機號碼"
                     } else {
                         errorMessage = null // 清除錯誤訊息
-                        val inputlog = Inputlog(currentInput,passwd)
+                        val inputlog = Inputlog(currentInput, passwd)
                         viewModel.viewModelScope.launch {
                             val member = viewModel.login(inputlog)
                             Log.d("Login", "已登入0，issucc=$member")
@@ -207,9 +213,11 @@ fun Login(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 16.dp),
-                shape = RoundedCornerShape(8.dp)
+                shape = RoundedCornerShape(8.dp),
+                        colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFFFFA500),)
             ) {
-                Text(text = "登入", fontSize = 30.sp)
+                Text(text = "登入", fontSize = 50.sp)
             }
             errorMessage?.let {
                 Text(
@@ -225,60 +233,44 @@ fun Login(
 
         Row(
             horizontalArrangement = Arrangement.Start,
+            modifier = Modifier.padding(10.dp)
         ) {
-            Button(
-                shape = RoundedCornerShape(20),
-                onClick = {
-                    navController.navigate(route = AccountScreens.Edit.name)
-                },
-                border = BorderStroke(1.dp, Color.Black),
-                colors = ButtonDefaults.outlinedButtonColors(),
+            Text(
+                text = "註冊",
+                style = TextStyle(
+                    fontSize = 33.sp,
+                    lineHeight = 32.sp,
+                    fontWeight = FontWeight(700),
+                    color  = Color.White,
+                    textAlign = TextAlign.Center,
+                    textDecoration = TextDecoration.Underline
+                ),
                 modifier = Modifier
-
+                    .width(135.dp)
+                    .height(45.dp)
+                    .clickable {
+                        navController.navigate(route = AccountScreens.Signup.name)
+                    }
             )
-            {
-                Text(
-                    text = "註冊",
-                    style = TextStyle(
-                        fontSize = 27.sp,
-                        lineHeight = 32.sp,
-                        fontWeight = FontWeight(700),
-                        color = Color(0xFF000000),
-                        textAlign = TextAlign.Center,
-                    ),
-                    modifier = Modifier
-                        .width(135.dp)
-                        .height(45.dp)
-                )
-            }
 
-            Button(
-                shape = RoundedCornerShape(20),
-                onClick = {
-                    navController.navigate(route = AccountScreens.Reset.name)
-                },
-                border = BorderStroke(1.dp, Color.Black),
-                colors = ButtonDefaults.outlinedButtonColors(),
+            Text(
+                text = "忘記密碼",
+                style = TextStyle(
+                    fontSize = 33.sp,
+                    lineHeight = 32.sp,
+                    fontWeight = FontWeight(700),
+                    color  = Color.White,
+                    textAlign = TextAlign.Center,
+                    textDecoration = TextDecoration.Underline // 加上底線
+                ),
                 modifier = Modifier
-
+                    .width(135.dp)
+                    .height(45.dp)
+                    .clickable {
+                        navController.navigate(route = AccountScreens.Reset.name)
+                    }
             )
-            {
-                Text(
-                    text = "忘記密碼",
-                    style = TextStyle(
-                        fontSize = 27.sp,
-                        lineHeight = 32.sp,
-                        fontWeight = FontWeight(700),
-                        color = Color(0xFF000000),
-                        textAlign = TextAlign.Center,
-                    ),
-                    modifier = Modifier
-                        .width(135.dp)
-                        .height(45.dp)
-                )
-            }
         }
-
     }
 }
 

@@ -5,8 +5,10 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -81,17 +83,23 @@ fun Signup(
     val scrollState = rememberScrollState()
 
     Column(
+        verticalArrangement = Arrangement.spacedBy(2.dp, Alignment.Top),
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .verticalScroll(scrollState)
+            .border(width = 5.dp, color = Color(0xFF000000))
+            .padding(5.dp)
             .fillMaxSize()
-            .padding(16.dp)
+            .fillMaxWidth()
+            .fillMaxHeight()
+            .background(color = Color(0xFFF7E3A6))
+            .padding(12.dp)
     ) {
         Text(
             text = "會員註冊",
-            fontSize = 30.sp,
+            fontSize = 50.sp,
             fontWeight = FontWeight.Bold,
-            color = Color.Blue
+            color = Color(0xFFFFD700)
         )
 
 
@@ -132,8 +140,8 @@ fun Signup(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 10.dp)
-                .background(Color.White, RoundedCornerShape(8.dp))
+//                .padding(top = 10.dp)
+//                .background(Color.White, RoundedCornerShape(8.dp))
         ) {
             Text(
                 text = "請選擇出生年月日",
@@ -257,8 +265,8 @@ fun Signup(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 10.dp)
-                .background(Color.White, RoundedCornerShape(8.dp))
+//                .padding(top = 10.dp)
+//                .background(Color.White, RoundedCornerShape(8.dp))
         )
         {
             Text(
@@ -454,9 +462,13 @@ fun Signup(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 16.dp),
-            shape = RoundedCornerShape(8.dp)
+            shape = RoundedCornerShape(8.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0xFFFFA500),)
         ) {
-            Text(text = "註冊", fontSize = 16.sp)
+            Text(text = "註冊",
+                fontSize = 50.sp,
+                color = Color.White)
         }
         errorMessage?.let {
             Text(

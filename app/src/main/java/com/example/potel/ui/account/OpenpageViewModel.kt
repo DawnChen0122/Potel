@@ -83,44 +83,45 @@ class OpenpageViewModel : ViewModel() {
 
         Log.d("Login", "嘗試登入，輸入: $inputlog, 密碼: $passwd")
 
+        // 確保密碼不為空且沒有錯誤
         if (passwd.isNotEmpty() && !passwdError) {
             try {
-                Log.d("Login", "登入成功")
-                // 這裡假設 Retrofit 回傳的是 Member 類型的物件
+                Log.d("Login", "準備發送登入請求...")
+
+                // 假設 Retrofit 回傳的是 Response<Member> 類型
                 val response = RetrofitInstance.api.login(inputlog.input, inputlog.passwd)
 
-                // 假設 response 是 Member 類型，可以直接返回
-                return response // 直接返回成功的 Member 物件
-            } catch (e: Exception) {
-                e.printStackTrace() // 打印錯誤堆疊，幫助調試
-                Log.d("Login", "登入失敗: ${e.toString()}") // 記錄登入失敗
+                // 檢查回應是否成功
+                if (response.isSuccessful) {
+                    val member = response.body()
 
-                // 登入失敗時，返回一個 Member 物件，表示失敗，並可以填充錯誤訊息
-                return Member(
-                    memberid = 0,
-                    name = "",
-                    passwd = inputlog.passwd,
-                    cellphone = "",
-                    address = "",
-                    gender = "",
-                    email = "",
-                    birthday = "",
-                )
+                    if (member != null) {
+                        Log.d("Login", "登入成功，會員資料: $member")
+                        return member  // 成功後返回 Member 物件
+                    } else {
+                        // 如果回應體為 null，提供錯誤訊息
+                        Log.e("Login", "返回的 Member 物件為 null")
+                        throw Exception("登錄回應的資料為空")
+                    }
+                } else {
+                    // 如果回應失敗，顯示錯誤的 HTTP 狀態碼和訊息
+                    Log.e(
+                        "Login",
+                        "登入失敗，錯誤代碼: ${response.code()}，錯誤訊息: ${response.message()}"
+                    )
+                    throw Exception("登入失敗，錯誤代碼: ${response.code()}，錯誤訊息: ${response.message()}")
+                }
+
+            } catch (e: Exception) {
+                // 捕獲任何異常，並在錯誤日誌中顯示詳情
+                Log.e("Login", "登入過程中出現錯誤: ${e.message}")
+                // 根據需要拋出錯誤或顯示錯誤信息
+                throw e
             }
         } else {
-            Log.d("Login", "登入失敗")
-
-            // 如果密碼錯誤，仍然返回一個 Member 物件，並保持原始值
-            return Member(
-                memberid = 0,
-                name = "",
-                passwd = inputlog.passwd,
-                cellphone = "",
-                address = "",
-                gender = "",
-                email = "",
-                birthday = "",
-            )
+            // 如果密碼是空的或者有錯誤，拋出錯誤
+            Log.e("Login", "密碼錯誤或未填寫密碼")
+            throw Exception("密碼錯誤或未填寫密碼")
         }
     }
 }

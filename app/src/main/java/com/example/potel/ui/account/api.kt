@@ -10,7 +10,7 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Query
-
+import retrofit2.Response
 
 interface ApiService {
 
@@ -31,13 +31,22 @@ interface ApiService {
     suspend fun login(
         @Query("INPUT") input: String,
         @Query("PASSWD") passwd: String
-    ): Member
+    ): Response<Member>
 
 
     @POST("member/add")
     suspend fun addmember(
         @Body member: Member
     ): Check
+
+
+    @POST("/member/edit")
+    suspend fun edit(
+        @Body member: Edit
+    ): Check
+
+
+
 }
 
 
