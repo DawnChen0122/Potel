@@ -25,15 +25,19 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
+import kotlin.String
 
 
 @Composable
 fun Edit(
     viewModel: EditViewModel = viewModel(
-        factory = EditViewModelFactory(LocalContext.current.getSharedPreferences("member", Context.MODE_PRIVATE))
+        factory = EditViewModelFactory(
+            preferences = LocalContext.current.getSharedPreferences("member", Context.MODE_PRIVATE),
+            apiService = RetrofitInstance.api // 使用 RetrofitInstance 中的 apiService
+        ),
     ),
     navController: NavHostController
-) {
+){
     val member by viewModel.member.collectAsState()  // 觀察 member 資料並且自動更新 UI
     val scrollState = rememberScrollState()
 
@@ -46,12 +50,9 @@ fun Edit(
         verticalArrangement = Arrangement.spacedBy(2.dp, Alignment.Top),
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
-            .verticalScroll(scrollState)
             .border(width = 5.dp, color = Color(0xFF000000))
             .padding(5.dp)
             .fillMaxSize()
-            .fillMaxWidth()
-            .fillMaxHeight()
             .background(color = Color(0xFFF7E3A6))
             .padding(12.dp)
     )
@@ -138,18 +139,29 @@ fun Edit(
 
                 Button(
                     onClick = {
-                        if (member.email.isEmpty() || member.passwd.isEmpty() || member.address.isEmpty()
-                            || member.cellphone.isEmpty()
+                        if (member.email.isNotEmpty() && member.passwd.isNotEmpty() && member.address.isNotEmpty()
+                            && member.cellphone.isNotEmpty()
                         ) {
                             val updatedMember = Edit(
                                 passwd = member.passwd,
                                 cellphone = member.cellphone,
                                 address = member.address,
-                                email = member.email
+                                email = member.email,
+                                memberid = member.memberid
                             )
                             viewModel.viewModelScope.launch {
-                                viewModel.edit(updatedMember)
+                                try {
+                                    val result = viewModel.edit(updatedMember)
+                                    // 成功後進行相應的處理，例如顯示提示訊息
+                                    Log.d("EditButton", "更新成功: $result")
+                                } catch (e: Exception) {
+                                    // 處理錯誤，顯示錯誤訊息
+                                    Log.e("EditButton", "更新失敗: ${e.message}")
+                                }
                             }
+                        } else {
+                            // 顯示提示，讓使用者知道需要填寫所有欄位
+                            Log.d("EditButton", "請填寫所有欄位")
                         }
                     },
                     modifier = Modifier

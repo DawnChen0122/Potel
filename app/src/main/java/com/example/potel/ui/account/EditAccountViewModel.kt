@@ -7,7 +7,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-class EditViewModel(private val preferences: SharedPreferences) : ViewModel() {
+class EditViewModel(private val preferences: SharedPreferences,
+                    private val apiService: ApiService) : ViewModel() {
 
     private val _member = MutableStateFlow(
         Member(
@@ -89,6 +90,8 @@ class EditViewModel(private val preferences: SharedPreferences) : ViewModel() {
     // 更新會員資料
     suspend fun edit(updatedMember: Edit): Member {
         return try {
+
+            apiService.edit(updatedMember)
             // 假設這裡會進行資料庫或網絡請求來更新資料
             // 更新 _member 以反映最新的資料
             _member.value = _member.value.copy(

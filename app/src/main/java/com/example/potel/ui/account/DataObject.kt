@@ -39,6 +39,6 @@ data class Edit(
     val cellphone: String,
     val address: String,
     val email: String,
-
+    val memberid: Int
 )
 

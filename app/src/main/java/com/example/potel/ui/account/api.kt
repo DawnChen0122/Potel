@@ -40,7 +40,7 @@ interface ApiService {
     ): Check
 
 
-    @POST("/member/edit")
+    @POST("member/edit")
     suspend fun edit(
         @Body member: Edit
     ): Check

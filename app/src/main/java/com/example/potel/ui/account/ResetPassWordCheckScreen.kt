@@ -56,12 +56,8 @@ fun Resetpassword(
         verticalArrangement = Arrangement.spacedBy(2.dp, Alignment.Top),
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
-            .verticalScroll(scrollState)
             .border(width = 5.dp, color = Color(0xFF000000))
-            .padding(5.dp)
             .fillMaxSize()
-            .fillMaxWidth()
-            .fillMaxHeight()
             .background(color = Color(0xFFF7E3A6))
             .padding(12.dp)
     )
@@ -73,6 +69,7 @@ fun Resetpassword(
             color = Color(0xFFFFD700)
         )
 
+        Spacer(modifier = Modifier.height(16.dp))
 
         OutlinedTextField(
             value = email,
@@ -94,7 +91,7 @@ fun Resetpassword(
             )
         }
 
-
+        Spacer(modifier = Modifier.height(16.dp))
 
         OutlinedTextField(
             value =  cellphone,
@@ -117,7 +114,7 @@ fun Resetpassword(
             )
         }
 
-
+        Spacer(modifier = Modifier.height(16.dp))
 
         OutlinedTextField(
             value = passwd,
@@ -159,6 +156,7 @@ fun Resetpassword(
             )
         }
 
+        Spacer(modifier = Modifier.height(16.dp))
 
         OutlinedTextField(
             value = checkpasswd,
@@ -201,6 +199,7 @@ fun Resetpassword(
         }
 
 
+        Spacer(modifier = Modifier.height(16.dp))
 
 
         Button(
@@ -225,8 +224,8 @@ fun Resetpassword(
                     colors = ButtonDefaults.buttonColors(
                     containerColor = Color(0xFFFFA500),)
         ) {
-            Text(text = "重設密碼",
-                fontSize = 20.sp,
+            Text(text = "變更密碼",
+                fontSize = 50.sp,
                 color = Color.White)
         }
     }
