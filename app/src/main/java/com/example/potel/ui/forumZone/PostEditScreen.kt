@@ -6,6 +6,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -51,6 +52,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -337,10 +339,17 @@ fun PostEditContent(
                             onClick = onSelectImage,
                             modifier = Modifier.align(Alignment.Center),
                             colors = ButtonDefaults.buttonColors(
-                                containerColor = Color.LightGray,
+                                containerColor = colorResource(R.color.forumButton),
                                 contentColor = Color.Black
                             )
                         ) {
+                            val imageResource = R.drawable.uploadimage
+                            Image(
+                                painter = painterResource(id = imageResource),
+                                contentDescription = "上傳照片",
+                                modifier = Modifier
+                                    .size(35.dp).padding(end = 8.dp)
+                            )
                             Text(if (selectedImageUri != null) "更改照片" else "上傳照片")
                         }
                     }

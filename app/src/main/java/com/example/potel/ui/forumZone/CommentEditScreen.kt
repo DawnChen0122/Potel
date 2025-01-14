@@ -95,6 +95,7 @@ fun CommentEditScreen(
                                    content = content
                                )
                                forumVM.updateComment(updateComment)
+                               forumVM.setPostSuccessMessage("編輯完成")
                                navController.popBackStack()
                            }
                        }, shape = RoundedCornerShape(8.dp), colors = ButtonDefaults.buttonColors(

@@ -1,8 +1,6 @@
 package com.example.potel.ui.forumZone
 
-import android.content.ActivityNotFoundException
 import android.content.Context
-import android.content.Intent
 import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -29,7 +27,6 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -333,33 +330,6 @@ fun LikeController(forumVM: ForumVM, post: Post, memberId: Int,context : Context
                     color = Color.White
                 )
             }
-        }
-        Spacer(Modifier.weight(1f))
-        IconButton(onClick = {
-
-            // 創建分享 Intent
-            val intent = Intent(Intent.ACTION_SEND).apply {
-                type = "text/plain"
-                putExtra(Intent.EXTRA_TEXT, "看看這篇有趣的貼文！標題：${post.title}")
-            }
-
-            // 創建選擇器
-            val chooser = Intent.createChooser(intent, "分享到...")
-
-            // 啟動分享
-            try {
-                context.startActivity(chooser)
-            } catch (e: ActivityNotFoundException) {
-                Log.e("Share", "無法處理分享 Intent", e)
-            }
-
-        }) {
-            Icon(
-                imageVector = Icons.Filled.Share,
-                contentDescription = "分享",
-                modifier = Modifier.size(20.dp),
-                tint =Color.LightGray
-            )
         }
     }
 }
