@@ -1,7 +1,7 @@
 package com.example.potel.ui.shopping
 
+import android.util.Log
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,6 +15,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -26,20 +27,31 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.example.potel.ui.theme.PotelTheme
+
 
 @Composable
-fun CreditCardScreen(viewModel: CreditCardViewModel = viewModel(), navController: NavHostController) {    // 使用 remember 和 mutableStateOf 來保存並更新顯示的文本
+fun CreditCardScreen(
+    viewModel: ShopViewModel = viewModel(),
+    navController: NavHostController
+) {    // 使用 remember 和 mutableStateOf 來保存並更新顯示的文本
 
-    val cardnumber  by viewModel.cardnumber.collectAsState()
+    val navRequest by viewModel.navRequest.collectAsState()
+    val cardnumber by viewModel.cardnumber.collectAsState()
+    val expiredate by viewModel.expiredatenumber.collectAsState()
+    val safecode by viewModel.safecodenumber.collectAsState()
 
-    var expiredate by remember { mutableStateOf("") }
 
-    var safecode by remember { mutableStateOf("") }
+    LaunchedEffect(navRequest) {
+        Log.d("completeOrder", "navRequest: $navRequest")
+
+        if (navRequest.isNullOrBlank().not()) {
+            navController.navigate(navRequest!!)
+        }
+    }
+
 
     Column(
         modifier = Modifier
@@ -50,12 +62,13 @@ fun CreditCardScreen(viewModel: CreditCardViewModel = viewModel(), navController
     ) {
         // 顯示標題
         Text(
-            text = "信用卡資料",
+            text = "填寫信用卡",
             fontSize = 35.sp, // 字型大小: 35
-            fontWeight = FontWeight.Bold, // 字體樣式: 粗體
+            fontWeight = FontWeight.ExtraBold, // 字體樣式: 粗體
             color = Color.Black, // 字的顏色: 黑色
             modifier = Modifier.padding(bottom = 30.dp) // 下方間距
         )
+
 
         OutlinedTextField(
             value = cardnumber,
@@ -68,10 +81,9 @@ fun CreditCardScreen(viewModel: CreditCardViewModel = viewModel(), navController
                 .fillMaxWidth()
                 .padding(top = 8.dp),
         )
-
         if (viewModel.cardnumberError) {
             Text(
-                text = "信用卡卡號為十六位數字",
+                text = "信用卡卡號為十六碼",
                 color = Color.Red,
                 fontSize = 12.sp,
                 modifier = Modifier.padding(start = 16.dp)
@@ -82,7 +94,7 @@ fun CreditCardScreen(viewModel: CreditCardViewModel = viewModel(), navController
 //        Text(text = "MM/YY")
         OutlinedTextField(
             value = expiredate,
-            onValueChange = { expiredate = it },
+            onValueChange = viewModel::onExpiredatenumberChanged,
             label = { Text(text = "MM/YY") },
             singleLine = true,
             shape = RoundedCornerShape(20.dp),
@@ -98,10 +110,19 @@ fun CreditCardScreen(viewModel: CreditCardViewModel = viewModel(), navController
             colors = OutlinedTextFieldDefaults.colors(
             )
         )
+        if (viewModel.expiredatenumberError) {
+            Text(
+                text = "到期日期為四碼",
+                color = Color.Red,
+                fontSize = 12.sp,
+                modifier = Modifier.padding(start = 16.dp)
+            )
+        }
+
 
         OutlinedTextField(
             value = safecode,
-            onValueChange = { safecode = it },
+            onValueChange = viewModel::onSafecodenumberChanged,
             label = { Text(text = "CVV") },
             singleLine = true,
             shape = RoundedCornerShape(20.dp),
@@ -110,10 +131,19 @@ fun CreditCardScreen(viewModel: CreditCardViewModel = viewModel(), navController
                 .fillMaxWidth()
                 .padding(top = 8.dp),
         )
+        if (viewModel.safecodenumberError) {
+            Text(
+                text = "安全碼為三碼",
+                color = Color.Red,
+                fontSize = 12.sp,
+                modifier = Modifier.padding(start = 16.dp)
+            )
+        }
+
 
         // 顯示按鈕
         Button(
-            onClick = {navController.navigate(ShopScreens.Ordercheck.name)},
+            onClick = viewModel::onSubmitClick,
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color.Black, // 設定按鈕容器顏色
                 contentColor = Color.Yellow // 設定按鈕內容顏色

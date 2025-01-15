@@ -1,7 +1,6 @@
 package com.example.potel.ui.shopping
 
 import android.util.Log
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -12,57 +11,50 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
-import com.example.potel.R
-import kotlinx.coroutines.launch
 
-//// 定義產品資料類別
-//data class Products(
-//    val id: String,
-//    val name: String,
-//    val price: Double,
-//    val image: Int
-//)
+// 定義產品資料類別
+data class Products(
+    val id: String,
+    val name: String,
+    val price: Int,
+    val image: Int
+)
+
 
 @Composable
 fun ProductListScreen(
     navController: NavHostController,
-    prdtype: String
+    prdtype: String,
+    shopViewModel:ShopViewModel = viewModel()
 ) {
     val tag = "ProductListScreen"
-    val backStackEntry = navController.getBackStackEntry(ShopScreens.Twoclass.name)
-//    val shoppingViewModel: ShoppingViewModel = viewModel(backStackEntry, key = "shoppingVM")
-    val coroutineScope = rememberCoroutineScope()
-    var productList by remember { mutableStateOf<List<Product>>(emptyList()) }
+    val productList by shopViewModel.productList.collectAsState()
     Log.d(tag, "prdtype=$prdtype")
 
-//    LaunchedEffect(Unit) {
-//        coroutineScope.launch {
-//            productList = shoppingViewModel.getProductList(prdtype)
-//        }
-//    }
+    LaunchedEffect(Unit) {
+        shopViewModel.initProductList(prdtype)
+    }
 
 
     ListGrid(
         products = productList,
-        onItemClick = {
+        onItemClick = {product ->
             // 跳轉到商品詳情頁面，傳遞商品ID
-            navController.navigate(ShopScreens.Information.name)
+            Log.d(tag, "ListGrid==>prdId=${product.prdId}")
+            navController.navigate("${ShopScreens.Information.name}/${product.prdId}")
         }
     )
 }
@@ -74,14 +66,17 @@ fun ListGrid(
     products: List<Product>, // 傳入顯示的產品列表
     onItemClick: (Product) -> Unit // 點擊事件的回傳
 ) {
+    val tag = "ListGrid"
+    Log.d(tag, "products=${products.size}")
     LazyVerticalGrid(
-        columns = GridCells.Fixed(2), // 設定最小欄寬為128dp
+        columns = GridCells.Fixed(2),
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
     ) {
         items(products.size) { index -> // 遍歷每個產品
             val product = products[index]
+            Log.d(tag, "product=$product")
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(10.dp),
@@ -92,11 +87,10 @@ fun ListGrid(
                     .clickable { onItemClick(product) } // 直接呼叫onItemClick
             ) {
                 AsyncImage(
-                    model = composeImageUrl(product.imageid),
+                    model = composeImageUrl(product.imageId),
                     contentDescription = "寵物照片",
                     alignment = Alignment.TopCenter,
                     contentScale = ContentScale.FillWidth,
-//                    placeholder = painterResource(R.drawable.placeholder)
                 )
 
 //                Image(
@@ -106,10 +100,17 @@ fun ListGrid(
 //                    contentScale = ContentScale.FillWidth
 //                )
                 Text(
-                    text = product.name,
-                    fontWeight = FontWeight.Bold
+                    text = product.prdName,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black,
+                    fontSize = 16.sp
                 )
-                Text(text = product.price.toString())
+                Text(
+                    text = "$${product.price}.",
+                    fontWeight = FontWeight.Normal,
+                    color = Color.DarkGray,
+                    fontSize = 18.sp
+                )
             }
         }
     }

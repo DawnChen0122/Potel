@@ -10,9 +10,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -30,29 +30,29 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import com.example.potel.ui.carerecords.homeScreenRoute
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.potel.ui.booking.BookingScreens
-import com.example.potel.ui.booking.BookingScreens.Booking
-import com.example.potel.ui.home.AccountScreens
+import com.example.potel.ui.booking.BookingViewModel
+import com.example.potel.ui.booking.bookingScreenRoute
+import com.example.potel.ui.carerecords.homeScreenRoute
 import com.example.potel.ui.forumZone.ForumScreens
 import com.example.potel.ui.forumZone.forumScreenRoute
-import com.example.potel.ui.booking.bookingScreenRoute
-import com.example.potel.ui.myorders.myOrdersScreenRoute
-import com.example.potel.ui.theme.PotelTheme
+import com.example.potel.ui.home.AccountScreens
 import com.example.potel.ui.home.accountRoute
 import com.example.potel.ui.myorders.MyOrdersScreens
-import com.example.potel.ui.petsfile.PetsFileScreens
+import com.example.potel.ui.myorders.myOrdersScreenRoute
 import com.example.potel.ui.petsfile.petsfileScreenRoute
-import com.example.potel.ui.shopping.ShopScreens
+import com.example.potel.ui.theme.PotelTheme
 import com.example.potel.ui.shopping.shopScreenRoute
-import kotlin.reflect.KClass
-import kotlin.reflect.full.memberProperties
+import com.example.potel.ui.shopping.ShopScreens
+import com.example.potel.ui.shopping.ShopViewModel
+
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,38 +65,30 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@Preview(showBackground = true)
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PotelApp(
     navController: NavHostController = rememberNavController()
 ) {
-
+    // todo 1-2 先宣告一個完整頁面，包含 BottomBar / NavHost
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentScreen = backStackEntry?.destination?.route?.split("/")?.first() ?: "home"
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
+    val currentScreenTitle = findEnumTitleByName(currentScreen,
+        MyOrdersScreens::class.java)
 
     val isForumScreen = currentScreen in ForumScreens.entries.map { it.name }
-
-    val currentScreenTitle = findEnumTitleByName(currentScreen,
-        AccountScreens::class, MyOrdersScreens::class, BookingScreens::class,
-        ForumScreens::class, PetsFileScreens::class, ShopScreens::class
-    )
-
-
-
-
 
     Scaffold(
         modifier = Modifier
             .nestedScroll(scrollBehavior.nestedScrollConnection)
-            .fillMaxSize()
-            .fillMaxWidth(),
+            .fillMaxSize(),
         topBar = {
 
             if (!isForumScreen) {
                 MainTopAppBar(
-                    currentScreen = currentScreenTitle,
+                    currentScreen = currentScreen,
                     canNavigateBack = navController.previousBackStackEntry != null,
                     navigateUp = { navController.navigateUp() },
                     scrollBehavior = scrollBehavior
@@ -104,16 +96,18 @@ fun PotelApp(
             }
         },
         bottomBar = {
-            MainBottomAppBar(navController = navController)
+            MainBottomAppBar(navController)
         }
     ) { innerPadding ->
         Column(
             modifier = Modifier
                 .padding(innerPadding)
         ) {
+            // todo 1-3 將 NavHost 放在 Scaffold Content 裡
             TipNavHost(
                 modifier = Modifier
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .weight(1f),
                 navController = navController
             )
         }
@@ -124,27 +118,33 @@ fun PotelApp(
 @Composable
 fun TipNavHost(
     modifier: Modifier = Modifier,
-    navController: NavHostController
+    navController: NavHostController = rememberNavController(),
+    viewModel: ShopViewModel = viewModel()
 ) {
+    val bookingViewModel : BookingViewModel = viewModel()
+
     // todo 2-1 這裡是將所有的畫面路徑都列出來
     NavHost(
         modifier = modifier,
         navController = navController,
-
-        startDestination = AccountScreens.Login.name
-
-
+        startDestination = AccountScreens.HomeRoute.name
 
     ) {
         // todo 2-2 置入所有的畫面路徑
+//        homeScreenRoute(navController) // 02 明駿
+//        bookingScreenRoute(navController) // 04 芊伃
+//        myOrdersScreenRoute(navController) // 27 正能
+        shopScreenRoute(viewModel = viewModel, navController) // 07 柏森
+//        careRecordsScreenRoute(navController) // 25 泰陽
+//        discussZoneScreenRoute(navController) // 16 品伃
+//        petsScreenRoute(navController) // 18 勇慶
         accountRoute(navController) //02 明駿
-        bookingScreenRoute(navController)// 04 芊伃
         homeScreenRoute(navController) // 02 明駿
+        bookingScreenRoute(navController) // 04 芊伃
         myOrdersScreenRoute(navController) // 27 正能
-        shopScreenRoute(navController) // 07 柏森
+        shopScreenRoute(viewModel, navController) // 07 柏森
         forumScreenRoute(navController) // 16 品伃
         petsfileScreenRoute(navController) // 18 勇慶
-
     }
 
 }
@@ -181,102 +181,111 @@ fun MainTopAppBar(
 }
 
 
-
-fun findEnumTitleByName(name: String, vararg enums: KClass<out Enum<*>>): String {
-    for (enumClass in enums) {
-        enumClass.java.enumConstants?.firstOrNull { it.name == name }?.let { enumValue ->
-            return enumValue::class.memberProperties
-                .firstOrNull { it.name == "title" }
-                ?.getter?.call(enumValue) as? String ?: ""
-        }
-    }
-
-    return ""
-}
-
-
-
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
+fun MainBottomAppBar(navController: NavHostController){
+    BottomAppBar(
+        // 動作按鈕
+        actions = {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp), // 增加水平間距
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center // 將內容置中
+            ) {
+                IconButton(
+                    modifier = Modifier
+                        .size(60.dp)
+                        .weight(0.2f),
+                    onClick = {
+                        navController.navigate(AccountScreens.HomeRoute.name)
+                    }
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.home),
+                        contentDescription = "Home",
+                        modifier = Modifier.size(150.dp)
+                    )
+                }
 
+                IconButton(
+                    modifier = Modifier
+                        .size(60.dp)
+                        .weight(0.2f),
+                    onClick = {
+                        navController.navigate(BookingScreens.DateSelection.name)
+                    },
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.booking),
+                        contentDescription = "Booking",
+                        modifier = Modifier.size(150.dp)
+                    )
+                }
 
-
-fun MainBottomAppBar(navController: NavHostController) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp), // 這裡給Row一點邊距
-        horizontalArrangement = Arrangement.SpaceBetween, // 按鈕平均分佈
-        verticalAlignment = Alignment.CenterVertically // 垂直居中
+                IconButton(
+                    modifier = Modifier
+                        .size(60.dp)
+                        .weight(0.2f),
+                    onClick = {
+                        navController.navigate(ShopScreens.Twoclass.name)
+                    },
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.shopping),
+                        contentDescription = "Shopping",
+                        modifier = Modifier.size(150.dp)
+                    )
+                }
+                IconButton(
+                    modifier = Modifier
+                        .size(60.dp)
+                        .weight(0.2f),
+                    onClick = {
+                        // 先用popbackstack以避免重複載入頁面造成資源損耗, 若沒進入過該頁才改呼叫navigate
+                        if(!navController.popBackStack(MyOrdersScreens.MOS01.name, false))
+                            navController.navigate(MyOrdersScreens.MOS01.name)
+                    }
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.myorders),
+                        contentDescription = "MyOrders",
+                        modifier = Modifier.size(150.dp)
+                    )
+                }
+                IconButton(
+                    modifier = Modifier
+                        .size(60.dp)
+                        .weight(0.2f),
+                    onClick = {
+                    }
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.myinfo),
+                        contentDescription = "MyInfo",
+                        modifier = Modifier.size(150.dp)
+                    )
+                }
+            }
+        },
     )
+}
 
-    {
-
-        IconButton(
-            modifier = Modifier
-                .size(60.dp)
-                .width(10.dp),
-            onClick = {
-                navController.navigate(route = Booking.name)
-            },
-        ) {
-            Icon(
-                painter = painterResource(R.drawable.booking),
-                contentDescription = "Booking",
-                modifier = Modifier.size(150.dp)
-            )
-        }
-
-
-        IconButton(
-            modifier = Modifier
-                .size(60.dp)
-                .width(10.dp),
-            onClick = {
-                navController.navigate(route = ShopScreens.Twoclass.name)
-            },
-        ) {
-            Icon(
-                painter = painterResource(R.drawable.shopping),
-                contentDescription = "Shopping",
-                modifier = Modifier.size(150.dp)
-            )
-        }
-
-
-        IconButton(
-            modifier = Modifier
-                .size(60.dp)
-                .width(10.dp),
-            onClick = { navController.navigate(route = MyOrdersScreens.MOS01.name)
-                // 先用popbackstack以避免重複載入頁面造成資源損耗, 若沒進入過該頁才改呼叫navigate
-
-//                if (!navController.popBackStack(AccountScreens.HomeRoute.name, false))
-//                    navController.navigate(AccountScreens.HomeRoute.name)
+fun findEnumTitleByName(name: String, vararg enums: Class<out Enum<*>>): String {
+    // 遍历传入的每个枚举类
+    for (enumClass in enums) {
+        // 获取当前枚举类的所有枚举实例
+        val enumConstants = enumClass.enumConstants ?: continue
+        for (enumValue in enumConstants) {
+            // 检查枚举实例的名称是否匹配
+            if (enumValue.name == name) {
+                // 使用反射获取 title 属性值
+                val titleField = enumClass.getMethod("getTitle") // 调用 getTitle 方法
+                return titleField.invoke(enumValue) as String
             }
-        ) {
-            Icon(
-                painter = painterResource(R.drawable.myorders),
-                contentDescription = "MyOrders",
-                modifier = Modifier.size(150.dp)
-            )
-        }
-
-
-        IconButton(
-            modifier = Modifier
-                .size(60.dp)
-                .width(10.dp),
-            onClick = {
-                navController.navigate(route = PetsFileScreens.PetsFileFirst.name)
-            }
-        ) {
-            Icon(
-                painter = painterResource(R.drawable.myinfo),
-                contentDescription = "MyInfo",
-                modifier = Modifier.size(150.dp)
-            )
         }
     }
+    // 如果未找到，返回 null
+    return ""
 }

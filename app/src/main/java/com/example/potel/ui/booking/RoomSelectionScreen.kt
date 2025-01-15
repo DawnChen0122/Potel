@@ -21,6 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.example.potel.PotelApp
 import com.example.potel.R
@@ -36,6 +37,13 @@ fun RoomSelectionScreen(
     type: Char
 ) {
     val tag = "RoomSelectionScreen"
+
+    val order = bookingVM.addOrderEditState.collectAsState().value
+
+    val days by bookingVM.daySelectState.collectAsState()
+    val selectedRoomType by bookingVM.roomTypeSelectedState.collectAsState()
+
+    order.amount = days * order.price
 
     // 從 ViewModel 獲取房型列表
     val roomTypeList by bookingVM.roomTypesState.collectAsState()
@@ -146,5 +154,7 @@ fun RoomCard(
         }
     }
 }
+
+
 
 

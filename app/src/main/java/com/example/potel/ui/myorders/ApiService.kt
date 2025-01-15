@@ -14,7 +14,6 @@ interface ApiService {
     @GET("api/orders")
     suspend fun getOrders(
         @Query("memberid") memberid: Int,
-
         @Query("orderstate") orderstate:Char,
         @Query("datestart") dateStart:String?,
         @Query("dateend") dateEnd:String?
@@ -59,7 +58,7 @@ interface ApiService {
     @GET
     suspend fun login(
         @Query("loginId") account: String,
-        @Query("passwd") password: String
+        @Query("password") password: String
     ): User
 
 
@@ -76,7 +75,6 @@ data class User(
 )
 
 const val baseurl = "http://10.0.2.2:8080/PotelServer/"
-
 // singleton-pattern, 建立一個符合APIService介面的物件
 object RetrofitInstance {
     private val okHttpClient = OkHttpClient.Builder()

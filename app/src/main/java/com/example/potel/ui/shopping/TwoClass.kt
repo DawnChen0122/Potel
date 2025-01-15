@@ -27,16 +27,14 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 
 
-
 @Composable
 fun TwoClassScreen(
     navController: NavHostController
 ) {
-//    val shoppingVM: ShoppingViewModel = viewModel(key = "shoppingVM")
-//    val context = LocalContext.current
-    // 開 "settings"這個檔案, 沒有的話就建一個
-//    val preferences = context.getSharedPreferences("product", Context.MODE_PRIVATE)
-//    val productid = preferences.getString("uid", "1")!!
+    val shoppingVM: ShopViewModel = viewModel(key = "shoppingVM")
+    val context = LocalContext.current
+    val preferences = context.getSharedPreferences("member", Context.MODE_PRIVATE)
+
 
 
     Column (
@@ -63,16 +61,16 @@ fun TwoClassScreen(
                       },
             colors = ButtonDefaults.buttonColors(
                 // 設定按鈕容器顏色
-                containerColor = Color.Transparent,
+                containerColor = Color.White,
                 // 設定按鈕內容顏色
                 contentColor = Color.Black
 
             )
         ) {
             Text(
-                text = "狗勾專區",
+                text = "狗勾天堂",
                 fontSize = 36.sp, // 字型大小: 36
-                fontWeight = FontWeight.Bold, // 字體樣式: 粗體
+                fontWeight = FontWeight.ExtraBold, // 字體樣式: 粗體
                 color = Color.Black // 字的顏色: 黑色
             )
         }
@@ -90,15 +88,15 @@ fun TwoClassScreen(
             },
             colors = ButtonDefaults.buttonColors(
                 // 設定按鈕容器顏色
-                containerColor = Color.Transparent,
+                containerColor = Color.White,
                 // 設定按鈕內容顏色
                 contentColor = Color.Black
             )
         ) {
             Text(
-                text = "貓貓專區",
+                text = "貓貓樂園",
                 fontSize = 36.sp, // 字型大小: 36
-                fontWeight = FontWeight.Bold, // 字體樣式: 粗體
+                fontWeight = FontWeight.ExtraBold, // 字體樣式: 粗體
                 color = Color.Black // 字的顏色: 黑色
             )
         }
