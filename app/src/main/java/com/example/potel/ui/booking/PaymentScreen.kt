@@ -2,6 +2,7 @@ package com.example.potel.ui.booking
 
 import android.util.Log
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -10,8 +11,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -50,12 +53,12 @@ fun PaymentScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
-            painter = painterResource(id = R.drawable.credit),
+            painter = painterResource(id = R.drawable.creditcard),
             contentDescription = "Room Image",
             modifier = Modifier
-                .size(230.dp)
-                .clip(RoundedCornerShape(8.dp)),
-            contentScale = ContentScale.Crop
+                .size(350.dp)
+//                .clip(RoundedCornerShape(8.dp)),
+//            contentScale = ContentScale.Crop
         )
 
         Text("請輸入付款資訊", style = MaterialTheme.typography.titleMedium, fontSize = 18.sp)
@@ -65,13 +68,13 @@ fun PaymentScreen(
         OutlinedTextField(
             value = cardNumber,
             onValueChange = { cardNumber = it },
-            label = { Text("信用卡號碼") },
+            label = { Text("信用卡號碼", color = Color.Black) },
             isError = isSubmitted && !isValidCardNumber(cardNumber),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             modifier = Modifier.fillMaxWidth()
         )
         if (isSubmitted && !isValidCardNumber(cardNumber)) {
-            Text("信用卡號碼格式不正確！", color = MaterialTheme.colorScheme.error)
+            Text("信用卡號碼格式不正確！", color = Color(0xFFDA291C))
         }
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -84,7 +87,7 @@ fun PaymentScreen(
             OutlinedTextField(
                 value = expiryDate,
                 onValueChange = { expiryDate = it },
-                label = { Text("到期日") },
+                label = { Text("到期日", color = Color.Black) },
                 isError = isSubmitted && !isValidExpiryDate(expiryDate),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 modifier = Modifier.weight(1f)
@@ -93,7 +96,7 @@ fun PaymentScreen(
             OutlinedTextField(
                 value = cvv,
                 onValueChange = { cvv = it },
-                label = { Text("驗證碼") },
+                label = { Text("驗證碼", color = Color.Black) },
                 isError = isSubmitted && !isValidCVV(cvv),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 modifier = Modifier.weight(1f)
@@ -101,10 +104,10 @@ fun PaymentScreen(
         }
 
         if (isSubmitted && !isValidExpiryDate(expiryDate)) {
-            Text("到期日格式應為 MM/YY！", color = MaterialTheme.colorScheme.error)
+            Text("到期日格式應為 MM/YY！", color = Color(0xFFDA291C))
         }
         if (isSubmitted && !isValidCVV(cvv)) {
-            Text("驗證碼應為 3 或 4 位數字！", color = MaterialTheme.colorScheme.error)
+            Text("驗證碼應為 3 或 4 位數字！", color = Color(0xFFDA291C))
         }
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -123,9 +126,19 @@ fun PaymentScreen(
                     errorMessage = "請正確填寫所有資訊！"
                 }
             },
-            modifier = Modifier.padding(horizontal = 16.dp)
+//            modifier = Modifier.padding(horizontal = 0.dp)
+//            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .height(45.dp) // 高度設定
+                .width(400.dp)
+                .background(Color.Transparent) // 設置背景為透明以避免重疊顏色
+                .padding(0.dp), // 確保內部留白為 0
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFDA291C)), // 按鈕背景色
+            shape = RoundedCornerShape(8.dp) // 設置圓角
+
+
         ) {
-            Text("提交", fontSize = 18.sp)
+            Text("Confirm", fontSize = 23.sp,fontWeight = FontWeight.Bold)
         }
 
         if (errorMessage.isNotEmpty()) {
