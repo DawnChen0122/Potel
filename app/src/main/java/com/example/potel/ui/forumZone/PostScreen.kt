@@ -142,7 +142,7 @@ fun PostScreen(navController: NavHostController) {
                 item {
                     Spacer(Modifier.height(20.dp))
                     PostDetailContent(postDetail.value)
-                    LikeController(forumVM, postDetail.value, memberId, context)
+                    LikeController(forumVM, postDetail.value, memberId)
                 }
 
                 item {
@@ -290,7 +290,7 @@ fun PostBodySection(post: Post) {
 }
 
 @Composable
-fun LikeController(forumVM: ForumVM, post: Post, memberId: Int,context : Context ) {
+fun LikeController(forumVM: ForumVM, post: Post, memberId: Int) {
     var liked by remember { mutableStateOf(forumVM.isPostLikedByMember(post.postId, memberId))}
     var likesCount by remember { mutableIntStateOf(forumVM.getLikesCountForPost(post.postId)) }
 
