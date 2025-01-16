@@ -119,12 +119,14 @@ fun ForumScreen(
         if (message != null) {
             scope.launch {
                 val job = launch {
-                    hostState.showSnackbar(message, duration = SnackbarDuration.Indefinite)
+                    hostState.showSnackbar(
+                        message = message,
+                        duration = SnackbarDuration.Short
+                    )
                 }
-                delay(1500) // 自定义 3 秒显示时间
-                job.cancel() // 隐藏
+                job.join()
+                forumVM.setPostSuccessMessage(null)
             }
-            forumVM.setPostSuccessMessage(null) // 清除消息
         }
     }
 
@@ -322,7 +324,7 @@ fun PostListView(
     // 模拟初始加载完成
     LaunchedEffect(Unit) {
         coroutineScope.launch {
-            isRefreshing=true
+            isRefreshing = true
             delay(1000)
             isRefreshing = false
         }
@@ -350,7 +352,7 @@ fun PostListView(
             !isRefreshing -> {
                 LazyColumn(modifier = Modifier.fillMaxSize()) {
                     items(
-                        if(!showEditButton)posts.shuffled()
+                        if (!showEditButton) posts.shuffled()
                         else posts
                     ) { post ->
                         PostCard(post, forumVM, navController, showEditButton, memberId)
@@ -366,7 +368,6 @@ fun PostListView(
         }
     }
 }
-
 
 
 @Composable
@@ -475,6 +476,7 @@ fun PostCard(
             onDismissRequest = { showConfirmDeleteDialog = false },
             onConfirmDelete = {
                 forumVM.deletePost(post.postId)
+                forumVM.setPostSuccessMessage("刪除完成")
                 showConfirmDeleteDialog = false
             }
         )
@@ -624,15 +626,15 @@ fun PostHeader(post: Post) {
 
 @Composable
 fun PostContent(post: Post) {
-    Row(
-        Modifier
-            .fillMaxWidth()
-            .padding(start = 25.dp)
-            .background(colorResource(R.color.forum)),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        if (post.imageId != null) {
-            val truncatedContent = post.content.truncateToLength(60)
+    if (post.imageId != null) {
+        val truncatedContent = post.content.truncateToLength(60)
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .padding(start = 25.dp)
+                .background(colorResource(R.color.forum)),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             Column {
                 Text(post.title, fontSize = 20.sp, maxLines = 1, color = Color.White)
                 Spacer(Modifier.size(5.dp))
@@ -648,15 +650,28 @@ fun PostContent(post: Post) {
             }
             Spacer(Modifier.size(40.dp))
             PostImage(post.imageId)
-        } else {
-            val truncatedContent = post.content.truncateToLength(85)
+        }
+    } else {
+        val truncatedContent = post.content.truncateToLength(85)
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .padding(start = 25.dp, end = 25.dp)
+                .background(colorResource(R.color.forum)),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             Column {
-                Text(post.title, fontSize = 20.sp, maxLines = 1, color = Color.White)
+                Text(
+                    post.title,
+                    Modifier.width(350.dp),
+                    fontSize = 20.sp,
+                    color = Color.White
+                )
                 Spacer(Modifier.size(5.dp))
                 Text(
                     truncatedContent,
                     Modifier
-                        .width(370.dp)
+                        .width(350.dp)
                         .height(50.dp),
                     fontSize = 15.sp,
                     maxLines = 2,
@@ -666,6 +681,7 @@ fun PostContent(post: Post) {
         }
     }
 }
+
 
 @Composable
 fun PostFooter(likesCount: Int, liked: Boolean, commentCount: Int) {

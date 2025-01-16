@@ -402,7 +402,7 @@ fun AddCommentSection(postId: Int, forumVM: ForumVM, memberId: Int, memberName:S
         }
         OutlinedTextField(
             value = commentText,
-            onValueChange = { if (it.length <= 150) commentText = it },
+            onValueChange = { if (it.length <= 500) commentText = it },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(210.dp)
@@ -548,6 +548,7 @@ fun CommentHeader(comment: Comment, isLastComment: Boolean, memberId: Int, navCo
             onDismissRequest = { showConfirmDeleteDialog = false },
             onConfirmDelete = {
                 forumVM.deleteComment(comment.commentId)
+                forumVM.setPostSuccessMessage("刪除完成")
                 showConfirmDeleteDialog = false
             }
         )
@@ -596,7 +597,7 @@ fun CommentOptionsDialog(onDismissRequest: () -> Unit, onOptionSelected: (String
         content = {
             Column(
                 Modifier
-                    .background(Color.LightGray.copy(alpha = 0.8f), shape = RoundedCornerShape(8.dp))
+                    .background(Color.LightGray.copy(alpha = 0.9f), shape = RoundedCornerShape(8.dp))
                     .height(240.dp),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
