@@ -2,14 +2,17 @@ package com.example.potel.ui.account
 
 import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.*
@@ -46,17 +49,13 @@ fun Login(
     viewModel: OpenpageViewModel = viewModel(), navController: NavHostController
 ) {
 
+
+
     val context = LocalContext.current
 
     val preferences = context.getSharedPreferences("member", Context.MODE_PRIVATE)
 
-
     val inputError by viewModel.inputError.collectAsState()
-
-    val cellphone by viewModel.cellphone.collectAsState()
-
-
-    val email by viewModel.email.collectAsState()
 
     val passwd by viewModel.passwd.collectAsState()
 
@@ -64,13 +63,16 @@ fun Login(
 
     var currentInput by remember { mutableStateOf("") }
 
+    var errorMessage by remember { mutableStateOf<String?>(null) }
+
 
     Column(
         verticalArrangement = Arrangement.spacedBy(20.dp, Alignment.Top),
         horizontalAlignment = Alignment.CenterHorizontally,
+
         modifier = Modifier
             .border(width = 5.dp, color = Color(0xFF000000))
-            .padding(5.dp)
+            .padding(12.dp)
             .fillMaxWidth()
             .fillMaxHeight()
             .background(color = Color(0xFFF7E3A6))
@@ -80,9 +82,13 @@ fun Login(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top,
             modifier = Modifier
-
                 .padding(10.dp)
         ) {
+
+
+
+
+
             Text(
 
                 text = "Potel",
@@ -110,8 +116,8 @@ fun Login(
                 Text(
                     text = "請輸入有效的信箱或手機號碼",
                     color = Color.Red,
-                    fontSize = 12.sp,
-                    modifier = Modifier.padding(start = 16.dp)
+                    fontSize = 20.sp,
+                    modifier = Modifier.padding(start = 16.dp,top = 8.dp)
                 )
             }
 
@@ -149,63 +155,64 @@ fun Login(
             )
             if (viewModel.passwdError) {
                 Text(
-                    text = "密碼需在6至20字符內，且包含字母和數字",
+                    text = "密碼需在6至20字內，包含字母數字",
                     color = Color.Red,
-                    fontSize = 12.sp,
+                    fontSize = 20.sp,
                     modifier = Modifier.padding(start = 16.dp)
                 )
             }
         }
 
 
-
-
-
-
         Row(
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-
                 .padding(10.dp)
         )
 
         {
 
-            var errorMessage by remember { mutableStateOf<String?>(null) }
             // 註冊按鈕
             Button(
                 onClick = {
-                    if (email.isEmpty() && cellphone.isEmpty()) {
+                    if (currentInput.isEmpty()) {
                         errorMessage = "信箱或手機號碼欄位不得空白"
-                    } else if (!email.matches(viewModel.emailRegex) && !cellphone.matches(
+                    } else if (!currentInput.matches(viewModel.emailRegex) && !currentInput.matches(
                             viewModel.cellphoneRegex
                         )
                     ) {
                         errorMessage = "請輸入有效的信箱或手機號碼"
                     } else {
-                        errorMessage = null // 清除錯誤訊息
-                        val inputlog = Inputlog(currentInput, passwd)
-                        viewModel.viewModelScope.launch {
-                            val member = viewModel.login(inputlog)
-                            Log.d("Login", "已登入0，issucc=$member")
 
-                            if (member.memberid != 0) {  // 判斷登入是否成功（假設成功的 memberid 會非 0）
-                                preferences.edit().putInt("memberid", member.memberid)
-                                    .putString("name", member.name)
-                                    .putString("passwd", member.passwd)
-                                    .putString("cellphone", member.cellphone)
-                                    .putString("address", member.address)
-                                    .putString("email", member.email)
-                                    .putString("gender", member.gender)
-                                    .putString("birthday", member.birthday)
-                                    .apply()
-                                Log.d("Login", "已登入1，輸入的信箱/手機號碼: $member")
-                                navController.navigate(AccountScreens.HomeRoute.name)
-                                Log.d("Login", "已登入2，輸入的信箱/手機號碼: $inputlog")
-                            } else {
-                                // 登入失敗，顯示錯誤訊息
-                                Log.d("Login", "登入失敗，錯誤訊息: 登入失敗，請檢查您的帳號密碼")
+                        errorMessage = null
+
+                        val inputlog = Inputlog(currentInput, passwd)
+
+                        viewModel.viewModelScope.launch {
+                            try {
+                                val member = viewModel.login(inputlog)
+                                Log.d("Login", "已登入0，issucc=$member")
+                                if (member != null && member.memberid != 0) {
+                                    // 儲存登入資料
+                                    preferences.edit().putInt("memberid", member.memberid)
+                                        .putString("name", member.name)
+                                        .putString("passwd", member.passwd)
+                                        .putString("cellphone", member.cellphone)
+                                        .putString("address", member.address)
+                                        .putString("email", member.email)
+                                        .putString("gender", member.gender)
+                                        .putString("birthday", member.birthday)
+                                        .apply()
+                                    navController.navigate(AccountScreens.HomeRoute.name)
+                                } else {
+                                    Log.d("Login", "登入失敗，錯誤訊息: 登入失敗，請檢查您的帳號密碼")
+                                    errorMessage = "登入失敗，請檢查您的帳號密碼"
+                                }
+                            } catch (e: Exception) {
+                                // 處理登入過程中的異常
+                                Log.e("Login", "登入過程中出現錯誤: ${e.message}")
+                                errorMessage = "登入過程中出現錯誤，請稍後再試"
                             }
                         }
                     }
@@ -214,22 +221,24 @@ fun Login(
                     .fillMaxWidth()
                     .padding(top = 16.dp),
                 shape = RoundedCornerShape(8.dp),
-                        colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFFFFA500),)
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFFFFA500),
+                )
             ) {
                 Text(text = "登入", fontSize = 50.sp)
             }
-            errorMessage?.let {
-                Text(
-                    text = it,
-                    color = Color.Red,
-                    fontSize = 14.sp,
-                    modifier = Modifier.padding(top = 8.dp)
-                )
-            }
+
         }
 
-
+        errorMessage?.let {
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                text = it,
+                color = Color.Red,
+                fontSize = 20.sp,
+                modifier = Modifier.padding(start = 16.dp)
+            )
+        }
 
         Row(
             horizontalArrangement = Arrangement.Start,
@@ -241,7 +250,7 @@ fun Login(
                     fontSize = 33.sp,
                     lineHeight = 32.sp,
                     fontWeight = FontWeight(700),
-                    color  = Color.White,
+                    color = Color.White,
                     textAlign = TextAlign.Center,
                     textDecoration = TextDecoration.Underline
                 ),
@@ -253,15 +262,17 @@ fun Login(
                     }
             )
 
+            Spacer(modifier = Modifier.width(20.dp))
+
             Text(
                 text = "忘記密碼",
                 style = TextStyle(
                     fontSize = 33.sp,
                     lineHeight = 32.sp,
                     fontWeight = FontWeight(700),
-                    color  = Color.White,
+                    color = Color.White,
                     textAlign = TextAlign.Center,
-                    textDecoration = TextDecoration.Underline // 加上底線
+                    textDecoration = TextDecoration.Underline
                 ),
                 modifier = Modifier
                     .width(135.dp)
@@ -271,6 +282,9 @@ fun Login(
                     }
             )
         }
+
+
+
     }
 }
 

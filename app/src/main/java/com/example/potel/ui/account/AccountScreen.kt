@@ -76,11 +76,13 @@ fun Signup(
 
 
     val cellphone by viewModel.cellphone.collectAsState()
-    var cellphoneError by remember { mutableStateOf(false) }
 
     val address by viewModel.address.collectAsState()
 
     val scrollState = rememberScrollState()
+
+    var errorMessage by remember { mutableStateOf<String?>(null) }
+
 
     Column(
         verticalArrangement = Arrangement.spacedBy(2.dp, Alignment.Top),
@@ -391,12 +393,10 @@ fun Signup(
             Text(
                 text = "密碼需輸入相同",
                 color = Color.Red,
-                fontSize = 12.sp,
+                fontSize = 20.sp,
                 modifier = Modifier.padding(start = 16.dp)
             )
         }
-
-
 
 
 
@@ -406,12 +406,13 @@ fun Signup(
             label = { Text(text = "請輸入手機號碼") },
             singleLine = true,
             shape = RoundedCornerShape(8.dp),
+            isError = viewModel.cellphoneError,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 16.dp),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
         )
-        if (cellphoneError) {
+        if (viewModel.cellphoneError) {
             Text(
                 text = "手機號碼為十位數字",
                 color = Color.Red,
@@ -433,8 +434,15 @@ fun Signup(
         )
 
 
-        var errorMessage by remember { mutableStateOf<String?>(null) }
-        // 註冊按鈕
+        errorMessage?.let {
+            Text(
+                text = it,
+                color = Color.Red,
+                fontSize = 20.sp,
+                modifier = Modifier.padding(top = 8.dp)
+            )
+        }
+
         Button(
             onClick = {
 
@@ -442,8 +450,6 @@ fun Signup(
                     || name.isEmpty() || cellphone.isEmpty() || address.isEmpty()
                 ) {
                     errorMessage = "欄位不得空白"
-                } else if (passwd != checkpasswd) {
-                    errorMessage = "密碼與確認密碼不同"
                 } else {
                     viewModel.viewModelScope.launch {
                         val member = Member(
@@ -470,14 +476,7 @@ fun Signup(
                 fontSize = 50.sp,
                 color = Color.White)
         }
-        errorMessage?.let {
-            Text(
-                text = it,
-                color = Color.Red,
-                fontSize = 14.sp,
-                modifier = Modifier.padding(top = 8.dp)
-            )
-        }
+
     }
 }
 

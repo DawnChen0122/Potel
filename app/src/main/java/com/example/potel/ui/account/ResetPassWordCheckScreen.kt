@@ -5,10 +5,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.*
@@ -47,10 +45,9 @@ fun Resetpassword(
     val checkpasswd by viewModel.checkpasswd.collectAsState()
     var checkpasswdVisible by remember { mutableStateOf(false) }
 
-    val  cellphone by viewModel. cellphone.collectAsState()
-    val scrollState = rememberScrollState()
+    val cellphone by viewModel.cellphone.collectAsState()
 
-
+    var errorMessage by remember { mutableStateOf<String?>(null) }
 
     Column(
         verticalArrangement = Arrangement.spacedBy(2.dp, Alignment.Top),
@@ -86,7 +83,7 @@ fun Resetpassword(
             Text(
                 text = "請輸入有效的信箱",
                 color = Color.Red,
-                fontSize = 12.sp,
+                fontSize = 20.sp,
                 modifier = Modifier.padding(start = 16.dp)
             )
         }
@@ -94,7 +91,7 @@ fun Resetpassword(
         Spacer(modifier = Modifier.height(16.dp))
 
         OutlinedTextField(
-            value =  cellphone,
+            value = cellphone,
             onValueChange = viewModel::oncellphoneChanged,
             label = { Text(text = "請輸入手機號碼進行確認") },
             singleLine = true,
@@ -109,7 +106,7 @@ fun Resetpassword(
             Text(
                 text = "手機號碼為十位數字",
                 color = Color.Red,
-                fontSize = 12.sp,
+                fontSize = 20.sp,
                 modifier = Modifier.padding(start = 16.dp)
             )
         }
@@ -151,7 +148,7 @@ fun Resetpassword(
             Text(
                 text = "密碼需在6 至 20 字內數字英文至少各一",
                 color = Color.Red,
-                fontSize = 12.sp,
+                fontSize = 20.sp,
                 modifier = Modifier.padding(start = 16.dp)
             )
         }
@@ -193,26 +190,41 @@ fun Resetpassword(
             Text(
                 text = "密碼需輸入相同",
                 color = Color.Red,
-                fontSize = 12.sp,
+                fontSize = 20.sp,
                 modifier = Modifier.padding(start = 16.dp)
             )
         }
 
+        Spacer(modifier = Modifier.height(16.dp))
+
+        errorMessage?.let {
+            Text(
+                text = it,
+                color = Color.Red,
+                fontSize = 20.sp,
+                modifier = Modifier.padding(top = 8.dp)
+            )
+        }
 
         Spacer(modifier = Modifier.height(16.dp))
 
-
         Button(
             onClick = {
-                if (email.isEmpty() || passwd.isEmpty() || checkpasswd.isEmpty()
-                    ||  cellphone.isEmpty()
-                ) {
-                    "欄位不得空白"
-                } else if (passwd != checkpasswd) {
-                    "密碼不一致"
+                // 檢查是否有欄位為空
+                if (email.isEmpty() || passwd.isEmpty() || checkpasswd.isEmpty() || cellphone.isEmpty()) {
+                    errorMessage = "欄位不得空白"
+                }
+                // 檢查密碼是否一致
+                else if (passwd != checkpasswd) {
+                    errorMessage = "密碼不一致"
                 } else {
+                    // 沒有錯誤，執行變更密碼的操作
                     viewModel.viewModelScope.launch {
+                        // 清除錯誤訊息
+                        errorMessage = null
+                        // 檢查 email 和 cellphone 是否有效
                         viewModel.checkEmailAndCellphone()
+                        // 更新密碼
                         viewModel.changepasswd()
                     }
                 }
@@ -221,13 +233,17 @@ fun Resetpassword(
                 .fillMaxWidth()
                 .padding(top = 40.dp),
             shape = RoundedCornerShape(8.dp),
-                    colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFFFFA500),)
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0xFFFFA500),
+            )
         ) {
-            Text(text = "變更密碼",
+            Text(
+                text = "變更密碼",
                 fontSize = 50.sp,
-                color = Color.White)
+                color = Color.White
+            )
         }
+
     }
 }
 

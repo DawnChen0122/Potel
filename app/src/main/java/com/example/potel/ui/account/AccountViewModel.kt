@@ -1,6 +1,5 @@
 package com.example.potel.ui.account
 
-
 import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -54,14 +53,14 @@ class AccountViewModel : ViewModel() {
     }
 
 
-    private val _checkpasswd = MutableStateFlow("")
-    val checkpasswd = _checkpasswd.asStateFlow()
-    var checkpasswdError by mutableStateOf(false)
-    fun checkpasswdchange(checkpasswd: String) {
-        val checkpasswdRegex = Regex("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")
-        checkpasswdError = !checkpasswd.matches(checkpasswdRegex)
-        _checkpasswd.value = checkpasswd
-    }
+        private val _checkpasswd = MutableStateFlow("")
+        val checkpasswd = _checkpasswd.asStateFlow()
+        var checkpasswdError by mutableStateOf(false)
+        fun checkpasswdchange(checkpasswd: String) {
+            val checkpasswdRegex = Regex("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{6,20}$")
+            checkpasswdError = !checkpasswd.matches(checkpasswdRegex)
+            _checkpasswd.value = checkpasswd
+        }
 
 
     private val _cellphone = MutableStateFlow("")

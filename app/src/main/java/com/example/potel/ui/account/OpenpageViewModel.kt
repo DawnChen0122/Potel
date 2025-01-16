@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
@@ -16,15 +17,17 @@ import kotlinx.coroutines.launch
 class OpenpageViewModel : ViewModel() {
 
     private val _inputError = MutableStateFlow(false)
-    val inputError = _inputError.asStateFlow()
-
-    private val _cellphone = MutableStateFlow("")
-    val cellphone = _cellphone.asStateFlow()
-    val cellphoneRegex = "^[0-9]{10}$".toRegex()
+    val inputError: StateFlow<Boolean> = _inputError
 
     private val _email = MutableStateFlow("")
-    val email = _email.asStateFlow()
-    val emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$".toRegex()
+    val email: StateFlow<String> = _email
+
+    private val _cellphone = MutableStateFlow("")
+    val cellphone: StateFlow<String> = _cellphone
+
+    val emailRegex = Regex("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")
+    val cellphoneRegex = Regex("^[0-9]{10}$") // 假設是10位數字的電話號碼
+
 
     private val _passwd = MutableStateFlow("")
     val passwd = _passwd.asStateFlow()
@@ -37,43 +40,42 @@ class OpenpageViewModel : ViewModel() {
 
 
     fun onInputChanged(input: String) {
+
         viewModelScope.launch {
-            delay(500)  // 延遲500毫秒後處理輸入
-            if (input.isNotEmpty()) {
-                Log.d("PhoneNumberValidation", "Input: $input")  // 記錄輸入的內容
-                Log.d("PhoneNumberValidation", "Regex: $cellphoneRegex")  // 記錄電話號碼的正則表達式
-                Log.d("PhoneNumberValidation", "Email Regex: $emailRegex")  // 記錄電子郵件的正則表達式
-
-                if (input.contains("@")) {
-                    Log.d("PhoneNumberValidation", "輸入看起來是Email")
-
-                    if (input.matches(emailRegex)) {
-                        _inputError.value = false
-                        _email.value = input
-                        Log.d("PhoneNumberValidation", "Email 匹配成功: $input")
-                    } else {
-                        _inputError.value = true
-                        Log.e("PhoneNumberValidation", "Email 匹配失敗: $input")
-                    }
-                } else {
-                    Log.d("PhoneNumberValidation", "輸入看起來是電話號碼")
-
-                    if (input.matches(cellphoneRegex)) {
-                        _inputError.value = false
-                        _cellphone.value = input
-                        Log.d("PhoneNumberValidation", "電話號碼 匹配成功: $input")
-                    } else {
-                        _inputError.value = true
-                        Log.e("PhoneNumberValidation", "電話號碼 匹配失敗: $input")
-                    }
-                }
-            } else {
-                _inputError.value = false
-                Log.d("PhoneNumberValidation", "輸入為空，清除錯誤狀態")
-            }
+            delay(500)
+            validateInput(input)
         }
     }
 
+    private fun validateInput(input: String) {
+        if (input.isNotEmpty()) {
+            if (input.contains("@")) {
+                validateEmail(input)
+            } else {
+                validatePhoneNumber(input)
+            }
+        } else {
+            _inputError.value = false
+        }
+    }
+
+    private fun validateEmail(input: String) {
+        if (input.matches(emailRegex)) {
+            _inputError.value = false
+            _email.value = input
+        } else {
+            _inputError.value = true
+        }
+    }
+
+    private fun validatePhoneNumber(input: String) {
+        if (input.matches(cellphoneRegex)) {
+            _inputError.value = false
+            _cellphone.value = input
+        } else {
+            _inputError.value = true
+        }
+    }
 
     private val _login = MutableStateFlow(Change(success = false, message = ""))
     val login = _login.asStateFlow()
@@ -83,7 +85,7 @@ class OpenpageViewModel : ViewModel() {
 
         Log.d("Login", "嘗試登入，輸入: $inputlog, 密碼: $passwd")
 
-        // 確保密碼不為空且沒有錯誤
+
         if (passwd.isNotEmpty() && !passwdError) {
             try {
                 Log.d("Login", "準備發送登入請求...")

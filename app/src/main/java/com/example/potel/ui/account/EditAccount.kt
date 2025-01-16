@@ -7,7 +7,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.*
@@ -25,7 +24,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
-import kotlin.String
 
 
 @Composable
@@ -37,9 +35,10 @@ fun Edit(
         ),
     ),
     navController: NavHostController
-){
+) {
     val member by viewModel.member.collectAsState()  // 觀察 member 資料並且自動更新 UI
-    val scrollState = rememberScrollState()
+
+    var errorMessage by remember { mutableStateOf<String?>(null) }
 
     LaunchedEffect(member) {
         viewModel.loadMember()
@@ -78,16 +77,18 @@ fun Edit(
                 modifier = Modifier.padding(10.dp)
             ) {
 
-                // 顯示並更新姓名欄位（只顯示）
                 Text(text = "姓名: ${member.name}", style = MaterialTheme.typography.bodyLarge)
 
-                // 顯示性別（只顯示）
+                Spacer(modifier = Modifier.height(16.dp))
+
                 Text(text = "性別: ${member.gender}", style = MaterialTheme.typography.bodyLarge)
 
-                // 顯示生日（只顯示）
+                Spacer(modifier = Modifier.height(16.dp))
+
                 Text(text = "生日: ${member.birthday}", style = MaterialTheme.typography.bodyLarge)
 
-                // 顯示並更新手機號碼欄位（可編輯）
+                Spacer(modifier = Modifier.height(16.dp))
+
                 OutlinedTextField(
                     value = member.cellphone,
                     onValueChange = { viewModel.updateCellphone(it) },
@@ -137,11 +138,28 @@ fun Edit(
                 )
 
 
+
+                errorMessage?.let {
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(
+                        text = it,
+                        color = Color.Red,
+                        fontSize = 20.sp,
+                        modifier = Modifier.padding(start = 16.dp)
+                    )
+                }
+
+
                 Button(
                     onClick = {
-                        if (member.email.isNotEmpty() && member.passwd.isNotEmpty() && member.address.isNotEmpty()
-                            && member.cellphone.isNotEmpty()
+                        if (member.email.isEmpty() || member.passwd.isEmpty()
+                            || member.cellphone.isEmpty() || member.address.isEmpty()
                         ) {
+                            errorMessage = "欄位不得空白"
+
+                        } else  if (member.email.isNotEmpty() && member.passwd.isNotEmpty() && member.address.isNotEmpty()
+                                && member.cellphone.isNotEmpty())
+                        {
                             val updatedMember = Edit(
                                 passwd = member.passwd,
                                 cellphone = member.cellphone,
@@ -160,27 +178,28 @@ fun Edit(
                                 }
                             }
                         } else {
-                            // 顯示提示，讓使用者知道需要填寫所有欄位
-                            Log.d("EditButton", "請填寫所有欄位")
-                        }
+                        Log.d("EditButton", "請填寫所有欄位")
+                    }
                     },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 40.dp),
                     shape = RoundedCornerShape(8.dp),
-                            colors = ButtonDefaults.buttonColors(
-                            containerColor = Color(0xFFFFA500),)
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFFFFA500),
+                    )
                 ) {
-                    Text(text = "更改資料",
+                    Text(
+                        text = "更改資料",
                         fontSize = 40.sp,
-                        color = Color.White)
+                        color = Color.White
+                    )
                 }
             }
         }
 
     }
 }
-
 
 
 @Preview(showBackground = true)

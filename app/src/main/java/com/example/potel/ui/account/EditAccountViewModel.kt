@@ -55,18 +55,18 @@ class EditViewModel(private val preferences: SharedPreferences,
     private fun saveMemberToPreferences(member: Member) {
         preferences.edit().apply {
             putInt("memberid", member.memberid)
-            putString("name", member.name)  // 顯示 name 但不會允許更新
+            putString("name", member.name)
             putString("cellphone", member.cellphone)
             putString("email", member.email)
             putString("passwd", member.passwd)
             putString("address", member.address)
-            putString("gender", member.gender)  // 顯示 gender 但不會允許更新
-            putString("birthday", member.birthday)  // 顯示 birthday 但不會允許更新
+            putString("gender", member.gender)
+            putString("birthday", member.birthday)
             apply()
         }
     }
 
-    // 載入 Member 資料（假設是從 SharedPreferences 或其他地方）
+
     fun loadMember() {
         // 假設資料來自 SharedPreferences 或從網絡獲取
         val loadedMember = Member(
