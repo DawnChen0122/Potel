@@ -1,5 +1,6 @@
 package com.example.potel.ui.shopping
 
+import android.content.Context
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -17,16 +18,24 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import com.example.potel.ui.theme.PotelTheme
 
 
 @Composable
-fun TwoClassScreen(navController: NavHostController) {
+fun TwoClassScreen(
+    navController: NavHostController
+) {
+    val shoppingVM: ShopViewModel = viewModel(key = "shoppingVM")
+    val context = LocalContext.current
+    val preferences = context.getSharedPreferences("member", Context.MODE_PRIVATE)
+
+
 
     Column (
         modifier = Modifier
@@ -48,20 +57,20 @@ fun TwoClassScreen(navController: NavHostController) {
                 .height(185.dp),
 
             onClick = {
-                navController.navigate(ShopScreens.productlist.name)
+                navController.navigate(route = "${ShopScreens.Productlist.name}/D")
                       },
             colors = ButtonDefaults.buttonColors(
                 // 設定按鈕容器顏色
-                containerColor = Color.Transparent,
+                containerColor = Color.White,
                 // 設定按鈕內容顏色
                 contentColor = Color.Black
 
             )
         ) {
             Text(
-                text = "狗勾專區",
+                text = "狗勾天堂",
                 fontSize = 36.sp, // 字型大小: 36
-                fontWeight = FontWeight.Bold, // 字體樣式: 粗體
+                fontWeight = FontWeight.ExtraBold, // 字體樣式: 粗體
                 color = Color.Black // 字的顏色: 黑色
             )
         }
@@ -75,19 +84,19 @@ fun TwoClassScreen(navController: NavHostController) {
                 .background(Color.White)
                 .height(185.dp),
             onClick = {
-                navController.navigate(ShopScreens.productlist.name)
+                navController.navigate("${ShopScreens.Productlist.name}/C")
             },
             colors = ButtonDefaults.buttonColors(
                 // 設定按鈕容器顏色
-                containerColor = Color.Transparent,
+                containerColor = Color.White,
                 // 設定按鈕內容顏色
                 contentColor = Color.Black
             )
         ) {
             Text(
-                text = "貓貓專區",
+                text = "貓貓樂園",
                 fontSize = 36.sp, // 字型大小: 36
-                fontWeight = FontWeight.Bold, // 字體樣式: 粗體
+                fontWeight = FontWeight.ExtraBold, // 字體樣式: 粗體
                 color = Color.Black // 字的顏色: 黑色
             )
         }

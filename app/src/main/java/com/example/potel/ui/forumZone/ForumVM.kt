@@ -1,6 +1,7 @@
 package com.example.potel.ui.forumZone
 
 import android.util.Log
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.delay
@@ -34,6 +35,12 @@ class ForumVM : ViewModel() {
 
     private val _commentsState = MutableStateFlow(emptyList<Comment>())
 //    val commentsState: StateFlow<List<Comment>> = _commentsState.asStateFlow()
+
+    private val _isItemsVisible = MutableStateFlow(true)
+    val isItemsVisible: StateFlow<Boolean> = _isItemsVisible
+
+     var postSuccessMessage = mutableStateOf<String?>(null)
+         private set
 
     init {
         // 初始化資料載入
@@ -288,6 +295,14 @@ class ForumVM : ViewModel() {
             fetchLikeData()
             fetchForumData()
         }
+    }
+
+    fun setPostSuccessMessage(message: String?) {
+        postSuccessMessage.value = message
+    }
+
+    fun setItemsVisibility(isVisible: Boolean) {
+        _isItemsVisible.value = isVisible
     }
 }
 
