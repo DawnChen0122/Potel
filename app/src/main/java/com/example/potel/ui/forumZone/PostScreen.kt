@@ -91,7 +91,7 @@ fun PostScreen(navController: NavHostController) {
         )
     }
     val memberName by remember {
-        mutableStateOf(preferences.getString("name", null) ?: "預設名字preferences")
+        mutableStateOf(preferences.getString("name", null) ?: "Riley")
     }
     forumVM.setItemsVisibility(true)
     // 监听需要显示的消息

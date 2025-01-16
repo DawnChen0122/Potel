@@ -103,7 +103,7 @@ fun ForumScreen(
         )
     }
     val memberName by remember {
-        mutableStateOf(preferences.getString("name", null) ?: "預設名字")
+        mutableStateOf(preferences.getString("name", null) ?: "Riley")
     }
 
     LaunchedEffect(memberId) {
