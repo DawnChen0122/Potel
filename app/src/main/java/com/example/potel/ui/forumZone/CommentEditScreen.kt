@@ -19,7 +19,6 @@ import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
@@ -48,6 +47,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.potel.R
+import com.example.potel.ui.theme.TipColor
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -77,7 +77,7 @@ fun CommentEditScreen(
                        Icon(
                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                            contentDescription = stringResource(R.string.back_button),
-                           tint = Color.LightGray
+                           tint = Color.White
                        )
                    }
                },
@@ -120,29 +120,29 @@ fun CommentEditScreen(
         }
     ){ paddingValues ->
         Column(Modifier.padding( top =  paddingValues.calculateTopPadding())
-                        .background(colorResource(R.color.forum))
+                        .background(TipColor.light_brown)
                         .fillMaxSize()
         ) {
-            HorizontalDivider(
-                Modifier.padding(start = 10.dp, end = 10.dp),
-                thickness = 1.dp,
-                color = Color.DarkGray
-            )
+//            HorizontalDivider(
+//                Modifier.padding(start = 10.dp, end = 10.dp),
+//                thickness = 1.dp,
+//                color = Color.DarkGray
+//            )
             Column(modifier = Modifier.padding(horizontal = 20.dp)
             ) {
                 Spacer(Modifier.height(35.dp))
                 OutlinedTextField(
                     value = content,
                     onValueChange = { if (it.length <= 500) content = it },
-                    placeholder = { Text("輸入留言內容", color = Color.LightGray)},
+                    placeholder = { Text("輸入留言內容", color = Color.Black)},
                     modifier = Modifier
                         .fillMaxWidth(),
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = Color.Transparent,
                         unfocusedBorderColor = Color.Transparent,
-                        focusedTextColor = Color.White,
-                        unfocusedTextColor = Color.White,
-                        cursorColor = colorResource(R.color.forumButton)
+                        focusedTextColor = Color.Black,
+                        unfocusedTextColor = Color.Black,
+                        cursorColor = Color.Black
                     ),
                     minLines = 1
                 )

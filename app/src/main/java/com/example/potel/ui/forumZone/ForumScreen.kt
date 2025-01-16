@@ -83,6 +83,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.potel.R
+import com.example.potel.ui.theme.TipColor
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -138,7 +139,7 @@ fun ForumScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(colorResource(R.color.forum))
+                .background(color= TipColor.light_brown)
         ) {
             CenterAlignedTopAppBar(
                 title = {
@@ -160,12 +161,12 @@ fun ForumScreen(
                     containerColor = colorResource(R.color.forum)
                 )
             )
-            HorizontalDivider(
-                Modifier.padding(start = 10.dp, end = 10.dp),
-                thickness = 1.dp,
-                color = Color.DarkGray
-            )
-            Spacer(Modifier.height(20.dp))
+//            HorizontalDivider(
+//                Modifier.padding(start = 10.dp, end = 10.dp),
+//                thickness = 1.dp,
+//                color = Color.DarkGray
+//            )
+            Spacer(Modifier.height(15.dp))
             if (isItemsVisible) {
                 ForumTabContent(forumVM, navController, posts, memberId)
             }
@@ -281,7 +282,6 @@ fun ForumTabSelector(
         modifier = Modifier
             .height(40.dp)
             .fillMaxWidth()
-            .background(colorResource(R.color.forum))
             .padding(start = 15.dp, end = 15.dp),
         selectedTabIndex = selectedTabIndex,
         containerColor = Color.Transparent
@@ -359,7 +359,7 @@ fun PostListView(
                         HorizontalDivider(
                             Modifier.padding(start = 15.dp, end = 15.dp),
                             thickness = 1.dp,
-                            color = Color.DarkGray
+                            color = TipColor.deep_brown
                         )
                         Spacer(Modifier.height(3.dp))
                     }
@@ -417,7 +417,6 @@ fun PostCard(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(colorResource(R.color.forum))
             .padding(5.dp)
             .clickable {
                 forumVM.setItemsVisibility(false)
@@ -437,7 +436,7 @@ fun PostCard(
                             imageVector = Icons.Filled.MoreVert,
                             contentDescription = "更多操作",
                             Modifier.size(30.dp),
-                            tint = Color.Gray
+                            tint = TipColor.deep_brown
                         )
                     }
                 }
@@ -613,10 +612,10 @@ fun PostHeader(post: Post) {
                     .weight(1f)
                     .padding(start = 10.dp)
             ) {
-                Text(post.memberName, fontSize = 15.sp, color = Color.White) // 用戶代碼
+                Text(post.memberName, fontSize = 15.sp, color = Color.Black) // 用戶代碼
                 Text(
                     post.createDate.toFormattedDate(),
-                    color = colorResource(R.color.forumTab),
+                    color = TipColor.deep_brown,
                     fontSize = 13.sp
                 )
             }
@@ -631,12 +630,11 @@ fun PostContent(post: Post) {
         Row(
             Modifier
                 .fillMaxWidth()
-                .padding(start = 25.dp)
-                .background(colorResource(R.color.forum)),
+                .padding(start = 25.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column {
-                Text(post.title, fontSize = 20.sp, maxLines = 1, color = Color.White)
+                Text(post.title, fontSize = 20.sp, maxLines = 1, color = Color.Black)
                 Spacer(Modifier.size(5.dp))
                 Text(
                     truncatedContent,
@@ -645,7 +643,7 @@ fun PostContent(post: Post) {
                         .height(50.dp),
                     fontSize = 15.sp,
                     maxLines = 2,
-                    color = Color.White
+                    color = Color.Black
                 )
             }
             Spacer(Modifier.size(40.dp))
@@ -656,8 +654,7 @@ fun PostContent(post: Post) {
         Row(
             Modifier
                 .fillMaxWidth()
-                .padding(start = 25.dp, end = 25.dp)
-                .background(colorResource(R.color.forum)),
+                .padding(start = 25.dp, end = 25.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column {
@@ -665,7 +662,7 @@ fun PostContent(post: Post) {
                     post.title,
                     Modifier.width(350.dp),
                     fontSize = 20.sp,
-                    color = Color.White
+                    color = Color.Black
                 )
                 Spacer(Modifier.size(5.dp))
                 Text(
@@ -675,7 +672,7 @@ fun PostContent(post: Post) {
                         .height(50.dp),
                     fontSize = 15.sp,
                     maxLines = 2,
-                    color = Color.White
+                    color = Color.Black
                 )
             }
         }
@@ -690,14 +687,14 @@ fun PostFooter(likesCount: Int, liked: Boolean, commentCount: Int) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        if (liked) Icon(Icons.Filled.Favorite, contentDescription = "讚數", tint = Color.Red)
-        else Icon(Icons.Filled.FavoriteBorder, contentDescription = "讚數", tint = Color.LightGray)
+        if (liked) Icon(Icons.Filled.Favorite, contentDescription = "讚數", tint = TipColor.bright_red)
+        else Icon(Icons.Filled.FavoriteBorder, contentDescription = "讚數", tint = colorResource(R.color.forum))
         Spacer(Modifier.size(5.dp))
-        Text(text = likesCount.toString(), fontSize = 14.sp, color = Color.White)
+        Text(text = likesCount.toString(), fontSize = 14.sp, color = colorResource(R.color.forum))
         Spacer(Modifier.size(15.dp))
-        Icon(Icons.Filled.MailOutline, contentDescription = "留言數", tint = Color.LightGray)
+        Icon(Icons.Filled.MailOutline, contentDescription = "留言數", tint = Color.DarkGray)
         Spacer(Modifier.size(5.dp))
-        Text(text = commentCount.toString(), fontSize = 14.sp, color = Color.White)
+        Text(text = commentCount.toString(), fontSize = 14.sp, color = colorResource(R.color.forum))
     }
 }
 

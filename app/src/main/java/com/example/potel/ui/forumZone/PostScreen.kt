@@ -69,6 +69,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.potel.R
+import com.example.potel.ui.theme.TipColor
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -122,7 +123,7 @@ fun PostScreen(navController: NavHostController) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = stringResource(R.string.back_button),
-                            tint = Color.LightGray
+                            tint = Color.White
                         )
                     }
                 },
@@ -137,7 +138,7 @@ fun PostScreen(navController: NavHostController) {
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(top = paddingValues.calculateTopPadding())
-                    .background(colorResource(R.color.forum))
+                    .background(TipColor.light_brown)
             ) {
                 item {
                     Spacer(Modifier.height(20.dp))
@@ -203,7 +204,7 @@ fun PostDetailContent(post: Post) {
     Column(
         Modifier
             .padding(horizontal = 20.dp)
-            .background(colorResource(R.color.forum))
+            .background(TipColor.light_brown)
     ) {
         // 用戶資料顯示區域
         UserInformationSection(post)
@@ -263,7 +264,7 @@ fun UserInformationSection(post: Post) {
         }
         Spacer(modifier = Modifier.width(10.dp))
         Column {
-            Text(text = post.memberName, fontSize = 16.sp, color = Color.White)
+            Text(text = post.memberName, fontSize = 16.sp, color =Color.Black)
             Spacer(modifier = Modifier.height(3.dp))
             PostDateText(post.createDate)
         }
@@ -272,20 +273,20 @@ fun UserInformationSection(post: Post) {
 
 @Composable
 fun PostDateText(createDate: String) {
-    Text(text = createDate.toFormattedDate(), fontSize = 12.sp, color = Color.Gray)
+    Text(text = createDate.toFormattedDate(), fontSize = 12.sp, color = TipColor.deep_brown)
 }
 
 @Composable
 fun PostTitleSection(post: Post) {
     Column(modifier = Modifier.padding(start = 5.dp)) {
-        Text(text = post.title, fontSize = 25.sp, color = Color.White)
+        Text(text = post.title, fontSize = 25.sp, color = Color.Black)
     }
 }
 
 @Composable
 fun PostBodySection(post: Post) {
     Column(modifier = Modifier.padding(start = 5.dp)) {
-        Text(text = post.content, fontSize = 18.sp, color = Color.White)
+        Text(text = post.content, fontSize = 18.sp, color = Color.Black)
     }
 }
 
@@ -322,12 +323,12 @@ fun LikeController(forumVM: ForumVM, post: Post, memberId: Int) {
                     imageVector = if (liked) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
                     contentDescription = "按讚按鈕",
                     modifier = Modifier.size(20.dp),
-                    tint = if (liked) Color.Red else Color.LightGray
+                    tint = if (liked) TipColor.bright_red else Color.DarkGray
                 )
                 Spacer(Modifier.size(5.dp))
                 Text(
                     text = likesCount.toString(),
-                    color = Color.White
+                    color = Color.DarkGray
                 )
             }
         }
@@ -340,11 +341,11 @@ fun AddCommentHeader(comments: List<Comment>) {
     HorizontalDivider(
         modifier = Modifier.padding(horizontal = 20.dp),
         thickness = 2.dp,
-        color = colorResource(R.color.addComment)
+        color = TipColor.deep_brown
     )
     Spacer(Modifier.height(20.dp))
     Row(Modifier.padding(horizontal = 25.dp), verticalAlignment = Alignment.CenterVertically) {
-        Text(text = "新增留言", fontSize = 20.sp, color = Color.LightGray)
+        Text(text = "新增留言", fontSize = 20.sp, color = colorResource(R.color.forum))
         Spacer(Modifier.width(15.dp))
         Column(
             modifier = Modifier
@@ -366,7 +367,7 @@ fun AddCommentSection(postId: Int, forumVM: ForumVM, memberId: Int, memberName:S
     Box(
         modifier = Modifier
             .padding(horizontal = 16.dp)
-            .background(colorResource(R.color.addComment), shape = RoundedCornerShape(8.dp))
+            .background(colorResource(R.color.forumTab).copy(alpha = 0.8f), shape = RoundedCornerShape(8.dp))
     ) {
 
         Column {
@@ -448,7 +449,7 @@ fun AddCommentSection(postId: Int, forumVM: ForumVM, memberId: Int, memberName:S
 fun CommentsSection(comments: List<Comment>, memberId: Int, navController:NavHostController, forumVM: ForumVM) {
     Column(
         Modifier
-            .background(colorResource(R.color.forum))
+            .background(TipColor.light_brown)
             .padding(horizontal = 26.dp)
     ) {
         comments.forEachIndexed { index, comment ->
@@ -458,7 +459,7 @@ fun CommentsSection(comments: List<Comment>, memberId: Int, navController:NavHos
             Spacer(modifier = Modifier.height(15.dp))
             HorizontalDivider(
                 thickness = 0.5.dp,
-                color = Color.Gray
+                color = TipColor.deep_brown
             )
             Spacer(modifier = Modifier.height(15.dp))
         }
@@ -488,14 +489,14 @@ fun CommentHeader(comment: Comment, isLastComment: Boolean, memberId: Int, navCo
         }
         Spacer(modifier = Modifier.width(10.dp))
         Column {
-            Text(text = comment.memberName, fontSize = 16.sp, color = Color.White)
+            Text(text = comment.memberName, fontSize = 16.sp, color = Color.Black)
             Spacer(modifier = Modifier.height(3.dp))
 
             if (isLastComment) {
                 Text(
                     text = "最新留言",
                     fontSize = 14.sp,
-                    color = Color.Gray
+                    color = TipColor.deep_brown
                 )
             } else {
                 CommentDateText(comment.createDate)
@@ -517,7 +518,7 @@ fun CommentHeader(comment: Comment, isLastComment: Boolean, memberId: Int, navCo
                         imageVector = Icons.Filled.Menu,
                         contentDescription = "更多操作",
                         Modifier.size(30.dp),
-                        tint = Color.Gray
+                        tint = TipColor.deep_brown
                     )
                 }
             }
@@ -643,14 +644,14 @@ fun CommentDateText(createDate: String) {
     Text(
         text = createDate.toFormattedDate(),
         fontSize = 14.sp,
-        color = Color.Gray
+        color = TipColor.deep_brown
     )
 }
 
 @Composable
 fun CommentContent(comment: Comment) {
     Column(Modifier.padding(horizontal = 5.dp)) {
-        Text(comment.content, color = Color.White)
+        Text(comment.content, color = Color.Black)
     }
 }
 

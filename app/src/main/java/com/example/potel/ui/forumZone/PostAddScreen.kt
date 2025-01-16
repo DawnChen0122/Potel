@@ -27,7 +27,6 @@ import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
@@ -60,6 +59,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.potel.R
+import com.example.potel.ui.theme.TipColor
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -108,7 +108,7 @@ fun PostAddScreen(
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = stringResource(R.string.back_button),
-                            tint = Color.LightGray
+                            tint = Color.White
                         )
                     }
                 },
@@ -227,45 +227,45 @@ fun PostAddContent(
     onSelectImage: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    LazyColumn(modifier = modifier.fillMaxSize().background(colorResource(R.color.forum))) {
+    LazyColumn(modifier = modifier.fillMaxSize().background(TipColor.light_brown)) {
         item {
             Column(
                 modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                HorizontalDivider(
-                    Modifier.padding(start = 10.dp, end = 10.dp),
-                    thickness = 1.dp,
-                    color = Color.DarkGray
-                )
+//                HorizontalDivider(
+//                    Modifier.padding(start = 10.dp, end = 10.dp),
+//                    thickness = 1.dp,
+//                    color = Color.DarkGray
+//                )
                 Spacer(Modifier.height(35.dp))
                 OutlinedTextField(
                     value = title,
                     onValueChange = onTitleChange,
-                    label = { Text("標題", color = Color.LightGray) },
+                    label = { Text("標題", color = Color.Black) },
                     modifier = Modifier.width(350.dp),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = Color.White,
-                        unfocusedBorderColor = Color.LightGray,
-                        focusedTextColor = Color.White,
-                        unfocusedTextColor = Color.LightGray,
-                        cursorColor = colorResource(R.color.forumButton)
+                        focusedBorderColor = Color.Black,
+                        unfocusedBorderColor = Color.Black,
+                        focusedTextColor = Color.Black,
+                        unfocusedTextColor = Color.Black,
+                        cursorColor = Color.Black
                     )
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 OutlinedTextField(
                     value = content,
                     onValueChange = onContentChange,
-                    label = { Text("內容", color = Color.LightGray)},
+                    label = { Text("內容", color = Color.Black)},
                     modifier = Modifier
                         .width(350.dp)
                         .height(150.dp),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = Color.White,
-                        unfocusedBorderColor = Color.LightGray,
-                        focusedTextColor = Color.White,
-                        unfocusedTextColor = Color.LightGray,
-                        cursorColor = colorResource(R.color.forumButton)
+                        focusedBorderColor = Color.Black,
+                        unfocusedBorderColor = Color.Black,
+                        focusedTextColor = Color.Black,
+                        unfocusedTextColor = Color.Black,
+                        cursorColor = Color.Black
                     ),
                     minLines = 1
                 )
@@ -273,7 +273,7 @@ fun PostAddContent(
                 Column(
                     Modifier
                         .size(350.dp)
-                        .border(1.dp, Color.LightGray, RoundedCornerShape(4.dp))
+                        .border(1.dp, Color.Black, RoundedCornerShape(4.dp))
                 ) {
                     Box(modifier = Modifier.fillMaxSize()) {
                         selectedImageUri?.let { uri ->
