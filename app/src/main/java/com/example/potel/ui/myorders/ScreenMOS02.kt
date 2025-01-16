@@ -56,7 +56,7 @@ fun ScreenMOS02(
 
     LaunchedEffect(Unit) {
         coroutineScope.launch {
-            orderlist = myOrdersViewModel.getOrders(memberid.toInt(), OrderState.Created.state)
+            orderlist = myOrdersViewModel.getOrders(memberid.toInt(), OrderState.Paid.state)
         }
     }
 
