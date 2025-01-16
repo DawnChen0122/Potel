@@ -12,8 +12,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.BottomAppBarDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -27,15 +34,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.BlendMode.Companion.Screen
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.potel.ui.booking.BookingScreens
 import com.example.potel.ui.booking.BookingViewModel
 import com.example.potel.ui.booking.bookingScreenRoute
 import com.example.potel.ui.carerecords.homeScreenRoute
@@ -46,8 +57,13 @@ import com.example.potel.ui.home.accountRoute
 import com.example.potel.ui.myorders.MyOrdersScreens
 import com.example.potel.ui.myorders.myOrdersScreenRoute
 import com.example.potel.ui.petsfile.petsfileScreenRoute
-import com.example.potel.ui.shopping.shoppingScreenRoute
 import com.example.potel.ui.theme.PotelTheme
+
+import com.example.potel.ui.shopping.shopScreenRoute
+
+import com.example.potel.ui.shopping.ShopScreens
+import com.example.potel.ui.shopping.ShopViewModel
+import kotlinx.coroutines.launch
 
 
 class MainActivity : ComponentActivity() {
@@ -114,7 +130,8 @@ fun PotelApp(
 @Composable
 fun TipNavHost(
     modifier: Modifier = Modifier,
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController = rememberNavController(),
+    viewModel: ShopViewModel = viewModel()
 ) {
     val bookingViewModel : BookingViewModel = viewModel()
 
@@ -126,11 +143,18 @@ fun TipNavHost(
 
     ) {
         // todo 2-2 置入所有的畫面路徑
+//        homeScreenRoute(navController) // 02 明駿
+//        bookingScreenRoute(navController) // 04 芊伃
+//        myOrdersScreenRoute(navController) // 27 正能
+        shopScreenRoute(viewModel = viewModel, navController) // 07 柏森
+//        careRecordsScreenRoute(navController) // 25 泰陽
+//        discussZoneScreenRoute(navController) // 16 品伃
+//        petsScreenRoute(navController) // 18 勇慶
         accountRoute(navController) //02 明駿
         homeScreenRoute(navController) // 02 明駿
         bookingScreenRoute(viewModel = bookingViewModel,navController) // 04 芊伃
         myOrdersScreenRoute(navController) // 27 正能
-        shoppingScreenRoute(navController) // 07 柏森
+        shopScreenRoute(viewModel, navController) // 07 柏森
         forumScreenRoute(navController) // 16 品伃
         petsfileScreenRoute(navController) // 18 勇慶
     }
@@ -202,6 +226,7 @@ fun MainBottomAppBar(navController: NavHostController){
                         .size(60.dp)
                         .weight(0.2f),
                     onClick = {
+                        navController.navigate(BookingScreens.DateSelection.name)
                     },
                 ) {
                     Icon(
@@ -216,6 +241,7 @@ fun MainBottomAppBar(navController: NavHostController){
                         .size(60.dp)
                         .weight(0.2f),
                     onClick = {
+                        navController.navigate(ShopScreens.Twoclass.name)
                     },
                 ) {
                     Icon(
