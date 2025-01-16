@@ -51,6 +51,7 @@ import com.example.potel.ui.shopping.ShopScreens
 import com.example.potel.ui.shopping.ShopViewModel
 import com.example.potel.ui.shopping.shopScreenRoute
 import com.example.potel.ui.theme.PotelTheme
+import com.example.potel.ui.theme.TipColor
 
 
 class MainActivity : ComponentActivity() {
@@ -208,7 +209,8 @@ fun MainBottomAppBar(navController: NavHostController){
                     Icon(
                         painter = painterResource(R.drawable.home),
                         contentDescription = "Home",
-                        modifier = Modifier.size(150.dp)
+                        modifier = Modifier.size(150.dp),
+                        tint = TipColor.deep_brown
                     )
                 }
 
@@ -223,7 +225,8 @@ fun MainBottomAppBar(navController: NavHostController){
                     Icon(
                         painter = painterResource(R.drawable.booking),
                         contentDescription = "Booking",
-                        modifier = Modifier.size(150.dp)
+                        modifier = Modifier.size(150.dp),
+                        tint = TipColor.deep_brown
                     )
                 }
 
@@ -238,7 +241,8 @@ fun MainBottomAppBar(navController: NavHostController){
                     Icon(
                         painter = painterResource(R.drawable.shopping),
                         contentDescription = "Shopping",
-                        modifier = Modifier.size(150.dp)
+                        modifier = Modifier.size(150.dp),
+                        tint = TipColor.deep_brown
                     )
                 }
                 IconButton(
@@ -254,7 +258,8 @@ fun MainBottomAppBar(navController: NavHostController){
                     Icon(
                         painter = painterResource(R.drawable.myorders),
                         contentDescription = "MyOrders",
-                        modifier = Modifier.size(150.dp)
+                        modifier = Modifier.size(150.dp),
+                        tint = TipColor.deep_brown
                     )
                 }
                 IconButton(
@@ -267,7 +272,8 @@ fun MainBottomAppBar(navController: NavHostController){
                     Icon(
                         painter = painterResource(R.drawable.myinfo),
                         contentDescription = "MyInfo",
-                        modifier = Modifier.size(150.dp)
+                        modifier = Modifier.size(150.dp),
+                        tint = TipColor.deep_brown
                     )
                 }
             }
