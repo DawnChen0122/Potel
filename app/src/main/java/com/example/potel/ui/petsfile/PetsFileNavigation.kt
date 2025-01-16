@@ -11,7 +11,6 @@ import androidx.navigation.compose.composable
 enum class Screens(title: String){
     PetsFileFirst(title = "新增寵物(狗貓)頁面"),
     PetsFileAdd(title = "新增資訊頁面"),
-    PetsFilePreview(title = "看到所有寵物"),
     PetsFileCats(title = "新刪修貓咪"),
     PetsFileDogs(title = "新刪修狗狗")
 }
@@ -30,11 +29,6 @@ fun NavGraphBuilder.petsfileScreenRoute(navController: NavHostController) {
         route = Screens.PetsFileAdd.name,
     ) {
         ScreenPetsFileAdd(navController = navController)
-    }
-    composable(
-        route = Screens.PetsFilePreview.name,
-    ) {
-        ScreenPetsFilePreview(navController = navController)
     }
     composable(
         route = Screens.PetsFileDogs.name,

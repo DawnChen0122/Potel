@@ -1,9 +1,9 @@
 package com.example.potel.ui.petsfile
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -44,6 +45,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -54,7 +56,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
@@ -64,24 +65,31 @@ import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import coil.compose.AsyncImage
 import com.example.potel.ui.theme.PotelTheme
 import kotlinx.coroutines.launch
 
-class MainActivity : ComponentActivity() {
+@SuppressLint("RestrictedApi")
+class PetsFileDogsActivity : ComponentActivity() {
+    @SuppressLint("RestrictedApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            PotelTheme  {
+            PotelTheme {
                 ScreensPetsFileDogs(navController = rememberNavController())
             }
         }
+    }
+
+    private fun setContent(function: @Composable () -> Unit) {
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ScreensPetsFileDogs(petsFileViewModel: PetsFileDogsViewModel = viewModel(),
-         navController: NavHostController
+fun ScreensPetsFileDogs(
+    petsFileViewModel: PetsFileDogsViewModel = viewModel(),
+    navController: NavHostController
 ) {
     var inputText by remember { mutableStateOf("") }
     // 從StateFlow取得並呈現最新的值
@@ -131,7 +139,7 @@ fun ScreensPetsFileDogs(petsFileViewModel: PetsFileDogsViewModel = viewModel(),
             BottomAppBar(actions = {
                 // 新增按鈕
                 IconButton(onClick = {
-                    showAddDialog = true
+                    navController.navigate(Screens.PetsFileAdd.name)
                 }) {
                     Icon(Icons.Filled.Add, contentDescription = "add")
                 }
@@ -153,13 +161,13 @@ fun ScreensPetsFileDogs(petsFileViewModel: PetsFileDogsViewModel = viewModel(),
 
     ) { innerPadding ->
         // 一定要套用innerPadding，否則內容無法跟TopAppBar對齊
-        DogsLists(dogs.filter { it.name.contains(inputText, true) },
+        DogsLists(dogs.filter { it.dogName.contains(inputText, true) },
             innerPadding,
             // 項目被點擊時執行
             onItemClick = {
                 scope.launch {
                     snackbarHostState.showSnackbar(
-                        "${it.name}, $${it.breed}",
+                        "${it.dogName}, $${it.dogBreed}",
                         withDismissAction = true
                     )
                 }
@@ -173,57 +181,36 @@ fun ScreensPetsFileDogs(petsFileViewModel: PetsFileDogsViewModel = viewModel(),
             // 刪除按鈕被點擊時執行
             onDeleteClick = {
                 // 將欲刪除的書從list移除
-                petsFileViewModel.removeItem(it)
+                petsFileViewModel.removeIDog(it)
                 // 將刪除的書名以Snackbar顯示
                 scope.launch {
                     snackbarHostState.showSnackbar(
-                        "${it.name} deleted", withDismissAction = true
+                        "${it.dogName} deleted", withDismissAction = true
                     )
                 }
             })
-        if (showAddDialog) {
-            // 顯示新增對話視窗
-            AddDialog(
-                // 取消時欲執行內容
-                onDismiss = {
-                    showAddDialog = false
-                })
-            // onAdd: 確定新增時欲執行內容
-            {
-                // 將欲新增的書加入到list
-                petsFileViewModel.addItem(it)
-                showAddDialog = false
-                // 新增成功後該書會被加到最後一筆，使用者可能看不到該書資訊；
-                // 將查詢文字換成新增的書名，可立即顯示該書資訊
-                inputText = it.name
-                // 將新增的書名以Snackbar顯示
-                scope.launch {
-                    snackbarHostState.showSnackbar(
-                        "${it.name} added", withDismissAction = true
-                    )
-                }
-            }
-        }
         if (showEditDialog) {
             // 顯示編輯對話視窗
+
             EditDialog(
                 editDogs,
                 // 取消時欲執行內容
                 onDismiss = {
                     showEditDialog = false
+                },
+                onEdit = { petDog->
+                    showEditDialog = false
+                    // 編輯成功後將查詢文字換成編輯的書名，可立即顯示該書資訊
+                    petsFileViewModel.updateDog(petDog)
+                    // 將修改好的書名以Snackbar顯示
+                    scope.launch {
+                        snackbarHostState.showSnackbar(
+                            "${petDog.dogName} updated", withDismissAction = true
+                        )
+                    }
                 })
             // onEdit: 確定編輯時欲執行內容
-            {
-                showEditDialog = false
-                // 編輯成功後將查詢文字換成編輯的書名，可立即顯示該書資訊
-                inputText = it.name
-                // 將修改好的書名以Snackbar顯示
-                scope.launch {
-                    snackbarHostState.showSnackbar(
-                        "${it.name} updated", withDismissAction = true
-                    )
-                }
-            }
+
         }
     }
 }
@@ -256,11 +243,13 @@ fun DogsLists(
                 modifier = Modifier.clickable {
                     onItemClick(dogs)
                 },
-                headlineContent = { Text(dogs.name) },
-                supportingContent = { Text(dogs.breed) },
+                headlineContent = { Text(dogs.dogName) },
+                supportingContent = { Text(dogs.dogBreed) },
                 leadingContent = {
-                    Image(
-                        painter = painterResource(id = dogs.image), contentDescription = "dogs"
+                    AsyncImage(
+                        modifier = Modifier.size(50.dp),
+                        model = "http://10.0.2.2:8080/PotelServer/api/image?imageid=${dogs.dogImages}",
+                        contentDescription = ""
                     )
                 },
                 trailingContent = {
@@ -290,7 +279,7 @@ fun DogsLists(
 @Composable
 fun AddDialog(
     onDismiss: () -> Unit,
-    onAdd: (PetsDog) -> Unit
+    onAdd: (PetsDog) -> Unit,
 ) {
     var name by remember { mutableStateOf("") }
     var breed by remember { mutableStateOf("") }
@@ -340,9 +329,9 @@ fun AddDialog(
                 ) {
                     Button(onClick = {
                         val newDogs = PetsDog(
-                            name, breed, gender,
+                            name, 1, breed, gender, "",
                             // 隨意給個封面圖
-                            android.R.drawable.ic_dialog_map
+                            1
                         )
                         onAdd(newDogs)
                     }) {
@@ -364,9 +353,9 @@ fun EditDialog(
     onDismiss: () -> Unit,
     onEdit: (PetsDog) -> Unit
 ) {
-    var name by remember { mutableStateOf(dogs.name) }
-    var breed by remember { mutableStateOf(dogs.breed) }
-    var gender by remember { mutableStateOf(dogs.gender) }
+    var name by remember { mutableStateOf(dogs.dogName) }
+    var breed by remember { mutableStateOf(dogs.dogBreed) }
+    var gender by remember { mutableStateOf(dogs.dogGender) }
     Dialog(onDismissRequest = { onDismiss() }) {
         Card(
             modifier = Modifier
@@ -387,7 +376,7 @@ fun EditDialog(
                     fontWeight = FontWeight.Bold,
                     color = Color.Blue
                 )
-                Text(text = "Dogs: ${dogs.name}, ${dogs.breed}, ${dogs.gender}")
+                Text(text = "Dogs: ${dogs.dogName}, ${dogs.dogBreed}, ${dogs.dogGender}")
                 TextField(
                     value = name,
                     onValueChange = { name = it },
@@ -413,9 +402,9 @@ fun EditDialog(
                 ) {
                     Button(onClick = {
                         // 就將原本書內容替換成使用者輸入的新內容，原始books內容也會更新
-                        dogs.name = name
-                        dogs.breed = breed
-                        dogs.gender = gender
+                        dogs.dogName = name
+                        dogs.dogBreed = breed
+                        dogs.dogGender = gender
                         onEdit(dogs)
                     }) {
                         Text("Update")
@@ -429,10 +418,11 @@ fun EditDialog(
         }
     }
 }
+
 @Preview(showBackground = true)
 @Composable
 fun ScreensPetsFileDogsPreview() {
-    PotelTheme  {
+    PotelTheme {
         ScreensPetsFileDogs(navController = rememberNavController())
     }
 }
