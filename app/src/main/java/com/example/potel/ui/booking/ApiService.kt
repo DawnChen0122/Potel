@@ -2,18 +2,46 @@ package com.example.potel.ui.booking
 
 import com.example.potel.ui.myorders.utils.MyCookieJar
 import okhttp3.OkHttpClient
-import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import java.sql.Timestamp
+import kotlin.contracts.Returns
 
+
+data class RoomTypeResponse(
+    val roomTypeId:Int,
+    val descpt:String,
+    val imageId:Int,
+    val price:Int,
+    val petType:Char,
+    val weightL:Int,
+    val weightH:Int,
+    val status:Char,
+    val createDate:Timestamp,
+    val modifyDate:Timestamp
+)
+
+data class Response(
+    val rc: Int, //return code
+    val rm: String,
+    val orderid: Int
+
+)
 
 interface ApiService {
 
+//    @GET("booking/findroomtype")
+//    suspend fun getAllRoomType(
+//    ): List<RoomTypeResponse>
     @GET("booking/findroomtype")
     suspend fun fetchRoomTypes(): List<RoomType>
+
+    @POST("booking/addorder")
+    suspend fun addOrder(@Body orderRequest:Order): Response
+
 
 }
 
@@ -34,6 +62,6 @@ object RetrofitInstance {
     }
 }
 
-fun composeImageUrl(imageId: Int): String{
-    return "${baseurl}booking/image?imageId=$imageId"
+fun composeImageUrl(imageid: Int): String{
+    return "${baseurl}booking/image?imageid=$imageid"
 }

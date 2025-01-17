@@ -6,6 +6,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -51,6 +52,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -72,33 +74,27 @@ fun PostEditScreen(
     val forumVM: ForumVM = viewModel(backStackEntry)
     val post = forumVM.postSelectedState.collectAsState()
 
-    // 讀取當前貼文的標題、內容以及圖片
     var title by remember { mutableStateOf(post.value.title)}
     var content by remember { mutableStateOf(post.value.content)}
 
-    // 將 String 轉換為 Uri
     val imageUri = remember(post.value.imageId) {
         post.value.imageId?.let {
             try {
-                // 將 String URL 轉換為 Uri
                 Uri.parse(composeImageUrl(it))
             } catch (e: Exception) {
-                // 如果轉換失敗，處理異常
                 Log.e("Uri Error", "Invalid Uri: ${e.message}")
                 null
             }
         }
     }
 
-    var selectedImageUri by remember { mutableStateOf(imageUri)} // 假設你有選擇圖片的 Uri
+    var selectedImageUri by remember { mutableStateOf(imageUri)}
 
-    // 狀態管理
     val scope = rememberCoroutineScope()
-    val snackbarHostState = remember { SnackbarHostState()}
+    val hostState = remember { SnackbarHostState()}
     val context = LocalContext.current
     var showDialog by remember { mutableStateOf(false)}
 
-    // 用於選擇圖片的功能
     val pickImageLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
         onResult = { uri: Uri? -> selectedImageUri = uri }
@@ -130,7 +126,7 @@ fun PostEditScreen(
                     Button(
                         onClick = {
                             if (title.isEmpty() || content.isEmpty()) {
-                                scope.launch { snackbarHostState.showSnackbar("標題和內容都必須填寫！") }
+                                scope.launch { hostState.showSnackbar("標題和內容都必須填寫！", withDismissAction = true) }
                             } else {
                                 when (selectedImageUri) {
                                     null -> {
@@ -173,10 +169,11 @@ fun PostEditScreen(
                                         forumVM.updatePostWithImage(updatePost, imagePart)
                                     }
                                 }
+                                forumVM.setPostSuccessMessage("編輯完成！")
                                 navController.popBackStack()
                             }
                         }, shape = RoundedCornerShape(8.dp), colors = ButtonDefaults.buttonColors(
-                            containerColor = colorResource(R.color.foruButton),
+                            containerColor = colorResource(R.color.forumButton),
                             contentColor = Color.Black
                         )
                     ) {
@@ -187,11 +184,12 @@ fun PostEditScreen(
             )
         },
         snackbarHost = {
-            SnackbarHost(hostState = snackbarHostState) { snackbarData ->
+            SnackbarHost(hostState = hostState) { data ->
                 Snackbar(
-                    snackbarData = snackbarData,
+                    snackbarData = data,
                     containerColor = Color.White,
-                    contentColor = Color.Black
+                    contentColor = Color.Black,
+                    dismissActionContentColor = Color.Black
                 )
             }
         }
@@ -274,7 +272,7 @@ fun PostEditContent(
     onTitleChange: (String) -> Unit,
     content: String,
     onContentChange: (String) -> Unit,
-    selectedImageUri: Uri?, // 修改為 Uri 類型
+    selectedImageUri: Uri?,
     onSelectImage: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -302,7 +300,7 @@ fun PostEditContent(
                         unfocusedBorderColor = Color.LightGray,
                         focusedTextColor = Color.White,
                         unfocusedTextColor = Color.LightGray,
-                        cursorColor = colorResource(R.color.foruButton)
+                        cursorColor = colorResource(R.color.forumButton)
                     )
                 )
                 Spacer(modifier = Modifier.height(8.dp))
@@ -318,7 +316,7 @@ fun PostEditContent(
                         unfocusedBorderColor = Color.LightGray,
                         focusedTextColor = Color.White,
                         unfocusedTextColor = Color.LightGray,
-                        cursorColor = colorResource(R.color.foruButton)
+                        cursorColor = colorResource(R.color.forumButton)
                     ),
                     minLines = 1
                 )
@@ -341,10 +339,17 @@ fun PostEditContent(
                             onClick = onSelectImage,
                             modifier = Modifier.align(Alignment.Center),
                             colors = ButtonDefaults.buttonColors(
-                                containerColor = Color.LightGray,
+                                containerColor = colorResource(R.color.forumButton),
                                 contentColor = Color.Black
                             )
                         ) {
+                            val imageResource = R.drawable.uploadimage
+                            Image(
+                                painter = painterResource(id = imageResource),
+                                contentDescription = "上傳照片",
+                                modifier = Modifier
+                                    .size(35.dp).padding(end = 8.dp)
+                            )
                             Text(if (selectedImageUri != null) "更改照片" else "上傳照片")
                         }
                     }

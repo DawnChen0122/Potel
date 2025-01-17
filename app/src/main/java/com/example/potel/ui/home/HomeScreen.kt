@@ -178,7 +178,7 @@ fun HomeRoute(
                     Button(
                         shape = RoundedCornerShape(20),
                         onClick = {
-                            navController.navigate(route = Screens.PetsFilePreview.name)
+                            navController.navigate(route = Screens.PetsFileFirst.name)
                         },
                         border = BorderStroke(1.dp, Color.Black),
                         colors = ButtonDefaults.outlinedButtonColors(),
