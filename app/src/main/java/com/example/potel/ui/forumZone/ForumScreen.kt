@@ -634,7 +634,7 @@ fun PostContent(post: Post) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column {
-                Text(post.title, fontSize = 20.sp, maxLines = 1, color = Color.Black)
+                Text(post.title,  Modifier.width(250.dp), fontSize = 20.sp, maxLines = 1, color = Color.Black)
                 Spacer(Modifier.size(5.dp))
                 Text(
                     truncatedContent,
@@ -646,7 +646,7 @@ fun PostContent(post: Post) {
                     color = Color.Black
                 )
             }
-            Spacer(Modifier.size(40.dp))
+            Spacer(Modifier.size(20.dp))
             PostImage(post.imageId)
         }
     } else {
@@ -660,7 +660,7 @@ fun PostContent(post: Post) {
             Column {
                 Text(
                     post.title,
-                    Modifier.width(350.dp),
+                    Modifier.width(400.dp),
                     fontSize = 20.sp,
                     color = Color.Black
                 )
@@ -668,7 +668,7 @@ fun PostContent(post: Post) {
                 Text(
                     truncatedContent,
                     Modifier
-                        .width(350.dp)
+                        .width(400.dp)
                         .height(50.dp),
                     fontSize = 15.sp,
                     maxLines = 2,
