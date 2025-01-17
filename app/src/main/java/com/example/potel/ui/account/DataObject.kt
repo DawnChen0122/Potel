@@ -18,14 +18,13 @@ data class Member(
 
 
 data class InputRequest(
-    val email : String,
+    val email: String,
     val passwd: String
 )
 
 
-
 data class Inputlog(
-    val input : String,
+    val input: String,
     val passwd: String
 )
 

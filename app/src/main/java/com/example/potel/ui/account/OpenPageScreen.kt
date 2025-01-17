@@ -50,7 +50,6 @@ fun Login(
 ) {
 
 
-
     val context = LocalContext.current
 
     val preferences = context.getSharedPreferences("member", Context.MODE_PRIVATE)
@@ -86,9 +85,6 @@ fun Login(
         ) {
 
 
-
-
-
             Text(
 
                 text = "Potel",
@@ -105,7 +101,7 @@ fun Login(
                     viewModel.onInputChanged(value)
                 },
                 label = { Text(text = "請輸入信箱或手機號碼") },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
                 shape = RoundedCornerShape(8.dp),
                 isError = inputError,
                 modifier = Modifier
@@ -117,7 +113,7 @@ fun Login(
                     text = "請輸入有效的信箱或手機號碼",
                     color = Color.Red,
                     fontSize = 20.sp,
-                    modifier = Modifier.padding(start = 16.dp,top = 8.dp)
+                    modifier = Modifier.padding(start = 16.dp, top = 8.dp)
                 )
             }
 
@@ -173,7 +169,6 @@ fun Login(
 
         {
 
-            // 註冊按鈕
             Button(
                 onClick = {
                     if (currentInput.isEmpty()) {
@@ -194,8 +189,9 @@ fun Login(
                                 val member = viewModel.login(inputlog)
                                 Log.d("Login", "已登入0，issucc=$member")
                                 if (member != null && member.memberid != 0) {
-                                    // 儲存登入資料
-                                    preferences.edit().putString("memberid",
+
+                                    preferences.edit().putString(
+                                        "memberid",
                                         member.memberid.toString()
                                     )
                                         .putString("name", member.name)
@@ -212,9 +208,9 @@ fun Login(
                                     errorMessage = "登入失敗，請檢查您的帳號密碼"
                                 }
                             } catch (e: Exception) {
-                                // 處理登入過程中的異常
+
                                 Log.e("Login", "登入過程中出現錯誤: ${e.message}")
-                                errorMessage = "登入過程中出現錯誤，請稍後再試"
+                                errorMessage = "登入失敗，請檢查您的帳號密碼"
                             }
                         }
                     }
@@ -284,7 +280,6 @@ fun Login(
                     }
             )
         }
-
 
 
     }

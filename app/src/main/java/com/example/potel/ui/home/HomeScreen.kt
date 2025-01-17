@@ -1,6 +1,7 @@
 package com.example.potel.ui.home
 
 
+import android.content.Context
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -25,6 +26,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -40,6 +42,8 @@ import com.example.potel.ui.petsfile.PetsFileScreens
 fun HomeRoute(
     navController: NavHostController = rememberNavController()
 ) {
+    val context = LocalContext.current
+    val preferences = context.getSharedPreferences("member", Context.MODE_PRIVATE)
 
 
     Scaffold(
@@ -59,7 +63,7 @@ fun HomeRoute(
                 .padding(innerPadding)
         ) {
             Text(
-                text = "OOO先生/小姐您好",
+                text = "${preferences.getString("name", "")}先生/小姐您好",
                 style = TextStyle(
                     fontSize = 20.sp,
                     lineHeight = 46.sp,
@@ -187,65 +191,64 @@ fun HomeRoute(
                     )
                 }
             }
-                Row(
-                    horizontalArrangement = Arrangement.Start,
-                ) {
-                    Button(
-                        shape = RoundedCornerShape(20),
-                        onClick = {
-                            navController.navigate(route = ForumScreens.ForumScreen.name)
-                        },
-                        border = BorderStroke(1.dp, Color.Black),
-                        colors = ButtonDefaults.outlinedButtonColors(),
+            Row(
+                horizontalArrangement = Arrangement.Start,
+            ) {
+                Button(
+                    shape = RoundedCornerShape(20),
+                    onClick = {
+                        navController.navigate(route = ForumScreens.ForumScreen.name)
+                    },
+                    border = BorderStroke(1.dp, Color.Black),
+                    colors = ButtonDefaults.outlinedButtonColors(),
+                    modifier = Modifier
+
+                )
+                {
+                    Text(
+                        text = "討論區",
+                        style = TextStyle(
+                            fontSize = 27.sp,
+                            lineHeight = 32.sp,
+                            fontWeight = FontWeight(700),
+                            color = Color(0xFF000000),
+                            textAlign = TextAlign.Center,
+                        ),
                         modifier = Modifier
-
+                            .width(100.dp)
+                            .height(45.dp)
                     )
-                    {
-                        Text(
-                            text = "討論區",
-                            style = TextStyle(
-                                fontSize = 27.sp,
-                                lineHeight = 32.sp,
-                                fontWeight = FontWeight(700),
-                                color = Color(0xFF000000),
-                                textAlign = TextAlign.Center,
-                            ),
-                            modifier = Modifier
-                                .width(100.dp)
-                                .height(45.dp)
-                        )
-                    }
+                }
 
-                    Button(
-                        shape = RoundedCornerShape(20),
-                        onClick = {
-                            navController.navigate(route = PetsFileScreens.PetsFileFirst.name)
-                        },
-                        border = BorderStroke(1.dp, Color.Black),
-                        colors = ButtonDefaults.outlinedButtonColors(),
+                Button(
+                    shape = RoundedCornerShape(20),
+                    onClick = {
+                        navController.navigate(route = PetsFileScreens.PetsFileFirst.name)
+                    },
+                    border = BorderStroke(1.dp, Color.Black),
+                    colors = ButtonDefaults.outlinedButtonColors(),
+                    modifier = Modifier
+
+                )
+                {
+                    Text(
+                        text = "寵物/會員資料",
+                        style = TextStyle(
+                            fontSize = 27.sp,
+                            lineHeight = 32.sp,
+                            fontWeight = FontWeight(700),
+                            color = Color(0xFF000000),
+                            textAlign = TextAlign.Center,
+                        ),
                         modifier = Modifier
-
+                            .width(180.dp)
+                            .height(45.dp)
                     )
-                    {
-                        Text(
-                            text = "寵物/會員資料",
-                            style = TextStyle(
-                                fontSize = 27.sp,
-                                lineHeight = 32.sp,
-                                fontWeight = FontWeight(700),
-                                color = Color(0xFF000000),
-                                textAlign = TextAlign.Center,
-                            ),
-                            modifier = Modifier
-                                .width(180.dp)
-                                .height(45.dp)
-                        )
-                    }
                 }
             }
         }
     }
-
+}
 
 
 @Preview(showBackground = true)

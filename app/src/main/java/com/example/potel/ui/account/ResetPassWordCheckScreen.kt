@@ -26,6 +26,8 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.potel.ui.home.AccountScreens
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
@@ -210,22 +212,25 @@ fun Resetpassword(
 
         Button(
             onClick = {
-                // 檢查是否有欄位為空
                 if (email.isEmpty() || passwd.isEmpty() || checkpasswd.isEmpty() || cellphone.isEmpty()) {
                     errorMessage = "欄位不得空白"
-                }
-                // 檢查密碼是否一致
-                else if (passwd != checkpasswd) {
+                } else if (passwd != checkpasswd) {
                     errorMessage = "密碼不一致"
                 } else {
-                    // 沒有錯誤，執行變更密碼的操作
                     viewModel.viewModelScope.launch {
-                        // 清除錯誤訊息
                         errorMessage = null
-                        // 檢查 email 和 cellphone 是否有效
-                        viewModel.checkEmailAndCellphone()
-                        // 更新密碼
-                        viewModel.changepasswd()
+                        val result1 = viewModel.checkEmailAndCellphone()
+                        if (result1.success) {
+                            viewModel.changepasswd()
+                            val result2 = viewModel.changepasswd()
+                            if (result2.success) {
+                                errorMessage = "密碼更改成功"
+                                delay(1000)
+                                navController.navigate(AccountScreens.Login.name)
+                            }
+                        } else {
+                            errorMessage = "密碼更改失敗"
+                        }
                     }
                 }
             },
