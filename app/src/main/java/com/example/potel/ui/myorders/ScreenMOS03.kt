@@ -56,7 +56,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.potel.R
-import com.example.potel.ui.theme.TipColor
 import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.ZoneId
@@ -92,18 +91,14 @@ fun ScreenMOS03(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(10.dp)
-            .background(color = TipColor.deep_brown),
+            .padding(10.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(
-                    color = TipColor.light_brown,
-                    shape = RoundedCornerShape(size = 8.dp)
-                ),
+                .background(color = Color(0xFFD9D9D9), shape = RoundedCornerShape(size = 8.dp)),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
         ) {
@@ -126,8 +121,7 @@ fun ScreenMOS03(
                             lineHeight = 32.sp,
                             fontFamily = FontFamily(Font(R.font.dm_sans)),
                             fontWeight = FontWeight(700),
-//                        color = Color(0xFF000000),
-                            color = TipColor.deep_brown,
+                            color = Color(0xFF000000),
                             textAlign = TextAlign.Center,
                         ),
                         modifier = Modifier
@@ -140,8 +134,7 @@ fun ScreenMOS03(
                             lineHeight = 32.sp,
                             fontFamily = FontFamily(Font(R.font.dm_sans)),
                             fontWeight = FontWeight(700),
-//                        color = Color(0xFF000000),
-                            color = TipColor.deep_brown,
+                            color = Color(0xFF000000),
                             textAlign = TextAlign.Start
                         ),
                         modifier = Modifier
@@ -151,7 +144,6 @@ fun ScreenMOS03(
                 Icon(
                     imageVector = Icons.Default.Search,
                     contentDescription = "查詢",
-                    tint = TipColor.deep_brown,
                     modifier = Modifier
                         .weight(0.1f)
                         .combinedClickable(
@@ -197,9 +189,7 @@ fun ScreenMOS03(
                     )
                     Text(
                         modifier = Modifier.weight(0.1f),
-                        text = " ～ ",
-                        //                        color = Color(0xFF000000),
-                        color = TipColor.deep_brown,
+                        text = " ～ "
                     )
                     TextField(
                         modifier = Modifier.weight(0.45f),
@@ -286,49 +276,26 @@ fun ScreenMOS03(
                                     fontFamily = FontFamily.SansSerif,
                                     style = TextStyle(
                                         fontWeight = FontWeight(700),
-                                        fontSize = 16.sp,
-                                        color = TipColor.deep_brown,
-                                    ),
+                                        fontSize = 16.sp),
                                     modifier = Modifier.weight(1f)
                                 )
                                 Text(
                                     text = "金額: ${order.amount}",
                                     modifier = Modifier.weight(1f),
-                                    textAlign = TextAlign.End,
-                                    style = TextStyle(
-                                        color = TipColor.deep_brown,
-                                    )
+                                    textAlign = TextAlign.End
                                 )
                             }
-                            Text(
-                                text = "訂房時間: ${order.createdate}",
-                                style = TextStyle(
-                                    color = TipColor.deep_brown,
-                                )
-                            )
+                            Text(text = "訂房時間: ${order.createdate}")
                             Row(
                                 modifier = Modifier.fillMaxWidth()
                             ) {
+                                 Text(text = "入住時間: ")
                                  Text(
-                                     text = "入住時間: ",
-                                     style = TextStyle(
-                                         color = TipColor.deep_brown,
-                                     )
-                                 )
-                                 Text(
-                                     text = "${order.dates}~${order.datee}",
-                                     fontSize = 14.sp,
-                                     style = TextStyle(
-                                         color = TipColor.deep_brown,
-                                     )
+                                     text = "${order.dates}~${order.datee}"
+                                     , fontSize = 14.sp
                                  )
                             }
-                            Text(
-                                text = "暱稱: ${order.pet.nickname}",
-                                style = TextStyle(
-                                    color = TipColor.deep_brown,
-                                )
-                            )
+                            Text(text = "暱稱: ${order.pet.nickname}")
                         }
                         Column (
                             modifier = Modifier

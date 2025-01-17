@@ -1,4 +1,5 @@
 package com.example.potel.ui.petsfile
+
 import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.compose.foundation.Image
@@ -12,7 +13,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -64,7 +64,6 @@ import androidx.core.app.ComponentActivity
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import coil.compose.AsyncImage
 import com.example.potel.ui.theme.PotelTheme
 import kotlinx.coroutines.launch
 
@@ -88,7 +87,7 @@ class PetsFileCatsActivity : ComponentActivity() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ScreensPetsFileCats(petsFileViewModel: PetsFileCatsViewModel = viewModel(),
-                        navController: NavHostController
+                            navController: NavHostController
 ) {
     var inputText by remember { mutableStateOf("") }
     // 從StateFlow取得並呈現最新的值
@@ -138,7 +137,7 @@ fun ScreensPetsFileCats(petsFileViewModel: PetsFileCatsViewModel = viewModel(),
             BottomAppBar(actions = {
                 // 新增按鈕
                 IconButton(onClick = {
-                    navController.navigate(Screens.PetsFileAdd.name)
+                    showAddDialog = true
                 }) {
                     Icon(Icons.Filled.Add, contentDescription = "add")
                 }
@@ -160,13 +159,13 @@ fun ScreensPetsFileCats(petsFileViewModel: PetsFileCatsViewModel = viewModel(),
 
     ) { innerPadding ->
         // 一定要套用innerPadding，否則內容無法跟TopAppBar對齊
-        CatsLists(cats.filter { it.catName.contains(inputText, true) },
+        CatsLists(cats.filter { it.name.contains(inputText, true) },
             innerPadding,
             // 項目被點擊時執行
             onItemClick = {
                 scope.launch {
                     snackbarHostState.showSnackbar(
-                        "${it.catName}, $${it.catbreed}",
+                        "${it.name}, $${it.breed}",
                         withDismissAction = true
                     )
                 }
@@ -180,35 +179,57 @@ fun ScreensPetsFileCats(petsFileViewModel: PetsFileCatsViewModel = viewModel(),
             // 刪除按鈕被點擊時執行
             onDeleteClick = {
                 // 將欲刪除的書從list移除
-                petsFileViewModel.removeCat(it)
+                petsFileViewModel.removeItem(it)
                 // 將刪除的書名以Snackbar顯示
                 scope.launch {
                     snackbarHostState.showSnackbar(
-                        "${it.catName} deleted", withDismissAction = true
+                        "${it.name} deleted", withDismissAction = true
                     )
                 }
             })
-
+        if (showAddDialog) {
+            // 顯示新增對話視窗
+            AddDialogCats (
+                // 取消時欲執行內容
+                onDismiss = {
+                    showAddDialog = false
+                })
+            // onAdd: 確定新增時欲執行內容
+            {
+                // 將欲新增的書加入到list
+                petsFileViewModel.addItem(it)
+                showAddDialog = false
+                // 新增成功後該書會被加到最後一筆，使用者可能看不到該書資訊；
+                // 將查詢文字換成新增的書名，可立即顯示該書資訊
+                inputText = it.name
+                // 將新增的書名以Snackbar顯示
+                scope.launch {
+                    snackbarHostState.showSnackbar(
+                        "${it.name} added", withDismissAction = true
+                    )
+                }
+            }
+        }
         if (showEditDialog) {
             // 顯示編輯對話視窗
-
             EditDialog(
                 editCats,
                 // 取消時欲執行內容
                 onDismiss = {
                     showEditDialog = false
-                },
-                onEdit = { petCat->
-                    showEditDialog = false
-                    // 編輯成功後將查詢文字換成編輯的書名，可立即顯示該書資訊
-                    petsFileViewModel.updateCat(petCat)
-                    // 將修改好的書名以Snackbar顯示
-                    scope.launch {
-                        snackbarHostState.showSnackbar(
-                            "${petCat.catName} updated", withDismissAction = true
-                        )
-                    }
                 })
+            // onEdit: 確定編輯時欲執行內容
+            {
+                showEditDialog = false
+                // 編輯成功後將查詢文字換成編輯的書名，可立即顯示該書資訊
+                inputText = it.name
+                // 將修改好的書名以Snackbar顯示
+                scope.launch {
+                    snackbarHostState.showSnackbar(
+                        "${it.name} updated", withDismissAction = true
+                    )
+                }
+            }
         }
     }
 }
@@ -241,13 +262,11 @@ fun CatsLists(
                 modifier = Modifier.clickable {
                     onItemClick(cats)
                 },
-                headlineContent = { Text(cats.catName) },
-                supportingContent = { Text(cats.catbreed) },
+                headlineContent = { Text(cats.name) },
+                supportingContent = { Text(cats.breed) },
                 leadingContent = {
-                    AsyncImage(
-                        modifier = Modifier.size(50.dp),
-                        model = "http://10.0.2.2:8080/PotelServer/api/image?imageid=${cats.catImages}",
-                        contentDescription = ""
+                    Image(
+                        painter = painterResource(id = cats.image), contentDescription = "cats"
                     )
                 },
                 trailingContent = {
@@ -327,9 +346,9 @@ fun AddDialogCats(
                 ) {
                     Button(onClick = {
                         val newCats = PetsCat(
-                            name,1, breed, gender,
+                            name, breed, gender,
                             // 隨意給個封面圖
-                            "1"
+                            android.R.drawable.ic_dialog_map
                         )
                         onAdd(newCats)
                     }) {
@@ -351,9 +370,9 @@ fun EditDialog(
     onDismiss: () -> Unit,
     onEdit: (PetsCat) -> Unit
 ) {
-    var name by remember { mutableStateOf(cats.catName) }
-    var breed by remember { mutableStateOf(cats.catbreed) }
-    var gender by remember { mutableStateOf(cats.catgender) }
+    var name by remember { mutableStateOf(cats.name) }
+    var breed by remember { mutableStateOf(cats.breed) }
+    var gender by remember { mutableStateOf(cats.gender) }
     Dialog(onDismissRequest = { onDismiss() }) {
         Card(
             modifier = Modifier
@@ -374,7 +393,7 @@ fun EditDialog(
                     fontWeight = FontWeight.Bold,
                     color = Color.Blue
                 )
-                Text(text = "Cats: ${cats.catName}, ${cats.catbreed}, ${cats.catgender}")
+                Text(text = "Cats: ${cats.name}, ${cats.breed}, ${cats.gender}")
                 TextField(
                     value = name,
                     onValueChange = { name = it },
@@ -400,9 +419,9 @@ fun EditDialog(
                 ) {
                     Button(onClick = {
                         // 就將原本書內容替換成使用者輸入的新內容，原始books內容也會更新
-                        cats.catName = name
-                        cats.catbreed = breed
-                        cats.catgender = gender
+                        cats.name = name
+                        cats.breed = breed
+                        cats.gender = gender
                         onEdit(cats)
                     }) {
                         Text("Update")

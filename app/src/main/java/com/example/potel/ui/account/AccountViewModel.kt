@@ -1,6 +1,6 @@
 package com.example.potel.ui.account
 
-
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -10,122 +10,109 @@ import kotlinx.coroutines.flow.asStateFlow
 
 class AccountViewModel : ViewModel() {
 
-    private val _uid = MutableStateFlow("")
-    val uid = _uid.asStateFlow()
-    var uidError by mutableStateOf(false)
-    fun onUidChanged(uid: String) {
-        val uidRegex = Regex("^[a-zA-Z0-9]{3,20}$")
-        uidError = !uid.matches(uidRegex)
-        _uid.value = uid
+
+    private val _gender = MutableStateFlow("")
+    val gender = _gender.asStateFlow()
+    fun genderchange(gender: String) {
+        val genderMap = mapOf(
+            "男" to "M",
+            "女" to "F",
+            "不願透漏" to "N"
+        )
+        _gender.value = genderMap[gender] ?: "N"
     }
 
 
-    private val _username = MutableStateFlow("")
-    val username = _username.asStateFlow()
-    fun onUsernameChanged(username: String) {
-        _username.value = username
-    }
+    private val _birthday = MutableStateFlow("")
+    val birthday = _birthday.asStateFlow()
 
-    private val _password = MutableStateFlow("")
-    val password = _password.asStateFlow()
-    var passwordError by mutableStateOf(false)
-    fun onPasswordChanged(password: String) {
-        val passwordRegex = Regex("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{6,20}$")
-        passwordError = !password.matches(passwordRegex)
-        _password.value = password
+    fun birthdaychange(inputYear: String, inputMonth: String, inputDay: String) {
+        if (inputYear.isNotEmpty() && inputMonth.isNotEmpty() && inputDay.isNotEmpty()) {
+            _birthday.value = "$inputYear-$inputMonth-$inputDay"
+        } else {
+            _birthday.value = ""
+        }
     }
 
 
-    private val _checkpassword = MutableStateFlow("")
-    val checkpassword = _checkpassword.asStateFlow()
-    var checkpasswordError by mutableStateOf(false)
-    fun onCheckPasswordChanged(checkpassword: String) {
-        val checkpasswordRegex = Regex("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")
-        checkpasswordError = !checkpassword.matches(checkpasswordRegex)
-        _checkpassword.value = checkpassword
+
+    private val _name = MutableStateFlow("")
+    val name = _name.asStateFlow()
+    fun namechange(name: String) {
+        _name.value = name
     }
 
 
-    private val _phonenumber = MutableStateFlow("")
-    val phonenumber = _phonenumber.asStateFlow()
-    var phonenumberError by mutableStateOf(false)
-    fun onPhonenumberChanged(phonenumber: String) {
-        val phonenumberRegex = Regex("^[0-9]{10}$")
-        phonenumberError = !phonenumber.matches(phonenumberRegex)
-        _phonenumber.value = phonenumber
+    private val _passwd = MutableStateFlow("")
+    val passwd = _passwd.asStateFlow()
+    var passwdError by mutableStateOf(false)
+    fun passwdchange(passwd: String) {
+        val passwdRegex = Regex("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{6,20}$")
+        passwdError = !passwd.matches(passwdRegex)
+        _passwd.value = passwd
+    }
+
+
+        private val _checkpasswd = MutableStateFlow("")
+        val checkpasswd = _checkpasswd.asStateFlow()
+        var checkpasswdError by mutableStateOf(false)
+        fun checkpasswdchange(checkpasswd: String) {
+            val checkpasswdRegex = Regex("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{6,20}$")
+            checkpasswdError = !checkpasswd.matches(checkpasswdRegex)
+            _checkpasswd.value = checkpasswd
+        }
+
+
+    private val _cellphone = MutableStateFlow("")
+    val cellphone = _cellphone.asStateFlow()
+    var cellphoneError by mutableStateOf(false)
+    fun cellphonechange(cellphone: String) {
+        val cellphoneRegex = Regex("^[0-9]{10}$")
+        cellphoneError = !cellphone.matches(cellphoneRegex)
+        _cellphone.value = cellphone
     }
 
 
     private val _address = MutableStateFlow("")
     val address = _address.asStateFlow()
-    fun onAddressChanged(address: String) {
+    fun addresschange(address: String) {
         _address.value = address
     }
+
 
     private val _email = MutableStateFlow("")
     val email = _email.asStateFlow()
     var emailError by mutableStateOf(false)
-    fun onEmailChanged(email: String) {
+    fun emailchange(email: String) {
         val emailRegex = Regex("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")
         emailError = !email.matches(emailRegex)
         _email.value = email
     }
 
+    private val _addmember = MutableStateFlow(Change(success = false, message = ""))
+    val addmember = _addmember.asStateFlow()
+
+    suspend fun addmember(member: Member): Check {
+
+
+        if (member.passwd.isNotEmpty() && !passwdError) {
+            try {
+                Log.d("ChangePassWd", "Valid input, preparing to send request")
+
+                val response =
+                    RetrofitInstance.api.addmember(member)
+                return response
+            } catch (e: Exception) {
+
+                e.printStackTrace() // 打印錯誤堆疊，幫助調試
+                val check = Check(false, e.toString())
+                return check
+
+            }
+        } else {
+            val check = Check(false, "e.toString()")
+            return check
+        }
+    }
+
 }
-//    fun login(){
-//        val account = _email.value
-//        val password = _password.value
-//        viewModelScope.launch{
-//           val user =  RetrofitInstance.api.login(loginid = account, password = password)
-//            // 跳轉業面跟儲存
-//        }
-//    }
-//
-//}
-
-// 假設的 ApiService，負責處理登入請求
-//object ApiService3 {
-//    fun Login3(callback: (Result) -> Unit) {
-//        // 模擬的 API 呼叫，假設登入成功
-//        // 這裡您可以處理 API 的回應
-//        callback(Result())
-//    }
-//}
-//
-//// 假設的 Result 類別，用來表示 API 回應
-//class Result
-
-//    fun getApiData() {
-//        // todo 2-5 取得 API 資料，目前先用假資料
-//        _items.update {
-//            listOf(
-//                TipHomeItemUiState(
-//                    title = "Home",
-//                    imageVector = Icons.Filled.Home
-//                ),
-//                TipHomeItemUiState(
-//                    title = "Search",
-//                    imageVector = Icons.Filled.Search
-//                ),
-//                TipHomeItemUiState(
-//                    title = "Delete",
-//                    imageVector = Icons.Filled.Delete
-//                ),
-//            )
-//        }
-//    }
-
-//private fun ApiService.Companion.Login(string: String) {}
-//API 翻轉頁面 資料交互
-
-//    fun onConfirmClick() {
-//        ApiService.Login { result ->
-//            // 更新 _uid 資料，可以根據 API 回應來改變 uid
-//            _uid.value = listOf(
-//                TipHomeItemUiState(title = "User ID", imageVector = Icons.Filled.Person),
-////                TipHomeItemUiState(title = "User Data", imageVector = Icons.Filled.DataUsage)
-//            )
-//        }
-//    }
-//}
-

@@ -14,6 +14,6 @@
     <color name="forumTab">#8D8080</color>
     <color name="forum">#202433</color>
     <color name="forumGreen">#9AB78D</color>
-    <color name="forumButton">#D1CAFF</color>
+    <color name="foruButton">#D1CAFF</color>
     <color name="addComment">#33394F</color>
 </resources>

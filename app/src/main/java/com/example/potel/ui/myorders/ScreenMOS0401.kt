@@ -38,7 +38,6 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.potel.R
-import com.example.potel.ui.theme.TipColor
 import kotlinx.coroutines.launch
 
 @Composable
@@ -70,19 +69,14 @@ fun ScreenMOS0401(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(10.dp)
-            .background(color = TipColor.deep_brown),
+            .padding(10.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-//                .background(color = Color(0xFFD9D9D9), shape = RoundedCornerShape(size = 8.dp)),
-                .background(
-                    color = TipColor.light_brown,
-                    shape = RoundedCornerShape(size = 8.dp)
-                ),
+                .background(color = Color(0xFFD9D9D9), shape = RoundedCornerShape(size = 8.dp)),
             horizontalAlignment = Alignment.Start,
             verticalArrangement = Arrangement.Top
         ) {
@@ -98,7 +92,7 @@ fun ScreenMOS0401(
                         lineHeight = 32.sp,
                         fontFamily = FontFamily(Font(R.font.dm_sans)),
                         fontWeight = FontWeight(700),
-                        color = TipColor.deep_brown,
+                        color = Color(0xFF000000),
                         textAlign = TextAlign.Center,
                     ),
                     modifier = Modifier
@@ -111,7 +105,7 @@ fun ScreenMOS0401(
                         lineHeight = 32.sp,
                         fontFamily = FontFamily(Font(R.font.dm_sans)),
                         fontWeight = FontWeight(700),
-                        color = TipColor.deep_brown,
+                        color = Color(0xFF000000),
                         textAlign = TextAlign.Start
                     ),
                     modifier = Modifier
@@ -121,33 +115,21 @@ fun ScreenMOS0401(
 
             Text(text = "訂單編號: ${prdorder?.prdorderid}",
                 fontFamily = FontFamily.SansSerif,
-                style = TextStyle(
-                    fontWeight = FontWeight(700),
-                    fontSize = 18.sp,
-                    color = TipColor.deep_brown,
-                    ),
+                style = TextStyle(fontWeight = FontWeight(700),
+                    fontSize = 18.sp),
                 modifier = Modifier.padding(5.dp)
             )
-            Text(
-                text = "訂單金額: NTD ${prdorder?.amount}",
-                modifier = Modifier.padding(5.dp),
-                color = TipColor.deep_brown,
-                )
-            Text(
-                text = "交易日期: ${prdorder?.createdate}",
-                modifier = Modifier.padding(5.dp),
-                color = TipColor.deep_brown,
-                )
+            Text(text = "訂單金額: NTD ${prdorder?.amount}",
+                modifier = Modifier.padding(5.dp))
+            Text(text = "交易日期: ${prdorder?.createdate}",
+                modifier = Modifier.padding(5.dp))
 
             Spacer(modifier = Modifier.height(12.dp).padding(5.dp))
             HorizontalDivider()
             Text(text = "訂單內容:",
                 fontFamily = FontFamily.SansSerif,
-                style = TextStyle(
-                    fontWeight = FontWeight(700),
-                    fontSize = 18.sp,
-                    color = TipColor.deep_brown,
-                ),
+                style = TextStyle(fontWeight = FontWeight(700),
+                    fontSize = 18.sp),
                 modifier = Modifier.padding(5.dp)
             )
 
@@ -171,10 +153,7 @@ fun ScreenMOS0401(
                             )
                             .padding(5.dp),
                     ) {
-                        Text(
-                            text = "品名: ${prdorditem.product.prdname}",
-                            color = TipColor.deep_brown,
-                            )
+                        Text(text = "品名: ${prdorditem.product.prdname}")
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth(),
@@ -184,13 +163,11 @@ fun ScreenMOS0401(
                             Text(
                                 text = "金額: NTD ${prdorditem.product.price}",
                                 modifier = Modifier.weight(1f),
-                                color = TipColor.deep_brown,
                                 textAlign = TextAlign.Start
                             )
                             Text(
                                 text = "數量: ${prdorditem.prdcount}",
                                 modifier = Modifier.weight(1f),
-                                color = TipColor.deep_brown,
                                 textAlign = TextAlign.End
                             )
                         }
@@ -216,7 +193,7 @@ fun ScreenMOS0401(
                         fontSize = 16.sp,
                         fontFamily = FontFamily(Font(R.font.dm_sans)),
                         fontWeight = FontWeight(700),
-                        color = TipColor.deep_brown,
+                        color = Color(0xFF000000),
                     ),
                 )
             }

@@ -1,13 +1,22 @@
 package com.example.potel.ui.account
 
+import android.content.Context
+import android.util.Log
+import android.widget.Toast
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.*
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,80 +29,102 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import androidx.compose.material3.Text
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.potel.ui.home.AccountScreens
+import kotlinx.coroutines.launch
+import androidx.compose.ui.text.style.TextDecoration
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 
-fun Login(viewModel:OpenpageViewModel = viewModel()
-          , navController: NavHostController) {
 
-    val inputError = viewModel.inputError.collectAsState()
-
-    val phonenumber = viewModel.phonenumber.collectAsState()
-
-    val email = viewModel.email.collectAsState()
+fun Login(
+    viewModel: OpenpageViewModel = viewModel(), navController: NavHostController
+) {
 
 
-    val password = viewModel.password.collectAsState()
 
-    var passwordVisible by remember { mutableStateOf(false) }
+    val context = LocalContext.current
+
+    val preferences = context.getSharedPreferences("member", Context.MODE_PRIVATE)
+
+    val inputError by viewModel.inputError.collectAsState()
+
+    val passwd by viewModel.passwd.collectAsState()
+
+    var passwdVisible by remember { mutableStateOf(false) }
 
     var currentInput by remember { mutableStateOf("") }
 
+    var errorMessage by remember { mutableStateOf<String?>(null) }
+
+
     Column(
+        verticalArrangement = Arrangement.spacedBy(20.dp, Alignment.Top),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.SpaceAround,
+
         modifier = Modifier
-            .fillMaxSize()
-            .padding(10.dp)
+            .border(width = 5.dp, color = Color(0xFF000000))
+            .padding(12.dp)
+            .fillMaxWidth()
+            .fillMaxHeight()
+            .background(color = Color(0xFFF7E3A6))
+            .padding(top = 12.dp, bottom = 12.dp)
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top,
             modifier = Modifier
-
                 .padding(10.dp)
         ) {
+
+
+
+
+
             Text(
-//                modifier = Modifier.clickable {
-//                    navController.navigate(accountRoute)
-//                },
-                text = "Potel" ,
-                fontSize = 40.sp,
+
+                text = "Potel",
+                fontSize = 100.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color.Blue
+                color = Color(0xFFFFD700)
             )
+
 
             OutlinedTextField(
                 value = currentInput,
                 onValueChange = { value ->
                     currentInput = value
-                    viewModel.onInputChanged(value)},
-                    label = { Text(text = "請輸入信箱或手機號碼") },
+                    viewModel.onInputChanged(value)
+                },
+                label = { Text(text = "請輸入信箱或手機號碼") },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                 shape = RoundedCornerShape(8.dp),
-                isError = inputError.value,
+                isError = inputError,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 0.dp)
             )
-            if (inputError.value) {
+            if (inputError) {
                 Text(
                     text = "請輸入有效的信箱或手機號碼",
                     color = Color.Red,
-                    fontSize = 12.sp,
-                    modifier = Modifier.padding(start = 16.dp)
+                    fontSize = 20.sp,
+                    modifier = Modifier.padding(start = 16.dp,top = 8.dp)
                 )
             }
 
 
             OutlinedTextField(
-                value = password.value,
-                onValueChange = viewModel::onPasswordChanged,
+                value = passwd,
+                onValueChange = viewModel::passwdchange,
                 label = { Text(text = "密碼") },
                 leadingIcon = {
                     Icon(
@@ -103,15 +134,15 @@ fun Login(viewModel:OpenpageViewModel = viewModel()
                 },
                 trailingIcon = {
                     Text(
-                        text = if (passwordVisible) "隱藏" else "顯示",
+                        text = if (passwdVisible) "隱藏" else "顯示",
                         modifier = Modifier.clickable {
-                            passwordVisible = !passwordVisible
+                            passwdVisible = !passwdVisible
                         }
                     )
                 },
-                isError = viewModel.passwordError,
+                isError = viewModel.passwdError,
                 shape = RoundedCornerShape(8.dp),
-                visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                visualTransformation = if (passwdVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                 singleLine = true,
                 colors = TextFieldDefaults.colors(
@@ -122,56 +153,143 @@ fun Login(viewModel:OpenpageViewModel = viewModel()
                     .fillMaxWidth()
                     .padding(top = 16.dp)
             )
-            if (viewModel.passwordError) {
+            if (viewModel.passwdError) {
                 Text(
-                    text = "密碼需在6至20字符內，且包含字母和數字",
+                    text = "密碼需在6至20字內，包含字母數字",
                     color = Color.Red,
-                    fontSize = 12.sp,
+                    fontSize = 20.sp,
                     modifier = Modifier.padding(start = 16.dp)
                 )
             }
         }
 
+
         Row(
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-
                 .padding(10.dp)
-        ) {
-            var errorMessage by remember { mutableStateOf<String?>(null) }
+        )
+
+        {
+
             // 註冊按鈕
             Button(
                 onClick = {
-                    if (email.value.isEmpty() && phonenumber.value.isEmpty()) {
+                    if (currentInput.isEmpty()) {
                         errorMessage = "信箱或手機號碼欄位不得空白"
-                    } else if (!email.value.matches(viewModel.emailRegex) && !phonenumber.value.matches(viewModel.phonenumberRegex)) {
+                    } else if (!currentInput.matches(viewModel.emailRegex) && !currentInput.matches(
+                            viewModel.cellphoneRegex
+                        )
+                    ) {
                         errorMessage = "請輸入有效的信箱或手機號碼"
                     } else {
-                        errorMessage = null // 清除錯誤訊息
-                        // 執行註冊邏輯
-                        "執行登入"
+
+                        errorMessage = null
+
+                        val inputlog = Inputlog(currentInput, passwd)
+
+                        viewModel.viewModelScope.launch {
+                            try {
+                                val member = viewModel.login(inputlog)
+                                Log.d("Login", "已登入0，issucc=$member")
+                                if (member != null && member.memberid != 0) {
+                                    // 儲存登入資料
+                                    preferences.edit().putString("memberid",
+                                        member.memberid.toString()
+                                    )
+                                        .putString("name", member.name)
+                                        .putString("passwd", member.passwd)
+                                        .putString("cellphone", member.cellphone)
+                                        .putString("address", member.address)
+                                        .putString("email", member.email)
+                                        .putString("gender", member.gender)
+                                        .putString("birthday", member.birthday)
+                                        .apply()
+                                    navController.navigate(AccountScreens.HomeRoute.name)
+                                } else {
+                                    Log.d("Login", "登入失敗，錯誤訊息: 登入失敗，請檢查您的帳號密碼")
+                                    errorMessage = "登入失敗，請檢查您的帳號密碼"
+                                }
+                            } catch (e: Exception) {
+                                // 處理登入過程中的異常
+                                Log.e("Login", "登入過程中出現錯誤: ${e.message}")
+                                errorMessage = "登入過程中出現錯誤，請稍後再試"
+                            }
+                        }
                     }
                 },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 16.dp),
-                shape = RoundedCornerShape(8.dp)
-            ) {
-                Text(text = "登入", fontSize = 16.sp)
-            }
-            errorMessage?.let {
-                Text(
-                    text = it,
-                    color = Color.Red,
-                    fontSize = 14.sp,
-                    modifier = Modifier.padding(top = 8.dp)
+                shape = RoundedCornerShape(8.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFFFFA500),
                 )
-
+            ) {
+                Text(text = "登入", fontSize = 50.sp)
             }
+
         }
+
+        errorMessage?.let {
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                text = it,
+                color = Color.Red,
+                fontSize = 20.sp,
+                modifier = Modifier.padding(start = 16.dp)
+            )
+        }
+
+        Row(
+            horizontalArrangement = Arrangement.Start,
+            modifier = Modifier.padding(10.dp)
+        ) {
+            Text(
+                text = "註冊",
+                style = TextStyle(
+                    fontSize = 33.sp,
+                    lineHeight = 32.sp,
+                    fontWeight = FontWeight(700),
+                    color = Color.White,
+                    textAlign = TextAlign.Center,
+                    textDecoration = TextDecoration.Underline
+                ),
+                modifier = Modifier
+                    .width(135.dp)
+                    .height(45.dp)
+                    .clickable {
+                        navController.navigate(route = AccountScreens.Signup.name)
+                    }
+            )
+
+            Spacer(modifier = Modifier.width(20.dp))
+
+            Text(
+                text = "忘記密碼",
+                style = TextStyle(
+                    fontSize = 33.sp,
+                    lineHeight = 32.sp,
+                    fontWeight = FontWeight(700),
+                    color = Color.White,
+                    textAlign = TextAlign.Center,
+                    textDecoration = TextDecoration.Underline
+                ),
+                modifier = Modifier
+                    .width(135.dp)
+                    .height(45.dp)
+                    .clickable {
+                        navController.navigate(route = AccountScreens.Reset.name)
+                    }
+            )
+        }
+
+
+
     }
 }
+
 
 @Preview(showBackground = true)
 @Composable
