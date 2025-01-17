@@ -118,7 +118,8 @@ fun PostScreen(navController: NavHostController) {
                 title = { Text("") },
                 navigationIcon = {
                     IconButton(onClick = {
-                        navController.navigateUp()
+                        if(!navController.popBackStack(ForumScreens.ForumScreen.name, false))
+                            navController.navigate(ForumScreens.ForumScreen.name)
                     }) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
@@ -458,7 +459,7 @@ fun CommentsSection(comments: List<Comment>, memberId: Int, navController:NavHos
             CommentContent(comment)
             Spacer(modifier = Modifier.height(15.dp))
             HorizontalDivider(
-                thickness = 0.5.dp,
+                thickness = 1.dp,
                 color = TipColor.deep_brown
             )
             Spacer(modifier = Modifier.height(15.dp))
