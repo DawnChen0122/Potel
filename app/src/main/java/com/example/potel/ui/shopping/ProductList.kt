@@ -4,7 +4,10 @@ import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -17,13 +20,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
+import com.example.potel.ui.theme.TipColor
 
 // 定義產品資料類別
 data class Products(
@@ -82,8 +85,9 @@ fun ListGrid(
                 verticalArrangement = Arrangement.spacedBy(10.dp),
                 modifier = Modifier
                     .padding(12.dp)
-                    .border(width = 2.dp, color = Color.Yellow, shape = RoundedCornerShape(10))
-                    .background(color = Color.Cyan)
+                    .border(width = 2.dp, color = TipColor.bright_red, shape = RoundedCornerShape(10))
+//                    .background(color = Color.Cyan)
+                    .background(color = TipColor.light_brown)
                     .clickable { onItemClick(product) } // 直接呼叫onItemClick
             ) {
                 AsyncImage(
