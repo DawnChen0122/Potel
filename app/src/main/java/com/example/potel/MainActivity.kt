@@ -183,7 +183,7 @@ fun MainTopAppBar(
 }
 
 
-@OptIn(ExperimentalMaterial3Api::class)
+
 @Composable
 fun MainBottomAppBar(navController: NavHostController) {
     BottomAppBar(
