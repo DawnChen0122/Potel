@@ -37,6 +37,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.example.potel.R
+import com.example.potel.ui.theme.TipColor
 import kotlinx.coroutines.launch
 
 @Composable
@@ -60,7 +61,8 @@ fun ScreenMOS0201(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(2.dp),
+            .padding(2.dp)
+            .background(color = TipColor.deep_brown),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
@@ -68,7 +70,9 @@ fun ScreenMOS0201(
             modifier = Modifier
                 .fillMaxSize()
 //                .padding(10.dp)
-                .background(color = Color(0xFFD9D9D9), shape = RoundedCornerShape(size = 8.dp)),
+//                .background(color = Color(0xFFD9D9D9), shape = RoundedCornerShape(size = 8.dp)),
+                .background(color = TipColor.light_brown,
+            shape = RoundedCornerShape(size = 8.dp)),
             horizontalAlignment = Alignment.Start,
             verticalArrangement = Arrangement.Top
         ) {
@@ -84,7 +88,8 @@ fun ScreenMOS0201(
                         lineHeight = 32.sp,
                         fontFamily = FontFamily(Font(R.font.dm_sans)),
                         fontWeight = FontWeight(700),
-                        color = Color(0xFF000000),
+//                        color = Color(0xFF000000),
+                        color = TipColor.deep_brown,
                         textAlign = TextAlign.Center,
                     ),
                     modifier = Modifier
@@ -97,7 +102,8 @@ fun ScreenMOS0201(
                         lineHeight = 32.sp,
                         fontFamily = FontFamily(Font(R.font.dm_sans)),
                         fontWeight = FontWeight(700),
-                        color = Color(0xFF000000),
+//                        color = Color(0xFF000000),
+                        color = TipColor.deep_brown,
                         textAlign = TextAlign.Start
                     ),
                     modifier = Modifier
@@ -130,7 +136,8 @@ fun ScreenMOS0201(
                         lineHeight = 32.sp,
                         fontFamily = FontFamily(Font(R.font.dm_sans)),
                         fontWeight = FontWeight(700),
-                        color = Color(0xFF000000),
+//                        color = Color(0xFF000000),
+                        color = TipColor.deep_brown,
                         textAlign = TextAlign.Start
                     ),
                     modifier = Modifier
@@ -150,7 +157,8 @@ fun ScreenMOS0201(
                             fontSize = 16.sp,
                             fontFamily = FontFamily(Font(R.font.dm_sans)),
                             fontWeight = FontWeight(700),
-                            color = Color(0xFF000000),
+//                        color = Color(0xFF000000),
+                            color = TipColor.deep_brown,
                         ),
                     )
                 }
@@ -163,7 +171,8 @@ fun ScreenMOS0201(
                     lineHeight = 32.sp,
                     fontFamily = FontFamily(Font(R.font.dm_sans)),
 //                    fontWeight = FontWeight(700),
-                    color = Color(0xFF000000),
+//                        color = Color(0xFF000000),
+                    color = TipColor.deep_brown,
                     textAlign = TextAlign.Start
                 ),
                 modifier = Modifier
@@ -176,7 +185,8 @@ fun ScreenMOS0201(
                     lineHeight = 32.sp,
                     fontFamily = FontFamily(Font(R.font.dm_sans)),
 //                    fontWeight = FontWeight(700),
-                    color = Color(0xFF000000),
+//                        color = Color(0xFF000000),
+                    color = TipColor.deep_brown,
                     textAlign = TextAlign.Start
                 ),
                 modifier = Modifier
@@ -189,7 +199,8 @@ fun ScreenMOS0201(
                     lineHeight = 32.sp,
                     fontFamily = FontFamily(Font(R.font.dm_sans)),
 //                    fontWeight = FontWeight(700),
-                    color = Color(0xFF000000),
+//                        color = Color(0xFF000000),
+                    color = TipColor.deep_brown,
                     textAlign = TextAlign.Start
                 ),
                 modifier = Modifier
@@ -202,7 +213,8 @@ fun ScreenMOS0201(
                     lineHeight = 32.sp,
                     fontFamily = FontFamily(Font(R.font.dm_sans)),
 //                    fontWeight = FontWeight(700),
-                    color = Color(0xFF000000),
+//                        color = Color(0xFF000000),
+                    color = TipColor.deep_brown,
                     textAlign = TextAlign.Start
                 ),
                 modifier = Modifier
@@ -215,7 +227,8 @@ fun ScreenMOS0201(
                     lineHeight = 32.sp,
                     fontFamily = FontFamily(Font(R.font.dm_sans)),
 //                    fontWeight = FontWeight(700),
-                    color = Color(0xFF000000),
+//                        color = Color(0xFF000000),
+                    color = TipColor.deep_brown,
                     textAlign = TextAlign.Start
                 ),
                 modifier = Modifier
@@ -228,7 +241,8 @@ fun ScreenMOS0201(
                     lineHeight = 32.sp,
                     fontFamily = FontFamily(Font(R.font.dm_sans)),
 //                    fontWeight = FontWeight(700),
-                    color = Color(0xFF000000),
+//                        color = Color(0xFF000000),
+                    color = TipColor.deep_brown,
                     textAlign = TextAlign.Start
                 ),
                 modifier = Modifier
