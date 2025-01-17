@@ -40,7 +40,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.potel.R
-import com.example.potel.ui.theme.TipColor
 import kotlinx.coroutines.launch
 
 @Composable
@@ -56,15 +55,14 @@ fun ScreenMOS02(
 
     LaunchedEffect(Unit) {
         coroutineScope.launch {
-            orderlist = myOrdersViewModel.getOrders(memberid.toInt(), OrderState.Paid.state)
+            orderlist = myOrdersViewModel.getOrders(memberid.toInt(), OrderState.Created.state)
         }
     }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(10.dp)
-            .background(color = TipColor.deep_brown),
+            .padding(10.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
@@ -72,11 +70,7 @@ fun ScreenMOS02(
             modifier = Modifier
                 .fillMaxSize()
 //                .padding(5.dp)
-//                .background(color = Color(0xFFD9D9D9), shape = RoundedCornerShape(size = 8.dp)),
-                .background(
-                    color = TipColor.light_brown,
-                    shape = RoundedCornerShape(size = 8.dp)
-                ),
+                .background(color = Color(0xFFD9D9D9), shape = RoundedCornerShape(size = 8.dp)),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
         ) {
@@ -92,8 +86,7 @@ fun ScreenMOS02(
                         lineHeight = 32.sp,
                         fontFamily = FontFamily(Font(R.font.dm_sans)),
                         fontWeight = FontWeight(700),
-//                        color = Color(0xFF000000),
-                        color = TipColor.deep_brown,
+                        color = Color(0xFF000000),
                         textAlign = TextAlign.Center,
                     ),
                     modifier = Modifier
@@ -106,8 +99,7 @@ fun ScreenMOS02(
                         lineHeight = 32.sp,
                         fontFamily = FontFamily(Font(R.font.dm_sans)),
                         fontWeight = FontWeight(700),
-//                        color = Color(0xFF000000),
-                        color = TipColor.deep_brown,
+                        color = Color(0xFF000000),
                         textAlign = TextAlign.Start
                     ),
                     modifier = Modifier
@@ -143,7 +135,7 @@ fun ScreenMOS02(
                                 .fillMaxWidth()
                                 .padding(5.dp)
                                 .weight(1f)
-//                                .border(border = BorderStroke(1.dp, Color.Black))
+//                        .border(border = BorderStroke(1.dp, Color.Black))
 
                         ){
                             Row(
@@ -154,34 +146,18 @@ fun ScreenMOS02(
                             ){
                                 Text(text = order.roomtype.descpt,
                                     fontFamily = FontFamily.SansSerif,
-                                    style = TextStyle(
-                                        color = TipColor.deep_brown,
-                                        fontWeight = FontWeight(700),
-                                        fontSize = 16.sp
-                                    ),
+                                    style = TextStyle(fontWeight = FontWeight(700),
+                                        fontSize = 16.sp),
                                     modifier = Modifier.weight(1f)
                                 )
                                 Text(
                                     text = "金額: ${order.amount}",
                                     modifier = Modifier.weight(1f),
-                                    textAlign = TextAlign.End,
-                                    style = TextStyle(
-                                        color = TipColor.deep_brown,
-                                    )
+                                    textAlign = TextAlign.End
                                 )
                             }
-                            Text(
-                                text = "訂房時間: ${order.createdate}",
-                                style = TextStyle(
-                                    color = TipColor.deep_brown,
-                                )
-                            )
-                            Text(
-                                text = "暱稱: ${order.pet.nickname}",
-                                style = TextStyle(
-                                    color = TipColor.deep_brown,
-                                )
-                            )
+                            Text(text = "訂房時間: ${order.createdate}")
+                            Text(text = "暱稱: ${order.pet.nickname}")
                         }
                         Column (
                             modifier = Modifier
@@ -207,6 +183,99 @@ fun ScreenMOS02(
                     }
                 }
             }
+
+
+//            // 一筆資料
+//            Row(
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .border(
+//                        border = BorderStroke(width = 1.dp, Color.Black),
+//                        shape = RoundedCornerShape(10)
+//                    )
+//                    .padding(5.dp),
+//                horizontalArrangement = Arrangement.SpaceBetween
+//            ) {
+//                Column(
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .padding(5.dp)
+//                        .weight(1f)
+////                        .border(border = BorderStroke(1.dp, Color.Black))
+//
+//                ){
+//                    Row(
+//                        modifier = Modifier
+//                            .fillMaxWidth(),
+//                        horizontalArrangement = Arrangement.SpaceBetween
+//
+//                    ){
+//                        Text(text = "海景房",
+//                            fontFamily = FontFamily.SansSerif,
+//                            style = TextStyle(fontWeight = FontWeight(700),
+//                                fontSize = 16.sp),
+//                            modifier = Modifier.weight(1f)
+//                        )
+//                        Text(
+//                            text = "金額: 5000",
+//                            modifier = Modifier.weight(1f),
+//                            textAlign = TextAlign.End
+//                        )
+//                    }
+//                    Row { Text(text = "訂房時間") }
+//                }
+//                Column (modifier = Modifier.width(70.dp)){
+//                    Text(text = "毛毛")
+//                }
+//            }
+//
+//
+//            Row(
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .border(
+//                        border = BorderStroke(width = 1.dp, Color.Black),
+//                        shape = RoundedCornerShape(10)
+//                    )
+//                    .padding(5.dp),
+//                horizontalArrangement = Arrangement.SpaceBetween
+//            ) {
+//                Column(
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .padding(5.dp)
+//                        .weight(1f)
+////                        .border(border = BorderStroke(1.dp, Color.Black))
+//
+//                ){
+//                    Row(
+//                        modifier = Modifier
+//                            .fillMaxWidth(),
+//                        horizontalArrangement = Arrangement.SpaceBetween
+//
+//                    ){
+//                        Text(text = "海景房",
+//                            fontFamily = FontFamily.SansSerif,
+//                            style = TextStyle(fontWeight = FontWeight(700),
+//                                fontSize = 16.sp),
+//                            modifier = Modifier.weight(1f)
+//                        )
+//                        Text(
+//                            text = "金額: 5000",
+//                            modifier = Modifier.weight(1f),
+//                            textAlign = TextAlign.End
+//                        )
+//                    }
+//                    Row { Text(text = "訂房時間") }
+//                }
+//                Column (modifier = Modifier.width(70.dp)){
+//                    Text(text = "毛毛")
+//                }
+//            }
+
         }
+
+
+
     }
 }

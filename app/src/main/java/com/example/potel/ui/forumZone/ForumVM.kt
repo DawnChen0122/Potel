@@ -39,8 +39,8 @@ class ForumVM : ViewModel() {
     private val _isItemsVisible = MutableStateFlow(true)
     val isItemsVisible: StateFlow<Boolean> = _isItemsVisible
 
-     var postSuccessMessage = mutableStateOf<String?>(null)
-         private set
+    var postSuccessMessage = mutableStateOf<String?>(null)
+        private set
 
     init {
         // 初始化資料載入

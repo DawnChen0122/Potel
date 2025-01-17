@@ -1,7 +1,7 @@
-
 package com.example.potel.ui.booking
 
 
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
@@ -23,49 +23,50 @@ enum class BookingScreens(val title: String) {
 
 
 }
-    fun NavGraphBuilder.bookingScreenRoute(
-        viewModel: BookingViewModel,
-        navController: NavHostController
+
+fun NavGraphBuilder.bookingScreenRoute(
+    navController: NavHostController
+) {
+    composable(
+
+        route = DateSelection.name,
     ) {
+        DateSelectionScreen(
+            bookingVM = viewModel(),
+            navController = navController
+        )
 
-        composable(
-
-            route = DateSelection.name,
-        ) {
-            DateSelectionScreen(
-                bookingVM = viewModel,
-                navController = navController
-            )
-
-        }
-        composable(
-            route = Booking.name,
-        ) {
-            BookingScreen(
-                bookingVM = viewModel, navController = navController
-            )
-        }
-        composable(
-            route = "${RoomSelection.name}/{type}",//字串不能帶參數
-        ) { backStackEntry ->
-            val typeChar = backStackEntry.arguments?.getString("type")?.getOrNull(0) ?: 'C'
-            RoomSelectionScreen(viewModel, navController = navController, type = typeChar)
-        }
-        composable(
-            route = Payment.name,
-        ) {
-            PaymentScreen(
-                bookingVM = viewModel,
-                navController = navController
-            )
-        }
-        composable(
-            route = BookingSuccess.name,
-        ) {
-            BookingSuccessScreen(
-                bookingVM = viewModel,
-                navController = navController
-            )
-        }
     }
+    composable(
+        route = Booking.name,
+
+    ) {
+        BookingScreen(
+            bookingVM = viewModel(),
+        navController = navController
+        )
+    }
+    composable(
+        route = "${RoomSelection.name}/{type}",//字串不能帶參數
+    ) { backStackEntry ->
+        val typeChar = backStackEntry.arguments?.getString("type")?.getOrNull(0) ?: 'C'
+        RoomSelectionScreen(viewModel(), navController = navController, type = typeChar)
+    }
+    composable(
+        route = Payment.name,
+    ) {
+        PaymentScreen(
+            bookingVM = viewModel(),
+            navController = navController
+        )
+    }
+    composable(
+        route = BookingSuccess.name,
+    ) {
+        BookingSuccessScreen(
+            bookingVM = viewModel(),
+            navController = navController
+        )
+    }
+}
 

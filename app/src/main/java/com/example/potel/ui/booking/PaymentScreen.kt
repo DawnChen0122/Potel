@@ -32,7 +32,8 @@ fun PaymentScreen(
     var cardNumber by remember { mutableStateOf("") }
     var expiryDate by remember { mutableStateOf("") }
     var cvv by remember { mutableStateOf("") }
-    var errorMessage by remember { mutableStateOf("") } // 錯誤訊息
+    var isSubmitted by remember { mutableStateOf(false) } // 是否已提交
+    var errorMessage by remember { mutableStateOf("") }
 
     val days by bookingVM.daySelectState.collectAsState()
     val selectedRoomType by bookingVM.roomTypeSelectedState.collectAsState()
@@ -41,10 +42,6 @@ fun PaymentScreen(
     order.cardNumber = cardNumber
     order.expiryDate = expiryDate
     order.cvv = cvv
-
-    val fieldModifier = Modifier
-        .fillMaxWidth()
-        .padding(horizontal = 16.dp)
 
     Column(
         modifier = Modifier
@@ -56,7 +53,7 @@ fun PaymentScreen(
             painter = painterResource(id = R.drawable.credit),
             contentDescription = "Room Image",
             modifier = Modifier
-                .size(300.dp)
+                .size(230.dp)
                 .clip(RoundedCornerShape(8.dp)),
             contentScale = ContentScale.Crop
         )
@@ -64,21 +61,22 @@ fun PaymentScreen(
         Text("請輸入付款資訊", style = MaterialTheme.typography.titleMedium, fontSize = 18.sp)
         Spacer(modifier = Modifier.height(16.dp))
 
+        // 信用卡號碼輸入
         OutlinedTextField(
             value = cardNumber,
             onValueChange = { cardNumber = it },
             label = { Text("信用卡號碼") },
-            isError = !isValidCardNumber(cardNumber),
+            isError = isSubmitted && !isValidCardNumber(cardNumber),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             modifier = Modifier.fillMaxWidth()
         )
-        Spacer(modifier = Modifier.height(8.dp))
-        if (!isValidCardNumber(cardNumber)) {
+        if (isSubmitted && !isValidCardNumber(cardNumber)) {
             Text("信用卡號碼格式不正確！", color = MaterialTheme.colorScheme.error)
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
+        // 到期日和驗證碼輸入
         Row(
             horizontalArrangement = Arrangement.spacedBy(16.dp),
             modifier = Modifier.fillMaxWidth()
@@ -87,7 +85,7 @@ fun PaymentScreen(
                 value = expiryDate,
                 onValueChange = { expiryDate = it },
                 label = { Text("到期日") },
-                isError = !isValidExpiryDate(expiryDate),
+                isError = isSubmitted && !isValidExpiryDate(expiryDate),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 modifier = Modifier.weight(1f)
             )
@@ -96,26 +94,28 @@ fun PaymentScreen(
                 value = cvv,
                 onValueChange = { cvv = it },
                 label = { Text("驗證碼") },
-                isError = !isValidCVV(cvv),
+                isError = isSubmitted && !isValidCVV(cvv),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 modifier = Modifier.weight(1f)
             )
         }
-        Spacer(modifier = Modifier.height(8.dp))
-        if (!isValidExpiryDate(expiryDate)) {
+
+        if (isSubmitted && !isValidExpiryDate(expiryDate)) {
             Text("到期日格式應為 MM/YY！", color = MaterialTheme.colorScheme.error)
         }
-        if (!isValidCVV(cvv)) {
+        if (isSubmitted && !isValidCVV(cvv)) {
             Text("驗證碼應為 3 或 4 位數字！", color = MaterialTheme.colorScheme.error)
         }
 
         Spacer(modifier = Modifier.height(16.dp))
+
         order.amount = days * selectedRoomType.price
         Text("全部金額: $${order.amount}元", fontSize = 18.sp)
 
         Spacer(modifier = Modifier.height(24.dp))
         Button(
             onClick = {
+                isSubmitted = true
                 if (isValidCardNumber(cardNumber) && isValidExpiryDate(expiryDate) && isValidCVV(cvv)) {
                     bookingVM.addOrder(order)
                     navController.navigate(BookingScreens.BookingSuccess.name)
@@ -127,6 +127,7 @@ fun PaymentScreen(
         ) {
             Text("提交", fontSize = 18.sp)
         }
+
         if (errorMessage.isNotEmpty()) {
             Spacer(modifier = Modifier.height(8.dp))
             Text(errorMessage, color = MaterialTheme.colorScheme.error)
@@ -148,6 +149,7 @@ fun isValidExpiryDate(expiryDate: String): Boolean {
 fun isValidCVV(cvv: String): Boolean {
     return Regex("^\\d{3,4}$").matches(cvv)
 }
+
 
 
 @Preview(showBackground = true)
