@@ -1,15 +1,11 @@
 package com.example.potel.ui.petsfile
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.example.potel.ui.forumZone.Comment
-import com.example.potel.ui.forumZone.CommentUpdateRequest
+import com.example.potel.R
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 
 class PetsFileCatsViewModel : ViewModel() {
     // MutableStateFlow用來監控指定資料狀態，當資料一改變即可通知對應畫面更新
@@ -20,14 +16,11 @@ class PetsFileCatsViewModel : ViewModel() {
 
     // 一開始就呼叫fetchBooks()取得測試資料以更新_bookState內容
     init {
-        viewModelScope.launch {
-            val pets = fetchPets()
-            _catsState.update { pets }
-        }
+        _catsState.update { fetchPets() }
     }
 
     /** 新增一本書到List並更新_bookState內容 */
-    fun addCat(item: PetsCat) {
+    fun addItem(item: PetsCat) {
         _catsState.update {
             val catsList = it.toMutableList()
             catsList.add(item)
@@ -36,14 +29,11 @@ class PetsFileCatsViewModel : ViewModel() {
     }
 
     /** 移除一本書並更新_bookState內容 */
-    fun removeCat(item: PetsCat) {
-        viewModelScope.launch {
-            RetrofitInstance.api.deleteCat(item.catId)
-            _catsState.update {
-                val catsList = it.toMutableList()
-                catsList.remove(item)
-                catsList
-            }
+    fun removeItem(item: PetsCat) {
+        _catsState.update {
+            val catsList = it.toMutableList()
+            catsList.remove(item)
+            catsList
         }
     }
 
@@ -52,40 +42,24 @@ class PetsFileCatsViewModel : ViewModel() {
      * 載入測試需要資料
      * @return 多本書資訊
      */
-    private suspend fun fetchPets(): List<PetsCat> {
-        return RetrofitInstance.api.CatsLists()
-//        return listOf(
-//            PetsCat("Whiskers", "Persian", "Male", R.drawable.dog1),
-//            PetsCat("Lily", "Siamese", "Female", R.drawable.dog2),
-//            PetsCat("Simba", "Maine Coon", "Male", R.drawable.dog3),
-//            PetsCat("Bella", "Bengal", "Female", R.drawable.dog4),
-//            PetsCat("Leo", "British Shorthair", "Male", R.drawable.dog5),
-//            PetsCat("Mia", "Ragdoll", "Female", R.drawable.dog6),
-//            PetsCat("Oliver", "Abyssinian", "Male", R.drawable.dog7),
-//            PetsCat("Chloe", "Scottish Fold", "Female", R.drawable.dog8),
-//            PetsCat("Max", "Burmese", "Male", R.drawable.dog9),
-//            PetsCat("Nala", "Norwegian Forest", "Female", R.drawable.dog10),
-//            PetsCat("Oscar", "Sphynx", "Male", R.drawable.dog11),
-//            PetsCat("Daisy", "Birman", "Female", R.drawable.dog12),
-//            PetsCat("Tiger", "Oriental Shorthair", "Male", R.drawable.dog13),
-//            PetsCat("Zoe", "Turkish Angora", "Female", R.drawable.dog14),
-//            PetsCat("Toby", "Exotic Shorthair", "Male", R.drawable.dog15)
-//        )
+    private fun fetchPets(): List<PetsCat> {
+        return listOf(
+            PetsCat("Whiskers", "Persian", "Male", R.drawable.dog1),
+            PetsCat("Lily", "Siamese", "Female", R.drawable.dog2),
+            PetsCat("Simba", "Maine Coon", "Male", R.drawable.dog3),
+            PetsCat("Bella", "Bengal", "Female", R.drawable.dog4),
+            PetsCat("Leo", "British Shorthair", "Male", R.drawable.dog5),
+            PetsCat("Mia", "Ragdoll", "Female", R.drawable.dog6),
+            PetsCat("Oliver", "Abyssinian", "Male", R.drawable.dog7),
+            PetsCat("Chloe", "Scottish Fold", "Female", R.drawable.dog8),
+            PetsCat("Max", "Burmese", "Male", R.drawable.dog9),
+            PetsCat("Nala", "Norwegian Forest", "Female", R.drawable.dog10),
+            PetsCat("Oscar", "Sphynx", "Male", R.drawable.dog11),
+            PetsCat("Daisy", "Birman", "Female", R.drawable.dog12),
+            PetsCat("Tiger", "Oriental Shorthair", "Male", R.drawable.dog13),
+            PetsCat("Zoe", "Turkish Angora", "Female", R.drawable.dog14),
+            PetsCat("Toby", "Exotic Shorthair", "Male", R.drawable.dog15)
+        )
     }
 
-
-fun updateCat(editPetCat: PetsCat) {
-    viewModelScope.launch {
-        val response = RetrofitInstance.api.updateCat(editPetCat)
-        var editIndex = -1
-        _catsState.value.toMutableList().forEachIndexed { index, petsCat ->
-            if (editPetCat.catId == petsCat.catId) {
-                editIndex = index
-            }
-        }
-        val newList = _catsState.value.toMutableList()
-        newList[editIndex] = editPetCat
-        _catsState.update { newList }
-    }
-}
 }

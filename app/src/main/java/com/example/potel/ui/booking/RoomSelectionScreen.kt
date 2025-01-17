@@ -30,7 +30,9 @@ import java.net.URL
 
 @Composable
 fun RoomSelectionScreen(
+
     bookingVM: BookingViewModel,
+
     navController: NavHostController,
     type: Char
 ) {

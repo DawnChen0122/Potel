@@ -75,7 +75,6 @@ data class User(
 )
 
 const val baseurl = "http://10.0.2.2:8080/PotelServer/"
-
 // singleton-pattern, 建立一個符合APIService介面的物件
 object RetrofitInstance {
     private val okHttpClient = OkHttpClient.Builder()

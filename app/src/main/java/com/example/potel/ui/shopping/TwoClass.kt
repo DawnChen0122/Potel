@@ -25,9 +25,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
-import com.example.potel.ui.theme.PotelTheme
-import com.example.potel.ui.theme.TipColor
 
 
 @Composable
@@ -51,7 +48,7 @@ fun TwoClassScreen(
 
         Button(
             shape = RoundedCornerShape(20),
-            border = BorderStroke(3.dp, TipColor.bright_red),
+            border = BorderStroke(3.dp, Color.Yellow),
             modifier = Modifier
                 .padding(0.dp)
                 .width(200.dp)
@@ -64,7 +61,7 @@ fun TwoClassScreen(
                       },
             colors = ButtonDefaults.buttonColors(
                 // 設定按鈕容器顏色
-                containerColor = TipColor.light_brown,
+                containerColor = Color.White,
                 // 設定按鈕內容顏色
                 contentColor = Color.Black
 
@@ -74,12 +71,12 @@ fun TwoClassScreen(
                 text = "狗勾天堂",
                 fontSize = 36.sp, // 字型大小: 36
                 fontWeight = FontWeight.ExtraBold, // 字體樣式: 粗體
-                color = TipColor.deep_brown // 字的顏色: 黑色
+                color = Color.Black // 字的顏色: 黑色
             )
         }
         Button(
             shape = RoundedCornerShape(20),
-            border = BorderStroke(3.dp, TipColor.bright_red),
+            border = BorderStroke(3.dp, Color.Yellow),
             modifier = Modifier
                 .padding(0.dp)
                 .width(200.dp)
@@ -91,7 +88,7 @@ fun TwoClassScreen(
             },
             colors = ButtonDefaults.buttonColors(
                 // 設定按鈕容器顏色
-                containerColor = TipColor.light_brown,
+                containerColor = Color.White,
                 // 設定按鈕內容顏色
                 contentColor = Color.Black
             )
@@ -100,16 +97,16 @@ fun TwoClassScreen(
                 text = "貓貓樂園",
                 fontSize = 36.sp, // 字型大小: 36
                 fontWeight = FontWeight.ExtraBold, // 字體樣式: 粗體
-                color = TipColor.deep_brown // 字的顏色: 黑色
+                color = Color.Black // 字的顏色: 黑色
             )
         }
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun TwoClassPreview() {
-    PotelTheme{
-        TwoClassScreen(navController = rememberNavController())
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun TwoClassPreview() {
+//    PotelTheme{
+//        TwoClassScreen()
+//    }
+//}

@@ -1,5 +1,6 @@
 package com.example.potel.ui.home
 
+
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -32,19 +33,21 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.potel.ui.booking.BookingScreens
 import com.example.potel.ui.forumZone.ForumScreens
-import com.example.potel.ui.petsfile.Screens
+import com.example.potel.ui.petsfile.PetsFileScreens
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeRoute(
     navController: NavHostController = rememberNavController()
 ) {
+
+
     Scaffold(
         modifier = Modifier
             .fillMaxSize(),
     ) { innerPadding ->
         Column(
-            verticalArrangement = Arrangement.spacedBy(39.dp, Alignment.Top),
+            verticalArrangement = Arrangement.spacedBy(20.dp, Alignment.Top),
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .border(width = 5.dp, color = Color(0xFF000000))
@@ -83,6 +86,26 @@ fun HomeRoute(
                     .height(49.dp)
             )
 
+
+            Text(
+                text = "1.請提供健康證明及疫苗紀錄。\n" +
+                        "2.請遵守旅館規定，保持環境整潔。\n" +
+                        "3.如有突發狀況，請立即聯絡我們。",
+                style = TextStyle(
+                    fontSize = 20.sp,
+                    lineHeight = 49.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color(0xFF000000),
+                    textAlign = TextAlign.Center,
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+            )
+
+
+
+
             Text(
                 text = "最新消息",
                 style = TextStyle(
@@ -97,12 +120,30 @@ fun HomeRoute(
                     .height(49.dp)
             )
 
+
+
+            Text(
+                text = "1.喵喵喵喵喵喵喵喵。\n" +
+                        "2.旺旺旺旺旺旺旺旺。\n" +
+                        "3.產品都優質美味歡迎購買。",
+                style = TextStyle(
+                    fontSize = 20.sp,
+                    lineHeight = 49.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color(0xFF000000),
+                    textAlign = TextAlign.Center,
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+            )
+
             Column(
                 verticalArrangement = Arrangement.spacedBy(21.dp, Alignment.Top),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(122.dp)
+                    .height(100.dp)
             ) {
 
                 Text(
@@ -161,7 +202,7 @@ fun HomeRoute(
                     )
                     {
                         Text(
-                            text = "聊天室",
+                            text = "討論區",
                             style = TextStyle(
                                 fontSize = 27.sp,
                                 lineHeight = 32.sp,
@@ -170,7 +211,7 @@ fun HomeRoute(
                                 textAlign = TextAlign.Center,
                             ),
                             modifier = Modifier
-                                .width(135.dp)
+                                .width(100.dp)
                                 .height(45.dp)
                         )
                     }
@@ -178,7 +219,7 @@ fun HomeRoute(
                     Button(
                         shape = RoundedCornerShape(20),
                         onClick = {
-                            navController.navigate(route = Screens.PetsFileFirst.name)
+                            navController.navigate(route = PetsFileScreens.PetsFileFirst.name)
                         },
                         border = BorderStroke(1.dp, Color.Black),
                         colors = ButtonDefaults.outlinedButtonColors(),
@@ -187,7 +228,7 @@ fun HomeRoute(
                     )
                     {
                         Text(
-                            text = "毛小孩追蹤",
+                            text = "寵物/會員資料",
                             style = TextStyle(
                                 fontSize = 27.sp,
                                 lineHeight = 32.sp,
@@ -196,7 +237,7 @@ fun HomeRoute(
                                 textAlign = TextAlign.Center,
                             ),
                             modifier = Modifier
-                                .width(135.dp)
+                                .width(180.dp)
                                 .height(45.dp)
                         )
                     }

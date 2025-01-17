@@ -7,8 +7,7 @@ data class Post(
     val content: String = "",
     val createDate: String = "",
     val modifyDate: String? = null,
-    val imageId: Int? = null,
-    val memberName: String =""
+    val imageId: Int? = null
 )
 data class NewPost(
     val memberId: Int = 0,
@@ -28,8 +27,7 @@ data class Comment(
     val memberId: Int = 0,
     val content: String = "",
     val createDate: String = "",
-    val modifyDate: String? = null,
-    val memberName: String =""
+    val modifyDate: String? = null
 )
 
 data class NewComment(
