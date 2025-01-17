@@ -47,6 +47,7 @@ import com.example.potel.ui.home.AccountScreens
 import com.example.potel.ui.home.accountRoute
 import com.example.potel.ui.myorders.MyOrdersScreens
 import com.example.potel.ui.myorders.myOrdersScreenRoute
+import com.example.potel.ui.petsfile.PetsFileScreens
 import com.example.potel.ui.petsfile.petsfileScreenRoute
 import com.example.potel.ui.theme.PotelTheme
 import com.example.potel.ui.shopping.shopScreenRoute
@@ -257,6 +258,8 @@ fun MainBottomAppBar(navController: NavHostController) {
                         .size(60.dp)
                         .weight(0.2f),
                     onClick = {
+                        navController.navigate(PetsFileScreens.PetsFileFirst.name)
+
                     }
                 ) {
                     Icon(

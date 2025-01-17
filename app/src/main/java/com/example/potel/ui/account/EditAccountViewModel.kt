@@ -70,7 +70,7 @@ class EditViewModel(private val preferences: SharedPreferences,
     fun loadMember() {
         // 假設資料來自 SharedPreferences 或從網絡獲取
         val loadedMember = Member(
-            memberid = preferences.getInt("memberid", 0),
+            memberid = preferences.getString("memberid", "0")!!.toInt(),
             name = preferences.getString("name", "") ?: "",
             passwd = preferences.getString("passwd", "") ?: "",
             cellphone = preferences.getString("cellphone", "") ?: "",

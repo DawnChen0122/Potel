@@ -18,6 +18,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.potel.R
 import com.example.potel.ui.home.AccountScreens
+
 import com.example.potel.ui.theme.PotelTheme
 
 //class MainActivity : ComponentActivity() {
@@ -68,7 +69,8 @@ fun ScreenPetsFileFirst( navController: NavHostController) {
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Button(onClick = {navController.navigate( route =AccountScreens.Edit.name )}) {
+            Button(onClick =
+            { navController.navigate ( AccountScreens.Edit.name) }) {
                 Text(text = "Add user")
             }
         }

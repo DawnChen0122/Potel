@@ -195,7 +195,9 @@ fun Login(
                                 Log.d("Login", "已登入0，issucc=$member")
                                 if (member != null && member.memberid != 0) {
                                     // 儲存登入資料
-                                    preferences.edit().putInt("memberid", member.memberid)
+                                    preferences.edit().putString("memberid",
+                                        member.memberid.toString()
+                                    )
                                         .putString("name", member.name)
                                         .putString("passwd", member.passwd)
                                         .putString("cellphone", member.cellphone)
