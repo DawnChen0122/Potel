@@ -1,6 +1,5 @@
 package com.example.potel.ui.forumZone
 
-import android.content.Context
 import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -37,166 +36,82 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Snackbar
-import androidx.compose.material3.SnackbarDuration
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.potel.R
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PostScreen(navController: NavHostController) {
-
+    val memberId = 5
     val backStackEntry = navController.getBackStackEntry(ForumScreens.ForumScreen.name)
     val forumVM: ForumVM = viewModel(backStackEntry)
     val postDetail = forumVM.postSelectedState.collectAsState()
     val comments by forumVM.postSelectedCommentsList.collectAsState()
-
-    val scope = rememberCoroutineScope()
-    val hostState = remember { SnackbarHostState() }
-
-    val context = LocalContext.current
-    val preferences = context.getSharedPreferences("member", Context.MODE_PRIVATE)
-    val memberId by remember {
-        mutableIntStateOf(
-            preferences.getString("memberid", null)?.toIntOrNull() ?: 4
-        )
-    }
-    val memberName by remember {
-        mutableStateOf(preferences.getString("name", null) ?: "預設名字preferences")
-    }
-    forumVM.setItemsVisibility(true)
-    // 监听需要显示的消息
-    LaunchedEffect(forumVM.postSuccessMessage.value) {
-        val message = forumVM.postSuccessMessage.value
-        if (message != null) {
-            scope.launch {
-                val job = launch {
-                    hostState.showSnackbar(
-                        message = message,
-                        duration = SnackbarDuration.Short
-                    )
-                }
-                job.join()
-                forumVM.setPostSuccessMessage(null)
-            }
-        }
-    }
-
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text("") },
                 navigationIcon = {
-                    IconButton(onClick = {
-                        navController.navigateUp()
-                    }) {
+                    IconButton(onClick = { navController.navigateUp() }) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = stringResource(R.string.back_button),
                             tint = Color.LightGray
                         )
                     }
-                },
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = colorResource(R.color.forum)
+                }, colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    containerColor = colorResource(R.color.forum) // 背景色設置
                 )
             )
         }
     ) { paddingValues ->
-        Box(modifier = Modifier.fillMaxSize()) {
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(top = paddingValues.calculateTopPadding())
-                    .background(colorResource(R.color.forum))
-            ) {
-                item {
-                    Spacer(Modifier.height(20.dp))
-                    PostDetailContent(postDetail.value)
-                    LikeController(forumVM, postDetail.value, memberId, context)
-                }
-
-                item {
-                    Spacer(Modifier.height(20.dp))
-                    AddCommentHeader(comments)
-                    AddCommentSection(postDetail.value.postId, forumVM, memberId,memberName)
-                }
-
-                item {
-                    Spacer(Modifier.height(20.dp))
-                    CommentsSection(comments, memberId, navController, forumVM)
-                }
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = paddingValues.calculateTopPadding())
+                .background(colorResource(R.color.forum))
+        ) {
+            item {
+                Spacer(Modifier.height(20.dp))
+                PostDetailContent(postDetail.value)
+                LikeController(forumVM, postDetail.value, memberId)
             }
-
-
-            SnackbarHost(
-                hostState = hostState,
-                modifier = Modifier.align(Alignment.BottomCenter),
-                snackbar = { data ->
-                    Snackbar(
-                        modifier = Modifier
-                            .padding(16.dp)
-                            .width(200.dp),
-                        containerColor = Color.White,
-                        contentColor = Color.Black,
-                        shape = RoundedCornerShape(16.dp),
-                        content = {
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.Start
-                            ) {
-                                Icon(
-                                    modifier = Modifier
-                                        .size(60.dp)
-                                        .padding(end = 8.dp),
-                                    painter = painterResource(id = R.drawable.dogandcat),
-                                    contentDescription = "完成通知"
-                                )
-                                Text(
-                                    text = data.visuals.message,
-                                    modifier = Modifier.weight(1f),
-                                    fontSize = 20.sp,
-                                    textAlign = TextAlign.Center
-                                )
-                            }
-                        }
-                    )
-                }
-            )
+            // 顯示新增留言區
+            item {
+                Spacer(Modifier.height(20.dp))
+                AddCommentHeader(comments)
+                AddCommentSection(postDetail.value.postId, forumVM, memberId)
+            }
+            // 顯示留言區
+            item {
+                Spacer(Modifier.height(20.dp))
+                CommentsSection(comments, memberId, navController, forumVM)
+            }
         }
     }
 }
-
 
 @Composable
 fun PostDetailContent(post: Post) {
@@ -263,7 +178,7 @@ fun UserInformationSection(post: Post) {
         }
         Spacer(modifier = Modifier.width(10.dp))
         Column {
-            Text(text = post.memberName, fontSize = 16.sp, color = Color.White)
+            Text(text = "用戶${post.memberId}", fontSize = 16.sp, color = Color.White)
             Spacer(modifier = Modifier.height(3.dp))
             PostDateText(post.createDate)
         }
@@ -290,7 +205,7 @@ fun PostBodySection(post: Post) {
 }
 
 @Composable
-fun LikeController(forumVM: ForumVM, post: Post, memberId: Int,context : Context ) {
+fun LikeController(forumVM: ForumVM, post: Post, memberId: Int) {
     var liked by remember { mutableStateOf(forumVM.isPostLikedByMember(post.postId, memberId))}
     var likesCount by remember { mutableIntStateOf(forumVM.getLikesCountForPost(post.postId)) }
 
@@ -349,7 +264,7 @@ fun AddCommentHeader(comments: List<Comment>) {
         Column(
             modifier = Modifier
                 .size(30.dp)
-                .background(colorResource(R.color.forumButton), RoundedCornerShape(8.dp)),
+                .background(colorResource(R.color.foruButton), RoundedCornerShape(8.dp)),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -360,7 +275,7 @@ fun AddCommentHeader(comments: List<Comment>) {
 }
 
 @Composable
-fun AddCommentSection(postId: Int, forumVM: ForumVM, memberId: Int, memberName:String) {
+fun AddCommentSection(postId: Int, forumVM: ForumVM, memberId: Int) {
     var commentText by remember { mutableStateOf("") }
     val scrollState = rememberScrollState()
     Box(
@@ -368,7 +283,7 @@ fun AddCommentSection(postId: Int, forumVM: ForumVM, memberId: Int, memberName:S
             .padding(horizontal = 16.dp)
             .background(colorResource(R.color.addComment), shape = RoundedCornerShape(8.dp))
     ) {
-
+        // Row 在左上角
         Column {
             Spacer(modifier = Modifier.height(10.dp))
             Row(
@@ -396,7 +311,7 @@ fun AddCommentSection(postId: Int, forumVM: ForumVM, memberId: Int, memberName:S
                 }
                 Spacer(modifier = Modifier.width(10.dp))
                 Column {
-                    Text(text = memberName, fontSize = 16.sp, color = Color.White)
+                    Text(text = "現在使用者", fontSize = 16.sp, color = Color.White)
                 }
             }
         }
@@ -411,7 +326,7 @@ fun AddCommentSection(postId: Int, forumVM: ForumVM, memberId: Int, memberName:S
             placeholder = { Text("我想說...", color = Color.White) },
             maxLines = 3,
             colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = Color.Transparent,
+                focusedBorderColor = Color.Transparent, // 根據條件改變顏色
                 unfocusedBorderColor = Color.Transparent,
                 focusedTextColor = Color.White,
                 unfocusedTextColor = Color.White,
@@ -429,10 +344,9 @@ fun AddCommentSection(postId: Int, forumVM: ForumVM, memberId: Int, memberName:S
                 )
                 forumVM.addComment(newComment)
                 commentText = ""
-                forumVM.setPostSuccessMessage("留言成功！")
             },
             shape = RoundedCornerShape(8.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = colorResource(R.color.forumButton)),
+            colors = ButtonDefaults.buttonColors(containerColor = colorResource(R.color.foruButton)),
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(end = 15.dp, bottom = 12.dp)
@@ -488,9 +402,9 @@ fun CommentHeader(comment: Comment, isLastComment: Boolean, memberId: Int, navCo
         }
         Spacer(modifier = Modifier.width(10.dp))
         Column {
-            Text(text = comment.memberName, fontSize = 16.sp, color = Color.White)
+            Text(text = "用戶${comment.memberId}", fontSize = 16.sp, color = Color.White)
             Spacer(modifier = Modifier.height(3.dp))
-
+            // 如果是最後一條留言，顯示 "最新留言"，否則顯示創建時間
             if (isLastComment) {
                 Text(
                     text = "最新留言",
@@ -507,19 +421,17 @@ fun CommentHeader(comment: Comment, isLastComment: Boolean, memberId: Int, navCo
                 .weight(1f),
             horizontalAlignment = Alignment.End
         ) {
-            if(comment.memberId == memberId) {
-                IconButton(
-                    onClick = {
-                        showDialog = true
-                    }
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.Menu,
-                        contentDescription = "更多操作",
-                        Modifier.size(30.dp),
-                        tint = Color.Gray
-                    )
-                }
+            IconButton(
+                onClick = {
+                    showDialog=true
+                }, enabled = comment.memberId == memberId
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.Menu,
+                    contentDescription = "更多操作",
+                    Modifier.size(30.dp),
+                    tint = Color.Gray
+                )
             }
         }
     }
@@ -565,7 +477,7 @@ fun DeleteCommentConfirmationDialog(
         content = {
             Column(
                 Modifier
-                    .background(Color.LightGray.copy(alpha = 0.9f), shape = RoundedCornerShape(8.dp))
+                    .background(Color.LightGray.copy(alpha = 0.8f), shape = RoundedCornerShape(8.dp))
                     .height(240.dp),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally

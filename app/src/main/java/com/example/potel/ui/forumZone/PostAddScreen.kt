@@ -1,12 +1,10 @@
 package com.example.potel.ui.forumZone
 
-import android.content.Context
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -41,7 +39,6 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -52,7 +49,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -73,11 +69,12 @@ fun PostAddScreen(
     // 從導航堆疊中取得 ForumVM 這個 ViewModel
     val forumVM: ForumVM = viewModel(navController.getBackStackEntry(ForumScreens.ForumScreen.name))
 
+    val memberId = 5 // 使用固定的 memberId，未來可以根據用戶登入情況動態改變
     var title by remember { mutableStateOf("") }
     var content by remember { mutableStateOf("") }
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
     val scope = rememberCoroutineScope()
-    val hostState = remember { SnackbarHostState() }
+    val snackbarHostState = remember { SnackbarHostState() }
     val context = LocalContext.current
     var showDialog by remember { mutableStateOf(false) }
 
@@ -87,14 +84,6 @@ fun PostAddScreen(
         onResult = { uri: Uri? -> selectedImageUri = uri }
     )
 
-    val contextPreferences = LocalContext.current
-    val preferences = contextPreferences.getSharedPreferences("member", Context.MODE_PRIVATE)
-    val memberId by remember {
-        mutableIntStateOf(
-            preferences.getString("memberid", null)?.toIntOrNull() ?: 4
-        )
-    }
-    forumVM.setItemsVisibility(true)
     // 主界面容器
     Scaffold(
         topBar = {
@@ -118,7 +107,7 @@ fun PostAddScreen(
                 actions = {
                     Button(onClick = {
                         if (title.isEmpty() || content.isEmpty()) {
-                            scope.launch { hostState.showSnackbar("標題和內容都必須填寫！", withDismissAction = true) }
+                            scope.launch { snackbarHostState.showSnackbar("標題和內容都必須填寫！") }
                         } else {
                             val imagePart = selectedImageUri?.let { uri ->
                                 context.contentResolver.openInputStream(uri)?.readBytes()?.let {
@@ -128,11 +117,10 @@ fun PostAddScreen(
                             }
                             val newPost = NewPost(memberId = memberId, title = title, content = content)
                             forumVM.addPost(newPost, imagePart)
-                            forumVM.setPostSuccessMessage("發文成功！")
                             navController.popBackStack()
                         }
                     }, shape = RoundedCornerShape(8.dp), colors = ButtonDefaults.buttonColors(
-                        containerColor = colorResource(R.color.forumButton),
+                        containerColor = colorResource(R.color.foruButton),
                         contentColor = Color.Black
                     )) {
                         Text("發布貼文", fontSize = 15.sp)
@@ -142,12 +130,11 @@ fun PostAddScreen(
             )
         },
         snackbarHost = {
-            SnackbarHost(hostState = hostState) { data ->
+            SnackbarHost(hostState = snackbarHostState) { snackbarData ->
                 Snackbar(
-                    snackbarData = data,
+                    snackbarData = snackbarData,
                     containerColor = Color.White,
-                    contentColor = Color.Black,
-                    dismissActionContentColor = Color.Black
+                    contentColor = Color.Black
                 )
             }
         }
@@ -249,7 +236,7 @@ fun PostAddContent(
                         unfocusedBorderColor = Color.LightGray,
                         focusedTextColor = Color.White,
                         unfocusedTextColor = Color.LightGray,
-                        cursorColor = colorResource(R.color.forumButton)
+                        cursorColor = colorResource(R.color.foruButton)
                     )
                 )
                 Spacer(modifier = Modifier.height(8.dp))
@@ -265,7 +252,7 @@ fun PostAddContent(
                         unfocusedBorderColor = Color.LightGray,
                         focusedTextColor = Color.White,
                         unfocusedTextColor = Color.LightGray,
-                        cursorColor = colorResource(R.color.forumButton)
+                        cursorColor = colorResource(R.color.foruButton)
                     ),
                     minLines = 1
                 )
@@ -288,18 +275,11 @@ fun PostAddContent(
                             onClick = onSelectImage,
                             modifier = Modifier.align(Alignment.Center),
                             colors = ButtonDefaults.buttonColors(
-                                containerColor = colorResource(R.color.forumButton),
+                                containerColor = Color.LightGray,
                                 contentColor = Color.Black
                             )
                         ) {
-                            val imageResource = R.drawable.uploadimage
-                            Image(
-                                painter = painterResource(id = imageResource),
-                                contentDescription = "上傳照片",
-                                modifier = Modifier
-                                    .size(35.dp).padding(end = 8.dp)
-                            )
-                            Text(if (selectedImageUri != null) "更改照片" else "上傳照片", fontSize = 15.sp)
+                            Text(if (selectedImageUri != null) "更改照片" else "上傳照片")
                         }
                     }
                 }
