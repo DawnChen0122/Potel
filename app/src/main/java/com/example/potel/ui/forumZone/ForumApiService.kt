@@ -97,6 +97,6 @@ object RetrofitInstance {
             .create(ForumApiService::class.java)
     }
 }
-fun composeImageUrl(imageId: Int): String{
-    return "${baseurl}api/image?imageid=$imageId"
+fun composeImageUrl(imageid: Int): String{
+    return "${baseurl}api/image?imageid=$imageid"
 }

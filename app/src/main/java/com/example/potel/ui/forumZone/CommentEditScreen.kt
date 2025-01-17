@@ -62,7 +62,7 @@ fun CommentEditScreen(
     Log.d(tag, "CommentEditScreen - Comment: ${comment.value}")
     var content by remember { mutableStateOf(comment.value.content)}
     val scope = rememberCoroutineScope()
-    val hostState = remember { SnackbarHostState() }
+    val snackbarHostState = remember { SnackbarHostState() }
     var showDialog by remember { mutableStateOf(false)}
 
     Scaffold(
@@ -88,18 +88,17 @@ fun CommentEditScreen(
                    Button(
                        onClick = {
                            if (content.isEmpty()) {
-                               scope.launch { hostState.showSnackbar("內容必須填寫！", withDismissAction = true) }
+                               scope.launch { snackbarHostState.showSnackbar("內容必須填寫！") }
                            }else{
                                val updateComment =Comment(
                                    commentId = comment.value.commentId,
                                    content = content
                                )
                                forumVM.updateComment(updateComment)
-                               forumVM.setPostSuccessMessage("編輯完成")
                                navController.popBackStack()
                            }
                        }, shape = RoundedCornerShape(8.dp), colors = ButtonDefaults.buttonColors(
-                           containerColor = colorResource(R.color.forumButton),
+                           containerColor = colorResource(R.color.foruButton),
                            contentColor = Color.Black)
                    ) {
                            Text("保存變更", fontSize = 15.sp)
@@ -109,12 +108,11 @@ fun CommentEditScreen(
            )
         },
         snackbarHost = {
-            SnackbarHost(hostState = hostState) { data ->
+            SnackbarHost(hostState = snackbarHostState) { snackbarData ->
                 Snackbar(
-                    snackbarData = data,
+                    snackbarData = snackbarData,
                     containerColor = Color.White,
-                    contentColor = Color.Black,
-                    dismissActionContentColor = Color.Black
+                    contentColor = Color.Black
                 )
             }
         }
@@ -133,7 +131,7 @@ fun CommentEditScreen(
                 Spacer(Modifier.height(35.dp))
                 OutlinedTextField(
                     value = content,
-                    onValueChange = { if (it.length <= 500) content = it },
+                    onValueChange = { if (it.length <= 150) content = it },
                     placeholder = { Text("輸入留言內容", color = Color.LightGray)},
                     modifier = Modifier
                         .fillMaxWidth(),
@@ -142,7 +140,7 @@ fun CommentEditScreen(
                         unfocusedBorderColor = Color.Transparent,
                         focusedTextColor = Color.White,
                         unfocusedTextColor = Color.White,
-                        cursorColor = colorResource(R.color.forumButton)
+                        cursorColor = colorResource(R.color.foruButton)
                     ),
                     minLines = 1
                 )
@@ -184,7 +182,6 @@ fun CommentEditScreen(
                         Button(
                             onClick = {
                                 showDialog = false
-                                forumVM.setPostSuccessMessage("編輯完成！")
                                 navController.navigate(ForumScreens.PostScreen.name)
                             },
                             colors = ButtonDefaults.buttonColors(

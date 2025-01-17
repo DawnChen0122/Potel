@@ -12,8 +12,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.BottomAppBarDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -27,9 +34,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.BlendMode.Companion.Screen
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -47,10 +57,13 @@ import com.example.potel.ui.home.accountRoute
 import com.example.potel.ui.myorders.MyOrdersScreens
 import com.example.potel.ui.myorders.myOrdersScreenRoute
 import com.example.potel.ui.petsfile.petsfileScreenRoute
+import com.example.potel.ui.theme.PotelTheme
+
+import com.example.potel.ui.shopping.shopScreenRoute
+
 import com.example.potel.ui.shopping.ShopScreens
 import com.example.potel.ui.shopping.ShopViewModel
-import com.example.potel.ui.shopping.shopScreenRoute
-import com.example.potel.ui.theme.PotelTheme
+import kotlinx.coroutines.launch
 
 
 class MainActivity : ComponentActivity() {
@@ -75,11 +88,7 @@ fun PotelApp(
     val currentScreen = backStackEntry?.destination?.route?.split("/")?.first() ?: "home"
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
     val currentScreenTitle = findEnumTitleByName(currentScreen,
-        MyOrdersScreens::class.java,
-        BookingScreens::class.java,
-        ShopScreens::class.java,
-        Screens::class.java
-        )
+        MyOrdersScreens::class.java)
 
     val isForumScreen = currentScreen in ForumScreens.entries.map { it.name }
 
@@ -91,8 +100,7 @@ fun PotelApp(
 
             if (!isForumScreen) {
                 MainTopAppBar(
-//                    currentScreen = currentScreen,
-                    currentScreen = currentScreenTitle,
+                    currentScreen = currentScreen,
                     canNavigateBack = navController.previousBackStackEntry != null,
                     navigateUp = { navController.navigateUp() },
                     scrollBehavior = scrollBehavior
@@ -132,6 +140,7 @@ fun TipNavHost(
         modifier = modifier,
         navController = navController,
         startDestination = Screens.HomeRoute.name
+
     ) {
         // todo 2-2 置入所有的畫面路徑
 //        homeScreenRoute(navController) // 02 明駿

@@ -1,190 +1,64 @@
 package com.example.potel.ui.petsfile
 
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.example.potel.R
-import com.example.potel.ui.forumZone.NewPost
-import com.example.potel.ui.forumZone.Post
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.MultipartBody
-import okhttp3.RequestBody.Companion.toRequestBody
 
 class PetFileAddViewModel : ViewModel() {
-    private val tag = "tag_PetFileAddViewModel"
+
+    // 使用 MutableStateFlow 和 StateFlow 管理狀態
     private val _ownerName = MutableStateFlow("")
     val ownerName: StateFlow<String> = _ownerName
-
-    private val _petId = MutableStateFlow(0)  // 改為 Int 類型
-    val petId: StateFlow<Int> = _petId
 
     private val _petName = MutableStateFlow("")
     val petName: StateFlow<String> = _petName
 
-    private val _petBreed = MutableStateFlow("")
-    val petBreed: StateFlow<String> = _petBreed
-
     private val _petGender = MutableStateFlow("")
     val petGender: StateFlow<String> = _petGender
 
-    private val _petImages = MutableStateFlow(0)  // 改為 Int 類型
-    val petImages: StateFlow<Int> = _petImages
+    private val _contactInfo = MutableStateFlow("")
+    val contactInfo: StateFlow<String> = _contactInfo
 
-    // 更新狀態
-    fun updateOwnerName(name: String) {
-        _ownerName.value = name
+    private val _petDiscribe = MutableStateFlow("")
+    val petDiscribe: StateFlow<String> = _petDiscribe
+
+    private val _petImage = MutableStateFlow("")
+    val petImage: StateFlow<String> = _petImage
+
+    // 更新 ownerName
+    fun updateOwnerName(newOwnerName: String) {
+        _ownerName.value = newOwnerName
     }
 
-    fun updatePetId(id: Int) {
-        _petId.value = id
+    // 更新 petName
+    fun updatePetName(newPetName: String) {
+        _petName.value = newPetName
     }
 
-    fun updatePetName(name: String) {
-        _petName.value = name
+    // 更新 petGender
+    fun updatePetGender(newPetGender: String) {
+        _petGender.value = newPetGender
     }
 
-    fun updatePetBreed(breed: String) {
-        _petBreed.value = breed
+    // 更新 contactInfo
+    fun updateContactInfo(newContactInfo: String) {
+        _contactInfo.value = newContactInfo
     }
 
-    fun updatePetGender(gender: String) {
-        _petGender.value = gender
+    // 更新 petDiscribe
+    fun updatePetDiscribe(newPetDiscribe: String) {
+        _petDiscribe.value = newPetDiscribe
     }
 
-    fun updatePetImages(images: Int) {
-        _petImages.value = images
+    // 更新 petImage
+    fun updatePetImage(newPetImage: String) {
+        _petImage.value = newPetImage
     }
 
-    fun addPost(post: NewPost, imagePart: MultipartBody.Part?) {
-        viewModelScope.launch {
-            try {
-                val memberIdPart =
-                    post.memberId.toString().toRequestBody("text/plain".toMediaTypeOrNull())
-                val titlePart = post.title.toRequestBody("text/plain".toMediaTypeOrNull())
-                val contentPart = post.content.toRequestBody("text/plain".toMediaTypeOrNull())
-
-                val response = RetrofitInstance.api.addPost(
-                    memberId = memberIdPart,
-                    title = titlePart,
-                    content = contentPart,
-                    image = imagePart
-                )
-
-                if (response.isSuccessful) {
-                    Log.d(tag, "Post added successfully: ${response.body()}")
-                } else {
-                    Log.e(tag, "Error adding post: Code ${response.code()}")
-                }
-            } catch (e: Exception) {
-                Log.e(tag, "Error adding post: ${e.message}")
-            }
-        }
-    }
-
-    fun updatePostWithImage(post: Post, imagePart: MultipartBody.Part?) {
-        viewModelScope.launch {
-            try {
-                val postIdPart =
-                    post.postId.toString().toRequestBody("text/plain".toMediaTypeOrNull())
-                val titlePart = post.title.toRequestBody("text/plain".toMediaTypeOrNull())
-                val contentPart = post.content.toRequestBody("text/plain".toMediaTypeOrNull())
-
-                val response = RetrofitInstance.api.updatePostWithImage(
-                    postId = postIdPart,
-                    title = titlePart,
-                    content = contentPart,
-                    image = imagePart
-                )
-
-                if (response.isSuccessful) {
-                    Log.d(tag, "updatePostWithImage successfully: ${response.body()}")
-//                    petsFileData()
-                } else {
-                    Log.e(tag, "Error updatePostWithImage Code ${response.code()}")
-                }
-            } catch (e: Exception) {
-                Log.e(tag, "Error updatePostWithImage: ${e.message}")
-            }
-        }
-    }
-
-    fun onAddDogClick(imagePart: MultipartBody.Part?) {
-        Log.d("onAddDogClick", imagePart.toString())
-
-        // 從 ViewModel 獲取變數
-        val ownername = _ownerName.value.toRequestBody("text/plain".toMediaTypeOrNull())
-        val petname = _petName.value.toRequestBody("text/plain".toMediaTypeOrNull())
-        val petbreed = _petBreed.value.toRequestBody("text/plain".toMediaTypeOrNull())
-        val doggender = _petGender.value.toRequestBody("text/plain".toMediaTypeOrNull())
-
-        // 使用 viewModelScope 發起網路請求
-        viewModelScope.launch {
-            RetrofitInstance.api.addDog(
-                dogOwner = ownername,
-                dogBreed = petbreed,
-                dogName = petname,
-                dogGender = doggender,
-                image = imagePart
-            )
-        }
-    }
-
-    // 提交 Cat 資料
-    fun onAddCatClick(imagePart: MultipartBody.Part?) {
-        Log.d("onAddCatClick", imagePart.toString())
-
-        // 從 ViewModel 獲取變數
-        val ownername = _ownerName.value.toRequestBody("text/plain".toMediaTypeOrNull())
-        val petname = _petName.value.toRequestBody("text/plain".toMediaTypeOrNull())
-        val petbreed = _petBreed.value.toRequestBody("text/plain".toMediaTypeOrNull())
-        val catgender = _petGender.value.toRequestBody("text/plain".toMediaTypeOrNull())
-
-        // 使用 viewModelScope 發起網路請求
-        viewModelScope.launch {
-            RetrofitInstance.api.addCat(
-                catOwner = ownername,
-                catBreed = petbreed,
-                catName = petname,
-                catGender = catgender,
-                image = imagePart
-            )
-        }
-    }
-
-    fun onMaleClick() {
-        _petGender.update { "Male" }
-    }
-
-    fun onFemaleClick() {
-        _petGender.update { "Female" }
-
-    }
     // 處理添加資料的動作
-//    fun onAddCatClick() {
-//        // 在此處理提交的邏輯，這裡只是示範
-//        println("資料已提交：$ownerName, $petName, $petGender, $contactInfo, $petDiscribe, $petImage")
-//    }
-//
-//    fun onAddDogClick() {
-//        val name = _petName.value
-//        val image: Int = R.drawable.dog
-//        val owner: String = _ownerName.value
-//        viewModelScope.launch {
-//            RetrofitInstance.api.addDog(
-//                PetsFileApiService.AddDogBody(
-//                    dogOwner = owner,
-//                    dogId = "3",
-//                    dogName = "Max",
-//                    dogBreed = "123",
-//                    dogGender = "Male",
-//                    dogImage = "5"
-//                )
-//            )
-//        }
-//    }
+    fun onAddClicked() {
+        // 在此處理提交的邏輯，這裡只是示範
+        println("資料已提交：$ownerName, $petName, $petGender, $contactInfo, $petDiscribe, $petImage")
+    }
 }
