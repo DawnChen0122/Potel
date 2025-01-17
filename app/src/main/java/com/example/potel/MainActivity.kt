@@ -51,7 +51,6 @@ import com.example.potel.ui.shopping.ShopScreens
 import com.example.potel.ui.shopping.ShopViewModel
 import com.example.potel.ui.shopping.shopScreenRoute
 import com.example.potel.ui.theme.PotelTheme
-import com.example.potel.ui.theme.TipColor
 
 
 class MainActivity : ComponentActivity() {
@@ -135,13 +134,8 @@ fun TipNavHost(
         startDestination = Screens.HomeRoute.name
     ) {
         // todo 2-2 置入所有的畫面路徑
-//        homeScreenRoute(navController) // 02 明駿
-//        bookingScreenRoute(navController) // 04 芊伃
-//        myOrdersScreenRoute(navController) // 27 正能
+
         shopScreenRoute(viewModel = viewModel, navController) // 07 柏森
-//        careRecordsScreenRoute(navController) // 25 泰陽
-//        discussZoneScreenRoute(navController) // 16 品伃
-//        petsScreenRoute(navController) // 18 勇慶
         accountRoute(navController) //02 明駿
         homeScreenRoute(navController) // 02 明駿
         bookingScreenRoute(viewModel = bookingViewModel,navController) // 04 芊伃
@@ -185,7 +179,7 @@ fun MainTopAppBar(
 }
 
 
-@OptIn(ExperimentalMaterial3Api::class)
+
 @Composable
 fun MainBottomAppBar(navController: NavHostController){
     BottomAppBar(
@@ -210,7 +204,6 @@ fun MainBottomAppBar(navController: NavHostController){
                         painter = painterResource(R.drawable.home),
                         contentDescription = "Home",
                         modifier = Modifier.size(150.dp),
-                        tint = TipColor.deep_brown
                     )
                 }
 
@@ -226,7 +219,7 @@ fun MainBottomAppBar(navController: NavHostController){
                         painter = painterResource(R.drawable.booking),
                         contentDescription = "Booking",
                         modifier = Modifier.size(150.dp),
-                        tint = TipColor.deep_brown
+
                     )
                 }
 
@@ -242,7 +235,7 @@ fun MainBottomAppBar(navController: NavHostController){
                         painter = painterResource(R.drawable.shopping),
                         contentDescription = "Shopping",
                         modifier = Modifier.size(150.dp),
-                        tint = TipColor.deep_brown
+
                     )
                 }
                 IconButton(
@@ -259,7 +252,7 @@ fun MainBottomAppBar(navController: NavHostController){
                         painter = painterResource(R.drawable.myorders),
                         contentDescription = "MyOrders",
                         modifier = Modifier.size(150.dp),
-                        tint = TipColor.deep_brown
+
                     )
                 }
                 IconButton(
@@ -273,7 +266,7 @@ fun MainBottomAppBar(navController: NavHostController){
                         painter = painterResource(R.drawable.myinfo),
                         contentDescription = "MyInfo",
                         modifier = Modifier.size(150.dp),
-                        tint = TipColor.deep_brown
+
                     )
                 }
             }
