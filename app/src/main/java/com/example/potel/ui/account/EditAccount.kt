@@ -5,7 +5,6 @@ import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.material3.ButtonDefaults
@@ -31,12 +30,12 @@ fun Edit(
     viewModel: EditViewModel = viewModel(
         factory = EditViewModelFactory(
             preferences = LocalContext.current.getSharedPreferences("member", Context.MODE_PRIVATE),
-            apiService = RetrofitInstance.api // 使用 RetrofitInstance 中的 apiService
+            apiService = RetrofitInstance.api
         ),
     ),
     navController: NavHostController
 ) {
-    val member by viewModel.member.collectAsState()  // 觀察 member 資料並且自動更新 UI
+    val member by viewModel.member.collectAsState()
 
     var errorMessage by remember { mutableStateOf<String?>(null) }
 
@@ -100,7 +99,7 @@ fun Edit(
                         .padding(top = 10.dp)
                 )
 
-                // 顯示並更新 email 欄位（可編輯）
+
                 OutlinedTextField(
                     value = member.email,
                     onValueChange = { viewModel.updateEmail(it) },
@@ -112,7 +111,7 @@ fun Edit(
                         .padding(top = 10.dp)
                 )
 
-                // 顯示並更新密碼欄位（可編輯）
+
                 OutlinedTextField(
                     value = member.passwd,
                     onValueChange = { viewModel.updatePassword(it) },
@@ -122,10 +121,10 @@ fun Edit(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 10.dp),
-                    visualTransformation = PasswordVisualTransformation()  // 密碼加密顯示
+                    visualTransformation = PasswordVisualTransformation()
                 )
 
-                // 顯示並更新地址欄位（可編輯）
+
                 OutlinedTextField(
                     value = member.address,
                     onValueChange = { viewModel.updateAddress(it) },
@@ -157,9 +156,9 @@ fun Edit(
                         ) {
                             errorMessage = "欄位不得空白"
 
-                        } else  if (member.email.isNotEmpty() && member.passwd.isNotEmpty() && member.address.isNotEmpty()
-                                && member.cellphone.isNotEmpty())
-                        {
+                        } else if (member.email.isNotEmpty() && member.passwd.isNotEmpty() && member.address.isNotEmpty()
+                            && member.cellphone.isNotEmpty()
+                        ) {
                             val updatedMember = Edit(
                                 passwd = member.passwd,
                                 cellphone = member.cellphone,
@@ -170,16 +169,14 @@ fun Edit(
                             viewModel.viewModelScope.launch {
                                 try {
                                     val result = viewModel.edit(updatedMember)
-                                    // 成功後進行相應的處理，例如顯示提示訊息
                                     Log.d("EditButton", "更新成功: $result")
                                 } catch (e: Exception) {
-                                    // 處理錯誤，顯示錯誤訊息
                                     Log.e("EditButton", "更新失敗: ${e.message}")
                                 }
                             }
                         } else {
-                        Log.d("EditButton", "請填寫所有欄位")
-                    }
+                            Log.d("EditButton", "請填寫所有欄位")
+                        }
                     },
                     modifier = Modifier
                         .fillMaxWidth()

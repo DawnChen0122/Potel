@@ -1,6 +1,7 @@
 package com.example.potel.ui.account
 
 
+import android.util.Log
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
@@ -32,6 +33,9 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.potel.ui.booking.BookingScreens
+import com.example.potel.ui.home.AccountScreens
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
@@ -142,8 +146,7 @@ fun Signup(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-//                .padding(top = 10.dp)
-//                .background(Color.White, RoundedCornerShape(8.dp))
+
         ) {
             Text(
                 text = "請選擇出生年月日",
@@ -267,8 +270,6 @@ fun Signup(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-//                .padding(top = 10.dp)
-//                .background(Color.White, RoundedCornerShape(8.dp))
         )
         {
             Text(
@@ -461,7 +462,18 @@ fun Signup(
                             address = address,
                             birthday = birthday
                         )
-                        viewModel.addmember(member)
+                        val result = viewModel.addmember(member)
+
+                        if (result.message  == "Account added successfully" ) {
+
+                            errorMessage = "註冊成功"
+                            Log.d("Registration", "註冊成功，準備跳轉到登入頁面")
+                            delay(1000)
+                            navController.navigate(AccountScreens.Login.name)
+                        } else {
+                            errorMessage =  "註冊失敗"
+                            Log.e("Registration", "註冊失敗，錯誤訊息: ${result.message}")
+                        }
                     }
                 }
             },
@@ -470,11 +482,14 @@ fun Signup(
                 .padding(top = 16.dp),
             shape = RoundedCornerShape(8.dp),
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFFFFA500),)
+                containerColor = Color(0xFFFFA500),
+            )
         ) {
-            Text(text = "註冊",
+            Text(
+                text = "註冊",
                 fontSize = 50.sp,
-                color = Color.White)
+                color = Color.White
+            )
         }
 
     }

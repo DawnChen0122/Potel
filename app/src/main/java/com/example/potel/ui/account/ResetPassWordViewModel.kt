@@ -33,12 +33,12 @@ class ResetPassWordViewModel : ViewModel() {
 
 
     private val _cellphone = MutableStateFlow("")
-    val  cellphone = _cellphone.asStateFlow()
+    val cellphone = _cellphone.asStateFlow()
     var cellphoneError by mutableStateOf(false)
-    fun oncellphoneChanged( cellphone: String) {
-        val  cellphoneRegex = Regex("^[0-9]{10}$")
-        cellphoneError = ! cellphone.matches( cellphoneRegex)
-        _cellphone.value =  cellphone
+    fun oncellphoneChanged(cellphone: String) {
+        val cellphoneRegex = Regex("^[0-9]{10}$")
+        cellphoneError = !cellphone.matches(cellphoneRegex)
+        _cellphone.value = cellphone
     }
 
 
@@ -56,19 +56,19 @@ class ResetPassWordViewModel : ViewModel() {
     val checkEmailAndCellphone = _checkEmailAndCellphone.asStateFlow()
 
 
-    suspend fun checkEmailAndCellphone() {
+    suspend fun checkEmailAndCellphone(): Check {
 
         val email = _email.value
-        val  cellphone = _cellphone.value
+        val cellphone = _cellphone.value
 
         Log.d("checkEmailAndCellphone", "Checking email and phone number:")
         Log.d("checkEmailAndCellphone", "Email: $email, Phone number: $ cellphone")
 
-        if (email.isNotEmpty() &&  cellphone.isNotEmpty() && !emailError && !cellphoneError) {
+        if (email.isNotEmpty() && cellphone.isNotEmpty() && !emailError && !cellphoneError) {
             try {
                 Log.d("checkEmailAndCellphone", "Valid input, preparing to send request")
 
-                val response = RetrofitInstance.api.checkEmailAndCellphone(email,  cellphone)
+                val response = RetrofitInstance.api.checkEmailAndCellphone(email, cellphone)
 
                 if (response != null) {
                     Log.d("checkEmailAndCellphone", "API response raw: $response")
@@ -80,11 +80,9 @@ class ResetPassWordViewModel : ViewModel() {
                     Log.e("checkEmailAndCellphone", "API response is null")
                 }
                 _checkEmailAndCellphone.value = response
+                return response
             } catch (e: Exception) {
-                // 捕獲並打印錯誤訊息
                 Log.e("checkEmailAndCellphone", "API request failed: ${e.localizedMessage}")
-
-                // 如果是 HTTP 404 錯誤，打印具體的錯誤代碼和 URL
                 if (e is retrofit2.HttpException) {
                     Log.e(
                         "checkEmailAndCellphone",
@@ -96,21 +94,22 @@ class ResetPassWordViewModel : ViewModel() {
                     )
                 }
 
-                e.printStackTrace() // 打印錯誤堆疊，幫助調試
+                e.printStackTrace()
             }
         } else {
             Log.d("checkEmailAndCellphone", "Invalid email or phone number")
-            println("Invalid email or phone number")
+            _checkEmailAndCellphone.value =
+                Check(success = false, message = "電子郵件或手機號碼無效")
         }
+        return _checkEmailAndCellphone.value
     }
-
 
     private val _changepasswd = MutableStateFlow(Change(success = false, message = ""))
     val changepasswd = _changepasswd.asStateFlow()
 
     suspend fun changepasswd(): Check {
         val passwd = _passwd.value
-        val  email = _email.value
+        val email = _email.value
 
         if (passwd.isNotEmpty() && !passwdError) {
             try {
@@ -123,10 +122,10 @@ class ResetPassWordViewModel : ViewModel() {
                 )
                 return response
             } catch (e: Exception) {
-
-                e.printStackTrace() // 打印錯誤堆疊，幫助調試
+                e.printStackTrace()
                 val check = Check(false, e.toString())
                 return check
+
 
             }
         } else {
