@@ -43,7 +43,7 @@ fun ScreenPetsFileFirst(navController: NavHostController) {
             .verticalScroll(scrollState)
             .fillMaxSize()
 //            .padding(16.dp)
-//            .background(Color(0xFFF0E68C)),
+//            .background(Color(0xFFF0E68C))
             .background(color = TipColor.light_brown),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top,
@@ -70,7 +70,7 @@ fun ScreenPetsFileFirst(navController: NavHostController) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
-                painter = painterResource(id = R.drawable.user), // 替換為 dog 圖片資源ID
+                painter = painterResource(id = R.drawable.user1), // 替換為 dog 圖片資源ID
                 contentDescription = "User",
                 modifier = Modifier.size(100.dp)
             )
