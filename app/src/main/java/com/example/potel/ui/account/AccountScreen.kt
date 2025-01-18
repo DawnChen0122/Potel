@@ -496,7 +496,7 @@ fun Signup(
 
                             errorMessage = "註冊成功"
                             Log.d("Registration", "註冊成功，準備跳轉到登入頁面")
-                            delay(1000)
+                            delay(5000)
                             navController.navigate(AccountScreens.Login.name)
                         } else {
                             errorMessage =  "註冊失敗"

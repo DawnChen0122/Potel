@@ -10,6 +10,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -66,7 +67,7 @@ fun HomeRoute(
             Text(
                 text = "${preferences.getString("name", "")}先生/小姐您好",
                 color = Color(0xFF713F2A),
-                        style = TextStyle(
+                style = TextStyle(
                     fontSize = 20.sp,
                     lineHeight = 46.sp,
                     fontWeight = FontWeight(700),
@@ -77,6 +78,8 @@ fun HomeRoute(
                     .width(176.dp)
                     .height(46.dp)
             )
+
+            Spacer(modifier = Modifier.height(30.dp))
 
             Text(
                 text = "入住須知",
@@ -111,6 +114,7 @@ fun HomeRoute(
 
 
 
+            Spacer(modifier = Modifier.height(30.dp))
 
             Text(
                 text = "最新消息",
@@ -129,9 +133,9 @@ fun HomeRoute(
 
 
             Text(
-                text = "1.喵喵喵喵喵喵喵喵。\n" +
-                        "2.旺旺旺旺旺旺旺旺。\n" +
-                        "3.產品都優質美味歡迎購買。",
+                text = "1.貓咪專屬空間開放，舒適假期等你來！\n" +
+                        "2.狗狗新設施上線，提供更好住宿體驗！\n" +
+                        "3.優質美味產品，歡迎來選購！",
                 style = TextStyle(
                     fontSize = 20.sp,
                     lineHeight = 49.sp,
@@ -152,106 +156,119 @@ fun HomeRoute(
                     .height(100.dp)
             ) {
 
-                Text(
-                    text = "顯示房客評價",
-                    style = TextStyle(
-                        fontSize = 27.sp,
-                        lineHeight = 32.sp,
-                        fontWeight = FontWeight(700),
-                        color = Color(0xFF713F2A),
-                        textAlign = TextAlign.Center,
-                    ),
-                    modifier = Modifier
-                        .width(246.dp)
-                        .height(49.dp)
-                )
+//                Text(
+//                    text = "顯示房客評價",
+//                    style = TextStyle(
+//                        fontSize = 27.sp,
+//                        lineHeight = 32.sp,
+//                        fontWeight = FontWeight(700),
+//                        color = Color(0xFF713F2A),
+//                        textAlign = TextAlign.Center,
+//                    ),
+//                    modifier = Modifier
+//                        .width(246.dp)
+//                        .height(49.dp)
+//                )
 
-                Button(
-                    shape = RoundedCornerShape(20),
-                    onClick = {
-                        navController.navigate(route = BookingScreens.Booking.name)
-                    },
-                    border = BorderStroke(1.dp, Color.Black),
-                    colors = ButtonDefaults.outlinedButtonColors(),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(30.dp)
-                )
-                {
-                    Text(
-                        text = "房型介紹",
-                        style = TextStyle(
-                            fontSize = 26.sp,
-                            lineHeight = 49.sp,
-                            fontWeight = FontWeight(700),
-                            color = Color(0xFF000000),
-                            textAlign = TextAlign.Center,
-                        ),
+//                Button(
+////                    shape = RoundedCornerShape(20),
+////                    onClick = {
+////                        navController.navigate(route = BookingScreens.Booking.name)
+////                    },
+////                    border = BorderStroke(1.dp, Color.Black),
+////                    colors = ButtonDefaults.outlinedButtonColors(),
+////                    modifier = Modifier
+////                        .fillMaxWidth()
+////                        .padding(30.dp)
+//
+//
+//                            shape = RoundedCornerShape(20),
+//                    onClick = {
+//                        navController.navigate(route = ForumScreens.ForumScreen.name)
+//                    },
+//                    border = BorderStroke(1.dp, Color.Black),
+//                    colors = ButtonDefaults.outlinedButtonColors(),
+//                    modifier = Modifier
+//                )
+//                {
+//                    Text(
+//                        text = "房型介紹",
+//                        style = TextStyle(
+//                            fontSize = 26.sp,
+//                            lineHeight = 49.sp,
+//                            fontWeight = FontWeight(700),
+//                            color = Color(0xFF713F2A),
+//                            textAlign = TextAlign.Center,
+//                        ),
+//                        modifier = Modifier
+//                            .width(246.dp)
+//                            .height(49.dp)
+//                    )
+//                }
+//            }
+
+            Spacer(modifier = Modifier.height(30.dp))
+
+                Row(
+                    horizontalArrangement = Arrangement.Start,
+                ) {
+                    Button(
+                        shape = RoundedCornerShape(20),
+                        onClick = {
+                            navController.navigate(route = ForumScreens.ForumScreen.name)
+                        },
+                        border = BorderStroke(1.dp, Color.Black),
+                        colors = ButtonDefaults.outlinedButtonColors(),
                         modifier = Modifier
-                            .width(246.dp)
-                            .height(49.dp)
+
                     )
-                }
-            }
-            Row(
-                horizontalArrangement = Arrangement.Start,
-            ) {
-                Button(
-                    shape = RoundedCornerShape(20),
-                    onClick = {
-                        navController.navigate(route = ForumScreens.ForumScreen.name)
-                    },
-                    border = BorderStroke(1.dp, Color.Black),
-                    colors = ButtonDefaults.outlinedButtonColors(),
-                    modifier = Modifier
-
-                )
-                {
-                    Text(
-                        text = "討論區",
-                        style = TextStyle(
-                            fontSize = 27.sp,
-                            lineHeight = 32.sp,
-                            fontWeight = FontWeight(700),
-                            color = Color(0xFF713F2A),
-                            textAlign = TextAlign.Center,
-                        ),
-                        modifier = Modifier
-                            .width(100.dp)
-                            .height(45.dp)
-                    )
-                }
-
-                Button(
-                    shape = RoundedCornerShape(20),
-                    onClick = {
-                        navController.navigate(route = PetsFileScreens.PetsFileFirst.name)
-                    },
-                    border = BorderStroke(1.dp, Color.Black),
-                    colors = ButtonDefaults.outlinedButtonColors(),
-                    modifier = Modifier
-
-                )
-                {
-                    Text(
-                        text = "寵物/會員資料",
-                        style = TextStyle(
-                            fontSize = 27.sp,
-                            lineHeight = 32.sp,
-                            fontWeight = FontWeight(700),
-                            color = Color(0xFF713F2A),
+                    {
+                        Text(
+                            text = "討論區",
+                            style = TextStyle(
+                                fontSize = 27.sp,
+                                lineHeight = 32.sp,
+                                fontWeight = FontWeight(700),
+                                color = Color(0xFF713F2A),
                                 textAlign = TextAlign.Center,
-                        ),
+                            ),
+                            modifier = Modifier
+                                .width(100.dp)
+                                .height(45.dp)
+                        )
+                    }
+
+                    Button(
+                        shape = RoundedCornerShape(20),
+                        onClick = {
+                            navController.navigate(route = PetsFileScreens.PetsFileFirst.name)
+                        },
+                        border = BorderStroke(1.dp, Color.Black),
+                        colors = ButtonDefaults.outlinedButtonColors(),
                         modifier = Modifier
-                            .width(180.dp)
-                            .height(45.dp)
+
                     )
+                    {
+                        Text(
+                            text = "寵物/會員資料",
+                            style = TextStyle(
+                                fontSize = 27.sp,
+                                lineHeight = 32.sp,
+                                fontWeight = FontWeight(700),
+                                color = Color(0xFF713F2A),
+                                textAlign = TextAlign.Center,
+                            ),
+                            modifier = Modifier
+                                .width(180.dp)
+                                .height(45.dp)
+                        )
+                    }
                 }
             }
         }
     }
-}
 
+}
 
 @Preview(showBackground = true)
 @Composable

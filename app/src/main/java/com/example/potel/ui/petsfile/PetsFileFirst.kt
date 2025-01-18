@@ -63,7 +63,7 @@ fun ScreenPetsFileFirst(navController: NavHostController) {
         )
 
         // 空白200個字元
-        Spacer(modifier = Modifier.height(200.dp))
+        Spacer(modifier = Modifier.height(100.dp))
 
         Row(
             horizontalArrangement = Arrangement.Center,
