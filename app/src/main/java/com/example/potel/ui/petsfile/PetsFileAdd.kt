@@ -70,8 +70,8 @@ fun ScreenPetsFileAdd(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
-            .background(Color(0xFFF0E68C))
+//            .padding(16.dp)
+            .background(Color(0xFFDBC8B6))
     ) {
         Column(
             modifier = Modifier

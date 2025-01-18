@@ -37,8 +37,8 @@ fun ScreenPetsFileFirst( navController: NavHostController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
-            .background(Color(0xFFF0E68C))
+//            .padding(16.dp)
+            .background(Color(0xFFDBC8B6))
             .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
