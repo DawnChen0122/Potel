@@ -35,6 +35,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.potel.ui.booking.BookingScreens
 import com.example.potel.ui.home.AccountScreens
+import com.example.potel.ui.theme.TipColor
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -87,25 +88,27 @@ fun Signup(
 
     var errorMessage by remember { mutableStateOf<String?>(null) }
 
+    val focusedColors = TipColor.deep_brown
+
 
     Column(
         verticalArrangement = Arrangement.spacedBy(2.dp, Alignment.Top),
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .verticalScroll(scrollState)
-            .border(width = 5.dp, color = Color(0xFF000000))
-            .padding(5.dp)
+//            .border(width = 5.dp, color = Color(0xFF000000))
+//            .padding(5.dp)
             .fillMaxSize()
             .fillMaxWidth()
             .fillMaxHeight()
-            .background(color = Color(0xFFF7E3A6))
+            .background(color = TipColor.light_brown)
             .padding(12.dp)
     ) {
         Text(
             text = "會員註冊",
             fontSize = 50.sp,
             fontWeight = FontWeight.Bold,
-            color = Color(0xFFFFD700)
+            color = Color(0xFFAA8066)
         )
 
 
@@ -113,19 +116,23 @@ fun Signup(
         OutlinedTextField(
             value = name,
             onValueChange = viewModel::namechange,
-            label = { Text(text = "請輸入姓名") },
+            label = { Text(
+                text = "請輸入姓名",
+                color = TipColor.deep_brown) },
             singleLine = true,
             shape = RoundedCornerShape(8.dp),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 10.dp)
+
         )
 
 
         OutlinedTextField(
             value = email,
             onValueChange = viewModel::emailchange,
-            label = { Text("請輸入信箱") },
+            label = { Text(text ="請輸入信箱" ,
+                    color = TipColor.deep_brown) },
             singleLine = true,
             shape = RoundedCornerShape(8.dp),
             isError = viewModel.emailError,
@@ -151,6 +158,7 @@ fun Signup(
             Text(
                 text = "請選擇出生年月日",
                 modifier = Modifier.padding(10.dp)
+                ,color = TipColor.deep_brown,
             )
         }
 
@@ -173,13 +181,21 @@ fun Signup(
                 TextField(
                     readOnly = true,
                     modifier = Modifier.menuAnchor(MenuAnchorType.PrimaryEditable, true),
+                    colors = TextFieldDefaults.colors(
+                        focusedIndicatorColor = focusedColors,
+                        unfocusedIndicatorColor = focusedColors,
+                        focusedLabelColor = focusedColors,
+                        unfocusedLabelColor = focusedColors
+                    ),
                     value = inputYear,
                     onValueChange = {
                         inputYear = it
                         expandedYear = true
                     },
                     singleLine = true,
-                    label = { Text("年") },
+                    label =
+                    {Text(text ="年" ,
+                        color = TipColor.deep_brown)},
                     trailingIcon = { TrailingIcon(expanded = expandedYear) }
                 )
                 ExposedDropdownMenu(
@@ -212,7 +228,9 @@ fun Signup(
                         expandedMonth = true
                     },
                     singleLine = true,
-                    label = { Text("月") },
+                    label =
+                    {Text(text ="月" ,
+                        color = TipColor.deep_brown)},
                     trailingIcon = { TrailingIcon(expanded = expandedMonth) }
                 )
                 ExposedDropdownMenu(
@@ -246,7 +264,8 @@ fun Signup(
                         expandedDay = true
                     },
                     singleLine = true,
-                    label = { Text("日") },
+                    label = {Text(text ="日" ,
+                        color = TipColor.deep_brown)},
                     trailingIcon = { TrailingIcon(expanded = expandedDay) }
                 )
                 ExposedDropdownMenu(
@@ -274,8 +293,9 @@ fun Signup(
         {
             Text(
                 text = "請選擇性別",
-                modifier = Modifier.padding(10.dp)
-            )
+                modifier = Modifier.padding(10.dp) ,
+                color = TipColor.deep_brown,
+                )
         }
 
 
@@ -296,7 +316,9 @@ fun Signup(
                     expandedGender = true
                 },
                 singleLine = true,
-                label = { Text("性別") },
+                label =
+                {Text(text ="性別" ,
+                    color = TipColor.deep_brown)},
                 trailingIcon = { TrailingIcon(expanded = expandedGender) }
             )
 
@@ -321,7 +343,8 @@ fun Signup(
         OutlinedTextField(
             value = passwd,
             onValueChange = viewModel::passwdchange,
-            label = { Text(text = "密碼") },
+            label = {Text(text ="密碼" ,
+                color = TipColor.deep_brown)},
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Default.Lock,
@@ -334,6 +357,7 @@ fun Signup(
                     modifier = Modifier.clickable {
                         passwdVisible = !passwdVisible
                     }
+                    ,color = TipColor.deep_brown,
                 )
             },
             isError = viewModel.passwdError,
@@ -362,7 +386,8 @@ fun Signup(
         OutlinedTextField(
             value = checkpasswd,
             onValueChange = viewModel::checkpasswdchange,
-            label = { Text(text = "再次確認密碼") },
+            label = {Text(text ="再次確認密碼" ,
+                color = TipColor.deep_brown)},
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Default.Lock,
@@ -404,7 +429,8 @@ fun Signup(
         OutlinedTextField(
             value = cellphone,
             onValueChange = viewModel::cellphonechange,
-            label = { Text(text = "請輸入手機號碼") },
+            label = {Text(text ="請輸入手機號碼" ,
+                    color = TipColor.deep_brown)},
             singleLine = true,
             shape = RoundedCornerShape(8.dp),
             isError = viewModel.cellphoneError,
@@ -426,7 +452,9 @@ fun Signup(
         OutlinedTextField(
             value = address,
             onValueChange = viewModel::addresschange,
-            label = { Text(text = "請輸入地址") },
+            label = {Text(text ="請輸入地址" ,
+                color = TipColor.deep_brown)
+                    },
             singleLine = true,
             shape = RoundedCornerShape(8.dp),
             modifier = Modifier
@@ -482,14 +510,14 @@ fun Signup(
                 .padding(top = 16.dp),
             shape = RoundedCornerShape(8.dp),
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFFFFA500),
+                containerColor = Color(0xFFDBC8B6),
             )
         ) {
             Text(
                 text = "註冊",
                 fontSize = 50.sp,
-                color = Color.White
-            )
+                color = TipColor.deep_brown,
+                )
         }
 
     }

@@ -36,6 +36,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.potel.ui.booking.BookingScreens
 import com.example.potel.ui.forumZone.ForumScreens
 import com.example.potel.ui.petsfile.PetsFileScreens
+import com.example.potel.ui.theme.TipColor
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -54,17 +55,18 @@ fun HomeRoute(
             verticalArrangement = Arrangement.spacedBy(20.dp, Alignment.Top),
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
-                .border(width = 5.dp, color = Color(0xFF000000))
-                .padding(5.dp)
+//                .border(width = 5.dp, color = Color(0xFF000000))
+//                .padding(5.dp)
                 .fillMaxWidth()
                 .fillMaxHeight()
-                .background(color = Color(0xFFF7E3A6))
+                .background(color = TipColor.light_brown)
                 .padding(top = 12.dp, bottom = 12.dp)
                 .padding(innerPadding)
         ) {
             Text(
                 text = "${preferences.getString("name", "")}先生/小姐您好",
-                style = TextStyle(
+                color = Color(0xFF713F2A),
+                        style = TextStyle(
                     fontSize = 20.sp,
                     lineHeight = 46.sp,
                     fontWeight = FontWeight(700),
@@ -82,7 +84,7 @@ fun HomeRoute(
                     fontSize = 27.sp,
                     lineHeight = 49.sp,
                     fontWeight = FontWeight.Bold,
-                    color = Color(0xFF000000),
+                    color = Color(0xFF713F2A),
                     textAlign = TextAlign.Center,
                 ),
                 modifier = Modifier
@@ -99,7 +101,7 @@ fun HomeRoute(
                     fontSize = 20.sp,
                     lineHeight = 49.sp,
                     fontWeight = FontWeight.Bold,
-                    color = Color(0xFF000000),
+                    color = Color(0xFF713F2A),
                     textAlign = TextAlign.Center,
                 ),
                 modifier = Modifier
@@ -116,7 +118,7 @@ fun HomeRoute(
                     fontSize = 27.sp,
                     lineHeight = 49.sp,
                     fontWeight = FontWeight.Bold,
-                    color = Color(0xFF000000),
+                    color = Color(0xFF713F2A),
                     textAlign = TextAlign.Center,
                 ),
                 modifier = Modifier
@@ -134,7 +136,7 @@ fun HomeRoute(
                     fontSize = 20.sp,
                     lineHeight = 49.sp,
                     fontWeight = FontWeight.Bold,
-                    color = Color(0xFF000000),
+                    color = Color(0xFF713F2A),
                     textAlign = TextAlign.Center,
                 ),
                 modifier = Modifier
@@ -156,7 +158,7 @@ fun HomeRoute(
                         fontSize = 27.sp,
                         lineHeight = 32.sp,
                         fontWeight = FontWeight(700),
-                        color = Color(0xFF000000),
+                        color = Color(0xFF713F2A),
                         textAlign = TextAlign.Center,
                     ),
                     modifier = Modifier
@@ -211,7 +213,7 @@ fun HomeRoute(
                             fontSize = 27.sp,
                             lineHeight = 32.sp,
                             fontWeight = FontWeight(700),
-                            color = Color(0xFF000000),
+                            color = Color(0xFF713F2A),
                             textAlign = TextAlign.Center,
                         ),
                         modifier = Modifier
@@ -237,8 +239,8 @@ fun HomeRoute(
                             fontSize = 27.sp,
                             lineHeight = 32.sp,
                             fontWeight = FontWeight(700),
-                            color = Color(0xFF000000),
-                            textAlign = TextAlign.Center,
+                            color = Color(0xFF713F2A),
+                                textAlign = TextAlign.Center,
                         ),
                         modifier = Modifier
                             .width(180.dp)

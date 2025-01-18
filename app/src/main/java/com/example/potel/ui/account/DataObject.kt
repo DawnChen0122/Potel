@@ -33,7 +33,7 @@ data class Change(
     val message: String?
 )
 
-data class Edit(
+data class Edit1(
     val passwd: String,
     val cellphone: String,
     val address: String,

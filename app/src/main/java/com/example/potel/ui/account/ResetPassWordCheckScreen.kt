@@ -27,6 +27,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.potel.ui.home.AccountScreens
+import com.example.potel.ui.theme.TipColor
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -55,9 +56,9 @@ fun Resetpassword(
         verticalArrangement = Arrangement.spacedBy(2.dp, Alignment.Top),
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
-            .border(width = 5.dp, color = Color(0xFF000000))
+//            .border(width = 5.dp, color = Color(0xFF000000))
             .fillMaxSize()
-            .background(color = Color(0xFFF7E3A6))
+            .background(color = TipColor.light_brown)
             .padding(12.dp)
     )
     {
@@ -65,7 +66,7 @@ fun Resetpassword(
             text = "重設密碼",
             fontSize = 50.sp,
             fontWeight = FontWeight.Bold,
-            color = Color(0xFFFFD700)
+            color = Color(0xFFAA8066)
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -239,13 +240,13 @@ fun Resetpassword(
                 .padding(top = 40.dp),
             shape = RoundedCornerShape(8.dp),
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFFFFA500),
+                containerColor = Color(0xFFDBC8B6),
             )
         ) {
             Text(
                 text = "變更密碼",
                 fontSize = 50.sp,
-                color = Color.White
+                color = TipColor.deep_brown
             )
         }
 

@@ -22,6 +22,10 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.potel.ui.home.AccountScreens
+import com.example.potel.ui.petsfile.PetsFileScreens
+import com.example.potel.ui.theme.TipColor
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
@@ -39,20 +43,32 @@ fun Edit(
 
     var errorMessage by remember { mutableStateOf<String?>(null) }
 
+    val genderMap = mapOf(
+        "M" to "男",
+        "F" to "女",
+        "N" to "不願透露"
+    )
+
+
     LaunchedEffect(member) {
-        viewModel.loadMember()
-        Log.d("EditScreen", "Member updated: $member")
+        try {
+            viewModel.loadMember()
+            Log.d("EditScreen", "Member loaded: $member")
+        } catch (e: Exception) {
+            Log.e("EditScreen", "Error loading member data", e)
+        }
     }
 
     Column(
         verticalArrangement = Arrangement.spacedBy(2.dp, Alignment.Top),
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
-            .border(width = 5.dp, color = Color(0xFF000000))
-            .padding(5.dp)
+//            .border(width = 5.dp, color = Color(0xFF000000))
+//            .padding(5.dp)
             .fillMaxSize()
-            .background(color = Color(0xFFF7E3A6))
+            .background(color = TipColor.light_brown)
             .padding(12.dp)
+            .background(color = TipColor.light_brown)
     )
     {
         Column(
@@ -66,7 +82,7 @@ fun Edit(
                 text = "編輯會員資料",
                 fontSize = 40.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color(0xFFFFD700)
+                color = Color(0xFFAA8066)
             )
 
 
@@ -76,22 +92,29 @@ fun Edit(
                 modifier = Modifier.padding(10.dp)
             ) {
 
-                Text(text = "姓名: ${member.name}", style = MaterialTheme.typography.bodyLarge)
+                Text(text = "姓名: ${member.name}"
+                       ,color = TipColor.deep_brown, style = MaterialTheme.typography.bodyLarge)
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                Text(text = "性別: ${member.gender}", style = MaterialTheme.typography.bodyLarge)
+                val genderText = genderMap[member.gender] ?: "未知" // Default to "未知" if not found
+                Text(text = "性別: $genderText",
+//                Text(text = "性別: ${member.gender}"
+                    color = TipColor.deep_brown, style = MaterialTheme.typography.bodyLarge)
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                Text(text = "生日: ${member.birthday}", style = MaterialTheme.typography.bodyLarge)
+                Text(text = "生日: ${member.birthday}"
+                    ,color = TipColor.deep_brown, style = MaterialTheme.typography.bodyLarge)
 
                 Spacer(modifier = Modifier.height(16.dp))
 
                 OutlinedTextField(
                     value = member.cellphone,
                     onValueChange = { viewModel.updateCellphone(it) },
-                    label = { Text(text = "請輸入手機號碼") },
+                    label = { Text(
+                        text = "請輸入手機號碼",
+                        color = TipColor.deep_brown) },
                     singleLine = true,
                     shape = RoundedCornerShape(8.dp),
                     modifier = Modifier
@@ -103,7 +126,9 @@ fun Edit(
                 OutlinedTextField(
                     value = member.email,
                     onValueChange = { viewModel.updateEmail(it) },
-                    label = { Text(text = "請輸入電子郵件") },
+                    label = { Text(
+                        text = "請輸入電子郵件",
+                        color = TipColor.deep_brown) },
                     singleLine = true,
                     shape = RoundedCornerShape(8.dp),
                     modifier = Modifier
@@ -115,7 +140,9 @@ fun Edit(
                 OutlinedTextField(
                     value = member.passwd,
                     onValueChange = { viewModel.updatePassword(it) },
-                    label = { Text(text = "請輸入密碼") },
+                    label = { Text(
+                        text = "請輸入密碼",
+                        color = TipColor.deep_brown) },
                     singleLine = true,
                     shape = RoundedCornerShape(8.dp),
                     modifier = Modifier
@@ -128,7 +155,9 @@ fun Edit(
                 OutlinedTextField(
                     value = member.address,
                     onValueChange = { viewModel.updateAddress(it) },
-                    label = { Text(text = "請輸入地址") },
+                    label = { Text(
+                        text = "請輸入地址",
+                        color = TipColor.deep_brown) },
                     singleLine = true,
                     shape = RoundedCornerShape(8.dp),
                     modifier = Modifier
@@ -151,15 +180,18 @@ fun Edit(
 
                 Button(
                     onClick = {
+                        Log.d("EditButton", "Button clicked, checking fields: email = ${member.email}, passwd = ${member.passwd}, cellphone = ${member.cellphone}, address = ${member.address}")
+
                         if (member.email.isEmpty() || member.passwd.isEmpty()
                             || member.cellphone.isEmpty() || member.address.isEmpty()
                         ) {
                             errorMessage = "欄位不得空白"
+                            Log.d("EditButton", "Fields are empty, errorMessage set to: $errorMessage")
 
                         } else if (member.email.isNotEmpty() && member.passwd.isNotEmpty() && member.address.isNotEmpty()
                             && member.cellphone.isNotEmpty()
                         ) {
-                            val updatedMember = Edit(
+                            val updatedMember = Edit1(
                                 passwd = member.passwd,
                                 cellphone = member.cellphone,
                                 address = member.address,
@@ -168,10 +200,15 @@ fun Edit(
                             )
                             viewModel.viewModelScope.launch {
                                 try {
+                                    Log.d("EditButton", "Updating member data: $updatedMember")
                                     val result = viewModel.edit(updatedMember)
                                     Log.d("EditButton", "更新成功: $result")
+                                    errorMessage = "更新成功"
+                                    delay(1000)
+                                    navController.navigate(PetsFileScreens.PetsFileFirst.name)
                                 } catch (e: Exception) {
                                     Log.e("EditButton", "更新失敗: ${e.message}")
+                                    errorMessage = "更新失敗"
                                 }
                             }
                         } else {
@@ -183,13 +220,13 @@ fun Edit(
                         .padding(top = 40.dp),
                     shape = RoundedCornerShape(8.dp),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFFFFA500),
+                        containerColor = Color(0xFFDBC8B6),
                     )
                 ) {
                     Text(
                         text = "更改資料",
                         fontSize = 40.sp,
-                        color = Color.White
+                        color = TipColor.deep_brown,
                     )
                 }
             }

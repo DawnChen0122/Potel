@@ -39,6 +39,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.potel.ui.home.AccountScreens
 import kotlinx.coroutines.launch
 import androidx.compose.ui.text.style.TextDecoration
+import com.example.potel.ui.theme.TipColor
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -70,11 +71,11 @@ fun Login(
         horizontalAlignment = Alignment.CenterHorizontally,
 
         modifier = Modifier
-            .border(width = 5.dp, color = Color(0xFF000000))
-            .padding(12.dp)
+//            .border(width = 5.dp, color = Color(0xFF000000))
+//            .padding(12.dp)
             .fillMaxWidth()
             .fillMaxHeight()
-            .background(color = Color(0xFFF7E3A6))
+            .background(color = TipColor.light_brown)
             .padding(top = 12.dp, bottom = 12.dp)
     ) {
         Column(
@@ -86,11 +87,10 @@ fun Login(
 
 
             Text(
-
                 text = "Potel",
                 fontSize = 100.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color(0xFFFFD700)
+                color = Color(0xFFAA8066)
             )
 
 
@@ -220,10 +220,13 @@ fun Login(
                     .padding(top = 16.dp),
                 shape = RoundedCornerShape(8.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFFFFA500),
+                    containerColor = Color(0xFFDBC8B6),
                 )
             ) {
-                Text(text = "登入", fontSize = 50.sp)
+                Text(text = "登入", fontSize = 50.sp
+                       ,color = TipColor.deep_brown
+                )
+
             }
 
         }
@@ -248,7 +251,7 @@ fun Login(
                     fontSize = 33.sp,
                     lineHeight = 32.sp,
                     fontWeight = FontWeight(700),
-                    color = Color.White,
+                    color = TipColor.deep_brown,
                     textAlign = TextAlign.Center,
                     textDecoration = TextDecoration.Underline
                 ),
@@ -268,7 +271,7 @@ fun Login(
                     fontSize = 33.sp,
                     lineHeight = 32.sp,
                     fontWeight = FontWeight(700),
-                    color = Color.White,
+                    color = TipColor.deep_brown,
                     textAlign = TextAlign.Center,
                     textDecoration = TextDecoration.Underline
                 ),

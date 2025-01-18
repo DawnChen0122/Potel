@@ -3,6 +3,8 @@ package com.example.potel.ui.petsfile
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,6 +22,7 @@ import com.example.potel.R
 import com.example.potel.ui.home.AccountScreens
 
 import com.example.potel.ui.theme.PotelTheme
+import com.example.potel.ui.theme.TipColor
 
 //class MainActivity : ComponentActivity() {
 //    override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,14 +34,20 @@ import com.example.potel.ui.theme.PotelTheme
 //    }
 
 @Composable
-fun ScreenPetsFileFirst( navController: NavHostController) {
+
+fun ScreenPetsFileFirst(navController: NavHostController) {
+    val scrollState = rememberScrollState()
+
     Column(
         modifier = Modifier
+            .verticalScroll(scrollState)
             .fillMaxSize()
-            .padding(16.dp)
-            .background(Color(0xFFF0E68C)),
+//            .padding(16.dp)
+//            .background(Color(0xFFF0E68C)),
+            .background(color = TipColor.light_brown),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Top
+        verticalArrangement = Arrangement.Top,
+
     ) {
         // 空白50個字元
         Spacer(modifier = Modifier.height(50.dp))
@@ -46,7 +55,10 @@ fun ScreenPetsFileFirst( navController: NavHostController) {
         // 顯示標題 "Potel"
         Text(
             text = "Potel",
-            style = TextStyle(fontSize = 50.sp, fontWeight = androidx.compose.ui.text.font.FontWeight.Bold),
+            style = TextStyle(
+                fontSize = 50.sp,
+                fontWeight = androidx.compose.ui.text.font.FontWeight.Bold
+            ),
             color = Color.Black
         )
 
@@ -70,11 +82,11 @@ fun ScreenPetsFileFirst( navController: NavHostController) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Button(onClick =
-            { navController.navigate ( AccountScreens.Edit.name) }) {
-                Text(text = "Add user")
+            { navController.navigate(AccountScreens.Edit.name) }) {
+                Text(text = "Edit user")
             }
         }
-            Spacer(modifier = Modifier.height(100.dp))
+        Spacer(modifier = Modifier.height(100.dp))
 
         // 顯示圖片A (dog)
         Row(
@@ -106,7 +118,7 @@ fun ScreenPetsFileFirst( navController: NavHostController) {
                 Text(text = "Add dog")
             }
             Spacer(modifier = Modifier.width(30.dp))
-            Button(onClick = { PetsFileScreens.PetsFileCats.name}) {
+            Button(onClick = { PetsFileScreens.PetsFileCats.name }) {
                 Text(text = "Add cat")
             }
         }
@@ -116,7 +128,7 @@ fun ScreenPetsFileFirst( navController: NavHostController) {
 @Preview(showBackground = true)
 @Composable
 fun ScreenPetsFileFirstPreview() {
-    PotelTheme  {
+    PotelTheme {
         ScreenPetsFileFirst(rememberNavController())
     }
 }

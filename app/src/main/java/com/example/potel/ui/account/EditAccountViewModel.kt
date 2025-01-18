@@ -90,7 +90,7 @@ class EditViewModel(
     val edit = _edit.asStateFlow()
 
 
-    suspend fun edit(updatedMember: Edit): Member {
+    suspend fun edit(updatedMember: Edit1): Member {
         return try {
 
             apiService.edit(updatedMember)
