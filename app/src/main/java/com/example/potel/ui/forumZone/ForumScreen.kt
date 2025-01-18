@@ -83,6 +83,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.potel.R
+import com.example.potel.ui.home.AccountScreens
 import com.example.potel.ui.theme.TipColor
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -149,7 +150,7 @@ fun ForumScreen(
                     )
                 },
                 navigationIcon = {
-                    IconButton(onClick = { navController.navigateUp() }) {
+                    IconButton(onClick = { navController.navigate(AccountScreens.HomeRoute.name) }) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = stringResource(R.string.back_button),
