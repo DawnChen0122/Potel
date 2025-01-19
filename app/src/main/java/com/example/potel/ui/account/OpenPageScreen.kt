@@ -93,6 +93,8 @@ fun Login(
                 color = Color(0xFFAA8066)
             )
 
+            Spacer(modifier = Modifier.height(30.dp))
+
 
             OutlinedTextField(
                 value = currentInput,
@@ -168,8 +170,9 @@ fun Login(
         )
 
         {
+            Spacer(modifier = Modifier.height(30.dp))
 
-            Button(
+            OutlinedButton(
                 onClick = {
                     if (currentInput.isEmpty()) {
                         errorMessage = "信箱或手機號碼欄位不得空白"
@@ -240,6 +243,8 @@ fun Login(
                 modifier = Modifier.padding(start = 16.dp)
             )
         }
+
+        Spacer(modifier = Modifier.height(16.dp))
 
         Row(
             horizontalArrangement = Arrangement.Start,

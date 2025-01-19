@@ -85,6 +85,8 @@ fun Edit(
                 color = Color(0xFFAA8066)
             )
 
+            Spacer(modifier = Modifier.height(30.dp))
+
 
             Column(
                 horizontalAlignment = Alignment.Start,
@@ -93,21 +95,27 @@ fun Edit(
             ) {
 
                 Text(text = "姓名: ${member.name}"
-                       ,color = TipColor.deep_brown, style = MaterialTheme.typography.bodyLarge)
+                       ,color = TipColor.deep_brown,
+                    fontSize = 20.sp,
+                    style = MaterialTheme.typography.bodyLarge)
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(30.dp))
 
                 val genderText = genderMap[member.gender] ?: "未知" // Default to "未知" if not found
                 Text(text = "性別: $genderText",
 //                Text(text = "性別: ${member.gender}"
-                    color = TipColor.deep_brown, style = MaterialTheme.typography.bodyLarge)
+                    color = TipColor.deep_brown,
+                    fontSize = 20.sp,
+                    style = MaterialTheme.typography.bodyLarge)
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(30.dp))
 
                 Text(text = "生日: ${member.birthday}"
-                    ,color = TipColor.deep_brown, style = MaterialTheme.typography.bodyLarge)
+                    ,color = TipColor.deep_brown,
+                    fontSize = 20.sp,
+                    style = MaterialTheme.typography.bodyLarge)
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(20.dp))
 
                 OutlinedTextField(
                     value = member.cellphone,
@@ -178,7 +186,7 @@ fun Edit(
                 }
 
 
-                Button(
+                OutlinedButton(
                     onClick = {
                         Log.d("EditButton", "Button clicked, checking fields: email = ${member.email}, passwd = ${member.passwd}, cellphone = ${member.cellphone}, address = ${member.address}")
 
