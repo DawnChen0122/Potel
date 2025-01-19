@@ -149,7 +149,7 @@ fun Resetpassword(
         )
         if (viewModel.passwdError) {
             Text(
-                text = "密碼需在6 至 20 字內數字英文至少各一",
+                text = "密碼需在6至20字內，包含字母數字",
                 color = Color.Red,
                 fontSize = 20.sp,
                 modifier = Modifier.padding(start = 16.dp)
@@ -215,8 +215,8 @@ fun Resetpassword(
             onClick = {
                 if (email.isEmpty() || passwd.isEmpty() || checkpasswd.isEmpty() || cellphone.isEmpty()) {
                     errorMessage = "欄位不得空白"
-                } else if (passwd != checkpasswd) {
-                    errorMessage = "密碼不一致"
+//                } else if (passwd != checkpasswd) {
+//                    errorMessage = "密碼不一致"
                 } else {
                     viewModel.viewModelScope.launch {
                         errorMessage = null

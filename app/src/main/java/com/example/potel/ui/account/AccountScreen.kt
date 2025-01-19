@@ -144,7 +144,7 @@ fun Signup(
             Text(
                 text = "請輸入有效的信箱",
                 color = Color.Red,
-                fontSize = 12.sp,
+                fontSize = 20.sp,
                 modifier = Modifier.padding(start = 16.dp)
             )
         }
@@ -375,9 +375,9 @@ fun Signup(
         )
         if (viewModel.passwdError) {
             Text(
-                text = "密碼需在6至20字符內，且包含字母和數字",
+                text = "密碼需在6至20字內，包含字母和數字",
                 color = Color.Red,
-                fontSize = 12.sp,
+                fontSize = 20.sp,
                 modifier = Modifier.padding(start = 16.dp)
             )
         }
@@ -443,7 +443,7 @@ fun Signup(
             Text(
                 text = "手機號碼為十位數字",
                 color = Color.Red,
-                fontSize = 12.sp,
+                fontSize = 20.sp,
                 modifier = Modifier.padding(start = 16.dp)
             )
         }

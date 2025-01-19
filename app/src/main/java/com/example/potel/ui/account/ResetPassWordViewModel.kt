@@ -25,9 +25,8 @@ class ResetPassWordViewModel : ViewModel() {
     private val _checkpasswd = MutableStateFlow("")
     val checkpasswd = _checkpasswd.asStateFlow()
     var checkpasswdError by mutableStateOf(false)
-    fun checkpasswdchange(checkpasswd: String) {
-        val checkpasswdRegex = Regex("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{6,20}$")
-        checkpasswdError = !checkpasswd.matches(checkpasswdRegex)
+    fun checkpasswdchange (checkpasswd: String) {
+        checkpasswdError = checkpasswd != _passwd.value
         _checkpasswd.value = checkpasswd
     }
 

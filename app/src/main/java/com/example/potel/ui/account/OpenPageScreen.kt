@@ -40,6 +40,7 @@ import com.example.potel.ui.home.AccountScreens
 import kotlinx.coroutines.launch
 import androidx.compose.ui.text.style.TextDecoration
 import com.example.potel.ui.theme.TipColor
+import kotlinx.coroutines.delay
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -103,7 +104,7 @@ fun Login(
                     viewModel.onInputChanged(value)
                 },
                 label = { Text(text = "請輸入信箱或手機號碼") },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                 shape = RoundedCornerShape(8.dp),
                 isError = inputError,
                 modifier = Modifier
@@ -173,6 +174,7 @@ fun Login(
             Spacer(modifier = Modifier.height(30.dp))
 
             OutlinedButton(
+                
                 onClick = {
                     if (currentInput.isEmpty()) {
                         errorMessage = "信箱或手機號碼欄位不得空白"
@@ -205,6 +207,8 @@ fun Login(
                                         .putString("gender", member.gender)
                                         .putString("birthday", member.birthday)
                                         .apply()
+                                    errorMessage = "登入成功"
+                                    delay(1000)
                                     navController.navigate(AccountScreens.HomeRoute.name)
                                 } else {
                                     Log.d("Login", "登入失敗，錯誤訊息: 登入失敗，請檢查您的帳號密碼")
