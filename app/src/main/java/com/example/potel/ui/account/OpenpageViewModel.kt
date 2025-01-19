@@ -42,7 +42,7 @@ class OpenpageViewModel : ViewModel() {
     fun onInputChanged(input: String) {
 
         viewModelScope.launch {
-            delay(500)
+            delay(1000)
             validateInput(input)
         }
     }
