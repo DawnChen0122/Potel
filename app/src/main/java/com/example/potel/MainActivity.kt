@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.BottomAppBar
-import androidx.compose.material3.BottomAppBarDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -23,7 +22,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
-import androidx.compose.material3.rememberBottomAppBarState
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -32,8 +30,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -49,10 +47,10 @@ import com.example.potel.ui.myorders.MyOrdersScreens
 import com.example.potel.ui.myorders.myOrdersScreenRoute
 import com.example.potel.ui.petsfile.PetsFileScreens
 import com.example.potel.ui.petsfile.petsfileScreenRoute
-import com.example.potel.ui.theme.PotelTheme
-import com.example.potel.ui.shopping.shopScreenRoute
 import com.example.potel.ui.shopping.ShopScreens
 import com.example.potel.ui.shopping.ShopViewModel
+import com.example.potel.ui.shopping.shopScreenRoute
+import com.example.potel.ui.theme.PotelTheme
 import com.example.potel.ui.theme.TipColor
 
 
@@ -80,7 +78,12 @@ fun PotelApp(
 
     val currentScreenTitle = findEnumTitleByName(
         currentScreen,
-        MyOrdersScreens::class.java
+        MyOrdersScreens::class.java,
+        BookingScreens::class.java,
+        AccountScreens::class.java,
+        ShopScreens::class.java,
+        PetsFileScreens::class.java,
+        ForumScreens::class.java
     )
 
     val isForumScreen = currentScreen in ForumScreens.entries.map { it.name }
