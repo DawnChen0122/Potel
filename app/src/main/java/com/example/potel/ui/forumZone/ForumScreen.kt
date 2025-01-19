@@ -326,7 +326,7 @@ fun PostListView(
     LaunchedEffect(Unit) {
         coroutineScope.launch {
             isRefreshing = true
-            delay(1000)
+            delay(1500)
             isRefreshing = false
         }
     }

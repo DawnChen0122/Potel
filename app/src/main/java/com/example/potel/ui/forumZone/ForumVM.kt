@@ -8,7 +8,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -155,9 +154,7 @@ class ForumVM : ViewModel() {
                 val deletePostResponse = RetrofitInstance.api.deletePost(postId)
 
                 if (deletePostResponse.isSuccessful) {
-                    // 刪除貼文和留言
-                    _forumsState.update { forums -> forums.filterNot { it.postId == postId } }
-                    _commentsState.update { comments -> comments.filterNot { it.postId == postId } }
+                    fetchForumData()
                     Log.d(tag, "Post and its comments deleted successfully")
                 } else {
                     Log.e(tag, "Error deleting post: Code ${deletePostResponse.code()}")
