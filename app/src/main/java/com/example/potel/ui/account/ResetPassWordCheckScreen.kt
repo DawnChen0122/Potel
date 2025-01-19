@@ -211,7 +211,7 @@ fun Resetpassword(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Button(
+        OutlinedButton(
             onClick = {
                 if (email.isEmpty() || passwd.isEmpty() || checkpasswd.isEmpty() || cellphone.isEmpty()) {
                     errorMessage = "欄位不得空白"

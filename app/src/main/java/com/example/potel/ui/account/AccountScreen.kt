@@ -472,7 +472,7 @@ fun Signup(
             )
         }
 
-        Button(
+        OutlinedButton(
             onClick = {
 
                 if (email.isEmpty() || passwd.isEmpty() || checkpasswd.isEmpty()
