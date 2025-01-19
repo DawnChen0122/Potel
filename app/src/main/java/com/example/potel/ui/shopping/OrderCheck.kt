@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavHostController
+import com.example.potel.ui.theme.TipColor
 
 
 @Composable
@@ -49,7 +50,7 @@ fun OrderCheckScreen(
                 .fillMaxWidth()
                 .height(300.dp)
                 .shadow(elevation = 2.dp, shape = RoundedCornerShape(16))
-                .border(width = 2.dp, color = Color.Yellow, shape = RoundedCornerShape(16))
+                .border(width = 5.dp, color = TipColor.bright_red, shape = RoundedCornerShape(16))
                 .background(Color.White)
                 .padding(16.dp),
             shape = RoundedCornerShape(16.dp) // 設定圓角
@@ -89,8 +90,8 @@ fun OrderCheckScreen(
                         navController.navigate(ShopScreens.Twoclass.name)
                     },
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Color.Black, // 按鈕顏色
-                        contentColor = Color.Yellow // 按鈕中文字顏色
+                        containerColor = TipColor.light_brown, // 按鈕顏色
+                        contentColor = TipColor.deep_brown // 按鈕中文字顏色
                     )
                 ) {
                     Text(

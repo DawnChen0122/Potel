@@ -34,6 +34,8 @@ interface ApiService {
 
 
 val baseurl = "http://10.0.2.2:8080/PotelServer/"
+//val baseurl = "http://10.2.18.202:8080/PotelServer/"
+
 // 基本的 API 基礎 URL
 object RetrofitInstance {
     val api: ApiService by lazy {
