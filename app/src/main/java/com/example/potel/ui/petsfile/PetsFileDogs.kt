@@ -371,10 +371,10 @@ fun EditDialog(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "Edit Dogs",
+                    text = "Pets",
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold,
-                    color = Color.Blue
+                    color = Color.Black
                 )
                 Text(text = "Dogs: ${dogs.dogName}, ${dogs.dogBreed}, ${dogs.dogGender}")
                 TextField(
